@@ -20,7 +20,7 @@ export default {
     },
     extend: {
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
+        spaceGrotesk: ["Space Grotesk", "sans-serif"],
         serif: ["Merriweather", "Georgia", "serif"],
       },
       colors: {
@@ -98,6 +98,22 @@ export default {
             opacity: "0",
           },
         },
+        "pulse": {
+          "0%, 100%": {
+            opacity: "1"
+          },
+          "50%": {
+            opacity: "0.7"
+          }
+        },
+        "float": {
+          "0%, 100%": {
+            transform: "translateY(0)"
+          },
+          "50%": {
+            transform: "translateY(-10px)"
+          }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -105,6 +121,8 @@ export default {
         "fade-in-up": "fade-in-up 0.5s ease-out",
         "fade-in": "fade-in 0.3s ease-out",
         "fade-out": "fade-out 0.3s ease-out",
+        "pulse": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
+        "float": "float 5s ease-in-out infinite"
       },
     },
   },

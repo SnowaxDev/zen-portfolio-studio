@@ -1,7 +1,6 @@
 
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ThemeProvider } from '../contexts/ThemeContext';
 import Header from '../components/Header';
 import HeroSection from '../sections/HeroSection';
 import AboutSection from '../sections/AboutSection';
@@ -22,27 +21,25 @@ const Index = () => {
   }, []);
 
   return (
-    <ThemeProvider>
-      <AnimatePresence>
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-          className="overflow-x-hidden"
-        >
-          <AnimatedCursor />
-          <Header />
-          <main>
-            <HeroSection />
-            <AboutSection />
-            <ProjectsSection />
-            <SkillsSection />
-            <ContactSection />
-          </main>
-          <Footer />
-        </motion.div>
-      </AnimatePresence>
-    </ThemeProvider>
+    <AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.5 }}
+        className="overflow-x-hidden"
+      >
+        <AnimatedCursor />
+        <Header />
+        <main>
+          <HeroSection />
+          <AboutSection />
+          <ProjectsSection />
+          <SkillsSection />
+          <ContactSection />
+        </main>
+        <Footer />
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

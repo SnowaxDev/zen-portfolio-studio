@@ -8,7 +8,7 @@ const ThemeToggle: React.FC = () => {
   
   return (
     <motion.button
-      className="relative rounded-full w-12 h-6 bg-primary/20 flex items-center p-1 cursor-pointer"
+      className="relative rounded-full w-12 h-6 glassmorphism flex items-center p-1 cursor-pointer"
       onClick={toggleTheme}
       aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
       whileTap={{ scale: 0.95 }}
@@ -17,7 +17,7 @@ const ThemeToggle: React.FC = () => {
       transition={{ duration: 0.3 }}
     >
       <motion.div
-        className="w-5 h-5 rounded-full bg-primary"
+        className="w-5 h-5 rounded-full bg-accent"
         layout
         animate={{
           x: theme === 'dark' ? 24 : 0,
@@ -28,6 +28,25 @@ const ThemeToggle: React.FC = () => {
           damping: 30
         }}
       />
+      {theme === 'dark' ? (
+        <motion.span 
+          className="absolute right-2 text-xs text-accent/70"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          key="moon"
+        >
+          ●
+        </motion.span>
+      ) : (
+        <motion.span 
+          className="absolute left-2 text-xs text-accent/70"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          key="sun"
+        >
+          ○
+        </motion.span>
+      )}
       <span className="sr-only">Toggle theme</span>
     </motion.button>
   );

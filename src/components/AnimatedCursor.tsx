@@ -1,45 +1,83 @@
 
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 const AnimatedCursor: React.FC = () => {
-  const [position, setPosition] = useState({ x: 0, y: 0 });
+  const cursorX = useMotionValue(-100);
+  const cursorY = useMotionValue(-100);
+  
+  const springConfig = { damping: 28, stiffness: 700, mass: 0.5 };
+  const cursorXSpring = useSpring(cursorX, springConfig);
+  const cursorYSpring = useSpring(cursorY, springConfig);
+  
   const [clicked, setClicked] = useState(false);
   const [linkHovered, setLinkHovered] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
+  
+  const endX = useRef(0);
+  const endY = useRef(0);
 
   useEffect(() => {
-    const updatePosition = (e: MouseEvent) => {
-      setPosition({ x: e.clientX, y: e.clientY });
+    const handleMouseMove = (e: MouseEvent) => {
+      cursorX.set(e.clientX - 16);
+      cursorY.set(e.clientY - 16);
+      endX.current = e.clientX - 16;
+      endY.current = e.clientY - 16;
     };
 
-    const handleClick = () => {
+    const handleMouseDown = () => {
       setClicked(true);
       setTimeout(() => setClicked(false), 300);
     };
 
-    const handleLinkHoverStart = () => setLinkHovered(true);
-    const handleLinkHoverEnd = () => setLinkHovered(false);
+    const handleMouseLeave = () => {
+      setHidden(true);
+      cursorX.set(-100);
+      cursorY.set(-100);
+    };
 
-    window.addEventListener('mousemove', updatePosition);
-    window.addEventListener('click', handleClick);
+    const handleMouseEnter = () => {
+      setHidden(false);
+    };
 
-    // Add event listeners for links and buttons
-    const links = document.querySelectorAll('a, button');
-    links.forEach((link) => {
-      link.addEventListener('mouseenter', handleLinkHoverStart);
-      link.addEventListener('mouseleave', handleLinkHoverEnd);
+    const handleLinkHoverStart = () => {
+      setLinkHovered(true);
+      setIsHovering(true);
+    };
+    
+    const handleLinkHoverEnd = () => {
+      setLinkHovered(false);
+      setIsHovering(false);
+    };
+
+    document.addEventListener("mousemove", handleMouseMove);
+    document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("mouseleave", handleMouseLeave);
+    document.addEventListener("mouseenter", handleMouseEnter);
+
+    // Add event listeners for links, buttons and any interactive elements
+    const interactiveElements = document.querySelectorAll(
+      'a, button, [role="button"], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    );
+    
+    interactiveElements.forEach((el) => {
+      el.addEventListener("mouseenter", handleLinkHoverStart);
+      el.addEventListener("mouseleave", handleLinkHoverEnd);
     });
 
     return () => {
-      window.removeEventListener('mousemove', updatePosition);
-      window.removeEventListener('click', handleClick);
-
-      links.forEach((link) => {
-        link.removeEventListener('mouseenter', handleLinkHoverStart);
-        link.removeEventListener('mouseleave', handleLinkHoverEnd);
+      document.removeEventListener("mousemove", handleMouseMove);
+      document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener("mouseleave", handleMouseLeave);
+      document.removeEventListener("mouseenter", handleMouseEnter);
+      
+      interactiveElements.forEach((el) => {
+        el.removeEventListener("mouseenter", handleLinkHoverStart);
+        el.removeEventListener("mouseleave", handleLinkHoverEnd);
       });
     };
-  }, []);
+  }, [cursorX, cursorY]);
 
   // Hide default cursor
   useEffect(() => {
@@ -50,40 +88,51 @@ const AnimatedCursor: React.FC = () => {
     };
   }, []);
 
-  const cursorVariants = {
-    default: {
-      x: position.x - 16,
-      y: position.y - 16,
-      height: 32,
-      width: 32,
-      backgroundColor: "rgba(255, 255, 255, 0.1)",
-      border: "1.5px solid var(--primary)",
-      boxShadow: "0 0 15px rgba(var(--primary), 0.3)"
-    },
-    link: {
-      x: position.x - 20,
-      y: position.y - 20,
-      height: 40,
-      width: 40,
-      backgroundColor: "rgba(var(--primary), 0.15)",
-      boxShadow: "0 0 20px rgba(var(--primary), 0.4)"
-    },
-    clicked: {
-      x: position.x - 10,
-      y: position.y - 10,
-      height: 20,
-      width: 20,
-      backgroundColor: "rgba(var(--primary), 0.3)",
-    }
-  };
-
   return (
-    <motion.div
-      className="fixed top-0 left-0 z-50 rounded-full pointer-events-none hidden md:block"
-      variants={cursorVariants}
-      animate={clicked ? "clicked" : linkHovered ? "link" : "default"}
-      transition={{ type: "spring", stiffness: 500, damping: 28 }}
-    />
+    <>
+      <motion.div
+        className="fixed top-0 left-0 z-[999] rounded-full pointer-events-none hidden md:block"
+        style={{
+          height: clicked ? 20 : linkHovered ? 40 : 32,
+          width: clicked ? 20 : linkHovered ? 40 : 32,
+          backgroundColor: "transparent",
+          x: cursorXSpring,
+          y: cursorYSpring,
+          opacity: hidden ? 0 : 1,
+        }}
+        animate={{
+          scale: clicked ? 0.8 : linkHovered ? 1.2 : 1,
+          borderWidth: clicked ? "2px" : "1.5px",
+          borderColor: clicked || linkHovered ? "hsl(var(--accent))" : "hsl(var(--primary))",
+        }}
+        transition={{ duration: 0.15 }}
+      >
+        <div className="relative w-full h-full">
+          <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-pulse" />
+          <div className="absolute inset-0 rounded-full border border-primary" />
+          {isHovering && (
+            <motion.div 
+              className="absolute inset-0 rounded-full bg-primary opacity-10"
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              transition={{ duration: 0.2 }}
+            />
+          )}
+        </div>
+      </motion.div>
+      
+      {/* Trailing dot */}
+      <motion.div
+        className="fixed top-0 left-0 z-[998] rounded-full bg-accent w-2 h-2 pointer-events-none hidden md:block"
+        style={{
+          x: cursorXSpring,
+          y: cursorYSpring,
+          translateX: "50%",
+          translateY: "50%",
+          opacity: hidden ? 0 : 0.6,
+        }}
+      />
+    </>
   );
 };
 
