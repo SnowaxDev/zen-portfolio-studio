@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import HeroSection from '../sections/HeroSection';
 import AboutSection from '../sections/AboutSection';
@@ -9,6 +9,28 @@ import SkillsSection from '../sections/SkillsSection';
 import ServicesSection from '../sections/ServicesSection';
 import ContactSection from '../sections/ContactSection';
 import Footer from '../components/Footer';
+
+// Page transition variants
+const pageVariants = {
+  initial: { opacity: 0, y: 20 },
+  animate: { 
+    opacity: 1, 
+    y: 0,
+    transition: { 
+      duration: 0.6, 
+      ease: [0.22, 1, 0.36, 1],
+      staggerChildren: 0.2
+    }
+  },
+  exit: { 
+    opacity: 0, 
+    y: -20,
+    transition: { 
+      duration: 0.4, 
+      ease: [0.22, 1, 0.36, 1] 
+    }
+  }
+};
 
 const Index = () => {
   // Update metadata to Czech
@@ -21,25 +43,24 @@ const Index = () => {
   }, []);
 
   return (
-    <AnimatePresence>
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5 }}
-        className="overflow-x-hidden"
-      >
-        <Header />
-        <main>
-          <HeroSection />
-          <AboutSection />
-          <ProjectsSection />
-          <SkillsSection />
-          <ServicesSection />
-          <ContactSection />
-        </main>
-        <Footer />
-      </motion.div>
-    </AnimatePresence>
+    <motion.div
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
+      className="overflow-x-hidden"
+    >
+      <Header />
+      <main>
+        <HeroSection />
+        <AboutSection />
+        <ProjectsSection />
+        <SkillsSection />
+        <ServicesSection />
+        <ContactSection />
+      </main>
+      <Footer />
+    </motion.div>
   );
 };
 
