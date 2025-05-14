@@ -3,15 +3,18 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import AnimatedText from '../components/AnimatedText';
 import ParticleBackground from '../components/ParticleBackground';
+import { useIsMobile } from '../hooks/use-mobile';
 
 const HeroSection: React.FC = () => {
+  const isMobile = useIsMobile();
+  
   return (
     <section id="hero" className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
       <ParticleBackground />
       
       <div className="container-custom text-center md:text-left flex flex-col md:flex-row items-center relative z-10">
         <motion.div 
-          className="md:w-1/2 mb-10 md:mb-0"
+          className="md:w-1/2 mb-10 md:mb-0 px-4 sm:px-0"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -25,10 +28,16 @@ const HeroSection: React.FC = () => {
             Frontend Vývojář & UI/UX Designer
           </motion.span>
           
-          <AnimatedText 
-            text="Vytvářím digitální zážitky, které lidé milují"
-            className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
-          />
+          {isMobile ? (
+            <h1 className="text-3xl font-bold mb-6 leading-tight">
+              Vytvářím digitální zážitky, které lidé milují
+            </h1>
+          ) : (
+            <AnimatedText 
+              text="Vytvářím digitální zážitky, které lidé milují"
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+            />
+          )}
           
           <motion.p 
             className="text-foreground/70 mb-8 max-w-lg mx-auto md:mx-0"
@@ -48,7 +57,7 @@ const HeroSection: React.FC = () => {
           >
             <motion.a 
               href="#projects" 
-              className="group relative btn bg-primary text-white hover:bg-primary/90 px-8 py-3 rounded-lg font-medium overflow-hidden"
+              className="group relative btn bg-primary text-white hover:bg-primary/90 px-8 py-3 rounded-lg font-medium overflow-hidden w-full sm:w-auto"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -63,7 +72,7 @@ const HeroSection: React.FC = () => {
             
             <motion.a 
               href="#contact" 
-              className="group relative btn border border-primary text-primary hover:bg-primary/10 px-8 py-3 rounded-lg font-medium overflow-hidden"
+              className="group relative btn border border-primary text-primary hover:bg-primary/10 px-8 py-3 rounded-lg font-medium overflow-hidden w-full sm:w-auto"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
@@ -84,7 +93,7 @@ const HeroSection: React.FC = () => {
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
         >
-          <div className="relative mx-auto w-64 h-64 md:w-80 md:h-80">
+          <div className="relative mx-auto w-56 h-56 md:w-80 md:h-80">
             <motion.div 
               className="absolute inset-0 rounded-full bg-gradient-to-tr from-primary to-purple-500 opacity-20 blur-3xl"
               animate={{ 

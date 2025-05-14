@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useIsMobile } from '../hooks/use-mobile';
-import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from './ui/navigation-menu';
+import { NavigationMenu, NavigationMenuList, NavigationMenuItem } from './ui/navigation-menu';
 import { Home, User, Code, Wrench, Mail, Menu, X } from 'lucide-react';
 
 const Header: React.FC = () => {
@@ -75,7 +75,7 @@ const Header: React.FC = () => {
 
   return (
     <motion.header
-      className={`fixed top-0 left-0 right-0 z-50 py-4 px-6 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 py-3 md:py-4 transition-all duration-300 ${
         isScrolled ? 'glassmorphism shadow-lg' : 'bg-transparent'
       }`}
       initial="initial"
@@ -152,7 +152,7 @@ const Header: React.FC = () => {
         {isMobile && (
           <div className="flex items-center">
             <motion.button
-              className="text-foreground focus:outline-none"
+              className="p-1.5 bg-card/30 rounded-md backdrop-blur-md border border-white/5 text-foreground shadow-lg"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
               aria-label="Toggle mobile menu"
@@ -190,14 +190,14 @@ const Header: React.FC = () => {
       <AnimatePresence>
         {isMobile && mobileMenuOpen && (
           <motion.div
-            className="absolute top-full left-0 right-0 glassmorphism shadow-lg py-4"
+            className="absolute top-full left-0 right-0 mobile-menu py-4"
             initial="closed"
             animate="open"
             exit="closed"
             variants={mobileMenuVariants}
           >
             <nav className="container-custom">
-              <ul className="flex flex-col space-y-2">
+              <ul className="flex flex-col space-y-1">
                 {navItems.map((item, index) => {
                   const IconComponent = item.icon;
                   const active = isActive(item.href);
@@ -219,14 +219,14 @@ const Header: React.FC = () => {
                     >
                       <a
                         href={item.href}
-                        className={`flex items-center p-3 rounded-md ${
+                        className={`mobile-nav-item ${
                           active 
                             ? 'bg-accent/10 text-accent font-medium' 
                             : 'text-foreground/80 hover:bg-accent/5'
                         }`}
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        <IconComponent className={`mr-3 h-5 w-5 ${active ? 'text-accent' : ''}`} />
+                        <IconComponent className={`h-5 w-5 ${active ? 'text-accent' : ''}`} />
                         <span>{item.label}</span>
                       </a>
                     </motion.li>

@@ -6,7 +6,7 @@ const GradientBackground: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   
   const { scrollYProgress } = useScroll({
-    offset: ["start", "end"]
+    container: containerRef
   });
   
   // Transform values for parallax effect
