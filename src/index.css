@@ -71,7 +71,7 @@
   }
 
   * {
-    @apply border-border text-center;
+    @apply border-border;
   }
   
   body {
@@ -79,15 +79,11 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-affirage font-bold text-center;
+    @apply font-affirage font-bold;
   }
 
   p {
-    @apply leading-relaxed font-affirage text-center;
-  }
-
-  div {
-    @apply flex flex-col items-center justify-center;
+    @apply leading-relaxed font-affirage;
   }
   
   /* Smoothing for all transitions */
@@ -156,7 +152,7 @@
 
 @layer components {
   .container-custom {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col items-center;
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
   
   .text-gradient {
@@ -185,7 +181,7 @@
   
   /* New design system components */
   .card-modern {
-    @apply bg-card/80 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-primary/10 mx-auto;
+    @apply bg-card/80 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-primary/10;
   }
   
   .button-primary {
@@ -206,7 +202,7 @@
   
   .section-heading::after {
     content: '';
-    @apply absolute -bottom-2 left-1/4 right-1/4 w-1/2 h-1 bg-gradient-to-r from-primary to-accent rounded-full mx-auto;
+    @apply absolute -bottom-2 left-0 w-1/2 h-1 bg-gradient-to-r from-primary to-accent rounded-full;
   }
   
   /* Mobile-specific components */
@@ -226,3 +222,4 @@
 }
 
 /* ... keep existing code (keyframes, animations, scroll reveal) */
+
