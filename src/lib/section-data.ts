@@ -1,4 +1,3 @@
-
 import { 
   Book, 
   Code2, 
@@ -12,13 +11,15 @@ import {
   Linkedin, 
   Mail, 
   Phone,
-  BriefCase, 
+  Briefcase, 
   Users,
   Award,
   Image,
   CircleUser,
   BookOpen,
-  Folder
+  Folder,
+  Database,
+  Layers
 } from "lucide-react";
 
 // Skill section data
@@ -174,7 +175,7 @@ export const sectionMeta = {
     ],
     codingPhilosophy: {
       title: "Moje Kódovací Filosofie",
-      icon: CodeIcon,
+      icon: Code2,
     },
     techHobbies: {
       title: "Moje IT Koníčky",
@@ -183,6 +184,9 @@ export const sectionMeta = {
     myStack: {
       title: "Můj Vývojový Stack",
       icon: Cpu,
+    },
+    contact: {
+      ctaText: "Spolupracujme"
     }
   },
   skills: {

@@ -5,9 +5,10 @@ import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 interface ProgressBarProps {
   skill: string;
   percentage: number;
+  delay?: number; // Make the delay property optional
 }
 
-const ProgressBar: React.FC<ProgressBarProps> = ({ skill, percentage }) => {
+const ProgressBar: React.FC<ProgressBarProps> = ({ skill, percentage, delay = 0 }) => {
   const progressValue = useMotionValue(0);
   const progressDisplay = useTransform(progressValue, Math.round);
   const ref = useRef<HTMLDivElement>(null);
@@ -39,7 +40,6 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ skill, percentage }) => {
       <div className="flex justify-between mb-2 items-center">
         <span className="text-sm md:text-base font-medium">{skill}</span>
         <motion.span className="text-sm text-foreground/80 font-mono">
-          {/* Fix: Convert MotionValue to string using formatted display value */}
           <motion.span>{progressDisplay}</motion.span>%
         </motion.span>
       </div>
@@ -52,7 +52,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ skill, percentage }) => {
           viewport={{ once: true }}
           transition={{ 
             duration: 1.2, 
-            ease: [0.34, 1.56, 0.64, 1]
+            ease: [0.34, 1.56, 0.64, 1],
+            delay: delay // Use the delay property here
           }}
         >
           <div className="absolute top-0 right-0 h-full w-1 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity"></div>
