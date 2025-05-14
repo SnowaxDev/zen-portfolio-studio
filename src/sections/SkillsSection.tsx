@@ -5,12 +5,22 @@ import SectionTitle from '../components/SectionTitle';
 import ProgressBar from '../components/ProgressBar';
 import ScrollReveal from '../components/ScrollReveal';
 import { frontendSkills, backendSkills, frameworks, sectionMeta } from '../lib/section-data';
-import { Code2, Database, Layers } from 'lucide-react';
+import { Code2, Database, Layers, ChevronDown, ChevronUp } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 const SkillsSection: React.FC = () => {
   const { skills } = sectionMeta;
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
+  const [openSkills, setOpenSkills] = useState<string[]>(['frontend', 'backend']);
+  
+  const toggleSkill = (skill: string) => {
+    setOpenSkills(prev => 
+      prev.includes(skill) 
+        ? prev.filter(s => s !== skill) 
+        : [...prev, skill]
+    );
+  };
   
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -32,111 +42,156 @@ const SkillsSection: React.FC = () => {
     },
   };
 
+  const isOpen = (skill: string) => openSkills.includes(skill);
+
   return (
     <section id="skills" className="relative py-24 md:py-32 bg-gradient-to-b from-secondary/20 via-background to-background">
       {/* Design elements */}
-      <div className="absolute top-0 left-[10%] w-40 h-40 rounded-full bg-primary/5 blur-3xl" />
-      <div className="absolute bottom-0 right-[15%] w-60 h-60 rounded-full bg-accent/5 blur-3xl" />
+      <motion.div 
+        className="absolute top-0 left-[10%] w-40 h-40 rounded-full bg-primary/5 blur-3xl" 
+        animate={{ 
+          scale: [1, 1.2, 1],
+          opacity: [0.3, 0.5, 0.3]
+        }}
+        transition={{
+          duration: 8,
+          repeat: Infinity,
+          repeatType: "reverse"
+        }}
+      />
+      <motion.div 
+        className="absolute bottom-0 right-[15%] w-60 h-60 rounded-full bg-accent/5 blur-3xl" 
+        animate={{ 
+          scale: [1, 1.3, 1],
+          opacity: [0.4, 0.6, 0.4]
+        }}
+        transition={{
+          duration: 10,
+          repeat: Infinity,
+          repeatType: "reverse",
+          delay: 1
+        }}
+      />
       
       <div className="container-custom max-w-6xl relative z-10">
         <SectionTitle 
-          title={skills.title} 
-          subtitle={skills.subtitle}
+          title="Moje dovednosti" 
+          subtitle="Technologie a nástroje, se kterými rád pracuji"
         />
         
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
           <ScrollReveal width="100%" animationStyle="fade">
             <motion.div 
-              className="relative p-6 rounded-xl bg-card/40 backdrop-blur-sm border border-white/10 shadow-lg hover:shadow-primary/5 transition-all duration-500"
-              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="relative p-6 rounded-xl bg-card/40 backdrop-blur-sm border border-white/10 shadow-lg transition-all duration-500"
+              whileHover={{ y: -8, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
               initial={{ boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)" }}
-              whileInView={{ boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)" }}
-              viewport={{ once: true }}
             >
               <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl -z-10" />
-              <div className="flex items-center mb-8">
-                <div className="p-3 rounded-xl bg-primary/10 mr-4 shadow-sm">
-                  <Code2 className="text-primary" size={28} />
-                </div>
-                <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
-                  {skills.frontend.title}
-                </h3>
-              </div>
-              
-              <div className="space-y-6">
-                {frontendSkills.map((skill, index) => (
-                  <motion.div 
-                    key={skill.skill}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 + 0.2 }}
-                    onMouseEnter={() => setHoveredSkill(skill.skill)}
-                    onMouseLeave={() => setHoveredSkill(null)}
-                  >
-                    <div className="flex justify-between items-center mb-2">
-                      <span className={`font-medium transition-all duration-300 ${hoveredSkill === skill.skill ? 'text-primary' : ''}`}>
-                        {skill.skill}
-                      </span>
-                      <span className="text-sm text-foreground/70">{skill.percentage}%</span>
+              <Collapsible open={isOpen('frontend')} onOpenChange={() => toggleSkill('frontend')} className="w-full">
+                <CollapsibleTrigger className="w-full flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="p-3 rounded-xl bg-primary/10 mr-4 shadow-sm">
+                      <Code2 className="text-primary" size={28} />
                     </div>
-                    <ProgressBar 
-                      skill={skill.skill} 
-                      percentage={skill.percentage} 
-                      delay={index * 0.1}
-                      isHovered={hoveredSkill === skill.skill}
-                    />
+                    <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-primary/70">
+                      Frontend Vývoj
+                    </h3>
+                  </div>
+                  <motion.div
+                    animate={{ rotate: isOpen('frontend') ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="text-primary"
+                  >
+                    {isOpen('frontend') ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
                   </motion.div>
-                ))}
-              </div>
+                </CollapsibleTrigger>
+                
+                <CollapsibleContent className="space-y-6 mt-6">
+                  {frontendSkills.map((skill, index) => (
+                    <motion.div 
+                      key={skill.skill}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      onMouseEnter={() => setHoveredSkill(skill.skill)}
+                      onMouseLeave={() => setHoveredSkill(null)}
+                      className="transform transition-all duration-300"
+                      whileHover={{ scale: 1.01, x: 5 }}
+                    >
+                      <div className="flex justify-between items-center mb-2">
+                        <span className={`font-medium transition-all duration-300 ${hoveredSkill === skill.skill ? 'text-primary' : ''}`}>
+                          {skill.skill}
+                        </span>
+                        <span className="text-sm text-foreground/70">{skill.percentage}%</span>
+                      </div>
+                      <ProgressBar 
+                        skill={skill.skill} 
+                        percentage={skill.percentage} 
+                        delay={index * 0.1}
+                        isHovered={hoveredSkill === skill.skill}
+                      />
+                    </motion.div>
+                  ))}
+                </CollapsibleContent>
+              </Collapsible>
             </motion.div>
           </ScrollReveal>
           
           <ScrollReveal width="100%" animationStyle="fade" delay={0.2}>
             <motion.div 
-              className="relative p-6 rounded-xl bg-card/40 backdrop-blur-sm border border-white/10 shadow-lg hover:shadow-accent/5 transition-all duration-500"
-              whileHover={{ y: -8, transition: { duration: 0.3 } }}
+              className="relative p-6 rounded-xl bg-card/40 backdrop-blur-sm border border-white/10 shadow-lg transition-all duration-500"
+              whileHover={{ y: -8, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
               initial={{ boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)" }}
-              whileInView={{ boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)" }}
-              viewport={{ once: true }}
             >
               <div className="absolute top-0 right-0 w-40 h-40 bg-accent/5 rounded-full blur-3xl -z-10" />
-              <div className="flex items-center mb-8">
-                <div className="p-3 rounded-xl bg-accent/10 mr-4 shadow-sm">
-                  <Database className="text-accent" size={28} />
-                </div>
-                <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-accent to-accent/70">
-                  {skills.backend.title}
-                </h3>
-              </div>
-              
-              <div className="space-y-6">
-                {backendSkills.map((skill, index) => (
-                  <motion.div 
-                    key={skill.skill}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.1 + 0.2 }}
-                    onMouseEnter={() => setHoveredSkill(skill.skill)}
-                    onMouseLeave={() => setHoveredSkill(null)}
-                  >
-                    <div className="flex justify-between items-center mb-2">
-                      <span className={`font-medium transition-all duration-300 ${hoveredSkill === skill.skill ? 'text-accent' : ''}`}>
-                        {skill.skill}
-                      </span>
-                      <span className="text-sm text-foreground/70">{skill.percentage}%</span>
+              <Collapsible open={isOpen('backend')} onOpenChange={() => toggleSkill('backend')} className="w-full">
+                <CollapsibleTrigger className="w-full flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="p-3 rounded-xl bg-accent/10 mr-4 shadow-sm">
+                      <Database className="text-accent" size={28} />
                     </div>
-                    <ProgressBar 
-                      skill={skill.skill} 
-                      percentage={skill.percentage}
-                      delay={index * 0.1}
-                      isHovered={hoveredSkill === skill.skill}
-                      className="bg-accent"
-                    />
+                    <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-accent to-accent/70">
+                      Backend Vývoj
+                    </h3>
+                  </div>
+                  <motion.div
+                    animate={{ rotate: isOpen('backend') ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                    className="text-accent"
+                  >
+                    {isOpen('backend') ? <ChevronUp size={24} /> : <ChevronDown size={24} />}
                   </motion.div>
-                ))}
-              </div>
+                </CollapsibleTrigger>
+                
+                <CollapsibleContent className="space-y-6 mt-6">
+                  {backendSkills.map((skill, index) => (
+                    <motion.div 
+                      key={skill.skill}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.1 }}
+                      onMouseEnter={() => setHoveredSkill(skill.skill)}
+                      onMouseLeave={() => setHoveredSkill(null)}
+                      className="transform transition-all duration-300"
+                      whileHover={{ scale: 1.01, x: 5 }}
+                    >
+                      <div className="flex justify-between items-center mb-2">
+                        <span className={`font-medium transition-all duration-300 ${hoveredSkill === skill.skill ? 'text-accent' : ''}`}>
+                          {skill.skill}
+                        </span>
+                        <span className="text-sm text-foreground/70">{skill.percentage}%</span>
+                      </div>
+                      <ProgressBar 
+                        skill={skill.skill} 
+                        percentage={skill.percentage}
+                        delay={index * 0.1}
+                        isHovered={hoveredSkill === skill.skill}
+                        className="bg-accent"
+                      />
+                    </motion.div>
+                  ))}
+                </CollapsibleContent>
+              </Collapsible>
             </motion.div>
           </ScrollReveal>
         </div>
@@ -155,10 +210,15 @@ const SkillsSection: React.FC = () => {
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true }}
               transition={{ type: "spring", stiffness: 200 }}
+              whileHover={{ 
+                scale: 1.1, 
+                rotate: 10,
+                boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.2)"
+              }}
             >
               <Layers className="text-primary" size={32} />
             </motion.div>
-            <h3 className="text-2xl font-bold text-gradient">{skills.tools.title}</h3>
+            <h3 className="text-2xl font-bold text-gradient">Frameworky a Nástroje</h3>
           </div>
           
           <motion.div 
@@ -180,6 +240,9 @@ const SkillsSection: React.FC = () => {
                     <motion.span 
                       className="text-foreground/80 group-hover:text-primary transition-all duration-300"
                       whileHover={{ scale: 1.05 }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: index * 0.03 + 0.5 }}
                     >
                       {item}
                     </motion.span>

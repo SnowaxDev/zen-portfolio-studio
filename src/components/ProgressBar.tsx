@@ -64,7 +64,14 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
             delay: delay
           }}
         >
-          <div className="absolute top-0 right-0 h-full w-1 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+          <motion.div 
+            className="absolute top-0 right-0 h-full w-1 bg-white/30 opacity-0 group-hover:opacity-100 transition-opacity"
+            animate={{
+              width: isHovered ? '3px' : '1px',
+              boxShadow: isHovered ? '0 0 8px rgba(255, 255, 255, 0.5)' : 'none'
+            }}
+            transition={{ duration: 0.2 }}
+          />
         </motion.div>
       </div>
     </div>
