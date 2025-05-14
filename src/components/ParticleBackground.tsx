@@ -1,6 +1,5 @@
 
 import React, { useEffect, useRef } from 'react';
-import { useTheme } from '../contexts/ThemeContext';
 
 interface Particle {
   x: number;
@@ -13,7 +12,6 @@ interface Particle {
 
 const ParticleBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { theme } = useTheme();
   
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -35,7 +33,8 @@ const ParticleBackground: React.FC = () => {
     const particleCount = Math.min(Math.floor(window.innerWidth / 10), 100);
     const particles: Particle[] = [];
     
-    const primaryColor = theme === 'dark' ? '217, 91%, 60%' : '221, 83%, 53%';
+    // Use a fixed color scheme now that we don't have theme
+    const primaryColor = '221, 83%, 53%'; // Blue color
     
     for (let i = 0; i < particleCount; i++) {
       particles.push({
@@ -95,7 +94,7 @@ const ParticleBackground: React.FC = () => {
     return () => {
       window.removeEventListener('resize', setCanvasSize);
     };
-  }, [theme]);
+  }, []);
   
   return (
     <canvas 
