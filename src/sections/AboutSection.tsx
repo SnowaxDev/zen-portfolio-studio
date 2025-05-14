@@ -2,7 +2,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import SectionTitle from '../components/SectionTitle';
-import { FileCode2, Terminal, Laptop, CodeIcon } from 'lucide-react';
+import { FileCode2, Terminal, Laptop, CodeIcon, Server, Cpu } from 'lucide-react';
 
 const AboutSection: React.FC = () => {
   return (
@@ -10,7 +10,7 @@ const AboutSection: React.FC = () => {
       <div className="container-custom">
         <SectionTitle 
           title="O Mně" 
-          subtitle="Dozvězte se více o mém zázemí a co mě motivuje"
+          subtitle="Student s vášní pro webový vývoj a technologie"
         />
         
         <div className="flex flex-col lg:flex-row gap-12 items-center">
@@ -23,15 +23,14 @@ const AboutSection: React.FC = () => {
           >
             <h3 className="text-2xl font-bold mb-4">Moje Cesta</h3>
             <p className="mb-4">
-              S více než 2 lety zkušeností ve webovém vývoji se specializuji na vytváření výkonných, 
-              přístupných a vizuálně úchvatných webových aplikací. Moje vášeň pro čistý kód a 
-              intuitivní design mě vede k vytváření digitálních zážitků, které uživatelé milují.
+              Jako student experimentující s webovým vývojem mám velký zájem o vytváření 
+              moderních, přístupných a vizuálně atraktivních webových aplikací. Neustále se 
+              vzdělávám a hledám nové příležitosti k rozšíření svých dovedností.
             </p>
             <p className="mb-4">
-              Svou kariéru jsem začal jako UI designer, než jsem přešel na frontend development, 
-              což mi dává jedinečnou perspektivu při vytváření produktů, které skvěle vypadají a 
-              zároveň bezchybně fungují. Věřím v sílu designových systémů a komponentového vývoje 
-              pro vytváření konzistentních a udržitelných aplikací.
+              Momentálně hledám zákazníky pro své první komerční projekty, kde mohu aplikovat 
+              nabyté znalosti a dále růst jako vývojář. Mým cílem je poskytovat kvalitní 
+              webové služby za dostupné ceny, zejména pro začínající podnikatele a malé firmy.
             </p>
             
             <div className="mt-6 mb-6 p-4 bg-card rounded-lg border border-border">
@@ -50,7 +49,7 @@ const AboutSection: React.FC = () => {
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">»</span> 
-                  <span>Využívám test-driven development pro zajištění robustních aplikací.</span>
+                  <span>Využívám moderní nástroje a technologie pro efektivní vývoj.</span>
                 </li>
                 <li className="flex items-start">
                   <span className="text-primary mr-2">»</span> 
@@ -59,10 +58,35 @@ const AboutSection: React.FC = () => {
               </ul>
             </div>
             
+            <div className="mt-6 mb-6 p-4 bg-card rounded-lg border border-border">
+              <h4 className="text-xl font-semibold mb-3 flex items-center">
+                <Server className="mr-2 text-primary" size={20} />
+                Moje IT Koníčky
+              </h4>
+              <ul className="space-y-2">
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">»</span> 
+                  <span>Home labbing - experimenty s domácími servery a sítěmi</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">»</span> 
+                  <span>Automatizace pomocí skriptů a self-hosted aplikací</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">»</span> 
+                  <span>Linux systémy a open source software</span>
+                </li>
+                <li className="flex items-start">
+                  <span className="text-primary mr-2">»</span> 
+                  <span>Arduino a IoT projekty pro chytrou domácnost</span>
+                </li>
+              </ul>
+            </div>
+            
             <p>
-              Když nekóduji, najdete mě při zkoumání nových technologií, přispívání do open 
-              source projektů nebo při focení v přírodě. Vždy hledám nové výzvy a 
-              příležitosti k růstu jako vývojář.
+              Když nekóduji, najdete mě při experimentování s novým hardwarem, 
+              konfigurací síťových služeb nebo při studiu odborné literatury. Vždy hledám 
+              nové výzvy a příležitosti k osobnímu i profesnímu růstu.
             </p>
             
             <motion.div
@@ -89,26 +113,29 @@ const AboutSection: React.FC = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-card p-5 rounded-lg shadow-sm">
+              <div className="bg-card p-5 rounded-lg shadow-sm border border-border/40 hover:border-primary/30 transition-all duration-300">
                 <h4 className="font-bold text-3xl text-primary mb-2">2+</h4>
                 <p className="text-sm text-foreground/70">Roky zkušeností</p>
               </div>
-              <div className="bg-card p-5 rounded-lg shadow-sm">
-                <h4 className="font-bold text-3xl text-primary mb-2">20+</h4>
+              <div className="bg-card p-5 rounded-lg shadow-sm border border-border/40 hover:border-primary/30 transition-all duration-300">
+                <h4 className="font-bold text-3xl text-primary mb-2">10+</h4>
                 <p className="text-sm text-foreground/70">Dokončených projektů</p>
               </div>
-              <div className="bg-card p-5 rounded-lg shadow-sm">
-                <h4 className="font-bold text-3xl text-primary mb-2">15+</h4>
+              <div className="bg-card p-5 rounded-lg shadow-sm border border-border/40 hover:border-primary/30 transition-all duration-300">
+                <h4 className="font-bold text-3xl text-primary mb-2">5+</h4>
                 <p className="text-sm text-foreground/70">Spokojených klientů</p>
               </div>
-              <div className="bg-card p-5 rounded-lg shadow-sm">
-                <h4 className="font-bold text-3xl text-primary mb-2">6+</h4>
+              <div className="bg-card p-5 rounded-lg shadow-sm border border-border/40 hover:border-primary/30 transition-all duration-300">
+                <h4 className="font-bold text-3xl text-primary mb-2">3+</h4>
                 <p className="text-sm text-foreground/70">Open source příspěvků</p>
               </div>
             </div>
             
-            <div className="bg-card p-6 rounded-lg border border-border">
-              <h4 className="text-xl font-semibold mb-4">Můj Vývojový Stack</h4>
+            <div className="bg-card p-6 rounded-lg border border-border shadow-md hover:shadow-lg transition-all duration-300">
+              <h4 className="text-xl font-semibold mb-4 flex items-center">
+                <Cpu className="text-primary mr-2" size={20} />
+                Můj Vývojový Stack
+              </h4>
               
               <div className="space-y-4">
                 <div>
@@ -127,7 +154,7 @@ const AboutSection: React.FC = () => {
                     <h5 className="font-medium">Backend</h5>
                   </div>
                   <p className="text-sm text-foreground/80 pl-6">
-                    Node.js, Express, GraphQL, PostgreSQL, MongoDB
+                    Node.js, MongoDB
                   </p>
                 </div>
                 
@@ -137,7 +164,7 @@ const AboutSection: React.FC = () => {
                     <h5 className="font-medium">Nástroje</h5>
                   </div>
                   <p className="text-sm text-foreground/80 pl-6">
-                    Git, Docker, CI/CD, AWS, Figma, Jest, Cypress
+                    Git, Figma, Linux, Bash, VS Code
                   </p>
                 </div>
               </div>
