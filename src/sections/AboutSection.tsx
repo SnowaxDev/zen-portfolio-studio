@@ -1,174 +1,231 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import ScrollReveal from '../components/ScrollReveal';
 import SectionTitle from '../components/SectionTitle';
-import { FileCode2, Terminal, Laptop, CodeIcon, Server, Cpu } from 'lucide-react';
+import AnimatedText from '../components/AnimatedText';
+import { FileCode2, Terminal, Laptop, CodeIcon, Server, Cpu, Check } from 'lucide-react';
+import { cn } from '../lib/utils';
 
 const AboutSection: React.FC = () => {
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+        delayChildren: 0.2,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.4, ease: "easeOut" }
+    }
+  };
+
   return (
-    <section id="about" className="section bg-secondary/30">
+    <section id="about" className="section py-24 md:py-32 overflow-hidden">
       <div className="container-custom">
         <SectionTitle 
           title="O Mně" 
           subtitle="Student s vášní pro webový vývoj a technologie"
         />
         
-        <div className="flex flex-col lg:flex-row gap-12 items-center">
+        <div className="flex flex-col lg:flex-row gap-12 items-start">
           <motion.div 
-            className="lg:w-1/2"
-            initial={{ opacity: 0, x: -20 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            className="lg:w-1/2 space-y-6"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5 }}
           >
-            <h3 className="text-2xl font-bold mb-4">Moje Cesta</h3>
-            <p className="mb-4">
-              Jako student experimentující s webovým vývojem mám velký zájem o vytváření 
-              moderních, přístupných a vizuálně atraktivních webových aplikací. Neustále se 
-              vzdělávám a hledám nové příležitosti k rozšíření svých dovedností.
-            </p>
-            <p className="mb-4">
-              Momentálně hledám zákazníky pro své první komerční projekty, kde mohu aplikovat 
-              nabyté znalosti a dále růst jako vývojář. Mým cílem je poskytovat kvalitní 
-              webové služby za dostupné ceny, zejména pro začínající podnikatele a malé firmy.
-            </p>
+            <ScrollReveal direction="right">
+              <h3 className="text-2xl font-bold mb-2 text-gradient">Moje Cesta</h3>
+            </ScrollReveal>
             
-            <div className="mt-6 mb-6 p-4 bg-card rounded-lg border border-border">
-              <h4 className="text-xl font-semibold mb-3 flex items-center">
-                <CodeIcon className="mr-2 text-primary" size={20} />
-                Moje Kódovací Filosofie
-              </h4>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-primary mr-2">»</span> 
-                  <span>Píšu čistý, modulární kód, který je snadné udržovat a škálovat.</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-primary mr-2">»</span> 
-                  <span>Upřednostňuji přístupnost a výkon ve všem, co vytvářím.</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-primary mr-2">»</span> 
-                  <span>Využívám moderní nástroje a technologie pro efektivní vývoj.</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-primary mr-2">»</span> 
-                  <span>Neustále se učím novým technologiím, abych zůstal v popředí webového vývoje.</span>
-                </li>
-              </ul>
-            </div>
+            <ScrollReveal delay={0.1}>
+              <p className="text-lg">
+                Jako student experimentující s webovým vývojem mám velký zájem o vytváření 
+                moderních, přístupných a vizuálně atraktivních webových
+                aplikací. Neustále se vzdělávám a hledám nové příležitosti k rozšíření svých
+                dovedností.
+              </p>
+            </ScrollReveal>
             
-            <div className="mt-6 mb-6 p-4 bg-card rounded-lg border border-border">
-              <h4 className="text-xl font-semibold mb-3 flex items-center">
-                <Server className="mr-2 text-primary" size={20} />
-                Moje IT Koníčky
-              </h4>
-              <ul className="space-y-2">
-                <li className="flex items-start">
-                  <span className="text-primary mr-2">»</span> 
-                  <span>Home labbing - experimenty s domácími servery a sítěmi</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-primary mr-2">»</span> 
-                  <span>Automatizace pomocí skriptů a self-hosted aplikací</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-primary mr-2">»</span> 
-                  <span>Linux systémy a open source software</span>
-                </li>
-                <li className="flex items-start">
-                  <span className="text-primary mr-2">»</span> 
-                  <span>Arduino a IoT projekty pro chytrou domácnost</span>
-                </li>
-              </ul>
-            </div>
+            <ScrollReveal delay={0.2}>
+              <p className="text-lg">
+                Momentálně hledám zákazníky pro své první komerční projekty, kde mohu
+                aplikovat nabyté znalosti a dále růst jako vývojář. Mým cílem je poskytovat
+                kvalitní webové služby za dostupné ceny, zejména pro začínající
+                podnikatele a malé firmy.
+              </p>
+            </ScrollReveal>
             
-            <p>
-              Když nekóduji, najdete mě při experimentování s novým hardwarem, 
-              konfigurací síťových služeb nebo při studiu odborné literatury. Vždy hledám 
-              nové výzvy a příležitosti k osobnímu i profesnímu růstu.
-            </p>
+            <ScrollReveal width="100%" delay={0.3}>
+              <div className="mt-6 p-5 bg-card/80 backdrop-blur-sm rounded-lg border border-primary/10 shadow-lg hover:shadow-primary/5 transition-all duration-300">
+                <div className="flex items-center mb-3">
+                  <div className="p-2 rounded-md bg-primary/10 mr-3">
+                    <CodeIcon className="text-primary" size={22} />
+                  </div>
+                  <h4 className="text-xl font-semibold">Moje Kódovací Filosofie</h4>
+                </div>
+                
+                <ul className="space-y-3">
+                  {[
+                    'Píšu čistý, modulární kód, který je snadné udržovat a škálovat.',
+                    'Upřednostňuji přístupnost a výkon ve všem, co vytvářím.',
+                    'Využívám moderní nástroje a technologie pro efektivní vývoj.',
+                    'Neustále se učím novým technologiím, abych zůstal v popředí webového vývoje.'
+                  ].map((item, index) => (
+                    <motion.li 
+                      key={index} 
+                      className="flex items-start"
+                      variants={itemVariants}
+                    >
+                      <Check className="text-primary shrink-0 mt-1 mr-2" size={18} />
+                      <span>{item}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+            </ScrollReveal>
             
-            <motion.div
-              className="mt-8"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: 0.3 }}
-            >
+            <ScrollReveal width="100%" delay={0.4}>
+              <div className="mt-6 p-5 bg-card/80 backdrop-blur-sm rounded-lg border border-accent/10 shadow-lg hover:shadow-accent/5 transition-all duration-300">
+                <div className="flex items-center mb-3">
+                  <div className="p-2 rounded-md bg-accent/10 mr-3">
+                    <Server className="text-accent" size={22} />
+                  </div>
+                  <h4 className="text-xl font-semibold">Moje IT Koníčky</h4>
+                </div>
+                
+                <ul className="space-y-3">
+                  {[
+                    'Home labbing - experimenty s domácími servery a sítěmi',
+                    'Automatizace pomocí skriptů a self-hosted aplikací',
+                    'Linux systémy a open source software',
+                    'Arduino a IoT projekty pro chytrou domácnost'
+                  ].map((item, index) => (
+                    <motion.li 
+                      key={index} 
+                      className="flex items-start"
+                      variants={itemVariants}
+                    >
+                      <span className="text-accent mr-2">»</span> 
+                      <span>{item}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+            </ScrollReveal>
+            
+            <ScrollReveal delay={0.5}>
+              <p className="text-lg">
+                Když nekóduji, najdete mě při experimentování s novým hardwarem, 
+                konfigurací síťových služeb nebo při studiu odborné literatury. Vždy hledám 
+                nové výzvy a příležitosti k osobnímu i profesnímu růstu.
+              </p>
+            </ScrollReveal>
+            
+            <ScrollReveal distance={30} delay={0.6}>
               <a 
                 href="#contact"
-                className="text-primary font-medium border-b-2 border-primary hover:border-transparent hover:bg-primary hover:text-white transition-all duration-300 pb-1 px-2"
+                className="inline-block mt-4 px-6 py-2.5 bg-gradient-to-r from-primary to-accent text-white rounded-lg shadow-lg hover:shadow-primary/20 transition-all duration-300 hover:scale-105"
               >
                 Spolupracujme
               </a>
-            </motion.div>
+            </ScrollReveal>
           </motion.div>
           
           <motion.div 
-            className="lg:w-1/2"
+            className="lg:w-1/2 space-y-8"
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.5, delay: 0.2 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
           >
-            <div className="grid grid-cols-2 gap-4 mb-6">
-              <div className="bg-card p-5 rounded-lg shadow-sm border border-border/40 hover:border-primary/30 transition-all duration-300">
-                <h4 className="font-bold text-3xl text-primary mb-2">2+</h4>
-                <p className="text-sm text-foreground/70">Roky zkušeností</p>
-              </div>
-              <div className="bg-card p-5 rounded-lg shadow-sm border border-border/40 hover:border-primary/30 transition-all duration-300">
-                <h4 className="font-bold text-3xl text-primary mb-2">10+</h4>
-                <p className="text-sm text-foreground/70">Dokončených projektů</p>
-              </div>
-              <div className="bg-card p-5 rounded-lg shadow-sm border border-border/40 hover:border-primary/30 transition-all duration-300">
-                <h4 className="font-bold text-3xl text-primary mb-2">5+</h4>
-                <p className="text-sm text-foreground/70">Spokojených klientů</p>
-              </div>
-              <div className="bg-card p-5 rounded-lg shadow-sm border border-border/40 hover:border-primary/30 transition-all duration-300">
-                <h4 className="font-bold text-3xl text-primary mb-2">3+</h4>
-                <p className="text-sm text-foreground/70">Open source příspěvků</p>
-              </div>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { title: '2+', subtitle: 'Roky zkušeností', delay: 0 },
+                { title: '10+', subtitle: 'Dokončených projektů', delay: 0.1 },
+                { title: '5+', subtitle: 'Spokojených klientů', delay: 0.2 },
+                { title: '3+', subtitle: 'Open source příspěvků', delay: 0.3 },
+              ].map((item, index) => (
+                <ScrollReveal key={index} delay={item.delay} width="100%">
+                  <motion.div 
+                    className="bg-card/80 backdrop-blur-sm p-5 rounded-lg border border-border/40 shadow-md hover:border-primary/30 hover:shadow-primary/5 transition-all duration-300"
+                    whileHover={{ 
+                      scale: 1.03, 
+                      transition: { duration: 0.2 } 
+                    }}
+                  >
+                    <h4 className="font-bold text-3xl text-gradient mb-2">{item.title}</h4>
+                    <p className="text-sm text-foreground/70">{item.subtitle}</p>
+                  </motion.div>
+                </ScrollReveal>
+              ))}
             </div>
             
-            <div className="bg-card p-6 rounded-lg border border-border shadow-md hover:shadow-lg transition-all duration-300">
-              <h4 className="text-xl font-semibold mb-4 flex items-center">
-                <Cpu className="text-primary mr-2" size={20} />
-                Můj Vývojový Stack
-              </h4>
-              
-              <div className="space-y-4">
-                <div>
-                  <div className="flex items-center mb-1">
-                    <FileCode2 className="text-primary mr-2" size={16} />
-                    <h5 className="font-medium">Frontend</h5>
+            <ScrollReveal width="100%" delay={0.4}>
+              <motion.div 
+                className="bg-card/80 backdrop-blur-sm p-6 rounded-lg border border-border shadow-md hover:shadow-lg transition-all duration-300"
+                whileHover={{ 
+                  y: -5,
+                  boxShadow: "0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+                  transition: { duration: 0.2 }
+                }}
+              >
+                <div className="flex items-center mb-5">
+                  <div className="p-2.5 rounded-md bg-gradient-to-br from-primary/20 to-accent/20 mr-3">
+                    <Cpu className="text-primary" size={24} />
                   </div>
-                  <p className="text-sm text-foreground/80 pl-6">
-                    React, TypeScript, Next.js, Tailwind CSS, Framer Motion
-                  </p>
+                  <h4 className="text-xl font-semibold">Můj Vývojový Stack</h4>
                 </div>
                 
-                <div>
-                  <div className="flex items-center mb-1">
-                    <Terminal className="text-primary mr-2" size={16} />
-                    <h5 className="font-medium">Backend</h5>
+                <div className="space-y-5">
+                  <div>
+                    <div className="flex items-center mb-2">
+                      <div className="p-1.5 rounded-md bg-primary/10 mr-2">
+                        <FileCode2 className="text-primary" size={16} />
+                      </div>
+                      <h5 className="font-medium">Frontend</h5>
+                    </div>
+                    <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
+                      React, TypeScript, Next.js, Tailwind CSS, Framer Motion
+                    </p>
                   </div>
-                  <p className="text-sm text-foreground/80 pl-6">
-                    Node.js, MongoDB
-                  </p>
-                </div>
-                
-                <div>
-                  <div className="flex items-center mb-1">
-                    <Laptop className="text-primary mr-2" size={16} />
-                    <h5 className="font-medium">Nástroje</h5>
+                  
+                  <div>
+                    <div className="flex items-center mb-2">
+                      <div className="p-1.5 rounded-md bg-accent/10 mr-2">
+                        <Terminal className="text-accent" size={16} />
+                      </div>
+                      <h5 className="font-medium">Backend</h5>
+                    </div>
+                    <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
+                      Node.js, MongoDB
+                    </p>
                   </div>
-                  <p className="text-sm text-foreground/80 pl-6">
-                    Git, Figma, Linux, Bash, VS Code
-                  </p>
+                  
+                  <div>
+                    <div className="flex items-center mb-2">
+                      <div className="p-1.5 rounded-md bg-primary/10 mr-2">
+                        <Laptop className="text-primary" size={16} />
+                      </div>
+                      <h5 className="font-medium">Nástroje</h5>
+                    </div>
+                    <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
+                      Git, Figma, Linux, Bash, VS Code
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </div>
+              </motion.div>
+            </ScrollReveal>
           </motion.div>
         </div>
       </div>
