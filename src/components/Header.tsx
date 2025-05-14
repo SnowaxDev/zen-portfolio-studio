@@ -3,25 +3,43 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useIsMobile } from '../hooks/use-mobile';
 import ThemeToggle from './ThemeToggle';
+import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from './ui/navigation-menu';
+import { Home, User, Code, Wrench, Mail, Menu, X } from 'lucide-react';
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
   const isMobile = useIsMobile();
   
-  // Navigation items
+  // Navigation items with icons
   const navItems = [
-    { label: 'Home', href: '#hero' },
-    { label: 'About', href: '#about' },
-    { label: 'Projects', href: '#projects' },
-    { label: 'Skills', href: '#skills' },
-    { label: 'Contact', href: '#contact' }
+    { label: 'Home', href: '#hero', icon: Home },
+    { label: 'About', href: '#about', icon: User },
+    { label: 'Projects', href: '#projects', icon: Code },
+    { label: 'Skills', href: '#skills', icon: Wrench },
+    { label: 'Contact', href: '#contact', icon: Mail }
   ];
 
-  // Handle scroll event for header styling
+  // Handle scroll event for header styling and active section
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
+      
+      // Determine active section based on scroll position
+      const sections = document.querySelectorAll('section[id]');
+      let currentSection = 'hero';
+      
+      sections.forEach(section => {
+        const sectionTop = section.getBoundingClientRect().top;
+        const sectionId = section.getAttribute('id');
+        
+        if (sectionTop < window.innerHeight / 3 && sectionId) {
+          currentSection = sectionId;
+        }
+      });
+      
+      setActiveSection(currentSection);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -36,13 +54,30 @@ const Header: React.FC = () => {
 
   const mobileMenuVariants = {
     closed: { opacity: 0, y: "-100%" },
-    open: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+    open: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } }
+  };
+
+  const navItemVariants = {
+    hidden: { opacity: 0, y: -5 },
+    visible: (i: number) => ({ 
+      opacity: 1, 
+      y: 0, 
+      transition: { 
+        delay: i * 0.1,
+        duration: 0.3
+      } 
+    })
+  };
+
+  const isActive = (href: string) => {
+    const sectionId = href.replace('#', '');
+    return activeSection === sectionId;
   };
 
   return (
     <motion.header
       className={`fixed top-0 left-0 right-0 z-50 py-4 px-6 transition-all duration-300 ${
-        isScrolled ? 'bg-background/80 backdrop-blur-md shadow-sm' : 'bg-transparent'
+        isScrolled ? 'glassmorphism shadow-lg' : 'bg-transparent'
       }`}
       initial="initial"
       animate="animate"
@@ -51,52 +86,114 @@ const Header: React.FC = () => {
       <div className="container-custom flex items-center justify-between">
         <motion.a 
           href="#hero" 
-          className="text-xl font-bold text-primary"
+          className="text-xl font-bold text-gradient relative group"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
-          John.dev
+          <span>John.dev</span>
+          <motion.span 
+            className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent"
+            initial={{ width: 0 }}
+            animate={{ width: isActive('#hero') ? "100%" : 0 }}
+            transition={{ duration: 0.3 }}
+          />
+          <motion.span 
+            className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary"
+            initial={{ width: "0%" }}
+            whileHover={{ width: "100%" }}
+            transition={{ duration: 0.3 }}
+          />
         </motion.a>
         
         {/* Desktop Navigation */}
         {!isMobile && (
-          <nav className="flex items-center space-x-8">
-            <ul className="flex space-x-6">
-              {navItems.map((item) => (
-                <motion.li key={item.label} whileHover={{ y: -2 }}>
-                  <a
-                    href={item.href}
-                    className="text-foreground/80 hover:text-primary transition-colors"
-                  >
-                    {item.label}
-                  </a>
-                </motion.li>
-              ))}
-            </ul>
-            <ThemeToggle />
-          </nav>
+          <NavigationMenu>
+            <NavigationMenuList className="flex space-x-1">
+              {navItems.map((item, index) => {
+                const IconComponent = item.icon;
+                const active = isActive(item.href);
+                
+                return (
+                  <NavigationMenuItem key={item.label}>
+                    <motion.div
+                      custom={index}
+                      initial="hidden"
+                      animate="visible"
+                      variants={navItemVariants}
+                    >
+                      <a
+                        href={item.href}
+                        className={`flex items-center px-4 py-2 rounded-md transition-all duration-300 ${
+                          active 
+                            ? 'bg-accent/10 text-accent font-medium' 
+                            : 'text-foreground/80 hover:bg-accent/5 hover:text-primary'
+                        }`}
+                      >
+                        <IconComponent className={`mr-2 h-4 w-4 ${active ? 'text-accent' : ''}`} />
+                        <span>{item.label}</span>
+                        {active && (
+                          <motion.div
+                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent mx-2"
+                            layoutId="activeSection"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ duration: 0.3 }}
+                          />
+                        )}
+                      </a>
+                    </motion.div>
+                  </NavigationMenuItem>
+                );
+              })}
+              <NavigationMenuItem>
+                <motion.div
+                  custom={navItems.length}
+                  initial="hidden"
+                  animate="visible"
+                  variants={navItemVariants}
+                >
+                  <ThemeToggle />
+                </motion.div>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
         )}
         
         {/* Mobile Menu Button */}
         {isMobile && (
           <div className="flex items-center space-x-4">
             <ThemeToggle />
-            <button
+            <motion.button
               className="text-foreground focus:outline-none"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
               aria-label="Toggle mobile menu"
+              whileTap={{ scale: 0.9 }}
             >
-              {mobileMenuOpen ? (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              )}
-            </button>
+              <AnimatePresence mode="wait">
+                {mobileMenuOpen ? (
+                  <motion.div
+                    key="close"
+                    initial={{ opacity: 0, rotate: -90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: 90 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <X className="h-6 w-6" />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    key="menu"
+                    initial={{ opacity: 0, rotate: 90 }}
+                    animate={{ opacity: 1, rotate: 0 }}
+                    exit={{ opacity: 0, rotate: -90 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <Menu className="h-6 w-6" />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.button>
           </div>
         )}
       </div>
@@ -105,31 +202,48 @@ const Header: React.FC = () => {
       <AnimatePresence>
         {isMobile && mobileMenuOpen && (
           <motion.div
-            className="absolute top-full left-0 right-0 bg-background/95 backdrop-blur-md shadow-lg py-4"
+            className="absolute top-full left-0 right-0 glassmorphism shadow-lg py-4"
             initial="closed"
             animate="open"
             exit="closed"
             variants={mobileMenuVariants}
           >
             <nav className="container-custom">
-              <ul className="flex flex-col space-y-4">
-                {navItems.map((item) => (
-                  <motion.li 
-                    key={item.label}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: -20 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <a
-                      href={item.href}
-                      className="block py-2 text-foreground/80 hover:text-primary transition-colors"
-                      onClick={() => setMobileMenuOpen(false)}
+              <ul className="flex flex-col space-y-2">
+                {navItems.map((item, index) => {
+                  const IconComponent = item.icon;
+                  const active = isActive(item.href);
+                  
+                  return (
+                    <motion.li 
+                      key={item.label}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ 
+                        opacity: 1, 
+                        x: 0,
+                        transition: { delay: index * 0.08 } 
+                      }}
+                      exit={{ 
+                        opacity: 0, 
+                        x: -20,
+                        transition: { delay: (navItems.length - index) * 0.05 } 
+                      }}
                     >
-                      {item.label}
-                    </a>
-                  </motion.li>
-                ))}
+                      <a
+                        href={item.href}
+                        className={`flex items-center p-3 rounded-md ${
+                          active 
+                            ? 'bg-accent/10 text-accent font-medium' 
+                            : 'text-foreground/80 hover:bg-accent/5'
+                        }`}
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        <IconComponent className={`mr-3 h-5 w-5 ${active ? 'text-accent' : ''}`} />
+                        <span>{item.label}</span>
+                      </a>
+                    </motion.li>
+                  );
+                })}
               </ul>
             </nav>
           </motion.div>
