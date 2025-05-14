@@ -4,9 +4,11 @@ import { motion } from 'framer-motion';
 import AnimatedText from '../components/AnimatedText';
 import ParticleBackground from '../components/ParticleBackground';
 import { useIsMobile } from '../hooks/use-mobile';
+import { sectionMeta } from '../lib/section-data';
 
 const HeroSection: React.FC = () => {
   const isMobile = useIsMobile();
+  const { hero } = sectionMeta;
   
   return (
     <section id="hero" className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
@@ -25,17 +27,18 @@ const HeroSection: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            Frontend Vývojář & UI/UX Designer
+            {hero.subtitle}
           </motion.span>
           
           {isMobile ? (
             <h1 className="text-3xl font-bold mb-6 leading-tight">
-              Vytvářím digitální zážitky, které lidé milují
+              {hero.title}
             </h1>
           ) : (
             <AnimatedText 
-              text="Vytvářím digitální zážitky, které lidé milují"
+              text={hero.title}
               className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              animation="wave"
             />
           )}
           
@@ -45,8 +48,7 @@ const HeroSection: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
           >
-            Vytvářím moderní webové aplikace s Reactem a Next.js, se zaměřením na výkon, 
-            přístupnost a skvělý uživatelský zážitek.
+            {hero.description}
           </motion.p>
           
           <motion.div 

@@ -4,10 +4,23 @@ import { motion } from 'framer-motion';
 import ScrollReveal from '../components/ScrollReveal';
 import SectionTitle from '../components/SectionTitle';
 import AnimatedText from '../components/AnimatedText';
-import { FileCode2, Terminal, Laptop, CodeIcon, Server, Cpu, Check } from 'lucide-react';
-import { cn } from '../lib/utils';
+import { 
+  Check,
+  CodeIcon,
+  Server,
+  Cpu,
+} from 'lucide-react';
+import { 
+  statsData, 
+  techStackData, 
+  philosophyItems,
+  hobbyItems,
+  sectionMeta
+} from '../lib/section-data';
 
 const AboutSection: React.FC = () => {
+  const { about } = sectionMeta;
+  
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -32,8 +45,8 @@ const AboutSection: React.FC = () => {
     <section id="about" className="section py-24 md:py-32 overflow-hidden">
       <div className="container-custom">
         <SectionTitle 
-          title="O Mně" 
-          subtitle="Student s vášní pro webový vývoj a technologie"
+          title={about.title} 
+          subtitle={about.subtitle}
         />
         
         <div className="flex flex-col lg:flex-row gap-12 items-start">
@@ -45,43 +58,31 @@ const AboutSection: React.FC = () => {
             viewport={{ once: true, margin: "-100px" }}
           >
             <ScrollReveal direction="right">
-              <h3 className="text-2xl font-bold mb-2 text-gradient">Moje Cesta</h3>
+              <h3 className="text-2xl font-bold mb-2 text-gradient">{about.journey}</h3>
             </ScrollReveal>
             
-            <ScrollReveal delay={0.1}>
-              <p className="text-lg">
-                Jako student experimentující s webovým vývojem mám velký zájem o vytváření 
-                moderních, přístupných a vizuálně atraktivních webových
-                aplikací. Neustále se vzdělávám a hledám nové příležitosti k rozšíření svých
-                dovedností.
-              </p>
-            </ScrollReveal>
-            
-            <ScrollReveal delay={0.2}>
-              <p className="text-lg">
-                Momentálně hledám zákazníky pro své první komerční projekty, kde mohu
-                aplikovat nabyté znalosti a dále růst jako vývojář. Mým cílem je poskytovat
-                kvalitní webové služby za dostupné ceny, zejména pro začínající
-                podnikatele a malé firmy.
-              </p>
-            </ScrollReveal>
+            {about.journeyText.map((paragraph, index) => (
+              <ScrollReveal key={index} delay={index * 0.1 + 0.1}>
+                <p className="text-lg">
+                  {paragraph}
+                </p>
+              </ScrollReveal>
+            ))}
             
             <ScrollReveal width="100%" delay={0.3}>
-              <div className="mt-6 p-5 bg-card/80 backdrop-blur-sm rounded-lg border border-primary/10 shadow-lg hover:shadow-primary/5 transition-all duration-300">
+              <motion.div 
+                className="mt-6 p-5 bg-card/80 backdrop-blur-sm rounded-lg border border-primary/10 shadow-lg hover:shadow-primary/5 transition-all duration-300"
+                whileHover={{ y: -5 }}
+              >
                 <div className="flex items-center mb-3">
                   <div className="p-2 rounded-md bg-primary/10 mr-3">
                     <CodeIcon className="text-primary" size={22} />
                   </div>
-                  <h4 className="text-xl font-semibold">Moje Kódovací Filosofie</h4>
+                  <h4 className="text-xl font-semibold">{about.codingPhilosophy.title}</h4>
                 </div>
                 
                 <ul className="space-y-3">
-                  {[
-                    'Píšu čistý, modulární kód, který je snadné udržovat a škálovat.',
-                    'Upřednostňuji přístupnost a výkon ve všem, co vytvářím.',
-                    'Využívám moderní nástroje a technologie pro efektivní vývoj.',
-                    'Neustále se učím novým technologiím, abych zůstal v popředí webového vývoje.'
-                  ].map((item, index) => (
+                  {philosophyItems.map((item, index) => (
                     <motion.li 
                       key={index} 
                       className="flex items-start"
@@ -92,25 +93,23 @@ const AboutSection: React.FC = () => {
                     </motion.li>
                   ))}
                 </ul>
-              </div>
+              </motion.div>
             </ScrollReveal>
             
             <ScrollReveal width="100%" delay={0.4}>
-              <div className="mt-6 p-5 bg-card/80 backdrop-blur-sm rounded-lg border border-accent/10 shadow-lg hover:shadow-accent/5 transition-all duration-300">
+              <motion.div 
+                className="mt-6 p-5 bg-card/80 backdrop-blur-sm rounded-lg border border-accent/10 shadow-lg hover:shadow-accent/5 transition-all duration-300"
+                whileHover={{ y: -5 }}
+              >
                 <div className="flex items-center mb-3">
                   <div className="p-2 rounded-md bg-accent/10 mr-3">
                     <Server className="text-accent" size={22} />
                   </div>
-                  <h4 className="text-xl font-semibold">Moje IT Koníčky</h4>
+                  <h4 className="text-xl font-semibold">{about.techHobbies.title}</h4>
                 </div>
                 
                 <ul className="space-y-3">
-                  {[
-                    'Home labbing - experimenty s domácími servery a sítěmi',
-                    'Automatizace pomocí skriptů a self-hosted aplikací',
-                    'Linux systémy a open source software',
-                    'Arduino a IoT projekty pro chytrou domácnost'
-                  ].map((item, index) => (
+                  {hobbyItems.map((item, index) => (
                     <motion.li 
                       key={index} 
                       className="flex items-start"
@@ -121,15 +120,7 @@ const AboutSection: React.FC = () => {
                     </motion.li>
                   ))}
                 </ul>
-              </div>
-            </ScrollReveal>
-            
-            <ScrollReveal delay={0.5}>
-              <p className="text-lg">
-                Když nekóduji, najdete mě při experimentování s novým hardwarem, 
-                konfigurací síťových služeb nebo při studiu odborné literatury. Vždy hledám 
-                nové výzvy a příležitosti k osobnímu i profesnímu růstu.
-              </p>
+              </motion.div>
             </ScrollReveal>
             
             <ScrollReveal distance={30} delay={0.6}>
@@ -137,7 +128,7 @@ const AboutSection: React.FC = () => {
                 href="#contact"
                 className="inline-block mt-4 px-6 py-2.5 bg-gradient-to-r from-primary to-accent text-white rounded-lg shadow-lg hover:shadow-primary/20 transition-all duration-300 hover:scale-105"
               >
-                Spolupracujme
+                {about.contact?.ctaText || "Spolupracujme"}
               </a>
             </ScrollReveal>
           </motion.div>
@@ -150,12 +141,7 @@ const AboutSection: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
           >
             <div className="grid grid-cols-2 gap-4">
-              {[
-                { title: '2+', subtitle: 'Roky zkušeností', delay: 0 },
-                { title: '10+', subtitle: 'Dokončených projektů', delay: 0.1 },
-                { title: '5+', subtitle: 'Spokojených klientů', delay: 0.2 },
-                { title: '3+', subtitle: 'Open source příspěvků', delay: 0.3 },
-              ].map((item, index) => (
+              {statsData.map((item, index) => (
                 <ScrollReveal key={index} delay={item.delay} width="100%">
                   <motion.div 
                     className="bg-card/80 backdrop-blur-sm p-5 rounded-lg border border-border/40 shadow-md hover:border-primary/30 hover:shadow-primary/5 transition-all duration-300"
@@ -164,7 +150,13 @@ const AboutSection: React.FC = () => {
                       transition: { duration: 0.2 } 
                     }}
                   >
-                    <h4 className="font-bold text-3xl text-gradient mb-2">{item.title}</h4>
+                    <AnimatedText 
+                      text={item.title}
+                      className="font-bold text-3xl text-gradient mb-2"
+                      animation="scale"
+                      once={false}
+                      threshold={0.5}
+                    />
                     <p className="text-sm text-foreground/70">{item.subtitle}</p>
                   </motion.div>
                 </ScrollReveal>
@@ -184,45 +176,32 @@ const AboutSection: React.FC = () => {
                   <div className="p-2.5 rounded-md bg-gradient-to-br from-primary/20 to-accent/20 mr-3">
                     <Cpu className="text-primary" size={24} />
                   </div>
-                  <h4 className="text-xl font-semibold">Můj Vývojový Stack</h4>
+                  <h4 className="text-xl font-semibold">{about.myStack.title}</h4>
                 </div>
                 
                 <div className="space-y-5">
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <div className="p-1.5 rounded-md bg-primary/10 mr-2">
-                        <FileCode2 className="text-primary" size={16} />
-                      </div>
-                      <h5 className="font-medium">Frontend</h5>
-                    </div>
-                    <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
-                      React, TypeScript, Next.js, Tailwind CSS, Framer Motion
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <div className="p-1.5 rounded-md bg-accent/10 mr-2">
-                        <Terminal className="text-accent" size={16} />
-                      </div>
-                      <h5 className="font-medium">Backend</h5>
-                    </div>
-                    <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
-                      Node.js, MongoDB
-                    </p>
-                  </div>
-                  
-                  <div>
-                    <div className="flex items-center mb-2">
-                      <div className="p-1.5 rounded-md bg-primary/10 mr-2">
-                        <Laptop className="text-primary" size={16} />
-                      </div>
-                      <h5 className="font-medium">Nástroje</h5>
-                    </div>
-                    <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
-                      Git, Figma, Linux, Bash, VS Code
-                    </p>
-                  </div>
+                  {techStackData.map((item, index) => {
+                    const Icon = item.icon;
+                    return (
+                      <motion.div 
+                        key={index}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.1 + 0.2 }}
+                      >
+                        <div className="flex items-center mb-2">
+                          <div className={`p-1.5 rounded-md bg-${item.color}/10 mr-2`}>
+                            <Icon className={`text-${item.color}`} size={16} />
+                          </div>
+                          <h5 className="font-medium">{item.title}</h5>
+                        </div>
+                        <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
+                          {item.items}
+                        </p>
+                      </motion.div>
+                    );
+                  })}
                 </div>
               </motion.div>
             </ScrollReveal>
