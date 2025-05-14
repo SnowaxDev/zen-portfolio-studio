@@ -21,7 +21,7 @@ export default {
     extend: {
       fontFamily: {
         spaceGrotesk: ["Space Grotesk", "sans-serif"],
-        serif: ["Merriweather", "Georgia", "serif"],
+        serif: ["Merriweather", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -92,10 +92,10 @@ export default {
         },
         "fade-out": {
           "0%": {
-            opacity: "1",
+            opacity: "0",
           },
           "100%": {
-            opacity: "0",
+            opacity: "1",
           },
         },
         "pulse": {
@@ -113,6 +113,30 @@ export default {
           "50%": {
             transform: "translateY(-10px)"
           }
+        },
+        "shimmer": {
+          "0%": {
+            backgroundPosition: "-200% 0"
+          },
+          "100%": {
+            backgroundPosition: "200% 0"
+          }
+        },
+        "spin-slow": {
+          "0%": {
+            transform: "rotate(0deg)"
+          },
+          "100%": {
+            transform: "rotate(360deg)"
+          }
+        },
+        "bounce-gentle": {
+          "0%, 100%": {
+            transform: "translateY(0)"
+          },
+          "50%": {
+            transform: "translateY(-5px)"
+          }
         }
       },
       animation: {
@@ -122,7 +146,10 @@ export default {
         "fade-in": "fade-in 0.3s ease-out",
         "fade-out": "fade-out 0.3s ease-out",
         "pulse": "pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
-        "float": "float 5s ease-in-out infinite"
+        "float": "float 5s ease-in-out infinite",
+        "shimmer": "shimmer 2s infinite",
+        "spin-slow": "spin-slow 8s linear infinite",
+        "bounce-gentle": "bounce-gentle 2s ease-in-out infinite"
       },
     },
   },

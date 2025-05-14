@@ -10,8 +10,10 @@ interface AnimatedTextProps {
   type?: 'words' | 'chars' | 'lines';
   staggerChildren?: number;
   delayChildren?: number;
-  animation?: 'fade' | 'slide' | 'bounce' | 'scale';
+  animation?: 'fade' | 'slide' | 'bounce' | 'scale' | 'typewriter' | 'wave';
   threshold?: number;
+  highlightColor?: string;
+  textGradient?: boolean;
 }
 
 const AnimatedText: React.FC<AnimatedTextProps> = ({ 
@@ -22,7 +24,9 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
   staggerChildren = 0.08,
   delayChildren = 0.03,
   animation = 'fade',
-  threshold = 0.1
+  threshold = 0.1,
+  highlightColor = "",
+  textGradient = false
 }) => {
   // Split the text based on type
   const getTextContent = () => {
@@ -91,6 +95,37 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
             },
           },
         };
+      case 'typewriter':
+        return {
+          hidden: { 
+            opacity: 0,
+            width: 0
+          },
+          visible: {
+            opacity: 1,
+            width: "auto",
+            transition: {
+              duration: 0.3,
+            },
+          },
+        };
+      case 'wave':
+        return {
+          hidden: { 
+            y: 0,
+            opacity: 0
+          },
+          visible: (i: number) => ({
+            y: 0,
+            opacity: 1,
+            transition: {
+              delay: i * 0.05,
+              type: "spring",
+              damping: 10,
+              stiffness: 100,
+            },
+          }),
+        };
       case 'fade':
       default:
         return {
@@ -119,6 +154,13 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
       },
     }),
   };
+  
+  // Special class for highlight color or gradient
+  const getSpecialClasses = () => {
+    if (textGradient) return "text-gradient";
+    if (highlightColor) return `text-${highlightColor}`;
+    return "";
+  };
 
   return (
     <motion.div
@@ -131,8 +173,10 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
       {items.map((item, index) => (
         <motion.span
           key={index}
-          className="inline-block"
+          className={`inline-block ${getSpecialClasses()}`}
           variants={getAnimationVariant()}
+          // For wave animation, pass the index
+          custom={animation === 'wave' ? index : undefined}
         >
           {item}
           {type !== 'chars' && index < items.length - 1 ? ' ' : ''}

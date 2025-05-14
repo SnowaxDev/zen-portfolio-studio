@@ -17,7 +17,7 @@ const pageVariants = {
     opacity: 1, 
     y: 0,
     transition: { 
-      duration: 0.6, 
+      duration: 0.8, 
       ease: [0.22, 1, 0.36, 1],
       staggerChildren: 0.2
     }
@@ -26,8 +26,18 @@ const pageVariants = {
     opacity: 0, 
     y: -20,
     transition: { 
-      duration: 0.4, 
+      duration: 0.6, 
       ease: [0.22, 1, 0.36, 1] 
+    }
+  }
+};
+
+const sectionVariants = {
+  initial: { opacity: 0 },
+  animate: { 
+    opacity: 1,
+    transition: {
+      duration: 0.6,
     }
   }
 };
@@ -52,14 +62,54 @@ const Index = () => {
     >
       <Header />
       <main>
-        <HeroSection />
-        <AboutSection />
-        <ProjectsSection />
-        <SkillsSection />
-        <ServicesSection />
-        <ContactSection />
+        <motion.div variants={sectionVariants}>
+          <HeroSection />
+        </motion.div>
+        
+        <motion.div variants={sectionVariants}>
+          <AboutSection />
+        </motion.div>
+        
+        <motion.div variants={sectionVariants}>
+          <ProjectsSection />
+        </motion.div>
+        
+        <motion.div variants={sectionVariants}>
+          <SkillsSection />
+        </motion.div>
+        
+        <motion.div variants={sectionVariants}>
+          <ServicesSection />
+        </motion.div>
+        
+        <motion.div variants={sectionVariants}>
+          <ContactSection />
+        </motion.div>
       </main>
       <Footer />
+      
+      {/* Scroll indicator */}
+      <motion.div 
+        className="fixed bottom-5 right-5 flex flex-col items-center z-50"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.5, duration: 0.5 }}
+      >
+        <div className="bg-card/80 backdrop-blur-sm p-2.5 rounded-full border border-white/10 shadow-lg">
+          <motion.div 
+            className="w-1 h-6 bg-gradient-to-b from-primary to-accent rounded-full"
+            animate={{ 
+              scaleY: [1, 0.3, 1],
+              opacity: [1, 0.6, 1],
+            }}
+            transition={{ 
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          />
+        </div>
+      </motion.div>
     </motion.div>
   );
 };
