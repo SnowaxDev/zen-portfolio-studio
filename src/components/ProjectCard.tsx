@@ -1,6 +1,8 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Badge } from './ui/badge';
+import { AspectRatio } from './ui/aspect-ratio';
 
 interface ProjectCardProps {
   title: string;
@@ -8,7 +10,7 @@ interface ProjectCardProps {
   image: string;
   tags: string[];
   link: string;
-  github?: string;
+  github: string;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -21,52 +23,66 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 }) => {
   return (
     <motion.div 
-      className="bg-card rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300"
+      className="group bg-card rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-border/50"
+      whileHover={{ y: -5 }}
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
       transition={{ duration: 0.5 }}
-      whileHover={{ y: -5 }}
     >
-      <div className="relative h-48 overflow-hidden">
-        <img 
-          src={image} 
-          alt={title} 
-          className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-        />
-      </div>
-      
-      <div className="p-6">
-        <h3 className="text-xl font-bold mb-2">{title}</h3>
-        <p className="text-foreground/70 mb-4 line-clamp-3">{description}</p>
+      <div className="relative overflow-hidden">
+        <AspectRatio ratio={16/9}>
+          <img 
+            src={image} 
+            alt={title} 
+            className="w-full h-full object-cover transition duration-500 group-hover:scale-105" 
+          />
+        </AspectRatio>
         
-        <div className="flex flex-wrap gap-2 mb-4">
-          {tags.map(tag => (
-            <span key={tag} className="text-xs px-3 py-1 bg-primary/10 text-primary rounded-full">
-              {tag}
-            </span>
-          ))}
-        </div>
-        
-        <div className="flex space-x-3">
-          <a 
-            href={link} 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="text-sm font-medium text-primary hover:underline"
-          >
-            View Project
-          </a>
-          {github && (
-            <a 
-              href={github} 
-              target="_blank" 
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end"
+          initial={{ opacity: 0 }}
+          whileHover={{ opacity: 1 }}
+        >
+          <div className="p-4 flex space-x-3">
+            <motion.a 
+              href={link}
+              target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-medium text-foreground/70 hover:text-primary hover:underline"
+              className="bg-primary text-white px-3 py-1.5 rounded-md text-sm font-medium"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Live Demo
+            </motion.a>
+            <motion.a 
+              href={github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="bg-background/80 backdrop-blur-sm text-foreground px-3 py-1.5 rounded-md text-sm font-medium"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               GitHub
-            </a>
-          )}
+            </motion.a>
+          </div>
+        </motion.div>
+      </div>
+      
+      <div className="p-5">
+        <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">{title}</h3>
+        <p className="text-foreground/70 text-sm mb-4">{description}</p>
+        
+        <div className="flex flex-wrap gap-2">
+          {tags.map((tag, index) => (
+            <Badge 
+              key={index} 
+              variant="secondary"
+              className="text-xs font-medium"
+            >
+              {tag}
+            </Badge>
+          ))}
         </div>
       </div>
     </motion.div>

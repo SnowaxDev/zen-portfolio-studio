@@ -9,6 +9,7 @@ import ProjectsSection from '../sections/ProjectsSection';
 import SkillsSection from '../sections/SkillsSection';
 import ContactSection from '../sections/ContactSection';
 import Footer from '../components/Footer';
+import AnimatedCursor from '../components/AnimatedCursor';
 
 const Index = () => {
   // Update metadata
@@ -27,7 +28,9 @@ const Index = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
+          className="overflow-x-hidden"
         >
+          <AnimatedCursor />
           <Header />
           <main>
             <HeroSection />
