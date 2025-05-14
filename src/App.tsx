@@ -5,12 +5,22 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from 'framer-motion';
+import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
-import ProjectDetails from "./pages/ProjectDetails";
 import NotFound from "./pages/NotFound";
 import GradientBackground from "./components/GradientBackground";
 
-const queryClient = new QueryClient();
+// Use lazy loading for non-critical routes
+const ProjectDetails = lazy(() => import("./pages/ProjectDetails"));
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
 
 // Page transition wrapper component
 const AnimatedRoutes = () => {
@@ -20,8 +30,11 @@ const AnimatedRoutes = () => {
     <AnimatePresence mode="wait" initial={false}>
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Index />} />
-        <Route path="/projects/:id" element={<ProjectDetails />} />
-        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+        <Route path="/projects/:id" element={
+          <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Načítání...</div>}>
+            <ProjectDetails />
+          </Suspense>
+        } />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
