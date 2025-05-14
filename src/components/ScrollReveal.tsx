@@ -1,6 +1,6 @@
 
-import React, { useRef, useEffect, useState } from 'react';
-import { motion, useAnimation, useInView, Variant } from 'framer-motion';
+import React, { useRef, useEffect } from 'react';
+import { motion, useAnimation, useInView } from 'framer-motion';
 import { easings } from '../lib/utils';
 
 interface ScrollRevealProps {
@@ -31,11 +31,11 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   animationStyle = 'fade',
 }) => {
   const controls = useAnimation();
-  const ref = useRef(null);
+  const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once, amount: threshold });
   
   // Map for defining animation direction
-  const directionMap: Record<string, { x: number; y: number }> = {
+  const directionMap = {
     up: { x: 0, y: distance },
     down: { x: 0, y: -distance },
     left: { x: distance, y: 0 },
