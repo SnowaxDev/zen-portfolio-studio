@@ -1,4 +1,5 @@
 
+import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -41,17 +42,25 @@ const AnimatedRoutes = () => {
   );
 };
 
+// Separate the App component to ensure hooks are only called inside components
+const AppContent = () => (
+  <TooltipProvider>
+    <Toaster />
+    <Sonner />
+    <GradientBackground />
+    <BrowserRouter>
+      <AnimatedRoutes />
+    </BrowserRouter>
+  </TooltipProvider>
+);
+
+// Main App component that wraps everything with QueryClientProvider
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <GradientBackground />
-      <BrowserRouter>
-        <AnimatedRoutes />
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <AppContent />
+    </QueryClientProvider>
+  </React.StrictMode>
 );
 
 export default App;
