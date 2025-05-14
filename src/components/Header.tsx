@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useIsMobile } from '../hooks/use-mobile';
-import ThemeToggle from './ThemeToggle';
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink, navigationMenuTriggerStyle } from './ui/navigation-menu';
 import { Home, User, Code, Wrench, Mail, Menu, X } from 'lucide-react';
 
@@ -145,24 +144,13 @@ const Header: React.FC = () => {
                   </NavigationMenuItem>
                 );
               })}
-              <NavigationMenuItem>
-                <motion.div
-                  custom={navItems.length}
-                  initial="hidden"
-                  animate="visible"
-                  variants={navItemVariants}
-                >
-                  <ThemeToggle />
-                </motion.div>
-              </NavigationMenuItem>
             </NavigationMenuList>
           </NavigationMenu>
         )}
         
         {/* Mobile Menu Button */}
         {isMobile && (
-          <div className="flex items-center space-x-4">
-            <ThemeToggle />
+          <div className="flex items-center">
             <motion.button
               className="text-foreground focus:outline-none"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
