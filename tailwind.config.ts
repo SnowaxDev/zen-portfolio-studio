@@ -20,6 +20,7 @@ export default {
     },
     extend: {
       fontFamily: {
+        affirage: ["'Outfit'", "sans-serif"],
         spaceGrotesk: ["Space Grotesk", "sans-serif"],
         serif: ["Merriweather", "serif"],
       },
