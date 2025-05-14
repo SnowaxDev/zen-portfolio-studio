@@ -34,39 +34,35 @@ const Footer: React.FC = () => {
   return (
     <footer className="relative">
       {/* Newsletter Section */}
-      <div className="bg-card/90 py-16 border-t border-white/5 relative z-10 overflow-hidden">
+      <div className="bg-card/90 py-12 border-t border-white/5 relative z-10 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-accent/5" />
         <div className="container-custom relative z-10">
-          <ScrollReveal direction="up" threshold={0.2} className="max-w-3xl mx-auto text-center">
-            <h3 className="text-2xl md:text-3xl font-bold mb-4 text-gradient">
-              Odebírejte můj newsletter
+          <ScrollReveal direction="up" threshold={0.2} className="max-w-2xl mx-auto text-center">
+            <h3 className="text-xl md:text-2xl font-bold mb-3 text-gradient">
+              Odebírat novinky
             </h3>
-            <p className="text-foreground/70 mb-8 max-w-xl mx-auto">
-              Přihlaste se k odběru mého newsletteru a získávejte tipy, triky a nejnovější informace o webových technologiích.
+            <p className="text-foreground/70 mb-6 max-w-xl mx-auto text-sm">
+              Přihlaste se k odběru novinek o webových technologiích a mých projektech.
             </p>
             
-            <div className="flex flex-col sm:flex-row gap-3 max-w-md mx-auto">
+            <div className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto">
               <input
                 type="email"
                 placeholder="Váš email"
-                className="px-4 py-3 bg-background/50 border border-white/10 rounded-lg flex-grow"
+                className="px-4 py-2 bg-background/50 border border-white/10 rounded-lg flex-grow text-sm"
               />
-              <Button className="whitespace-nowrap flex items-center">
-                Přihlásit se <ArrowRight className="ml-2 h-4 w-4" />
+              <Button className="whitespace-nowrap text-sm flex items-center">
+                Odebírat <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
               </Button>
             </div>
-            
-            <p className="text-xs text-foreground/50 mt-4">
-              Odhlášení je možné kdykoli. Respektuji vaše soukromí.
-            </p>
           </ScrollReveal>
         </div>
       </div>
       
       {/* Main Footer */}
-      <div className="bg-secondary/30 py-16 border-t border-primary/5">
+      <div className="bg-background py-10 border-t border-primary/5">
         <div className="container-custom">
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-10">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-8">
             {/* Brand and description */}
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
@@ -75,15 +71,15 @@ const Footer: React.FC = () => {
               transition={{ duration: 0.5 }}
               className="lg:col-span-1"
             >
-              <a href="#hero" className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+              <a href="#hero" className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
                 Jan<span className="font-light">.dev</span>
               </a>
-              <p className="text-foreground/70 mt-2 mb-4">
+              <p className="text-foreground/70 mt-2 mb-3 text-sm">
                 Vytvářím výjimečné digitální zážitky pro klienty, kteří chtějí vyniknout.
               </p>
               
               <ScrollReveal 
-                className="mt-5 flex space-x-3"
+                className="mt-4 flex space-x-2"
                 width="100%"
                 delay={0.2}
                 direction="up"
@@ -95,12 +91,12 @@ const Footer: React.FC = () => {
                     <motion.a
                       key={index}
                       href={social.url}
-                      className="bg-card/50 hover:bg-card p-2 rounded-lg text-foreground/60 hover:text-primary transition-colors duration-300"
+                      className="bg-card/50 hover:bg-card p-1.5 rounded-md text-foreground/60 hover:text-primary transition-colors duration-300"
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.9 }}
                       aria-label={social.name}
                     >
-                      <Icon size={20} />
+                      <Icon size={16} />
                     </motion.a>
                   );
                 })}
@@ -115,15 +111,15 @@ const Footer: React.FC = () => {
               viewport={{ once: true }}
               className="flex flex-col"
             >
-              <motion.h4 variants={itemVariants} className="text-lg font-bold mb-4">Navigace</motion.h4>
-              <motion.ul variants={containerVariants} className="space-y-2">
+              <motion.h4 variants={itemVariants} className="text-base font-bold mb-3">Rychlé odkazy</motion.h4>
+              <motion.ul variants={containerVariants} className="space-y-1.5 text-sm">
                 {['O mně', 'Služby', 'Dovednosti', 'Projekty', 'Kontakt'].map((item, i) => (
                   <motion.li key={i} variants={itemVariants}>
                     <a 
                       href={`#${item.toLowerCase().replace(' ', '-')}`}
                       className="text-foreground/60 hover:text-primary transition-colors flex items-center"
                     >
-                      <span className="bg-primary/20 h-1.5 w-1.5 rounded-full mr-2"></span>
+                      <span className="bg-primary/20 h-1 w-1 rounded-full mr-1.5"></span>
                       {item}
                     </a>
                   </motion.li>
@@ -139,15 +135,15 @@ const Footer: React.FC = () => {
               viewport={{ once: true }}
               className="flex flex-col"
             >
-              <motion.h4 variants={itemVariants} className="text-lg font-bold mb-4">Služby</motion.h4>
-              <motion.ul variants={containerVariants} className="space-y-2">
+              <motion.h4 variants={itemVariants} className="text-base font-bold mb-3">Služby</motion.h4>
+              <motion.ul variants={containerVariants} className="space-y-1.5 text-sm">
                 {['Webové aplikace', 'UI/UX Design', 'E-commerce řešení', 'SEO optimalizace', 'Webhosting'].map((item, i) => (
                   <motion.li key={i} variants={itemVariants}>
                     <a 
                       href="#services"
                       className="text-foreground/60 hover:text-primary transition-colors flex items-center"
                     >
-                      <span className="bg-accent/20 h-1.5 w-1.5 rounded-full mr-2"></span>
+                      <span className="bg-accent/20 h-1 w-1 rounded-full mr-1.5"></span>
                       {item}
                     </a>
                   </motion.li>
@@ -163,8 +159,8 @@ const Footer: React.FC = () => {
               viewport={{ once: true }}
               className="flex flex-col"
             >
-              <motion.h4 variants={itemVariants} className="text-lg font-bold mb-4">Kontakt</motion.h4>
-              <motion.div variants={containerVariants} className="space-y-4">
+              <motion.h4 variants={itemVariants} className="text-base font-bold mb-3">Kontakt</motion.h4>
+              <motion.div variants={containerVariants} className="space-y-3 text-sm">
                 <motion.div variants={itemVariants} className="flex items-start">
                   <div>
                     <p className="text-foreground/60">Email:</p>
@@ -182,29 +178,22 @@ const Footer: React.FC = () => {
                     </a>
                   </div>
                 </motion.div>
-                
-                <motion.div variants={itemVariants} className="flex items-start">
-                  <div>
-                    <p className="text-foreground/60">Adresa:</p>
-                    <p>Praha, Česká republika</p>
-                  </div>
-                </motion.div>
               </motion.div>
             </motion.div>
           </div>
           
           {/* Copyright bar */}
-          <div className="mt-16 pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between items-center">
-            <p className="text-sm text-foreground/60 mb-4 md:mb-0">
+          <div className="mt-10 pt-5 border-t border-white/5 flex flex-col md:flex-row justify-between items-center">
+            <p className="text-xs text-foreground/50 mb-3 md:mb-0">
               &copy; {currentYear} Jan Novák. Všechna práva vyhrazena.
             </p>
             
-            <div className="flex space-x-4 text-sm">
-              <a href="#" className="text-foreground/60 hover:text-primary transition-colors">
+            <div className="flex space-x-4 text-xs">
+              <a href="#" className="text-foreground/50 hover:text-primary transition-colors">
                 Zásady ochrany soukromí
               </a>
-              <span className="text-foreground/30">|</span>
-              <a href="#" className="text-foreground/60 hover:text-primary transition-colors">
+              <span className="text-foreground/20">|</span>
+              <a href="#" className="text-foreground/50 hover:text-primary transition-colors">
                 Obchodní podmínky
               </a>
             </div>
@@ -214,7 +203,7 @@ const Footer: React.FC = () => {
       
       {/* Footer background decoration */}
       <motion.div 
-        className="absolute bottom-0 left-0 w-full h-20 opacity-5 overflow-hidden z-0 pointer-events-none"
+        className="absolute bottom-0 left-0 w-full h-10 opacity-5 overflow-hidden z-0 pointer-events-none"
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 0.05 }}
         viewport={{ once: true }}

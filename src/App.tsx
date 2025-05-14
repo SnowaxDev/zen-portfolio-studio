@@ -24,7 +24,7 @@ const queryClient = new QueryClient({
 });
 
 // Page transition wrapper component
-const AnimatedRoutes = () => {
+function AnimatedRoutes() {
   const location = useLocation();
   
   return (
@@ -40,27 +40,31 @@ const AnimatedRoutes = () => {
       </Routes>
     </AnimatePresence>
   );
-};
+}
 
-// Separate the App component to ensure hooks are only called inside components
-const AppContent = () => (
-  <TooltipProvider>
-    <Toaster />
-    <Sonner />
-    <GradientBackground />
-    <BrowserRouter>
-      <AnimatedRoutes />
-    </BrowserRouter>
-  </TooltipProvider>
-);
+// Application content component
+function AppContent() {
+  return (
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <GradientBackground />
+      <BrowserRouter>
+        <AnimatedRoutes />
+      </BrowserRouter>
+    </TooltipProvider>
+  );
+}
 
 // Main App component that wraps everything with QueryClientProvider
-const App = () => (
-  <React.StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <AppContent />
-    </QueryClientProvider>
-  </React.StrictMode>
-);
+function App() {
+  return (
+    <React.StrictMode>
+      <QueryClientProvider client={queryClient}>
+        <AppContent />
+      </QueryClientProvider>
+    </React.StrictMode>
+  );
+}
 
 export default App;

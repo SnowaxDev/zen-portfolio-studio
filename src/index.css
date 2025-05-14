@@ -86,39 +86,39 @@
     @apply leading-relaxed font-affirage;
   }
   
-  /* Smoothing for all transitions */
+  /* Clean transitions */
   * {
-    transition-property: background-color, border-color, color, fill, stroke;
-    transition-duration: 0.15s;
+    transition-property: background-color, border-color, color, fill, stroke, opacity, transform;
+    transition-duration: 0.2s;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   }
   
-  /* Scroll behavior */
-  html {
-    scroll-behavior: smooth;
-  }
-  
-  /* Custom scrollbar */
+  /* Modern scrollbar */
   ::-webkit-scrollbar {
-    width: 8px;
+    width: 6px;
+    height: 6px;
   }
   
   ::-webkit-scrollbar-track {
-    @apply bg-secondary;
+    @apply bg-background;
   }
   
   ::-webkit-scrollbar-thumb {
-    @apply bg-primary/50 rounded-full hover:bg-primary;
+    @apply bg-primary/30 rounded-full hover:bg-primary/50;
   }
 
   .section {
     @apply py-20 md:py-28;
   }
   
-  /* Mobile-specific improvements */
+  /* Better mobile experience */
   @media (max-width: 767px) {
-    h1, h2 {
-      @apply tracking-tight leading-tight;
+    h1 {
+      @apply text-3xl tracking-tight leading-tight;
+    }
+    
+    h2 {
+      @apply text-2xl tracking-tight leading-tight;
     }
     
     .container-custom {
@@ -132,94 +132,64 @@
     .section {
       @apply py-16;
     }
-    
-    /* Improved mobile menu */
-    .mobile-menu {
-      @apply bg-card/90 backdrop-blur-md border border-white/5 shadow-xl;
-    }
-    
-    /* Improved spacing for mobile forms */
-    input, textarea, select {
-      @apply mb-4;
-    }
-    
-    /* Better mobile card styles */
-    .card-modern {
-      @apply mx-4 p-5;
-    }
   }
 }
 
 @layer components {
+  /* Layout and containers */
   .container-custom {
     @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
   }
   
+  /* Modern text effects */
   .text-gradient {
     @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
   }
   
+  /* Modern card styles */
   .glassmorphism {
-    @apply backdrop-blur-lg bg-card/60 border border-white/10;
+    @apply backdrop-blur-md bg-card/80 border border-white/10;
   }
   
   .card-hover {
-    @apply transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg hover:shadow-primary/20;
+    @apply transition-all duration-300 ease-out hover:translate-y-[-5px] hover:shadow-lg hover:shadow-primary/10;
   }
   
-  .button-pulse {
-    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-  
+  /* Modern effect components */
   .hover-glow {
     @apply transition-all duration-300;
   }
   
   .hover-glow:hover {
-    filter: drop-shadow(0 0 8px hsl(var(--accent)));
+    filter: drop-shadow(0 0 6px hsl(var(--accent)));
   }
   
-  /* New design system components */
+  /* Modern card design */
   .card-modern {
-    @apply bg-card/80 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-primary/10;
+    @apply bg-card/80 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-md transition-all duration-300;
   }
   
+  /* Button styles */
   .button-primary {
-    @apply px-6 py-2.5 bg-gradient-to-r from-primary to-accent text-white rounded-lg shadow-lg hover:shadow-primary/20 transition-all duration-300 hover:scale-105;
+    @apply px-6 py-2.5 bg-primary text-white rounded-lg shadow-md hover:shadow-primary/20 transition-all duration-300 hover:bg-primary/90;
   }
   
   .button-secondary {
-    @apply px-6 py-2.5 bg-secondary border border-primary/20 hover:bg-secondary/80 text-white rounded-lg transition-all duration-300 hover:-translate-y-1;
+    @apply px-6 py-2.5 bg-secondary border border-primary/20 hover:bg-secondary/80 text-white rounded-lg transition-all duration-300;
   }
   
+  /* Form elements */
   .input-modern {
-    @apply bg-secondary/50 border border-white/10 rounded-lg p-3 focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all duration-300;
+    @apply bg-secondary/50 border border-white/10 rounded-lg p-3 focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all;
   }
   
+  /* Section headings */
   .section-heading {
-    @apply text-2xl md:text-3xl lg:text-4xl font-bold mb-4 relative inline-block;
+    @apply text-2xl md:text-3xl font-bold mb-4 inline-block;
   }
   
   .section-heading::after {
     content: '';
-    @apply absolute -bottom-2 left-0 w-1/2 h-1 bg-gradient-to-r from-primary to-accent rounded-full;
-  }
-  
-  /* Mobile-specific components */
-  @media (max-width: 767px) {
-    .mobile-button {
-      @apply w-full py-3.5 flex justify-center items-center font-medium text-base;
-    }
-    
-    .mobile-card {
-      @apply rounded-xl mx-2 border border-white/5 p-4 mb-4 shadow-lg;
-    }
-    
-    .mobile-nav-item {
-      @apply w-full p-3 mb-1 rounded-lg flex items-center gap-3 font-medium;
-    }
+    @apply block w-1/3 h-1 bg-gradient-to-r from-primary to-accent rounded-full mt-2;
   }
 }
-
-/* ... keep existing code (keyframes, animations, scroll reveal) */
-
