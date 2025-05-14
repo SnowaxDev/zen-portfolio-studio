@@ -1,50 +1,35 @@
 
-import React from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence } from 'framer-motion';
-import { lazy, Suspense } from "react";
 import Index from "./pages/Index";
+import ProjectDetails from "./pages/ProjectDetails";
 import NotFound from "./pages/NotFound";
 import GradientBackground from "./components/GradientBackground";
 
-// Use lazy loading for non-critical routes
-const ProjectDetails = lazy(() => import("./pages/ProjectDetails"));
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      refetchOnWindowFocus: false,
-      retry: 1,
-    },
-  },
-});
+const queryClient = new QueryClient();
 
 // Page transition wrapper component
-function AnimatedRoutes() {
+const AnimatedRoutes = () => {
   const location = useLocation();
   
   return (
     <AnimatePresence mode="wait" initial={false}>
       <Routes location={location} key={location.pathname}>
         <Route path="/" element={<Index />} />
-        <Route path="/projects/:id" element={
-          <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Načítání...</div>}>
-            <ProjectDetails />
-          </Suspense>
-        } />
+        <Route path="/projects/:id" element={<ProjectDetails />} />
+        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </AnimatePresence>
   );
-}
+};
 
-// Application content component
-function AppContent() {
-  return (
+const App = () => (
+  <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
       <Sonner />
@@ -53,18 +38,7 @@ function AppContent() {
         <AnimatedRoutes />
       </BrowserRouter>
     </TooltipProvider>
-  );
-}
-
-// Main App component that wraps everything with QueryClientProvider
-function App() {
-  return (
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <AppContent />
-      </QueryClientProvider>
-    </React.StrictMode>
-  );
-}
+  </QueryClientProvider>
+);
 
 export default App;

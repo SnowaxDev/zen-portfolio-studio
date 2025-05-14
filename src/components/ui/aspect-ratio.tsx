@@ -9,7 +9,7 @@ const AspectRatio = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <AspectRatioPrimitive.Root
     ref={ref}
-    className={cn("relative overflow-hidden", className)}
+    className={cn("", className)}
     {...props}
   />
 ));
