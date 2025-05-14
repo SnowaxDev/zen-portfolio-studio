@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import ProjectDetails from "./pages/ProjectDetails";
 import NotFound from "./pages/NotFound";
 import GradientBackground from "./components/GradientBackground";
+import AnimatedCursor from "./components/AnimatedCursor";
 
 const queryClient = new QueryClient();
 
@@ -17,6 +18,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <GradientBackground />
+      <AnimatedCursor />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />

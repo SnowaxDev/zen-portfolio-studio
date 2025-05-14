@@ -1,7 +1,7 @@
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
-import { CodeIcon } from 'lucide-react';
+import { MousePointer2 } from 'lucide-react';
 
 const AnimatedCursor: React.FC = () => {
   const cursorX = useMotionValue(-100);
@@ -11,27 +11,18 @@ const AnimatedCursor: React.FC = () => {
   const cursorXSpring = useSpring(cursorX, springConfig);
   const cursorYSpring = useSpring(cursorY, springConfig);
   
-  const [clicked, setClicked] = useState(false);
-  const [linkHovered, setLinkHovered] = useState(false);
+  const [isActive, setIsActive] = useState(false);
+  const [isPointer, setIsPointer] = useState(false);
   const [hidden, setHidden] = useState(false);
-  const [isHovering, setIsHovering] = useState(false);
-  const [isCodeElement, setIsCodeElement] = useState(false);
   
-  const endX = useRef(0);
-  const endY = useRef(0);
-
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
       cursorX.set(e.clientX - 16);
       cursorY.set(e.clientY - 16);
-      endX.current = e.clientX - 16;
-      endY.current = e.clientY - 16;
     };
 
-    const handleMouseDown = () => {
-      setClicked(true);
-      setTimeout(() => setClicked(false), 300);
-    };
+    const handleMouseDown = () => setIsActive(true);
+    const handleMouseUp = () => setIsActive(false);
 
     const handleMouseLeave = () => {
       setHidden(true);
@@ -43,49 +34,40 @@ const AnimatedCursor: React.FC = () => {
       setHidden(false);
     };
 
-    const handleLinkHoverStart = (e: MouseEvent) => {
-      setLinkHovered(true);
-      setIsHovering(true);
-      
-      // Check if the element is code-related
+    const handleElementHover = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
-      const isCode = target.tagName === 'CODE' || 
-                     target.classList.contains('code') || 
-                     target.closest('pre') !== null;
-      setIsCodeElement(isCode);
+      const isClickable = 
+        target.tagName === 'A' || 
+        target.tagName === 'BUTTON' ||
+        target.tagName === 'INPUT' ||
+        target.onclick !== null ||
+        target.classList.contains('clickable') ||
+        target.role === 'button' ||
+        (target.parentElement && target.parentElement.onclick !== null);
+      
+      setIsPointer(isClickable);
     };
     
-    const handleLinkHoverEnd = () => {
-      setLinkHovered(false);
-      setIsHovering(false);
-      setIsCodeElement(false);
+    const handleElementLeave = () => {
+      setIsPointer(false);
     };
 
     document.addEventListener("mousemove", handleMouseMove);
     document.addEventListener("mousedown", handleMouseDown);
+    document.addEventListener("mouseup", handleMouseUp);
     document.addEventListener("mouseleave", handleMouseLeave);
     document.addEventListener("mouseenter", handleMouseEnter);
-
-    // Add event listeners for links, buttons and any interactive elements
-    const interactiveElements = document.querySelectorAll(
-      'a, button, [role="button"], input, select, textarea, [tabindex]:not([tabindex="-1"]), code, pre'
-    );
-    
-    interactiveElements.forEach((el) => {
-      el.addEventListener("mouseenter", handleLinkHoverStart as EventListener);
-      el.addEventListener("mouseleave", handleLinkHoverEnd);
-    });
+    document.addEventListener("mouseover", handleElementHover);
+    document.addEventListener("mouseout", handleElementLeave);
 
     return () => {
       document.removeEventListener("mousemove", handleMouseMove);
       document.removeEventListener("mousedown", handleMouseDown);
+      document.removeEventListener("mouseup", handleMouseUp);
       document.removeEventListener("mouseleave", handleMouseLeave);
       document.removeEventListener("mouseenter", handleMouseEnter);
-      
-      interactiveElements.forEach((el) => {
-        el.removeEventListener("mouseenter", handleLinkHoverStart as EventListener);
-        el.removeEventListener("mouseleave", handleLinkHoverEnd);
-      });
+      document.removeEventListener("mouseover", handleElementHover);
+      document.removeEventListener("mouseout", handleElementLeave);
     };
   }, [cursorX, cursorY]);
 
@@ -98,65 +80,46 @@ const AnimatedCursor: React.FC = () => {
     };
   }, []);
 
-  const getCursorColor = () => {
-    if (clicked) return "hsl(var(--destructive))";
-    if (isCodeElement) return "hsl(var(--accent))";
-    if (linkHovered) return "hsl(var(--accent))";
-    return "hsl(var(--primary))";
-  };
-
   return (
     <>
+      {/* Main cursor ring */}
       <motion.div
-        className="fixed top-0 left-0 z-[999] rounded-full pointer-events-none hidden md:block"
+        className="fixed top-0 left-0 z-[999] rounded-full pointer-events-none hidden md:flex items-center justify-center"
         style={{
-          height: clicked ? 20 : linkHovered ? 40 : 32,
-          width: clicked ? 20 : linkHovered ? 40 : 32,
+          height: isPointer ? 36 : 32,
+          width: isPointer ? 36 : 32,
           backgroundColor: "transparent",
           x: cursorXSpring,
           y: cursorYSpring,
           opacity: hidden ? 0 : 1,
         }}
         animate={{
-          scale: clicked ? 0.8 : linkHovered ? 1.2 : 1,
-          borderWidth: clicked ? "2px" : "1.5px",
-          borderColor: getCursorColor(),
+          scale: isActive ? 0.8 : 1,
+          borderWidth: isActive ? "2px" : "1.5px",
+          borderColor: isPointer ? "hsl(var(--accent))" : "hsl(var(--primary))",
         }}
         transition={{ duration: 0.15 }}
       >
-        <div className="relative w-full h-full">
-          <div className="absolute inset-0 rounded-full border-2 border-primary/30 animate-pulse" />
-          <div className="absolute inset-0 rounded-full border border-primary" />
-          {isHovering && (
-            <motion.div 
-              className={`absolute inset-0 rounded-full ${isCodeElement ? 'bg-accent' : 'bg-primary'} opacity-10`}
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ duration: 0.2 }}
-            />
-          )}
-          {isCodeElement && (
-            <motion.div
+        <div className="relative w-full h-full rounded-full border border-current">
+          {isPointer && (
+            <MousePointer2 
+              size={14} 
               className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-accent"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.2 }}
-            >
-              <CodeIcon size={16} />
-            </motion.div>
+            />
           )}
         </div>
       </motion.div>
       
-      {/* Trailing dot */}
+      {/* Dot */}
       <motion.div
-        className={`fixed top-0 left-0 z-[998] rounded-full w-2 h-2 pointer-events-none hidden md:block ${isCodeElement ? 'bg-accent' : 'bg-primary'}`}
+        className="fixed top-0 left-0 z-[998] rounded-full w-2 h-2 pointer-events-none hidden md:block bg-current"
         style={{
           x: cursorXSpring,
           y: cursorYSpring,
           translateX: "50%",
           translateY: "50%",
           opacity: hidden ? 0 : 0.6,
+          color: isPointer ? "hsl(var(--accent))" : "hsl(var(--primary))",
         }}
       />
     </>
