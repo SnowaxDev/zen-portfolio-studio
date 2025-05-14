@@ -39,7 +39,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ skill, percentage }) => {
       <div className="flex justify-between mb-2 items-center">
         <span className="text-sm md:text-base font-medium">{skill}</span>
         <motion.span className="text-sm text-foreground/80 font-mono">
-          {progressDisplay}%
+          {/* Fix: Convert MotionValue to string using formatted display value */}
+          <motion.span>{progressDisplay}</motion.span>%
         </motion.span>
       </div>
       <div className="h-2 rounded-full bg-secondary/50 overflow-hidden backdrop-blur-sm relative">
