@@ -5,17 +5,17 @@ import SectionTitle from '../components/SectionTitle';
 import ProgressBar from '../components/ProgressBar';
 
 const frontendSkills = [
-  { skill: 'React / Next.js', percentage: 95 },
-  { skill: 'TypeScript', percentage: 90 },
-  { skill: 'Tailwind CSS', percentage: 95 },
-  { skill: 'Framer Motion', percentage: 85 },
+  { skill: 'React / Next.js', percentage: 85 },
+  { skill: 'TypeScript', percentage: 80 },
+  { skill: 'Tailwind CSS', percentage: 90 },
+  { skill: 'Framer Motion', percentage: 75 },
 ];
 
 const backendSkills = [
-  { skill: 'Node.js', percentage: 80 },
-  { skill: 'Express', percentage: 85 },
-  { skill: 'MongoDB', percentage: 75 },
-  { skill: 'GraphQL', percentage: 70 },
+  { skill: 'Node.js', percentage: 70 },
+  { skill: 'Express', percentage: 75 },
+  { skill: 'MongoDB', percentage: 65 },
+  { skill: 'GraphQL', percentage: 60 },
 ];
 
 const otherSkills = ['Git', 'Figma', 'Jest', 'CI/CD', 'Docker', 'AWS', 'Firebase', 'Vercel'];
@@ -40,8 +40,8 @@ const SkillsSection: React.FC = () => {
     <section id="skills" className="section bg-secondary/30">
       <div className="container-custom">
         <SectionTitle 
-          title="My Skills" 
-          subtitle="Technologies and tools I love working with"
+          title="Moje Dovednosti" 
+          subtitle="Technologie a nástroje, se kterými rád pracuji"
         />
         
         <div className="grid md:grid-cols-2 gap-12">
@@ -51,7 +51,7 @@ const SkillsSection: React.FC = () => {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5 }}
           >
-            <h3 className="text-xl font-bold mb-6">Frontend Development</h3>
+            <h3 className="text-xl font-bold mb-6">Frontend Vývoj</h3>
             {frontendSkills.map((skill) => (
               <ProgressBar 
                 key={skill.skill} 
@@ -67,7 +67,7 @@ const SkillsSection: React.FC = () => {
             viewport={{ once: true, margin: "-100px" }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <h3 className="text-xl font-bold mb-6">Backend Development</h3>
+            <h3 className="text-xl font-bold mb-6">Backend Vývoj</h3>
             {backendSkills.map((skill) => (
               <ProgressBar 
                 key={skill.skill} 
@@ -85,7 +85,7 @@ const SkillsSection: React.FC = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
         >
-          <h3 className="text-xl font-bold mb-6 text-center">Other Tools & Technologies</h3>
+          <h3 className="text-xl font-bold mb-6 text-center">Další Nástroje a Technologie</h3>
           
           <motion.div 
             className="flex flex-wrap justify-center gap-3"

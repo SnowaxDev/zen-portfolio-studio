@@ -22,11 +22,11 @@ const HeroSection: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
           >
-            Frontend Developer & UI/UX Designer
+            Frontend Vývojář & UI/UX Designer
           </motion.span>
           
           <AnimatedText 
-            text="Building digital experiences that people love"
+            text="Vytvářím digitální zážitky, které lidé milují"
             className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
           />
           
@@ -36,8 +36,8 @@ const HeroSection: React.FC = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
           >
-            I create modern web applications with React and Next.js, focusing on performance, 
-            accessibility, and delightful user experiences.
+            Vytvářím moderní webové aplikace s Reactem a Next.js, se zaměřením na výkon, 
+            přístupnost a skvělý uživatelský zážitek.
           </motion.p>
           
           <motion.div 
@@ -52,7 +52,7 @@ const HeroSection: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className="relative z-10">View My Work</span>
+              <span className="relative z-10">Moje Projekty</span>
               <motion.span 
                 className="absolute inset-0 bg-gradient-to-r from-primary-foreground/20 to-transparent"
                 initial={{ x: '-100%' }}
@@ -67,7 +67,7 @@ const HeroSection: React.FC = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <span className="relative z-10">Contact Me</span>
+              <span className="relative z-10">Kontaktujte Mě</span>
               <motion.span 
                 className="absolute inset-0 bg-primary/5"
                 initial={{ scale: 0, opacity: 0 }}
@@ -105,7 +105,7 @@ const HeroSection: React.FC = () => {
             >
               <img 
                 src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&q=80" 
-                alt="John Doe" 
+                alt="Jan Novák" 
                 className="w-full h-full object-cover"
               />
               <motion.div 

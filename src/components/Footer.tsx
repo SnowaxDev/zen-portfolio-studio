@@ -17,10 +17,10 @@ const Footer: React.FC = () => {
             className="mb-6 md:mb-0"
           >
             <a href="#hero" className="text-2xl font-bold text-primary">
-              John.dev
+              Jan.dev
             </a>
             <p className="text-foreground/70 mt-2">
-              Building exceptional digital experiences
+              Tvořím výjimečné digitální zážitky
             </p>
           </motion.div>
           
@@ -53,7 +53,7 @@ const Footer: React.FC = () => {
             </div>
             
             <p className="text-foreground/50 text-sm">
-              &copy; {currentYear} John Doe. All rights reserved.
+              &copy; {currentYear} Jan Novák. Všechna práva vyhrazena.
             </p>
           </motion.div>
         </div>

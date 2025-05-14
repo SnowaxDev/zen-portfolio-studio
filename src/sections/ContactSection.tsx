@@ -25,8 +25,8 @@ const ContactSection: React.FC = () => {
     // Simulate form submission
     setTimeout(() => {
       toast({
-        title: "Message sent!",
-        description: "Thank you for your message. I'll get back to you soon.",
+        title: "Zpráva odeslána!",
+        description: "Děkuji za vaši zprávu. Ozvu se vám co nejdříve.",
       });
       
       setFormData({
@@ -43,8 +43,8 @@ const ContactSection: React.FC = () => {
     <section id="contact" className="section">
       <div className="container-custom max-w-4xl">
         <SectionTitle 
-          title="Get In Touch" 
-          subtitle="Have a project in mind? Let's talk about it!"
+          title="Kontaktujte Mě" 
+          subtitle="Máte projekt na mysli? Pojďme si o tom popovídat!"
         />
         
         <div className="bg-card shadow-lg rounded-lg overflow-hidden">
@@ -57,26 +57,26 @@ const ContactSection: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                <h3 className="text-2xl font-bold mb-6">Contact Information</h3>
+                <h3 className="text-2xl font-bold mb-6">Kontaktní Informace</h3>
                 
                 <div className="space-y-6">
                   <div>
                     <p className="text-white/70 mb-1">Email</p>
-                    <p className="font-medium">hello@john.dev</p>
+                    <p className="font-medium">info@jan-novak.cz</p>
                   </div>
                   
                   <div>
-                    <p className="text-white/70 mb-1">Phone</p>
-                    <p className="font-medium">+1 (555) 123-4567</p>
+                    <p className="text-white/70 mb-1">Telefon</p>
+                    <p className="font-medium">+420 777 123 456</p>
                   </div>
                   
                   <div>
-                    <p className="text-white/70 mb-1">Location</p>
-                    <p className="font-medium">San Francisco, CA</p>
+                    <p className="text-white/70 mb-1">Lokalita</p>
+                    <p className="font-medium">Praha, Česká republika</p>
                   </div>
                   
                   <div className="mt-8">
-                    <p className="text-white/70 mb-2">Follow me</p>
+                    <p className="text-white/70 mb-2">Sledujte mě</p>
                     <div className="flex space-x-4">
                       <a href="#" className="text-white hover:text-white/80">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
@@ -109,7 +109,7 @@ const ContactSection: React.FC = () => {
               >
                 <div className="mb-6">
                   <label htmlFor="name" className="block text-sm font-medium text-foreground/70 mb-1">
-                    Your Name
+                    Vaše Jméno
                   </label>
                   <input
                     type="text"
@@ -124,7 +124,7 @@ const ContactSection: React.FC = () => {
                 
                 <div className="mb-6">
                   <label htmlFor="email" className="block text-sm font-medium text-foreground/70 mb-1">
-                    Email Address
+                    Email
                   </label>
                   <input
                     type="email"
@@ -139,7 +139,7 @@ const ContactSection: React.FC = () => {
                 
                 <div className="mb-6">
                   <label htmlFor="message" className="block text-sm font-medium text-foreground/70 mb-1">
-                    Message
+                    Zpráva
                   </label>
                   <textarea
                     id="message"
@@ -157,7 +157,7 @@ const ContactSection: React.FC = () => {
                   disabled={isSubmitting}
                   className="w-full py-3 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-70"
                 >
-                  {isSubmitting ? 'Sending...' : 'Send Message'}
+                  {isSubmitting ? 'Odesílám...' : 'Odeslat Zprávu'}
                 </button>
               </motion.form>
             </div>

@@ -10,7 +10,7 @@ const PricingCard = ({
   description, 
   features, 
   isPopular = false,
-  callToAction = "Get Started"
+  callToAction = "Začít"
 }: { 
   title: string;
   price: string;
@@ -32,7 +32,7 @@ const PricingCard = ({
   >
     {isPopular && (
       <div className="absolute -top-4 right-4 bg-accent px-3 py-1 rounded-full text-xs font-bold">
-        Most Popular
+        Nejoblíbenější
       </div>
     )}
     
@@ -43,7 +43,7 @@ const PricingCard = ({
     
     <div className="mb-4">
       <span className="text-3xl font-bold">{price}</span>
-      {price !== "Custom" && <span className="text-sm opacity-80 ml-1">/project</span>}
+      {price !== "Dle nabídky" && <span className="text-sm opacity-80 ml-1">/projekt</span>}
     </div>
     
     <p className="text-sm mb-6 opacity-90">{description}</p>
@@ -106,86 +106,88 @@ const ServicesSection = () => {
     <section id="services" className="section">
       <div className="container-custom">
         <SectionTitle
-          title="Services & Pricing"
-          subtitle="Transparent pricing for quality web development services"
+          title="Služby a Ceník"
+          subtitle="Transparentní ceny za kvalitní webový vývoj"
         />
         
         <div className="mb-16">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-12">
             <PricingCard
-              title="Basic Website"
-              price="$1,299"
-              description="Perfect for small businesses looking to establish an online presence."
+              title="Základní Web"
+              price="9 999 Kč"
+              description="Perfektní pro malé firmy, které chtějí vytvořit online přítomnost."
               features={[
-                "5-page responsive website",
-                "Mobile-friendly design",
-                "Basic SEO optimization",
-                "Contact form",
-                "Social media integration",
-                "2 rounds of revisions"
+                "5-stránkový responzivní web",
+                "Design optimalizovaný pro mobily",
+                "Základní SEO optimalizace",
+                "Kontaktní formulář",
+                "Propojení se sociálními sítěmi",
+                "2 kola revizí"
               ]}
+              callToAction="Objednat"
             />
             
             <PricingCard
-              title="Advanced Website"
-              price="$2,499"
-              description="Ideal for businesses that need more functionality and custom features."
+              title="Pokročilý Web"
+              price="19 999 Kč"
+              description="Ideální pro firmy, které potřebují více funkcí a vlastních prvků."
               features={[
-                "10-page responsive website",
-                "Advanced UI/UX design",
-                "Content management system",
-                "Advanced SEO package",
-                "Analytics integration",
-                "Performance optimization",
-                "3 rounds of revisions"
+                "10-stránkový responzivní web",
+                "Pokročilý UI/UX design",
+                "Systém správy obsahu",
+                "Pokročilý SEO balíček",
+                "Integrace analytiky",
+                "Optimalizace výkonu",
+                "3 kola revizí"
               ]}
               isPopular={true}
+              callToAction="Objednat"
             />
             
             <PricingCard
-              title="Custom Web App"
-              price="Custom"
-              description="For businesses requiring tailored solutions with advanced functionality."
+              title="Vlastní Webová Aplikace"
+              price="Dle nabídky"
+              description="Pro firmy vyžadující řešení na míru s pokročilými funkcemi."
               features={[
-                "Custom web application",
-                "User authentication",
-                "Database integration",
-                "Third-party API integration",
-                "Admin dashboard",
-                "Maintenance package",
-                "Unlimited revisions"
+                "Vlastní webová aplikace",
+                "Uživatelská autentizace",
+                "Integrace databáze",
+                "Integrace API třetích stran",
+                "Administrátorský dashboard",
+                "Balíček údržby",
+                "Neomezené revize"
               ]}
-              callToAction="Request Quote"
+              callToAction="Vyžádat nabídku"
             />
           </div>
         </div>
         
         <div className="bg-card shadow-lg rounded-lg p-8 mt-16">
-          <h3 className="text-2xl font-bold mb-6 text-center">Development Process</h3>
+          <h3 className="text-2xl font-bold mb-6 text-center">Proces Vývoje</h3>
           
           <div className="space-y-2">
             <TimelineItem
-              title="Discovery & Planning"
-              description="We begin with a thorough consultation to understand your business goals, target audience, and project requirements. Then we create a detailed roadmap for your project."
-              duration="1-2 weeks"
+              title="Objevování a Plánování"
+              description="Začínáme důkladnou konzultací, abychom pochopili vaše obchodní cíle, cílovou skupinu a požadavky projektu. Poté vytvoříme podrobný plán pro váš projekt."
+              duration="1-2 týdny"
             />
             
             <TimelineItem
-              title="Design & Prototyping"
-              description="Based on the requirements, we create wireframes and visual designs for your approval. You'll get interactive prototypes to visualize the final product."
-              duration="2-3 weeks"
+              title="Design a Prototypování"
+              description="Na základě požadavků vytvoříme wireframy a vizuální návrhy ke schválení. Dostanete interaktivní prototypy pro vizualizaci finálního produktu."
+              duration="2-3 týdny"
             />
             
             <TimelineItem
-              title="Development"
-              description="Our team builds your website or application using modern technologies. Regular updates keep you informed of progress."
-              duration="2-8 weeks"
+              title="Vývoj"
+              description="Náš tým vytvoří váš web nebo aplikaci pomocí moderních technologií. Pravidelné aktualizace vás budou informovat o postupu."
+              duration="2-6 týdnů"
             />
             
             <TimelineItem
-              title="Testing & Deployment"
-              description="We thoroughly test across devices and browsers before launching. After your approval, we deploy to production servers."
-              duration="1-2 weeks"
+              title="Testování a Nasazení"
+              description="Důkladně testujeme na různých zařízeních a prohlížečích před spuštěním. Po vašem schválení nasadíme na produkční servery."
+              duration="1-2 týdny"
             />
             
             <motion.div 
@@ -201,18 +203,18 @@ const ServicesSection = () => {
                 </div>
               </div>
               <div>
-                <h3 className="text-xl font-bold">Support & Maintenance</h3>
+                <h3 className="text-xl font-bold">Podpora a Údržba</h3>
                 <span className="text-sm bg-accent/20 text-accent px-2 py-0.5 rounded-full inline-block mb-2">
-                  Ongoing
+                  Průběžně
                 </span>
-                <p className="text-muted-foreground">We provide continued support and maintenance to ensure your website or application runs smoothly and stays updated.</p>
+                <p className="text-muted-foreground">Poskytujeme průběžnou podporu a údržbu, aby váš web nebo aplikace fungovaly hladce a zůstaly aktuální.</p>
               </div>
             </motion.div>
           </div>
         </div>
         
         <div className="mt-16 p-8 bg-muted rounded-xl">
-          <h3 className="text-2xl font-bold mb-4 text-center">Frequently Asked Questions</h3>
+          <h3 className="text-2xl font-bold mb-4 text-center">Často Kladené Otázky</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
             <motion.div 
               className="bg-card p-6 rounded-lg shadow-sm"
@@ -221,8 +223,8 @@ const ServicesSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              <h4 className="font-bold mb-2">How long does it take to complete a website?</h4>
-              <p className="text-muted-foreground">The timeline depends on complexity. Basic websites take 2-4 weeks, while custom web applications may take 2-3 months from concept to launch.</p>
+              <h4 className="font-bold mb-2">Jak dlouho trvá vytvořit web?</h4>
+              <p className="text-muted-foreground">Časový plán závisí na složitosti. Základní weby trvají 2-4 týdny, zatímco vlastní webové aplikace mohou trvat 1-2 měsíce od konceptu po spuštění.</p>
             </motion.div>
             
             <motion.div 
@@ -232,8 +234,8 @@ const ServicesSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.1 }}
             >
-              <h4 className="font-bold mb-2">Do you offer hosting services?</h4>
-              <p className="text-muted-foreground">Yes, we provide hosting solutions tailored to your website's needs. Our hosting packages include maintenance, backups, and security updates.</p>
+              <h4 className="font-bold mb-2">Nabízíte hosting?</h4>
+              <p className="text-muted-foreground">Ano, poskytujeme hostingová řešení přizpůsobená potřebám vašeho webu. Naše hostingové balíčky zahrnují údržbu, zálohy a bezpečnostní aktualizace.</p>
             </motion.div>
             
             <motion.div 
@@ -243,8 +245,8 @@ const ServicesSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
-              <h4 className="font-bold mb-2">What technologies do you use?</h4>
-              <p className="text-muted-foreground">We specialize in React, TypeScript, Tailwind CSS, and Next.js for frontend development. For backend, we use Node.js, PostgreSQL, and various cloud services.</p>
+              <h4 className="font-bold mb-2">Jaké technologie používáte?</h4>
+              <p className="text-muted-foreground">Specializujeme se na React, TypeScript, Tailwind CSS a Next.js pro frontend. Pro backend používáme Node.js, PostgreSQL a různé cloudové služby.</p>
             </motion.div>
             
             <motion.div 
@@ -254,8 +256,8 @@ const ServicesSection = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
-              <h4 className="font-bold mb-2">Do you offer maintenance after launch?</h4>
-              <p className="text-muted-foreground">Yes, we offer various maintenance packages to keep your site secure, updated, and performing optimally. Ask about our monthly maintenance plans.</p>
+              <h4 className="font-bold mb-2">Nabízíte údržbu po spuštění?</h4>
+              <p className="text-muted-foreground">Ano, nabízíme různé balíčky údržby, které udrží váš web zabezpečený, aktualizovaný a výkonný. Zeptejte se na naše měsíční plány údržby.</p>
             </motion.div>
           </div>
         </div>

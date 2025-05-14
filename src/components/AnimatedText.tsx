@@ -13,7 +13,7 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
   className = "", 
   once = true 
 }) => {
-  // Split the text into an array of letters
+  // Split the text into an array of words
   const words = text.split(' ');
   
   // Variants for container of words
@@ -21,19 +21,20 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
-      transition: { staggerChildren: 0.12, delayChildren: 0.04 * i },
+      transition: { staggerChildren: 0.08, delayChildren: 0.03 * i },
     }),
   };
   
-  // Variants for each word
+  // Enhanced variants for each word with more spring properties
   const child = {
     visible: {
       opacity: 1,
       y: 0,
       transition: {
         type: "spring",
-        damping: 12,
-        stiffness: 100,
+        damping: 10,
+        stiffness: 80,
+        velocity: 2
       },
     },
     hidden: {
@@ -41,8 +42,8 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
       y: 20,
       transition: {
         type: "spring",
-        damping: 12,
-        stiffness: 100,
+        damping: 10,
+        stiffness: 80,
       },
     },
   };

@@ -11,19 +11,19 @@ const projects = [
   {
     id: 'ecommerce-dashboard',
     title: 'E-commerce Dashboard',
-    description: 'A comprehensive admin dashboard for managing products, orders, and customers built with React and Tailwind CSS.',
+    description: 'Komplexní administrační rozhraní pro správu produktů, objednávek a zákazníků vytvořené s React a Tailwind CSS.',
     image: 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?w=500&h=280&fit=crop&q=80',
     tags: ['React', 'TailwindCSS', 'Redux', 'Chart.js'],
     link: '#',
     github: '#',
     isUpcoming: false,
     launchDate: null,
-    type: 'client' // 'client', 'personal', 'redesign'
+    type: 'client'
   },
   {
     id: 'task-management',
-    title: 'Task Management App',
-    description: 'A productivity application for organizing tasks with drag-and-drop functionality and real-time updates.',
+    title: 'Aplikace pro Správu Úkolů',
+    description: 'Produktivní aplikace pro organizaci úkolů s funkcí drag-and-drop a aktualizacemi v reálném čase.',
     image: 'https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?w=500&h=280&fit=crop&q=80',
     tags: ['Next.js', 'TypeScript', 'Prisma', 'Framer Motion'],
     link: '#',
@@ -35,7 +35,7 @@ const projects = [
   {
     id: 'fitness-tracker',
     title: 'Fitness Tracker',
-    description: 'Mobile-responsive application for tracking workouts and nutrition with data visualization and progress tracking.',
+    description: 'Mobilně responzivní aplikace pro sledování tréninků a výživy s vizualizací dat a sledováním pokroku.',
     image: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=500&h=280&fit=crop&q=80',
     tags: ['React Native', 'Firebase', 'Expo', 'D3.js'],
     link: '#',
@@ -46,8 +46,8 @@ const projects = [
   },
   {
     id: 'ai-assistant',
-    title: 'AI Assistant Platform',
-    description: 'An upcoming AI assistant platform that helps businesses automate customer support with advanced natural language processing.',
+    title: 'AI Asistent Platforma',
+    description: 'Připravovaná platforma AI asistenta, která pomáhá firmám automatizovat zákaznickou podporu pokročilým zpracováním přirozeného jazyka.',
     image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=500&h=280&fit=crop&q=80',
     tags: ['React', 'Node.js', 'Machine Learning', 'WebSockets'],
     link: null,
@@ -67,8 +67,8 @@ const ProjectsSection: React.FC = () => {
     <section id="projects" className="section">
       <div className="container-custom">
         <SectionTitle 
-          title="My Projects" 
-          subtitle="Check out some of my recent work"
+          title="Moje Projekty" 
+          subtitle="Podívejte se na některé mé nedávné práce"
         />
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -92,7 +92,7 @@ const ProjectsSection: React.FC = () => {
         
         {upcomingProjects.length > 0 && (
           <div className="mt-16">
-            <h3 className="text-2xl font-bold mb-6 text-gradient">Upcoming Projects</h3>
+            <h3 className="text-2xl font-bold mb-6 text-gradient">Připravované Projekty</h3>
             <div className="grid md:grid-cols-2 gap-6">
               {upcomingProjects.map((project, index) => (
                 <div key={index} className="glassmorphism rounded-xl p-6 border border-primary/20">
@@ -113,7 +113,7 @@ const ProjectsSection: React.FC = () => {
           transition={{ duration: 0.5 }}
         >
           <p className="text-foreground/70 mb-4">
-            Want to see more of my work?
+            Chcete vidět více mé práce?
           </p>
           <a 
             href="https://github.com"
@@ -121,7 +121,7 @@ const ProjectsSection: React.FC = () => {
             rel="noopener noreferrer"
             className="inline-block bg-secondary text-foreground hover:bg-secondary/80 transition-colors px-6 py-3 rounded-lg font-medium"
           >
-            Visit My GitHub
+            Navštivte Můj GitHub
           </a>
         </motion.div>
       </div>

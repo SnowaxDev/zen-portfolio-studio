@@ -11,12 +11,12 @@ import ContactSection from '../sections/ContactSection';
 import Footer from '../components/Footer';
 
 const Index = () => {
-  // Update metadata
+  // Update metadata to Czech
   useEffect(() => {
-    document.title = "John Doe | Frontend Developer & UI/UX Designer";
+    document.title = "Jan Novák | Frontend Vývojář & UI/UX Designer";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute("content", "Portfolio website for John Doe, a Frontend Developer and UI/UX Designer specializing in React and Next.js applications.");
+      metaDescription.setAttribute("content", "Portfolio web pro Jana Nováka, Frontend Vývojáře a UI/UX Designera specializujícího se na React a Next.js aplikace.");
     }
   }, []);
 
