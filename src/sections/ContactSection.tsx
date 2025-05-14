@@ -6,8 +6,11 @@ import SectionTitle from '../components/SectionTitle';
 import { AspectRatio } from '../components/ui/aspect-ratio';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
+import { Textarea } from '../components/ui/textarea';
 import ScrollReveal from '../components/ScrollReveal';
 import { Github, Linkedin, Twitter, Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '../components/ui/accordion';
+import { Button } from '../components/ui/button';
 
 const ContactSection: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -64,6 +67,25 @@ const ContactSection: React.FC = () => {
     hover: { scale: 1.2, y: -5 }
   };
 
+  const faqItems = [
+    {
+      question: "Jak dlouho trvá vytvořit web?",
+      answer: "Časový plán závisí na složitosti: Základní weby dokončím do 2 týdnů, jednodušší weby a jednoduší aplikace do 3 týdnů. Komplexní projekty mohou trvat déle."
+    },
+    {
+      question: "Nabízíte hosting?",
+      answer: "Ano, poskytuji hostingová řešení přizpůsobená potřebám vašeho webu. Hostingové balíčky zahrnují údržbu, zálohy a bezpečnostní aktualizace."
+    },
+    {
+      question: "Jaké technologie používáte?",
+      answer: "Specializuji se na React, TypeScript, Tailwind CSS a Next.js pro frontend. Pro backend používám Node.js, PostgreSQL a různé cloudové služby."
+    },
+    {
+      question: "Nabízíte i jednorázové úpravy?",
+      answer: "Ano, kromě kompletních projektů nabízím i jednorázové úpravy existujících webů, redesign, optimalizaci výkonu nebo implementaci nových funkcí."
+    }
+  ];
+
   return (
     <section id="contact" className="section pb-24">
       <div className="container-custom max-w-6xl">
@@ -80,52 +102,18 @@ const ContactSection: React.FC = () => {
             <div className="p-8">
               <h3 className="text-2xl font-bold mb-6 text-center text-gradient">Často Kladené Otázky</h3>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <motion.div 
-                  className="bg-secondary/50 rounded-lg p-6 backdrop-blur-sm border border-white/5"
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                >
-                  <h4 className="font-bold text-lg mb-2">Jak dlouho trvá vytvořit web?</h4>
-                  <p className="text-foreground/70">
-                    Časový plán závisí na složitosti: Základní weby dokončím do 2 týdnů, 
-                    jednodušší weby a jednoduší aplikace do 3 týdnů. 
-                    Komplexní projekty mohou trvat déle.
-                  </p>
-                </motion.div>
-                
-                <motion.div 
-                  className="bg-secondary/50 rounded-lg p-6 backdrop-blur-sm border border-white/5"
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                >
-                  <h4 className="font-bold text-lg mb-2">Nabízíte hosting?</h4>
-                  <p className="text-foreground/70">
-                    Ano, poskytuji hostingová řešení přizpůsobená potřebám vašeho webu. 
-                    Hostingové balíčky zahrnují údržbu, zálohy a bezpečnostní aktualizace.
-                  </p>
-                </motion.div>
-                
-                <motion.div 
-                  className="bg-secondary/50 rounded-lg p-6 backdrop-blur-sm border border-white/5"
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                >
-                  <h4 className="font-bold text-lg mb-2">Jaké technologie používáte?</h4>
-                  <p className="text-foreground/70">
-                    Specializuji se na React, TypeScript, Tailwind CSS a Next.js pro frontend. 
-                    Pro backend používám Node.js, PostgreSQL a různé cloudové služby.
-                  </p>
-                </motion.div>
-                
-                <motion.div 
-                  className="bg-secondary/50 rounded-lg p-6 backdrop-blur-sm border border-white/5"
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                >
-                  <h4 className="font-bold text-lg mb-2">Nabízíte i jednorázové úpravy?</h4>
-                  <p className="text-foreground/70">
-                    Ano, kromě kompletních projektů nabízím i jednorázové úpravy existujících webů, 
-                    redesign, optimalizaci výkonu nebo implementaci nových funkcí.
-                  </p>
-                </motion.div>
-              </div>
+              <Accordion type="single" collapsible className="w-full">
+                {faqItems.map((item, index) => (
+                  <AccordionItem key={index} value={`item-${index}`} className="border-b border-white/10">
+                    <AccordionTrigger className="text-left text-lg py-4 hover:no-underline">
+                      {item.question}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-foreground/70 pb-4">
+                      {item.answer}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
             </div>
           </div>
         </ScrollReveal>
@@ -165,7 +153,7 @@ const ContactSection: React.FC = () => {
                   
                   <div className="space-y-2">
                     <Label htmlFor="message" className="text-foreground/80">Zpráva</Label>
-                    <textarea
+                    <Textarea
                       id="message"
                       name="message"
                       rows={5}
@@ -176,12 +164,10 @@ const ContactSection: React.FC = () => {
                     />
                   </div>
                   
-                  <motion.button
+                  <Button
                     type="submit"
                     disabled={isSubmitting}
                     className="w-full py-3 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-70 flex items-center justify-center"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
                   >
                     {isSubmitting ? (
                       <span className="flex items-center">
@@ -197,7 +183,7 @@ const ContactSection: React.FC = () => {
                         Odeslat Zprávu
                       </span>
                     )}
-                  </motion.button>
+                  </Button>
                 </form>
               </div>
             </div>

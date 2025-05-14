@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import HeroSection from '../sections/HeroSection';
 import AboutSection from '../sections/AboutSection';
 import ProjectsSection from '../sections/ProjectsSection';
+import ServicesSection from '../sections/ServicesSection';
 import SkillsSection from '../sections/SkillsSection';
 import ContactSection from '../sections/ContactSection';
 import Footer from '../components/Footer';
@@ -93,6 +94,10 @@ const Index = () => {
         
         <motion.div variants={sectionVariants}>
           <AboutSection />
+        </motion.div>
+        
+        <motion.div variants={sectionVariants}>
+          <ServicesSection />
         </motion.div>
         
         <motion.div variants={sectionVariants}>
