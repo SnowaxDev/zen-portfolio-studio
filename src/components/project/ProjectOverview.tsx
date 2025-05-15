@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ScrollReveal } from '../ScrollReveal';
+import ScrollReveal from '../ScrollReveal';
 import { AspectRatio } from '../ui/aspect-ratio';
 import { CheckCircle } from 'lucide-react';
 import { BeforeAfterComparison } from '../ComparisonSlider';
