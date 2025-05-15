@@ -195,10 +195,14 @@ export const projects = [
       'Agresivní lazy loading a vylepšení výkonu pro starší zařízení'
     ]
   },
+];
+
+// Separate upcoming projects for better organization
+export const upcomingProjects = [
   {
     id: 'ai-assistant',
     title: 'AI Asistent Platforma',
-    description: 'Připravovaná platforma AI asistenta, která pomáhá firmám automatizovat zákaznickou podporu pokročilým zpracováním přirozeného jazyka.',
+    description: 'Platforma AI asistenta, která pomáhá firmám automatizovat zákaznickou podporu pokročilým zpracováním přirozeného jazyka.',
     image: 'https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=500&h=280&fit=crop&q=80',
     tags: ['React', 'Node.js', 'Machine Learning', 'WebSockets'],
     link: null,
@@ -215,6 +219,63 @@ export const projects = [
       'MongoDB pro ukládání konverzací a zpětnou vazbu'
     ]
   },
+  {
+    id: 'virtual-classroom',
+    title: 'Virtuální Učebna',
+    description: 'Interaktivní platforma pro online vzdělávání s podporou živých lekcí, kvízů a sledování pokroku studentů.',
+    image: 'https://images.unsplash.com/photo-1501504905252-473c47e087f8?w=500&h=280&fit=crop&q=80',
+    tags: ['React', 'WebRTC', 'Firebase', 'Redux'],
+    link: null,
+    github: null,
+    isUpcoming: true,
+    launchDate: '2025-10-30',
+    type: 'client',
+    price: null,
+    technicalDetails: [
+      'WebRTC pro živé video přenosy',
+      'Firebase Realtime Database pro sdílení dat v reálném čase',
+      'Redux pro správu stavu aplikace',
+      'Analytické nástroje pro sledování pokroku studentů'
+    ]
+  },
+  {
+    id: 'crypto-dashboard',
+    title: 'Krypto Dashboard',
+    description: 'Analytický nástroj pro sledování kryptoměnových trhů s pokročilými grafy a alertovým systémem.',
+    image: 'https://images.unsplash.com/photo-1639762681057-408e52192e55?w=500&h=280&fit=crop&q=80',
+    tags: ['Next.js', 'D3.js', 'Web3', 'TailwindCSS'],
+    link: null,
+    github: null,
+    isUpcoming: true,
+    launchDate: '2025-09-12',
+    type: 'personal',
+    price: null,
+    technicalDetails: [
+      'Next.js pro SSR a optimalizaci výkonu',
+      'D3.js pro komplexní finanční grafy',
+      'Web3.js pro interakci s blockchain sítěmi',
+      'Websocket API pro aktualizace cen v reálném čase'
+    ]
+  },
+  {
+    id: 'smart-home',
+    title: 'Smart Home Kontrolní Panel',
+    description: 'Řídicí panel pro správu chytré domácnosti s podporou populárních IoT zařízení a hlasových asistentů.',
+    image: 'https://images.unsplash.com/photo-1558002038-1055907df827?w=500&h=280&fit=crop&q=80',
+    tags: ['React', 'MQTT', 'Electron', 'Node.js'],
+    link: null,
+    github: null,
+    isUpcoming: true,
+    launchDate: '2025-11-25',
+    type: 'client',
+    price: null,
+    technicalDetails: [
+      'React pro frontend aplikace',
+      'MQTT protokol pro komunikaci s IoT zařízeními',
+      'Electron pro multi-platformní desktop aplikaci',
+      'Node.js backend s integracemi na různé služby a API'
+    ]
+  }
 ];
 
 // Social links

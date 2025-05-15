@@ -32,13 +32,15 @@ const pageVariants = {
   }
 };
 
+// Enhanced section variants for smoother animations
 const sectionVariants = {
   initial: { opacity: 0, y: 30 },
   animate: { 
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.6,
+      duration: 0.8,
+      ease: "easeOut"
     }
   }
 };
@@ -74,27 +76,57 @@ const Index = () => {
     >
       <Header />
       <main>
-        <motion.div variants={sectionVariants}>
+        <motion.div 
+          variants={sectionVariants}
+          initial="initial"
+          animate="animate"
+          viewport={{ once: true }}
+        >
           <HeroSection />
         </motion.div>
         
-        <motion.div variants={sectionVariants}>
+        <motion.div 
+          variants={sectionVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <AboutSection />
         </motion.div>
         
-        <motion.div variants={sectionVariants}>
+        <motion.div 
+          variants={sectionVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <ProjectsSection />
         </motion.div>
         
-        <motion.div variants={sectionVariants}>
+        <motion.div 
+          variants={sectionVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <SkillsSection />
         </motion.div>
         
-        <motion.div variants={sectionVariants}>
+        <motion.div 
+          variants={sectionVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <ServicesSection />
         </motion.div>
         
-        <motion.div variants={sectionVariants}>
+        <motion.div 
+          variants={sectionVariants}
+          initial="initial"
+          whileInView="animate"
+          viewport={{ once: true, margin: "-100px" }}
+        >
           <ContactSection />
         </motion.div>
       </main>
