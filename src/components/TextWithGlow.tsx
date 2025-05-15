@@ -7,13 +7,19 @@ interface TextWithGlowProps {
   className?: string;
   intensity?: 'light' | 'medium' | 'strong';
   color?: string;
+  pulsate?: boolean;
+  delay?: number;
+  duration?: number;
 }
 
 const TextWithGlow: React.FC<TextWithGlowProps> = ({
   children,
   className = '',
   intensity = 'medium',
-  color = 'rgba(212, 175, 55, 0.8)' // Default gold color
+  color = 'rgba(212, 175, 55, 0.8)', // Default gold color
+  pulsate = true,
+  delay = 0,
+  duration = 2,
 }) => {
   // Set shadow intensity based on prop
   const getShadowIntensity = () => {
@@ -24,6 +30,7 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
     }
   };
 
+  // Dynamic text glow variants with customized timing
   const textGlowVariants = {
     initial: {
       textShadow: `0 0 5px ${color}00`
@@ -31,11 +38,19 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
     animate: {
       textShadow: getShadowIntensity(),
       transition: {
-        duration: 2,
-        repeat: Infinity,
+        duration: duration,
+        repeat: pulsate ? Infinity : 0,
         repeatType: "reverse" as const,
-        ease: "easeInOut"
+        ease: "easeInOut",
+        delay: delay
       }
+    },
+    hover: {
+      textShadow: intensity === 'strong' 
+        ? `0 0 15px ${color}, 0 0 25px ${color}, 0 0 35px ${color}70` 
+        : `0 0 15px ${color}, 0 0 25px ${color}60`,
+      scale: 1.02,
+      transition: { duration: 0.3 }
     }
   };
 
@@ -45,6 +60,7 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
       variants={textGlowVariants}
       initial="initial"
       animate="animate"
+      whileHover="hover"
     >
       {children}
     </motion.span>

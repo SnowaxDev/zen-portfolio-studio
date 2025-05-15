@@ -6,6 +6,7 @@ import { Button } from '../ui/button';
 import { Check, Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import { cn } from '@/lib/utils';
+import TextWithGlow from '../TextWithGlow';
 
 interface ServiceCardProps {
   title: string;
@@ -44,13 +45,32 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     }
   }, [isPopular]);
 
+  // Animation variants for card elements
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+    hover: { y: -8, transition: { duration: 0.3 } }
+  };
+
+  const featureVariants = {
+    hidden: { opacity: 0, x: -10 },
+    visible: (i: number) => ({ 
+      opacity: 1, 
+      x: 0, 
+      transition: { 
+        delay: 0.3 + i * 0.1,
+        duration: 0.5 
+      } 
+    })
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial="hidden"
+      whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.5 }}
-      whileHover={{ y: -8 }}
+      whileHover="hover"
+      variants={cardVariants}
       className="h-full"
     >
       <Card className={cn(
@@ -59,11 +79,19 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         className
       )}>
         {isPopular && (
-          <div className="absolute -top-3 left-0 right-0 flex justify-center">
-            <div className="bg-gold text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full shadow-lg">
+          <motion.div 
+            className="absolute -top-3 left-0 right-0 flex justify-center"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5, duration: 0.5 }}
+          >
+            <TextWithGlow 
+              intensity="strong" 
+              className="bg-gold text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full shadow-lg"
+            >
               Nejoblíbenější
-            </div>
-          </div>
+            </TextWithGlow>
+          </motion.div>
         )}
         
         <motion.div
@@ -76,29 +104,64 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           isPopular ? "pt-8" : "pt-6"
         )}>
           <div className="mb-6">
-            <h3 className={cn(
-              "text-xl font-bold mb-2",
-              isPopular ? "text-gold" : "text-foreground"
-            )}>
-              {title}
-            </h3>
-            <p className="text-muted-foreground text-sm">
+            <motion.h3 
+              className={cn(
+                "text-xl font-bold mb-2",
+                isPopular ? "text-gold" : "text-foreground"
+              )}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              {isPopular ? (
+                <TextWithGlow intensity="medium" color="rgba(212, 175, 55, 0.8)">
+                  {title}
+                </TextWithGlow>
+              ) : title}
+            </motion.h3>
+            <motion.p 
+              className="text-muted-foreground text-sm"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.3 }}
+            >
               {description}
-            </p>
+            </motion.p>
           </div>
           
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-6">
             <div>
               <div className="flex items-baseline">
-                <span className={cn(
-                  "text-3xl md:text-4xl font-bold",
-                  isPopular ? "text-gold" : "text-foreground"
-                )}>
-                  {price.toLocaleString()} 
-                </span>
-                <span className="text-muted-foreground ml-2">Kč {billingType === 'oneTime' ? 'jednorázově' : 'měsíčně'}</span>
+                <motion.span 
+                  className={cn(
+                    "text-3xl md:text-4xl font-bold",
+                    isPopular ? "text-gold" : "text-foreground"
+                  )}
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.4 }}
+                >
+                  {isPopular ? (
+                    <TextWithGlow intensity="medium">
+                      {price.toLocaleString()}
+                    </TextWithGlow>
+                  ) : price.toLocaleString()}
+                </motion.span>
+                <motion.span 
+                  className="text-muted-foreground ml-2"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  transition={{ delay: 0.5 }}
+                >
+                  Kč {billingType === 'oneTime' ? 'jednorázově' : 'měsíčně'}
+                </motion.span>
               </div>
-              <div className="mt-1 inline-flex items-center">
+              <motion.div 
+                className="mt-1 inline-flex items-center"
+                initial={{ opacity: 0, y: 5 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6 }}
+              >
                 <div className={`px-2 py-0.5 text-xs rounded-full ${
                   billingType === 'oneTime' 
                     ? 'bg-blue-500/20 text-blue-400' 
@@ -123,21 +186,29 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
-              </div>
+              </motion.div>
             </div>
           </div>
           
           <div className="flex-grow">
-            <h4 className="font-medium mb-3 text-sm">Co je zahrnuto:</h4>
+            <motion.h4 
+              className="font-medium mb-3 text-sm"
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+            >
+              Co je zahrnuto:
+            </motion.h4>
             <ul className="space-y-2 mb-6">
               {features.map((feature, index) => (
                 <motion.li 
                   key={index} 
                   className="flex items-center text-sm"
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  custom={index}
+                  variants={featureVariants}
+                  initial="hidden"
+                  whileInView="visible"
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
                 >
                   <Check className={cn(
                     "h-4 w-4 mr-2 flex-shrink-0", 
@@ -153,6 +224,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             <motion.div
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
+              initial={{ opacity: 0, y: 10 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.7 + features.length * 0.05 }}
             >
               <Button 
                 className={cn("w-full", 
