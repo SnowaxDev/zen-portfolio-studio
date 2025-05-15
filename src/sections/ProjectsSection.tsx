@@ -3,7 +3,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { projects, sectionMeta } from '../lib/section-data';
-import { ArrowRight, Github } from 'lucide-react';
+import { ArrowRight, Github, Clock, Calendar, Sparkles } from 'lucide-react';
 import ProjectCard from '../components/ProjectCard';
 import ScrollReveal from '../components/ScrollReveal';
 import ProjectTimer from '../components/ProjectTimer';
@@ -76,21 +76,56 @@ const ProjectsSection: React.FC = () => {
         
         {upcomingProjects.length > 0 && (
           <div className="mt-24">
-            <div className="text-center mb-10">
-              <motion.h3 
+            <div className="text-center mb-16">
+              <motion.div 
+                className="inline-block relative"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
-                transition={{ duration: 0.6 }}
-                className="text-2xl font-bold mb-4 text-gradient-purple"
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
               >
-                Připravované Projekty
-              </motion.h3>
+                <motion.div 
+                  className="absolute -top-6 -right-6 text-gold"
+                  animate={{
+                    rotate: [0, 15, 0, -15, 0],
+                    scale: [1, 1.1, 1, 1.1, 1]
+                  }}
+                  transition={{
+                    duration: 5,
+                    repeat: Infinity,
+                    repeatType: "loop"
+                  }}
+                >
+                  <Sparkles size={24} />
+                </motion.div>
+                
+                <motion.h3 
+                  className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple via-purple-light to-gold-light"
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6 }}
+                >
+                  Připravované Projekty
+                </motion.h3>
+              </motion.div>
+              
               <motion.div 
                 initial={{ width: 0 }}
-                whileInView={{ width: "5rem" }}
+                whileInView={{ width: "6rem" }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                className="h-1 bg-gradient-to-r from-purple/50 to-gold/50 mx-auto rounded-full"
-              ></motion.div>
+                viewport={{ once: true }}
+                className="h-1 bg-gradient-to-r from-purple/50 to-gold/50 mx-auto rounded-full my-4"
+              />
+              
+              <motion.p
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+                viewport={{ once: true }}
+                className="text-muted-foreground max-w-2xl mx-auto mb-8"
+              >
+                Projekty na kterých aktuálně pracuji a brzy budou dokončeny
+              </motion.p>
             </div>
             
             <motion.div 
@@ -98,42 +133,65 @@ const ProjectsSection: React.FC = () => {
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="max-w-4xl mx-auto"
+              className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto"
             >
               {upcomingProjects.map((project, index) => (
                 <motion.div 
                   key={index}
                   variants={itemVariants} 
-                  className="mb-8 last:mb-0"
+                  className="relative"
                   whileHover={{ 
-                    y: -5, 
+                    y: -8, 
                     transition: { duration: 0.2 } 
                   }}
                 >
-                  <div className="bg-card/70 backdrop-blur-sm rounded-xl border border-purple/20 p-8 hover:shadow-lg hover:shadow-purple/10 transition-all duration-300 group">
-                    <div className="flex flex-col md:flex-row gap-6">
-                      <div className="md:w-2/3">
-                        <h4 className="text-2xl font-bold mb-3 text-gradient-purple group-hover:text-gold transition-colors duration-300">{project.title}</h4>
-                        <p className="text-foreground/70 mb-6 leading-relaxed">{project.description}</p>
-                        
-                        <div className="flex flex-wrap gap-2 mb-6">
-                          {project.tags.map((tag, idx) => (
-                            <motion.span 
-                              key={idx} 
-                              className="px-3 py-1 bg-purple/10 backdrop-blur-sm text-xs font-medium text-foreground/80 rounded-full border border-purple/20"
-                              whileHover={{ 
-                                scale: 1.05, 
-                                backgroundColor: "rgba(139, 92, 246, 0.2)" 
-                              }}
-                              transition={{ duration: 0.2 }}
-                            >
-                              {tag}
-                            </motion.span>
-                          ))}
-                        </div>
+                  <div className="bg-black/60 backdrop-blur-lg rounded-xl border border-purple/20 p-8 hover:shadow-xl hover:shadow-purple/10 transition-all duration-300 group relative overflow-hidden">
+                    {/* Background glow effect */}
+                    <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple/10 rounded-full blur-3xl group-hover:bg-purple/20 transition-colors duration-500" />
+                    <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gold/10 rounded-full blur-3xl group-hover:bg-gold/20 transition-colors duration-500" />
+                    
+                    <div className="relative z-10">
+                      {/* Label */}
+                      <motion.div 
+                        className="absolute -top-3 -right-3 bg-gradient-to-r from-purple to-purple-light px-3 py-1 rounded-full text-xs font-medium shadow-lg flex items-center gap-1.5"
+                        animate={{
+                          y: [0, -3, 0]
+                        }}
+                        transition={{
+                          duration: 2,
+                          repeat: Infinity,
+                          repeatType: "mirror"
+                        }}
+                      >
+                        <Clock size={12} />
+                        Brzy
+                      </motion.div>
+                      
+                      <h4 className="text-2xl font-bold mb-3 text-gradient-purple group-hover:text-gold transition-colors duration-300">{project.title}</h4>
+                      <p className="text-foreground/70 mb-6 leading-relaxed">{project.description}</p>
+                      
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {project.tags.map((tag, idx) => (
+                          <motion.span 
+                            key={idx} 
+                            className="px-3 py-1 bg-black/40 backdrop-blur-sm text-xs font-medium text-foreground/90 rounded-full border border-purple/20"
+                            whileHover={{ 
+                              scale: 1.05, 
+                              backgroundColor: "rgba(139, 92, 246, 0.2)" 
+                            }}
+                            transition={{ duration: 0.2 }}
+                          >
+                            {tag}
+                          </motion.span>
+                        ))}
                       </div>
                       
-                      <div className="md:w-1/3 flex flex-col justify-between">
+                      <div className="flex items-center justify-between mt-6">
+                        <div className="flex items-center gap-2">
+                          <Calendar size={16} className="text-purple-light" />
+                          <span className="text-sm text-foreground/70">Plánované dokončení:</span>
+                        </div>
+                        
                         <ProjectTimer launchDate={project.launchDate} />
                       </div>
                     </div>
@@ -144,7 +202,7 @@ const ProjectsSection: React.FC = () => {
           </div>
         )}
         
-        <ScrollReveal className="text-center mt-16" animationStyle="fade" direction="up" distance={30}>
+        <ScrollReveal className="text-center mt-20" animationStyle="fade" direction="up" distance={30}>
           <p className="text-foreground/70 mb-5">
             Chcete vidět více mé práce?
           </p>
@@ -152,9 +210,9 @@ const ProjectsSection: React.FC = () => {
             href="https://github.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-gold/20 border border-gold/20 text-white hover:bg-gold/30 transition-colors px-6 py-3 rounded-lg font-medium"
-            whileHover={{ scale: 1.05, boxShadow: "0 0 15px rgba(212, 175, 55, 0.3)" }}
-            whileTap={{ scale: 0.95 }}
+            className="inline-flex items-center gap-2 bg-black/50 border border-gold/20 text-white hover:bg-black/70 hover:border-gold/40 transition-colors px-6 py-3 rounded-lg font-medium backdrop-blur-md"
+            whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(212, 175, 55, 0.25)" }}
+            whileTap={{ scale: 0.98 }}
           >
             <Github size={18} />
             Navštivte Můj GitHub
