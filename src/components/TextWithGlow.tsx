@@ -25,8 +25,8 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
   const getShadowIntensity = () => {
     switch (intensity) {
       case 'light': return `0 0 10px ${color}, 0 0 20px ${color}40`;
-      case 'strong': return `0 0 10px ${color}, 0 0 20px ${color}, 0 0 30px ${color}60`;
-      default: return `0 0 10px ${color}, 0 0 15px ${color}50`;
+      case 'strong': return `0 0 12px ${color}, 0 0 24px ${color}, 0 0 36px ${color}60`;
+      default: return `0 0 10px ${color}, 0 0 18px ${color}50`;
     }
   };
 
@@ -47,9 +47,9 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
     },
     hover: {
       textShadow: intensity === 'strong' 
-        ? `0 0 15px ${color}, 0 0 25px ${color}, 0 0 35px ${color}70` 
+        ? `0 0 15px ${color}, 0 0 25px ${color}, 0 0 40px ${color}70` 
         : `0 0 15px ${color}, 0 0 25px ${color}60`,
-      scale: 1.02,
+      scale: 1.05,
       transition: { duration: 0.3 }
     }
   };

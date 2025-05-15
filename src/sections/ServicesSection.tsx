@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Layout, Zap, Cloud, Shield, Clock, Check, Info } from 'lucide-react';
@@ -7,20 +6,30 @@ import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import SectionTitle from '@/components/SectionTitle';
 import ServiceCard from '@/components/services/ServiceCard';
 import CompactServiceCard from '@/components/services/CompactServiceCard';
+import TextWithGlow from '@/components/TextWithGlow';
 
 // Types
 type ServiceCategory = 'websites' | 'design' | 'cloud' | 'maintenance';
 type CustomerType = 'individual' | 'business';
 type BillingType = 'oneTime' | 'subscription';
 
-// Service pricing data
-const servicePricingData = {
+interface ServiceData {
+  title: string;
+  description: string;
+  price: number;
+  billingType: BillingType;
+  isPopular: boolean; // Make isPopular required for all service data
+  features: string[];
+}
+
+// Service pricing data with explicit typing
+const servicePricingData: Record<ServiceCategory, Record<CustomerType, ServiceData>> = {
   websites: {
     individual: {
       title: "Webové stránky",
       description: "Profesionální webové stránky pro jednotlivce a malé firmy včetně responzivního designu a SEO optimalizace.",
       price: 9900,
-      billingType: 'oneTime' as BillingType,
+      billingType: 'oneTime',
       isPopular: true,
       features: [
         "Responzivní design",
@@ -34,7 +43,7 @@ const servicePricingData = {
       title: "Webové stránky Pro",
       description: "Pokročilé webové řešení pro střední a velké firmy s vícejazyčnou podporou a pokročilými funkcemi.",
       price: 29900,
-      billingType: 'oneTime' as BillingType,
+      billingType: 'oneTime',
       isPopular: false,
       features: [
         "Vše z balíčku pro jednotlivce",
@@ -50,7 +59,7 @@ const servicePricingData = {
       title: "UI/UX Design",
       description: "Uživatelsky přívětivý design pro vaše projekty s prototypováním a testováním použitelnosti.",
       price: 7900,
-      billingType: 'oneTime' as BillingType,
+      billingType: 'oneTime',
       isPopular: false,
       features: [
         "Návrh uživatelského rozhraní",
@@ -64,7 +73,7 @@ const servicePricingData = {
       title: "Kompletní Brand Design",
       description: "Komplexní designové služby pro vaši značku včetně brand identity a marketingových materiálů.",
       price: 24900,
-      billingType: 'oneTime' as BillingType,
+      billingType: 'oneTime',
       isPopular: false,
       features: [
         "Vše z UI/UX balíčku",
@@ -80,7 +89,7 @@ const servicePricingData = {
       title: "Cloud Hosting",
       description: "Spolehlivý hosting pro vaše projekty s denními zálohami a technickou podporou.",
       price: 390,
-      billingType: 'subscription' as BillingType,
+      billingType: 'subscription',
       isPopular: false,
       features: [
         "5GB prostoru",
@@ -94,7 +103,7 @@ const servicePricingData = {
       title: "Cloud & RDP řešení",
       description: "Pokročilá cloudová infrastruktura pro firmy s dedikovaným serverem a nepřetržitou podporou.",
       price: 1990,
-      billingType: 'subscription' as BillingType,
+      billingType: 'subscription',
       isPopular: false,
       features: [
         "Neomezený prostor",
@@ -110,7 +119,7 @@ const servicePricingData = {
       title: "Základní údržba",
       description: "Pravidelná údržba pro bezproblémový chod vašeho webu včetně měsíčních aktualizací a monitoringu.",
       price: 490,
-      billingType: 'subscription' as BillingType,
+      billingType: 'subscription',
       isPopular: false,
       features: [
         "Měsíční aktualizace",
@@ -124,7 +133,7 @@ const servicePricingData = {
       title: "Prémiová údržba",
       description: "Komplexní údržba a podpora pro firemní řešení s týdenními aktualizacemi a prioritní podporou.",
       price: 1490,
-      billingType: 'subscription' as BillingType,
+      billingType: 'subscription',
       isPopular: false,
       features: [
         "Týdenní aktualizace",
@@ -167,6 +176,14 @@ const additionalServices = [
     price: "od 3 000 Kč",
     priceType: "jednorázově"
   }
+];
+
+// Tab icons and labels configuration
+const tabsConfig = [
+  { value: 'websites', icon: Layout, label: 'Webové stránky', shortLabel: 'Weby' },
+  { value: 'design', icon: Zap, label: 'Design & UX', shortLabel: 'Design' },
+  { value: 'cloud', icon: Cloud, label: 'Cloud & RDP', shortLabel: 'Cloud' },
+  { value: 'maintenance', icon: Shield, label: 'Údržba', shortLabel: 'Údržba' },
 ];
 
 const ServicesSection: React.FC = () => {
@@ -244,75 +261,125 @@ const ServicesSection: React.FC = () => {
           />
         </motion.div>
         
-        {/* Service category tabs */}
+        {/* Service category tabs - Enhanced tab design */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-wrap justify-center mb-8"
+          className="flex flex-wrap justify-center mb-12"
         >
           <Tabs 
             value={selectedCategory}
             onValueChange={(value) => setSelectedCategory(value as ServiceCategory)}
             className="w-full max-w-3xl mx-auto"
           >
-            <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full bg-card/80 backdrop-blur-sm p-1 rounded-lg border border-white/10 shadow-lg">
-              <TabsTrigger value="websites" className="flex items-center gap-2 py-2 data-[state=active]:text-gold">
-                <Layout className="w-4 h-4" />
-                <span className="hidden sm:inline">Webové stránky</span>
-                <span className="sm:hidden">Weby</span>
-              </TabsTrigger>
-              <TabsTrigger value="design" className="flex items-center gap-2 py-2 data-[state=active]:text-gold">
-                <Zap className="w-4 h-4" />
-                <span className="hidden sm:inline">Design & UX</span>
-                <span className="sm:hidden">Design</span>
-              </TabsTrigger>
-              <TabsTrigger value="cloud" className="flex items-center gap-2 py-2 data-[state=active]:text-gold">
-                <Cloud className="w-4 h-4" />
-                <span className="hidden sm:inline">Cloud & RDP</span>
-                <span className="sm:hidden">Cloud</span>
-              </TabsTrigger>
-              <TabsTrigger value="maintenance" className="flex items-center gap-2 py-2 data-[state=active]:text-gold">
-                <Shield className="w-4 h-4" />
-                <span className="hidden sm:inline">Údržba</span>
-                <span className="sm:hidden">Údržba</span>
-              </TabsTrigger>
-            </TabsList>
+            <div className="relative">
+              {/* Decorative underline that animates with tab selection */}
+              <motion.div 
+                className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-purple/20 via-gold/40 to-purple/20 rounded-full"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ delay: 0.5 }}
+              />
+              
+              <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full bg-card/80 backdrop-blur-sm p-1 rounded-xl border border-white/10 shadow-lg">
+                {tabsConfig.map((tab) => {
+                  const TabIcon = tab.icon;
+                  const isActive = selectedCategory === tab.value;
+                  
+                  return (
+                    <TabsTrigger 
+                      key={tab.value}
+                      value={tab.value} 
+                      className={`
+                        flex items-center justify-center gap-2 py-3 px-1
+                        relative overflow-hidden transition-all duration-300 rounded-lg
+                        ${isActive ? 'text-gold font-medium' : 'text-muted-foreground'}
+                      `}
+                    >
+                      {/* Background glow effect for active tab */}
+                      {isActive && (
+                        <motion.div
+                          className="absolute inset-0 bg-gold/5 rounded-lg"
+                          layoutId="activeTabBackground"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ type: "spring", duration: 0.5 }}
+                        />
+                      )}
+                      
+                      <TabIcon className={`w-5 h-5 ${isActive ? 'text-gold' : ''}`} />
+                      <span className="hidden sm:inline">{tab.label}</span>
+                      <span className="sm:hidden">{tab.shortLabel}</span>
+                      
+                      {/* Animated underline for active tab */}
+                      {isActive && (
+                        <motion.div
+                          className="absolute bottom-0 left-[10%] right-[10%] h-0.5 bg-gold"
+                          layoutId="activeTabIndicator"
+                          initial={{ opacity: 0 }}
+                          animate={{ opacity: 1 }}
+                          transition={{ type: "spring", duration: 0.5 }}
+                        />
+                      )}
+                    </TabsTrigger>
+                  );
+                })}
+              </TabsList>
+            </div>
           </Tabs>
         </motion.div>
         
-        {/* Customer type toggle */}
+        {/* Customer type toggle - Enhanced design */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex justify-center mb-10"
+          className="flex justify-center mb-16"
         >
-          <ToggleGroup 
-            type="single" 
-            value={customerType} 
-            onValueChange={(value) => {
-              if (value) setCustomerType(value as CustomerType);
-            }}
-            className="inline-flex bg-card/50 p-1 rounded-full border border-white/10"
-          >
-            <ToggleGroupItem 
-              value="individual" 
-              aria-label="Jednotlivci & Malé firmy"
-              className="rounded-full px-4 data-[state=on]:bg-gold data-[state=on]:text-primary-foreground"
+          <div className="relative bg-card/30 p-1 rounded-full border border-white/10 shadow-lg overflow-hidden">
+            {/* Animated background for selected toggle */}
+            <motion.div
+              className="absolute h-full top-0 rounded-full bg-gradient-to-r from-gold/90 to-gold-light/90"
+              initial={{ x: 0, width: '50%' }}
+              animate={{ 
+                x: customerType === 'individual' ? 0 : '100%', 
+                width: customerType === 'individual' ? '50%' : '50%',
+              }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+              style={{ x: customerType === 'individual' ? 0 : '50%' }}
+            />
+            
+            <ToggleGroup 
+              type="single" 
+              value={customerType} 
+              onValueChange={(value) => {
+                if (value) setCustomerType(value as CustomerType);
+              }}
+              className="relative z-10"
             >
-              Jednotlivci & Malé firmy
-            </ToggleGroupItem>
-            <ToggleGroupItem 
-              value="business" 
-              aria-label="Střední & Velké firmy"
-              className="rounded-full px-4 data-[state=on]:bg-gold data-[state=on]:text-primary-foreground"
-            >
-              Střední & Velké firmy
-            </ToggleGroupItem>
-          </ToggleGroup>
+              <ToggleGroupItem 
+                value="individual" 
+                aria-label="Jednotlivci & Malé firmy"
+                className="rounded-full px-6 py-2 transition-all duration-300 data-[state=on]:text-primary-foreground data-[state=off]:text-foreground/70"
+              >
+                <TextWithGlow intensity="light" color="rgba(255, 255, 255, 0.9)" pulsate={false}>
+                  Jednotlivci & Malé firmy
+                </TextWithGlow>
+              </ToggleGroupItem>
+              <ToggleGroupItem 
+                value="business" 
+                aria-label="Střední & Velké firmy"
+                className="rounded-full px-6 py-2 transition-all duration-300 data-[state=on]:text-primary-foreground data-[state=off]:text-foreground/70"
+              >
+                <TextWithGlow intensity="light" color="rgba(255, 255, 255, 0.9)" pulsate={false}>
+                  Střední & Velké firmy
+                </TextWithGlow>
+              </ToggleGroupItem>
+            </ToggleGroup>
+          </div>
         </motion.div>
         
         {/* Service pricing cards */}
@@ -323,7 +390,7 @@ const ServicesSection: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-20"
         >
-          {/* Individual/Small Business Card */}
+          {/* Service Card - Now with fixed isPopular prop type */}
           <ServiceCard
             title={servicePricingData[selectedCategory][customerType].title}
             description={servicePricingData[selectedCategory][customerType].description}

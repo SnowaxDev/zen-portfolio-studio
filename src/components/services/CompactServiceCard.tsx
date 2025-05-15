@@ -33,10 +33,10 @@ const CompactServiceCard: React.FC<CompactServiceCardProps> = ({
       }
     },
     hover: { 
-      y: -5, 
-      boxShadow: "0 10px 30px -10px rgba(212, 175, 55, 0.2)",
+      y: -8, 
+      boxShadow: "0 15px 35px -15px rgba(212, 175, 55, 0.25)",
       transition: { 
-        duration: 0.3,
+        duration: 0.4,
         ease: "easeOut"
       }
     }
@@ -55,6 +55,8 @@ const CompactServiceCard: React.FC<CompactServiceCardProps> = ({
     },
     hover: { 
       rotate: [0, -10, 10, -5, 0],
+      scale: 1.1,
+      backgroundColor: "rgba(212, 175, 55, 0.1)",
       transition: { duration: 0.5 }
     }
   };
@@ -63,28 +65,29 @@ const CompactServiceCard: React.FC<CompactServiceCardProps> = ({
     <motion.div
       initial="hidden"
       whileInView="visible"
-      viewport={{ once: true }}
+      viewport={{ once: true, margin: "-50px" }}
       whileHover="hover"
       variants={cardVariants}
+      className="h-full"
     >
-      <Card className="bg-card/50 backdrop-blur-sm rounded-xl border border-white/10 h-full hover:border-gold/20 transition-all">
+      <Card className="bg-card/50 backdrop-blur-sm rounded-xl border border-white/10 h-full hover:border-gold/30 transition-all overflow-hidden">
         <CardContent className="pt-6 h-full flex flex-col">
           <motion.div 
-            className="mb-4 bg-muted/80 w-12 h-12 rounded-lg flex items-center justify-center"
+            className="mb-4 bg-muted/80 w-14 h-14 rounded-lg flex items-center justify-center"
             variants={iconContainerVariants}
           >
-            <Icon className="h-6 w-6 text-gold" />
+            <Icon className="h-7 w-7 text-gold" />
           </motion.div>
           
           <motion.h4 
-            className="text-lg font-medium mb-2"
+            className="text-xl font-medium mb-2"
             initial={{ opacity: 0, y: 5 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
           >
             <TextWithGlow 
               intensity="light" 
-              color="rgba(212, 175, 55, 0.5)"
+              color="rgba(212, 175, 55, 0.6)"
               pulsate={false}
             >
               {title}
@@ -101,7 +104,7 @@ const CompactServiceCard: React.FC<CompactServiceCardProps> = ({
           </motion.p>
           
           <motion.div 
-            className="flex items-center mt-auto"
+            className="flex items-center mt-auto pt-4 border-t border-white/5"
             initial={{ opacity: 0, y: 5 }}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
