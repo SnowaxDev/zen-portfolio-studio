@@ -45,7 +45,7 @@ const SkillsSection: React.FC = () => {
   const isOpen = (skill: string) => openSkills.includes(skill);
 
   return (
-    <section id="skills" className="relative py-24 md:py-32 bg-gradient-to-b from-secondary/20 via-background to-background">
+    <section id="skills" className="relative py-24 bg-background">
       {/* Design elements */}
       <motion.div 
         className="absolute top-0 left-[10%] w-40 h-40 rounded-full bg-primary/5 blur-3xl" 
@@ -82,11 +82,10 @@ const SkillsSection: React.FC = () => {
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
           <ScrollReveal width="100%" animationStyle="fade">
             <motion.div 
-              className="relative p-6 rounded-xl bg-card/40 backdrop-blur-sm border border-white/10 shadow-lg transition-all duration-500"
+              className="relative p-6 rounded-xl bg-card border border-white/10 shadow-lg transition-all duration-500"
               whileHover={{ y: -8, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
               initial={{ boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)" }}
             >
-              <div className="absolute top-0 right-0 w-40 h-40 bg-primary/5 rounded-full blur-3xl -z-10" />
               <Collapsible open={isOpen('frontend')} onOpenChange={() => toggleSkill('frontend')} className="w-full">
                 <CollapsibleTrigger className="w-full flex items-center justify-between">
                   <div className="flex items-center">
@@ -139,11 +138,10 @@ const SkillsSection: React.FC = () => {
           
           <ScrollReveal width="100%" animationStyle="fade" delay={0.2}>
             <motion.div 
-              className="relative p-6 rounded-xl bg-card/40 backdrop-blur-sm border border-white/10 shadow-lg transition-all duration-500"
+              className="relative p-6 rounded-xl bg-card border border-white/10 shadow-lg transition-all duration-500"
               whileHover={{ y: -8, boxShadow: "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)" }}
               initial={{ boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)" }}
             >
-              <div className="absolute top-0 right-0 w-40 h-40 bg-accent/5 rounded-full blur-3xl -z-10" />
               <Collapsible open={isOpen('backend')} onOpenChange={() => toggleSkill('backend')} className="w-full">
                 <CollapsibleTrigger className="w-full flex items-center justify-between">
                   <div className="flex items-center">
