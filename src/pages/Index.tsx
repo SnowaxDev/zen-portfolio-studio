@@ -1,6 +1,6 @@
 
 import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useScroll, useSpring } from 'framer-motion';
 import Header from '../components/Header';
 import HeroSection from '../sections/HeroSection';
 import AboutSection from '../sections/AboutSection';
@@ -11,42 +11,50 @@ import ContactSection from '../sections/ContactSection';
 import Footer from '../components/Footer';
 import { useIsMobile } from '../hooks/use-mobile';
 
-// Page transition variants - enhanced for smoother entry animations
+// Enhanced page transition variants with improved timing and easing
 const pageVariants = {
   initial: { opacity: 0 },
   animate: { 
     opacity: 1,
     transition: { 
-      duration: 0.8,
+      duration: 0.9,
       ease: [0.22, 1, 0.36, 1],
-      delayChildren: 0.3,
-      staggerChildren: 0.3
+      staggerChildren: 0.35,
+      delayChildren: 0.2
     }
   },
   exit: { 
     opacity: 0,
     transition: { 
-      duration: 0.6, 
+      duration: 0.7, 
       ease: [0.22, 1, 0.36, 1] 
     }
   }
 };
 
-// Enhanced section variants for smoother animations with staggered entry
+// Enhanced section variants with more natural animation
 const sectionVariants = {
-  initial: { opacity: 0, y: 30 },
+  initial: { opacity: 0, y: 40 },
   animate: { 
     opacity: 1,
     y: 0,
     transition: {
-      duration: 0.8,
-      ease: "easeOut"
+      duration: 0.9,
+      ease: [0.25, 0.1, 0.25, 1]
     }
   }
 };
 
 const Index = () => {
   const isMobile = useIsMobile();
+  
+  // Get scroll progress for scroll-based animations
+  const { scrollYProgress } = useScroll();
+  const smoothScrollProgress = useSpring(scrollYProgress, { 
+    stiffness: 100, 
+    damping: 30, 
+    restDelta: 0.001 
+  });
   
   // Update metadata to Czech
   useEffect(() => {
@@ -74,7 +82,14 @@ const Index = () => {
       exit="exit"
       className="overflow-x-hidden flex flex-col min-h-screen"
     >
+      {/* Scroll progress indicator */}
+      <motion.div 
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold via-purple to-gold-light z-50"
+        style={{ scaleX: smoothScrollProgress, transformOrigin: "0%" }}
+      />
+      
       <Header />
+      
       <main className="flex-grow">
         <motion.div 
           variants={sectionVariants}
@@ -130,19 +145,24 @@ const Index = () => {
           <ContactSection />
         </motion.div>
       </main>
+      
       <Footer />
       
-      {/* Scroll indicator - shows only on desktop */}
+      {/* Enhanced desktop scroll indicator */}
       {!isMobile && (
         <motion.div 
           className="fixed bottom-5 right-5 flex flex-col items-center z-50"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.5, duration: 0.5 }}
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.8, duration: 0.5 }}
         >
-          <div className="bg-card/80 backdrop-blur-sm p-2.5 rounded-full border border-white/10 shadow-lg">
+          <motion.div 
+            className="bg-card/80 backdrop-blur-sm p-3 rounded-full border border-gold/20 shadow-lg hover:border-gold/50 transition-colors"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
             <motion.div 
-              className="w-1 h-6 bg-gradient-to-b from-gold to-purple rounded-full"
+              className="w-1 h-8 bg-gradient-to-b from-gold to-purple rounded-full"
               animate={{ 
                 scaleY: [1, 0.3, 1],
                 opacity: [1, 0.6, 1],
@@ -153,11 +173,11 @@ const Index = () => {
                 ease: "easeInOut",
               }}
             />
-          </div>
+          </motion.div>
         </motion.div>
       )}
       
-      {/* Mobile-specific floating buttons */}
+      {/* Enhanced mobile floating buttons */}
       {isMobile && (
         <motion.div
           className="fixed bottom-5 right-5 z-50"
@@ -165,17 +185,23 @@ const Index = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.5 }}
         >
-          <a 
+          <motion.a 
             href="#contact"
-            className="flex items-center justify-center w-12 h-12 bg-gold rounded-full shadow-lg"
+            className="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-gold to-gold-light rounded-full shadow-lg shadow-gold/20"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
             aria-label="Contact Me"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
-          </a>
+          </motion.a>
         </motion.div>
       )}
+      
+      {/* Decorative elements */}
+      <div className="fixed top-20 left-10 w-32 h-32 bg-purple/10 rounded-full filter blur-3xl opacity-30 animate-pulse pointer-events-none" />
+      <div className="fixed bottom-40 right-10 w-48 h-48 bg-gold/10 rounded-full filter blur-3xl opacity-20 animate-pulse pointer-events-none" />
     </motion.div>
   );
 };

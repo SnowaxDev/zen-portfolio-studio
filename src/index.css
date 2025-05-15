@@ -76,6 +76,7 @@
   body {
     @apply bg-background text-foreground font-sans scroll-smooth;
     background-image: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.05) 0%, rgba(0, 0, 0, 0) 80%);
+    overflow-x: hidden;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -147,6 +148,11 @@
     .card-modern {
       @apply mx-4 p-5;
     }
+  }
+
+  /* Selection styling */
+  ::selection {
+    @apply bg-gold/30 text-white;
   }
 }
 
@@ -225,7 +231,7 @@
     @apply px-3 py-1 rounded-full text-sm bg-secondary border border-gold/5 hover:border-gold/30 transition-all;
   }
   
-  /* New glowing elements */
+  /* Enhanced glowing elements */
   .glow-border {
     @apply border border-gold/30 animate-glow-pulse;
   }
@@ -234,6 +240,62 @@
     @apply bg-clip-text text-transparent bg-[linear-gradient(110deg,#D4AF3700,#D4AF3740_20%,#D4AF37_60%,#D4AF3740_80%,#D4AF3700)] bg-[length:200%_100%] animate-shimmer;
   }
   
+  /* Button with animated gradient */
+  .gradient-button {
+    @apply relative overflow-hidden bg-gradient-to-r from-gold to-purple text-white px-6 py-3 rounded-lg shadow-lg;
+    background-size: 200% 100%;
+    animation: gradientMove 3s ease infinite;
+  }
+  
+  @keyframes gradientMove {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* New animated text underline */
+  .animated-underline {
+    @apply relative inline-block;
+  }
+  
+  .animated-underline::after {
+    content: '';
+    @apply absolute left-0 bottom-0 w-0 h-0.5 bg-gold transition-all duration-300 ease-out;
+  }
+  
+  .animated-underline:hover::after {
+    @apply w-full;
+  }
+  
+  /* 3D button effect */
+  .button-3d {
+    @apply relative bg-gold text-background px-6 py-3 rounded-lg font-medium shadow-lg transform transition-all duration-200;
+  }
+  
+  .button-3d::before {
+    content: '';
+    @apply absolute inset-0 bg-gold-dark rounded-lg transform -translate-y-1 translate-x-1 -z-10 transition-transform duration-200;
+  }
+  
+  .button-3d:hover {
+    @apply -translate-y-1 translate-x-1;
+  }
+  
+  .button-3d:hover::before {
+    @apply -translate-y-0 translate-x-0;
+  }
+  
+  /* Floating animation */
+  .float {
+    animation: float 6s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+  }
+
   /* Mobile-specific components */
   @media (max-width: 767px) {
     .mobile-button {
