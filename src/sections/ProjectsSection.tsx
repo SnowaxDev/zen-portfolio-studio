@@ -66,7 +66,7 @@ const ProjectsSection: React.FC = () => {
                 tags={project.tags}
                 link={project.link}
                 github={project.github}
-                type={project.type}
+                type={project.type as "client" | "personal" | "redesign"}
                 price={project.price}
               />
             </motion.div>
