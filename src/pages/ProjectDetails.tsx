@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -9,6 +8,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ScrollReveal from '../components/ScrollReveal';
 import { ExternalLink, Github, ArrowLeft, Clock, CheckCircle } from 'lucide-react';
+import BeforeAfterComparison from '../components/ComparisonSlider';
 
 // Import project data from our library
 import { projects as allProjects } from '../lib/section-data';
@@ -67,11 +67,11 @@ const ProjectDetails: React.FC = () => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="min-h-screen overflow-x-hidden"
+      className="min-h-screen overflow-x-hidden flex flex-col"
     >
       <Header />
       
-      <main className="pt-24 pb-16">
+      <main className="pt-24 pb-16 flex-grow">
         <div className="container-custom">
           <Link to="/#projects" className="inline-flex items-center text-gold hover:text-gold-light transition-all duration-300 mb-6 group">
             <ArrowLeft size={16} className="mr-2 group-hover:-translate-x-1 transition-transform duration-300" />
@@ -139,27 +139,11 @@ const ProjectDetails: React.FC = () => {
                   {project.type === 'redesign' && project.beforeImage && (
                     <div className="my-8">
                       <h3 className="text-xl font-bold mb-4 text-gradient">Před & Po</h3>
-                      <div className="grid md:grid-cols-2 gap-4">
-                        <div>
-                          <p className="text-sm text-foreground/60 mb-2">Před</p>
-                          <AspectRatio ratio={16/9} className="overflow-hidden rounded-lg border border-gold/10">
-                            <img 
-                              src={project.beforeImage} 
-                              alt={`${project.title} před redesignem`} 
-                              className="w-full h-full object-cover" 
-                            />
-                          </AspectRatio>
-                        </div>
-                        <div>
-                          <p className="text-sm text-foreground/60 mb-2">Po</p>
-                          <AspectRatio ratio={16/9} className="overflow-hidden rounded-lg border border-gold/10">
-                            <img 
-                              src={project.image} 
-                              alt={`${project.title} po redesignu`} 
-                              className="w-full h-full object-cover" 
-                            />
-                          </AspectRatio>
-                        </div>
+                      <div className="h-80 w-full rounded-lg overflow-hidden">
+                        <BeforeAfterComparison 
+                          beforeImage={project.beforeImage} 
+                          afterImage={project.image} 
+                        />
                       </div>
                     </div>
                   )}

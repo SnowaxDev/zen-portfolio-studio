@@ -72,10 +72,10 @@ const Index = () => {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="overflow-x-hidden"
+      className="overflow-x-hidden flex flex-col min-h-screen"
     >
       <Header />
-      <main>
+      <main className="flex-grow">
         <motion.div 
           variants={sectionVariants}
           initial="initial"
