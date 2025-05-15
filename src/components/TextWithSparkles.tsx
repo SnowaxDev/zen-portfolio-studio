@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { SparklesCore } from 'aceternity-ui/components';
+import { SparklesCore } from 'aceternity-ui';
 
 interface TextWithSparklesProps {
   children: React.ReactNode;

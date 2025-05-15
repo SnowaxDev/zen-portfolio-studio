@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ComparisonSlider } from 'aceternity-ui/components';
+import { ComparisonSlider } from 'aceternity-ui';
 
 interface BeforeAfterComparisonProps {
   beforeImage: string;
