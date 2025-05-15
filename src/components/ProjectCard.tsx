@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Badge } from './ui/badge';
@@ -21,7 +22,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   title,
   description,
   image,
-  tags,
+  tags = [], // Provide default empty array if tags is undefined
   link,
   github,
   id,
@@ -29,7 +30,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   price
 }) => {
   return (
-    
     <motion.div 
       className="group rounded-xl overflow-hidden transition-all duration-500 h-full"
       whileHover={{ y: -8 }}
@@ -92,7 +92,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           <p className="text-foreground/70 text-sm mb-4">{description}</p>
           
           <div className="flex flex-wrap gap-2 mb-4">
-            {tags.map((tag, index) => (
+            {tags && tags.map((tag, index) => (
               <Badge 
                 key={index} 
                 variant="secondary"

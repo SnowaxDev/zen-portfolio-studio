@@ -18,7 +18,7 @@ interface Project {
   description: string;
   image: string;
   category: ProjectCategory | ProjectCategory[];
-  technologies: string[];
+  tags: string[]; // Changed from technologies to tags to match ProjectCard
   client?: string;
   link?: string;
   featured?: boolean;
@@ -32,7 +32,7 @@ const projects: Project[] = [
     description: "Moderní e-shop s produktovým katalogem, nákupním košíkem a online platbou.",
     image: "/placeholder.svg",
     category: ['websites', 'development'],
-    technologies: ['React', 'Next.js', 'Stripe'],
+    tags: ['React', 'Next.js', 'Stripe'], // Changed from technologies to tags
     client: "Boutique Style s.r.o.",
     link: "#",
     featured: true
@@ -43,7 +43,7 @@ const projects: Project[] = [
     description: "Elegantní portfolio web s galerií fotografií a rezervačním systémem.",
     image: "/placeholder.svg",
     category: ['websites', 'design'],
-    technologies: ['React', 'Framer Motion', 'Tailwind CSS'],
+    tags: ['React', 'Framer Motion', 'Tailwind CSS'], // Changed from technologies to tags
     client: "Jan Novák - Fotograf",
     link: "#"
   },
@@ -53,7 +53,7 @@ const projects: Project[] = [
     description: "Webová aplikace pro rezervaci stolů s administračním rozhraním.",
     image: "/placeholder.svg",
     category: 'development',
-    technologies: ['React', 'Node.js', 'MongoDB'],
+    tags: ['React', 'Node.js', 'MongoDB'], // Changed from technologies to tags
     client: "Restaurace U Zlatého lva",
     link: "#"
   },
@@ -63,7 +63,7 @@ const projects: Project[] = [
     description: "Kompletní redesign značky včetně loga, vizuálního stylu a webových stránek.",
     image: "/placeholder.svg",
     category: 'design',
-    technologies: ['Figma', 'Adobe Illustrator', 'Adobe Photoshop'],
+    tags: ['Figma', 'Adobe Illustrator', 'Adobe Photoshop'], // Changed from technologies to tags
     client: "IT Solutions s.r.o.",
     link: "#",
     featured: true
@@ -74,7 +74,7 @@ const projects: Project[] = [
     description: "Aplikace pro sledování pokroku, vytváření tréninkových plánů a sdílení s komunitou.",
     image: "/placeholder.svg",
     category: 'development',
-    technologies: ['React Native', 'Firebase', 'Redux'],
+    tags: ['React Native', 'Firebase', 'Redux'], // Changed from technologies to tags
     client: "FitLife App",
     link: "#"
   },
@@ -84,7 +84,7 @@ const projects: Project[] = [
     description: "Konverzní landing page s animacemi a formulářem pro sběr leadů.",
     image: "/placeholder.svg",
     category: ['websites', 'design'],
-    technologies: ['HTML', 'CSS', 'JavaScript', 'GSAP'],
+    tags: ['HTML', 'CSS', 'JavaScript', 'GSAP'], // Changed from technologies to tags
     client: "InnoTech Startup",
     link: "#"
   }
@@ -245,16 +245,17 @@ const MyProjectsSection: React.FC = () => {
                 whileInView="visible"
                 viewport={{ once: true, margin: "-50px" }}
               >
-                {filteredProjects.map((project, index) => (
+                {filteredProjects.map((project) => (
                   <ProjectCard 
                     key={project.id}
+                    id={project.id.toString()}
                     title={project.title}
                     description={project.description}
                     image={project.image}
-                    technologies={project.technologies}
-                    href={project.link || "#"}
-                    client={project.client}
-                    featured={project.featured}
+                    tags={project.tags}
+                    link={project.link || null}
+                    github={null}
+                    type={project.client ? 'client' : 'personal'}
                   />
                 ))}
               </motion.div>
@@ -268,16 +269,17 @@ const MyProjectsSection: React.FC = () => {
                 whileInView="visible"
                 viewport={{ once: true, margin: "-50px" }}
               >
-                {filteredProjects.map((project, index) => (
+                {filteredProjects.map((project) => (
                   <ProjectCard 
                     key={project.id}
+                    id={project.id.toString()}
                     title={project.title}
                     description={project.description}
                     image={project.image}
-                    technologies={project.technologies}
-                    href={project.link || "#"}
-                    client={project.client}
-                    featured={project.featured}
+                    tags={project.tags}
+                    link={project.link || null}
+                    github={null}
+                    type={project.client ? 'client' : 'personal'}
                   />
                 ))}
               </motion.div>
@@ -291,16 +293,17 @@ const MyProjectsSection: React.FC = () => {
                 whileInView="visible"
                 viewport={{ once: true, margin: "-50px" }}
               >
-                {filteredProjects.map((project, index) => (
+                {filteredProjects.map((project) => (
                   <ProjectCard 
                     key={project.id}
+                    id={project.id.toString()}
                     title={project.title}
                     description={project.description}
                     image={project.image}
-                    technologies={project.technologies}
-                    href={project.link || "#"}
-                    client={project.client}
-                    featured={project.featured}
+                    tags={project.tags}
+                    link={project.link || null}
+                    github={null}
+                    type={project.client ? 'client' : 'personal'}
                   />
                 ))}
               </motion.div>
@@ -314,16 +317,17 @@ const MyProjectsSection: React.FC = () => {
                 whileInView="visible"
                 viewport={{ once: true, margin: "-50px" }}
               >
-                {filteredProjects.map((project, index) => (
+                {filteredProjects.map((project) => (
                   <ProjectCard 
                     key={project.id}
+                    id={project.id.toString()}
                     title={project.title}
                     description={project.description}
                     image={project.image}
-                    technologies={project.technologies}
-                    href={project.link || "#"}
-                    client={project.client}
-                    featured={project.featured}
+                    tags={project.tags}
+                    link={project.link || null}
+                    github={null}
+                    type={project.client ? 'client' : 'personal'}
                   />
                 ))}
               </motion.div>
