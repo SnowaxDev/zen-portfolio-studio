@@ -82,6 +82,7 @@ const SkillsSection: React.FC = () => {
       <BackgroundShapes />
       
       <div className="container-custom relative z-10">
+        {/* Section Header */}
         <div className="text-center mb-16">
           <motion.h2 
             initial={{ opacity: 0, y: 10 }}
@@ -94,9 +95,9 @@ const SkillsSection: React.FC = () => {
           </motion.h2>
           
           <motion.div 
-            initial={{ width: 0 }}
-            whileInView={{ width: "6rem" }}
-            transition={{ duration: 1, delay: 0.3 }}
+            initial={{ width: 0, opacity: 0 }}
+            whileInView={{ width: "6rem", opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
             viewport={{ once: true }}
             className="h-1 bg-gradient-to-r from-gold to-purple mx-auto rounded-full mb-5"
           />
@@ -112,18 +113,19 @@ const SkillsSection: React.FC = () => {
           </motion.p>
         </div>
         
-        <div className="grid md:grid-cols-2 gap-8">
+        {/* Skills Cards Grid */}
+        <div className="grid md:grid-cols-2 gap-8 mb-20">
           {/* Frontend Skills */}
           <ScrollReveal direction="left" distance={50} className="relative">
             <motion.div 
-              className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-lg shadow-blue-900/10"
+              className="group bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-lg shadow-blue-900/10 hover:shadow-blue-900/20"
               whileHover={{ 
                 y: -5, 
                 boxShadow: "0 20px 40px -20px rgba(37, 99, 235, 0.3)"
               }}
             >
               <Collapsible open={isOpen('frontend')} onOpenChange={() => toggleSkill('frontend')} className="w-full">
-                <CollapsibleTrigger className="w-full p-6 flex items-center justify-between text-left group">
+                <CollapsibleTrigger className="w-full p-6 flex items-center justify-between text-left group cursor-pointer">
                   <div className="flex items-center">
                     <div className="bg-gradient-to-br from-blue-600/20 to-blue-400/20 p-3.5 rounded-xl mr-4 group-hover:from-blue-600/30 group-hover:to-blue-400/30 transition-colors duration-300 backdrop-blur-md">
                       <Code size={24} className="text-blue-400" />
@@ -146,13 +148,14 @@ const SkillsSection: React.FC = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1, duration: 0.5 }}
-                      className="space-y-2"
+                      className="group"
                     >
                       <ProgressBar 
                         skill={skill.skill} 
                         percentage={skill.percentage} 
                         delay={index * 0.1} 
                         color="primary"
+                        isHovered={true}
                       />
                     </motion.div>
                   ))}
@@ -164,14 +167,14 @@ const SkillsSection: React.FC = () => {
           {/* Backend Skills */}
           <ScrollReveal direction="right" distance={50} className="relative">
             <motion.div 
-              className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-lg shadow-purple-900/10"
+              className="group bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-lg shadow-purple-900/10 hover:shadow-purple-900/20"
               whileHover={{ 
                 y: -5, 
                 boxShadow: "0 20px 40px -20px rgba(139, 92, 246, 0.3)"
               }}
             >
               <Collapsible open={isOpen('backend')} onOpenChange={() => toggleSkill('backend')} className="w-full">
-                <CollapsibleTrigger className="w-full p-6 flex items-center justify-between text-left group">
+                <CollapsibleTrigger className="w-full p-6 flex items-center justify-between text-left group cursor-pointer">
                   <div className="flex items-center">
                     <div className="bg-gradient-to-br from-purple-600/20 to-purple-400/20 p-3.5 rounded-xl mr-4 group-hover:from-purple-600/30 group-hover:to-purple-400/30 transition-colors duration-300 backdrop-blur-md">
                       <Database size={24} className="text-purple-400" />
@@ -194,13 +197,14 @@ const SkillsSection: React.FC = () => {
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: index * 0.1, duration: 0.5 }}
-                      className="space-y-2"
+                      className="group"
                     >
                       <ProgressBar 
                         skill={skill.skill} 
                         percentage={skill.percentage} 
                         delay={index * 0.1} 
                         color="secondary"
+                        isHovered={true}
                       />
                     </motion.div>
                   ))}
@@ -213,43 +217,61 @@ const SkillsSection: React.FC = () => {
         {/* Frameworks and Tools */}
         <div className="mt-24 relative">
           <ScrollReveal className="flex flex-col items-center justify-center mb-12" distance={30} delay={0.2}>
-            <motion.div 
-              className="bg-gradient-to-br from-gold/20 to-gold-dark/20 p-5 rounded-full mb-5 ring-2 ring-gold/10 shadow-lg shadow-gold/5 relative overflow-hidden"
-              whileHover={{ scale: 1.05 }}
-              animate={{ 
-                boxShadow: ["0 0 20px rgba(212, 175, 55, 0.2)", "0 0 30px rgba(212, 175, 55, 0.4)", "0 0 20px rgba(212, 175, 55, 0.2)"],
-                rotate: [0, 3, 0, -3, 0]
-              }}
-              transition={{ 
-                boxShadow: { 
-                  repeat: Infinity, 
-                  duration: 3 
-                },
-                rotate: { 
-                  repeat: Infinity, 
-                  duration: 10,
-                  ease: "easeInOut"
-                }
-              }}
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0 }}
+              whileInView={{ scale: 1, opacity: 1 }}
+              transition={{ type: "spring", stiffness: 100, delay: 0.2 }}
+              viewport={{ once: true }}
+              className="relative"
             >
-              <Layers className="text-gold relative z-10" size={32} />
-              
-              {/* Inner glow effect */}
               <motion.div 
-                className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent rounded-full"
+                className="bg-gradient-to-br from-gold/20 to-gold-dark/20 p-5 rounded-full mb-5 ring-2 ring-gold/10 shadow-lg shadow-gold/5 relative overflow-hidden"
+                whileHover={{ scale: 1.05 }}
+                animate={{ 
+                  boxShadow: ["0 0 20px rgba(212, 175, 55, 0.2)", "0 0 30px rgba(212, 175, 55, 0.4)", "0 0 20px rgba(212, 175, 55, 0.2)"],
+                }}
+                transition={{ 
+                  boxShadow: { 
+                    repeat: Infinity, 
+                    duration: 3 
+                  }
+                }}
+              >
+                <Layers className="text-gold relative z-10" size={32} />
+                
+                {/* Inner glow effect */}
+                <motion.div 
+                  className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent rounded-full"
+                  animate={{
+                    opacity: [0.3, 0.6, 0.3],
+                    rotate: [0, 360]
+                  }}
+                  transition={{
+                    duration: 8,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                />
+              </motion.div>
+              
+              <motion.div
                 animate={{
-                  opacity: [0.3, 0.6, 0.3],
-                  rotate: [0, 360]
+                  rotate: [-2, 2, -2]
                 }}
                 transition={{
-                  duration: 8,
+                  duration: 6,
                   repeat: Infinity,
-                  ease: "linear"
+                  ease: "easeInOut"
                 }}
-              />
+                className="absolute -top-6 -right-6 text-gold/80"
+              >
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 3L14.5 8.5L20.5 9.5L16 14L17.5 20L12 17L6.5 20L8 14L3.5 9.5L9.5 8.5L12 3Z" fill="currentColor" stroke="currentColor" strokeWidth="0.5" />
+                </svg>
+              </motion.div>
             </motion.div>
             
-            <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gold to-gold-light relative">
+            <h3 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-gold to-gold-light relative mb-1">
               Frameworky a Nástroje
             </h3>
             
@@ -267,7 +289,7 @@ const SkillsSection: React.FC = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.1 }}
-            className="flex flex-wrap justify-center gap-3.5 max-w-4xl mx-auto"
+            className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto"
           >
             {frameworks.map((framework, index) => (
               <motion.div
@@ -289,26 +311,26 @@ const SkillsSection: React.FC = () => {
                   }}
                 >
                   <motion.span 
-                    className="text-sm font-medium"
+                    className="text-sm font-medium relative"
                     animate={{ 
                       color: hoveredFramework === framework ? '#D4AF37' : '#94a3b8'
                     }}
                     transition={{ duration: 0.3 }}
                   >
                     {framework}
+                    {hoveredFramework === framework && (
+                      <motion.span 
+                        className="absolute -bottom-1 left-0 h-[2px] bg-gradient-to-r from-gold-light to-gold"
+                        initial={{ width: 0 }}
+                        animate={{ width: '100%' }}
+                        transition={{ duration: 0.3 }}
+                      />
+                    )}
                   </motion.span>
                 </motion.div>
               </motion.div>
             ))}
           </motion.div>
-          
-          <motion.div 
-            className="w-full max-w-3xl mx-auto mt-16 h-px bg-gradient-to-r from-transparent via-gold/10 to-transparent"
-            initial={{ scaleX: 0, opacity: 0 }}
-            whileInView={{ scaleX: 1, opacity: 1 }}
-            transition={{ duration: 1 }}
-            viewport={{ once: true }}
-          />
         </div>
       </div>
     </section>

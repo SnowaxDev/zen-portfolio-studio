@@ -74,18 +74,48 @@ const ProjectsSection: React.FC = () => {
           ))}
         </motion.div>
         
+        {/* Upcoming Projects Section - Redesigned */}
         {upcomingProjects.length > 0 && (
-          <div className="mt-24">
-            <div className="text-center mb-16">
-              <motion.div 
-                className="inline-block relative"
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.8 }}
-              >
+          <div className="mt-24 relative">
+            {/* Decorative background elements */}
+            <motion.div 
+              className="absolute -left-32 top-20 w-64 h-64 rounded-full bg-purple/5 blur-3xl"
+              animate={{
+                scale: [1, 1.2, 1],
+                opacity: [0.5, 0.7, 0.5]
+              }}
+              transition={{
+                duration: 8,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+            
+            <motion.div 
+              className="absolute -right-32 bottom-20 w-80 h-80 rounded-full bg-gold/5 blur-3xl"
+              animate={{
+                scale: [1, 1.15, 1],
+                opacity: [0.4, 0.6, 0.4]
+              }}
+              transition={{
+                duration: 10,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: 1
+              }}
+            />
+            
+            {/* Section header */}
+            <motion.div 
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8 }}
+              viewport={{ once: true }}
+              className="text-center mb-16 relative"
+            >
+              <div className="inline-block relative">
                 <motion.div 
-                  className="absolute -top-6 -right-6 text-gold"
+                  className="absolute -top-8 -right-8 text-gold"
                   animate={{
                     rotate: [0, 15, 0, -15, 0],
                     scale: [1, 1.1, 1, 1.1, 1]
@@ -96,24 +126,18 @@ const ProjectsSection: React.FC = () => {
                     repeatType: "loop"
                   }}
                 >
-                  <Sparkles size={24} />
+                  <Sparkles size={28} />
                 </motion.div>
                 
-                <motion.h3 
-                  className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple via-purple-light to-gold-light"
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6 }}
-                >
+                <h3 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple via-purple-light to-gold-light">
                   Připravované Projekty
-                </motion.h3>
-              </motion.div>
+                </h3>
+              </div>
               
               <motion.div 
                 initial={{ width: 0 }}
-                whileInView={{ width: "6rem" }}
+                whileInView={{ width: "8rem" }}
                 transition={{ duration: 0.8, delay: 0.3 }}
-                viewport={{ once: true }}
                 className="h-1 bg-gradient-to-r from-purple/50 to-gold/50 mx-auto rounded-full my-4"
               />
               
@@ -126,26 +150,29 @@ const ProjectsSection: React.FC = () => {
               >
                 Projekty na kterých aktuálně pracuji a brzy budou dokončeny
               </motion.p>
-            </div>
+            </motion.div>
             
+            {/* Upcoming projects grid */}
             <motion.div 
               variants={containerVariants}
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
-              className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto"
+              className="grid md:grid-cols-2 gap-10 max-w-5xl mx-auto"
             >
               {upcomingProjects.map((project, index) => (
                 <motion.div 
                   key={index}
                   variants={itemVariants} 
                   className="relative"
-                  whileHover={{ 
-                    y: -8, 
-                    transition: { duration: 0.2 } 
-                  }}
                 >
-                  <div className="bg-black/60 backdrop-blur-lg rounded-xl border border-purple/20 p-8 hover:shadow-xl hover:shadow-purple/10 transition-all duration-300 group relative overflow-hidden">
+                  <motion.div 
+                    className="relative bg-black/60 backdrop-blur-lg rounded-xl border border-purple/20 p-8 hover:shadow-xl hover:shadow-purple/10 transition-all duration-300 overflow-hidden"
+                    whileHover={{ 
+                      y: -8, 
+                      transition: { duration: 0.2 } 
+                    }}
+                  >
                     {/* Background glow effect */}
                     <div className="absolute -top-20 -right-20 w-40 h-40 bg-purple/10 rounded-full blur-3xl group-hover:bg-purple/20 transition-colors duration-500" />
                     <div className="absolute -bottom-20 -left-20 w-40 h-40 bg-gold/10 rounded-full blur-3xl group-hover:bg-gold/20 transition-colors duration-500" />
@@ -167,7 +194,14 @@ const ProjectsSection: React.FC = () => {
                         Brzy
                       </motion.div>
                       
-                      <h4 className="text-2xl font-bold mb-3 text-gradient-purple group-hover:text-gold transition-colors duration-300">{project.title}</h4>
+                      <motion.h4 
+                        className="text-2xl font-bold mb-3 text-gradient-purple hover:text-gold transition-colors duration-300"
+                        whileHover={{ x: 3 }}
+                        transition={{ type: "spring", stiffness: 300 }}
+                      >
+                        {project.title}
+                      </motion.h4>
+                      
                       <p className="text-foreground/70 mb-6 leading-relaxed">{project.description}</p>
                       
                       <div className="flex flex-wrap gap-2 mb-6">
@@ -186,8 +220,8 @@ const ProjectsSection: React.FC = () => {
                         ))}
                       </div>
                       
-                      <div className="flex items-center justify-between mt-6">
-                        <div className="flex items-center gap-2">
+                      <div className="mt-8 flex flex-col">
+                        <div className="flex items-center gap-2 mb-2">
                           <Calendar size={16} className="text-purple-light" />
                           <span className="text-sm text-foreground/70">Plánované dokončení:</span>
                         </div>
@@ -195,7 +229,24 @@ const ProjectsSection: React.FC = () => {
                         <ProjectTimer launchDate={project.launchDate} />
                       </div>
                     </div>
-                  </div>
+                    
+                    {/* Shimmer overlay effect */}
+                    <motion.div
+                      className="absolute inset-0 w-full h-full pointer-events-none"
+                      style={{
+                        background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent)",
+                        backgroundSize: "200% 100%",
+                      }}
+                      animate={{
+                        backgroundPosition: ["200% 0", "-200% 0"]
+                      }}
+                      transition={{
+                        duration: 3,
+                        repeat: Infinity,
+                        ease: "linear"
+                      }}
+                    />
+                  </motion.div>
                 </motion.div>
               ))}
             </motion.div>

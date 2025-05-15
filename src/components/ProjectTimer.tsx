@@ -39,37 +39,69 @@ const ProjectTimer: React.FC<ProjectTimerProps> = ({ launchDate }) => {
   }, [launchDate]);
   
   return (
-    <div className="mt-4">
-      <p className="text-sm text-primary mb-2">Launching in:</p>
-      <div className="flex justify-between items-center max-w-md">
-        <TimeBlock label="Days" value={timeLeft.days} />
-        <span className="text-foreground/30 text-2xl">:</span>
-        <TimeBlock label="Hours" value={timeLeft.hours} />
-        <span className="text-foreground/30 text-2xl">:</span>
-        <TimeBlock label="Minutes" value={timeLeft.minutes} />
-        <span className="text-foreground/30 text-2xl">:</span>
-        <TimeBlock label="Seconds" value={timeLeft.seconds} />
+    <motion.div 
+      className="w-full"
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
+      <div className="flex justify-between items-center gap-2">
+        <TimeBlock label="Dny" value={timeLeft.days} />
+        <span className="text-gold/80 text-xl">:</span>
+        <TimeBlock label="Hodiny" value={timeLeft.hours} />
+        <span className="text-gold/80 text-xl">:</span>
+        <TimeBlock label="Minuty" value={timeLeft.minutes} />
+        <span className="text-gold/80 text-xl">:</span>
+        <TimeBlock label="Sekundy" value={timeLeft.seconds} />
       </div>
-    </div>
+    </motion.div>
   );
 };
 
 const TimeBlock: React.FC<{ label: string; value: number }> = ({ label, value }) => (
   <motion.div 
     className="flex flex-col items-center"
-    animate={{ scale: [1, 1.05, 1] }}
-    transition={{ duration: 1, repeat: Infinity, repeatType: "reverse" }}
+    whileHover={{ y: -2 }}
+    transition={{ type: "spring", stiffness: 300 }}
   >
-    <motion.span 
-      className="text-2xl font-bold bg-secondary/40 rounded px-3 py-2 w-14 text-center"
-      key={value} // This makes the component re-render when the value changes
-      initial={{ opacity: 0.5, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.3 }}
+    <motion.div
+      className="relative"
+      whileHover={{ scale: 1.05 }}
     >
-      {value.toString().padStart(2, '0')}
-    </motion.span>
-    <span className="text-xs text-foreground/60 mt-1">{label}</span>
+      <motion.span 
+        className="flex items-center justify-center bg-black/50 border border-purple/20 backdrop-blur-md rounded-lg px-3 py-2 w-14 h-14 text-center relative overflow-hidden"
+        key={value} // This makes the component re-render when the value changes
+      >
+        <motion.span
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: 20, opacity: 0 }}
+          transition={{ type: "spring", stiffness: 300 }}
+          className="absolute text-xl font-bold text-white"
+        >
+          {value.toString().padStart(2, '0')}
+        </motion.span>
+        
+        {/* Subtle pulsing background */}
+        <motion.div
+          className="absolute inset-0 bg-purple/10"
+          animate={{ 
+            opacity: [0.2, 0.5, 0.2] 
+          }}
+          transition={{ 
+            duration: 2, 
+            repeat: Infinity,
+            repeatType: "mirror" 
+          }}
+        />
+        
+        {/* Bottom highlight */}
+        <motion.div
+          className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple/40 to-transparent"
+        />
+      </motion.span>
+    </motion.div>
+    <span className="text-xs text-foreground/60 mt-2">{label}</span>
   </motion.div>
 );
 

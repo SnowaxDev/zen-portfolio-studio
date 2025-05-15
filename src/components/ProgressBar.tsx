@@ -47,22 +47,40 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 
   // Define gradient colors based on the color prop
   const gradientClass = color === 'primary' 
-    ? 'from-blue-600 to-blue-400' 
+    ? 'from-blue-600 via-blue-500 to-blue-400' 
     : color === 'secondary' 
-      ? 'from-purple-600 to-purple-400' 
-      : 'from-gold to-gold-light';
+      ? 'from-purple-600 via-purple-500 to-purple-400' 
+      : 'from-gold via-gold to-gold-light';
   
   return (
-    <div className={`group ${isHovered ? 'scale-[1.02] transition-transform' : ''}`} ref={ref}>
+    <div className={`relative ${isHovered ? 'scale-[1.02] transition-transform' : ''}`} ref={ref}>
       <div className="flex justify-between mb-2 items-center">
-        <span className="text-sm md:text-base font-medium">{skill}</span>
-        <motion.div className="flex items-center space-x-1">
-          <motion.span className="text-sm font-mono bg-black/30 px-2 py-0.5 rounded-md backdrop-blur-sm">
+        <motion.span 
+          className="text-sm md:text-base font-medium relative inline-block"
+          whileHover={{ x: 3 }}
+          transition={{ type: "spring", stiffness: 300 }}
+        >
+          {skill}
+          <motion.span 
+            className="absolute -bottom-1 left-0 h-[2px] bg-gradient-to-r from-gold-light to-gold"
+            initial={{ width: 0 }}
+            whileInView={{ width: '100%' }}
+            transition={{ delay: 0.5, duration: 0.8 }}
+            viewport={{ once: true }}
+          />
+        </motion.span>
+        <motion.div 
+          className="flex items-center space-x-1"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4, delay: delay + 0.8 }}
+        >
+          <motion.span className="text-sm font-mono bg-black/40 px-2 py-0.5 rounded-md backdrop-blur-sm border border-white/10 shadow-lg">
             <motion.span>{progressDisplay}</motion.span>%
           </motion.span>
         </motion.div>
       </div>
-      <div className="h-2.5 rounded-full bg-black/30 overflow-hidden backdrop-blur-sm relative">
+      <div className="h-3 rounded-full bg-black/40 overflow-hidden backdrop-blur-sm border border-white/5 relative">
         <motion.div 
           className={`h-full rounded-full relative bg-gradient-to-r ${gradientClass}`}
           initial={{ width: 0 }}
@@ -75,9 +93,23 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
           }}
         >
           <motion.div 
+            className="absolute inset-0 backdrop-blur-sm opacity-0 group-hover:opacity-100"
+            style={{
+              background: "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.15), transparent)",
+              backgroundSize: "200% 100%",
+            }}
+            animate={{
+              backgroundPosition: ["200% 0", "-200% 0"],
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          />
+          <motion.div 
             className="absolute top-0 right-0 h-full w-1 bg-white/50 opacity-0 group-hover:opacity-100 transition-opacity"
             animate={{
-              width: isHovered ? '3px' : '1px',
               boxShadow: isHovered ? '0 0 8px rgba(255, 255, 255, 0.5)' : 'none'
             }}
             transition={{ duration: 0.2 }}
