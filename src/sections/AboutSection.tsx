@@ -1,13 +1,15 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Code2, Server, Cpu, ChevronDown } from 'lucide-react';
+import { Code2, Server, Cpu, ChevronDown, MoveRight, MoveUp, RotateCw } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { statsData, techStackData, philosophyItems, hobbyItems, sectionMeta } from '../lib/section-data';
+import ScrollReveal from '@/components/ScrollReveal';
 
 const AboutSection: React.FC = () => {
   const { about } = sectionMeta;
   const [isHobbyOpen, setIsHobbyOpen] = useState(false);
+  const [hoveredStat, setHoveredStat] = useState<number | null>(null);
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -28,34 +30,92 @@ const AboutSection: React.FC = () => {
     }
   };
 
+  const statVariants = {
+    hover: {
+      scale: 1.05,
+      boxShadow: "0 10px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)",
+      borderColor: "hsl(var(--primary) / 0.3)",
+      backgroundColor: "hsl(var(--card) / 0.9)",
+      transition: { duration: 0.2, ease: "easeOut" }
+    }
+  };
+
+  const iconAnimationVariants = {
+    initial: { rotate: 0 },
+    hover: { rotate: 360, transition: { duration: 1.5, ease: "easeInOut" } }
+  };
+
+  const checkmarkVariants = {
+    initial: { opacity: 0, x: -10 },
+    visible: (i: number) => ({
+      opacity: 1,
+      x: 0,
+      transition: { 
+        delay: 0.2 + (i * 0.1),
+        duration: 0.4,
+        ease: "easeOut"
+      }
+    })
+  };
+
+  const bgBlobVariants = {
+    initial: { scale: 0.9, opacity: 0.6 },
+    animate: {
+      scale: 1.1,
+      opacity: 0.8,
+      transition: { 
+        duration: 8,
+        repeat: Infinity,
+        repeatType: "reverse" as const,
+        ease: "easeInOut"
+      }
+    }
+  };
+
   return (
     <section id="about" className="relative py-20 md:py-28 overflow-hidden bg-background">
-      {/* Background elements */}
-      <div className="absolute top-40 left-10 w-64 h-64 rounded-full bg-primary/5 blur-3xl" />
-      <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-accent/5 blur-3xl" />
+      {/* Animated background elements */}
+      <motion.div 
+        className="absolute top-40 left-10 w-64 h-64 rounded-full bg-primary/5 blur-3xl"
+        variants={bgBlobVariants}
+        initial="initial"
+        animate="animate"
+      />
+      <motion.div 
+        className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-accent/5 blur-3xl"
+        variants={bgBlobVariants}
+        initial="initial"
+        animate="animate"
+        transition={{ delay: 2 }}
+      />
       
       <div className="container-custom relative z-10">
-        {/* Section title */}
+        {/* Section title with enhanced animation */}
         <div className="text-center mb-12">
-          <motion.h2 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className="text-3xl md:text-4xl font-bold relative inline-block"
+          <ScrollReveal
+            animationStyle="fade"
+            duration={0.7}
           >
-            {about.title}
-            <span className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-full" />
-          </motion.h2>
-          <motion.p 
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mt-4 text-muted-foreground max-w-2xl mx-auto"
+            <h2 className="text-3xl md:text-4xl font-bold relative inline-block">
+              {about.title}
+              <motion.span 
+                className="absolute -bottom-2 left-0 w-full h-1 bg-gradient-to-r from-primary to-accent rounded-full" 
+                initial={{ width: "0%" }}
+                whileInView={{ width: "100%" }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.3 }}
+              />
+            </h2>
+          </ScrollReveal>
+          
+          <ScrollReveal
+            delay={0.3}
+            animationStyle="fade"
           >
-            {about.subtitle}
-          </motion.p>
+            <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
+              {about.subtitle}
+            </p>
+          </ScrollReveal>
         </div>
         
         <div className="flex flex-col-reverse lg:flex-row gap-12">
@@ -65,54 +125,102 @@ const AboutSection: React.FC = () => {
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true }}
+            viewport={{ once: true, margin: "-100px" }}
           >
-            {/* Stats grid */}
+            {/* Stats grid with hover animations */}
             <div className="grid grid-cols-2 gap-4">
               {statsData.map((stat, index) => (
                 <motion.div
                   key={index}
                   variants={itemVariants}
-                  className="bg-card/70 backdrop-blur-sm border border-white/5 rounded-xl p-6 flex flex-col justify-center shadow-sm hover:shadow-md hover:border-primary/20 transition-all duration-300"
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                  className="bg-card/70 backdrop-blur-sm border border-white/5 rounded-xl p-6 flex flex-col justify-center shadow-sm hover:shadow-md transition-all duration-300"
+                  whileHover="hover"
+                  variants={statVariants}
+                  onHoverStart={() => setHoveredStat(index)}
+                  onHoverEnd={() => setHoveredStat(null)}
                 >
-                  <span className="text-3xl md:text-4xl font-bold text-gradient mb-1">{stat.title}</span>
+                  <motion.span 
+                    className="text-3xl md:text-4xl font-bold text-gradient mb-1 flex items-center"
+                    animate={{
+                      y: hoveredStat === index ? [0, -5, 0] : 0
+                    }}
+                    transition={{
+                      duration: 0.5,
+                      ease: "easeOut",
+                    }}
+                  >
+                    {stat.title}
+                    <motion.span 
+                      className="ml-2 text-primary inline-flex"
+                      initial={{ opacity: 0, scale: 0 }}
+                      animate={{ 
+                        opacity: hoveredStat === index ? 1 : 0,
+                        scale: hoveredStat === index ? 1 : 0,
+                      }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      <MoveUp size={18} />
+                    </motion.span>
+                  </motion.span>
                   <p className="text-sm text-foreground/70">{stat.subtitle}</p>
                 </motion.div>
               ))}
             </div>
             
-            {/* Tech stack */}
-            <motion.div 
-              variants={itemVariants}
-              className="bg-card/70 backdrop-blur-sm border border-white/5 rounded-xl p-6 shadow-sm"
+            {/* Tech stack with rotating icons */}
+            <ScrollReveal
+              animationStyle="slide"
+              direction="right"
+              distance={30}
+              delay={0.2}
             >
-              <div className="flex items-center mb-6">
-                <div className="p-3 rounded-lg bg-primary/10 mr-4">
-                  <Cpu className="text-primary" size={24} />
+              <motion.div 
+                className="bg-card/70 backdrop-blur-sm border border-white/5 rounded-xl p-6 shadow-sm hover:shadow-lg hover:border-primary/20 transition-all duration-500"
+                whileHover={{ y: -5 }}
+              >
+                <div className="flex items-center mb-6">
+                  <motion.div 
+                    className="p-3 rounded-lg bg-primary/10 mr-4"
+                    variants={iconAnimationVariants}
+                    initial="initial"
+                    whileHover="hover"
+                  >
+                    <Cpu className="text-primary" size={24} />
+                  </motion.div>
+                  <h4 className="text-xl font-semibold">{about.myStack.title}</h4>
                 </div>
-                <h4 className="text-xl font-semibold">{about.myStack.title}</h4>
-              </div>
-              
-              <div className="space-y-6">
-                {techStackData.map((item, index) => {
-                  const Icon = item.icon;
-                  return (
-                    <div key={index} className="group">
-                      <div className="flex items-center mb-2">
-                        <div className="p-2 rounded-md bg-primary/10 mr-3 group-hover:bg-primary/20 transition-colors duration-300">
-                          <Icon className="text-primary" size={18} />
+                
+                <div className="space-y-6">
+                  {techStackData.map((item, index) => {
+                    const Icon = item.icon;
+                    return (
+                      <motion.div 
+                        key={index} 
+                        className="group"
+                        initial={{ opacity: 0, x: -20 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: 0.1 * index, duration: 0.5 }}
+                      >
+                        <div className="flex items-center mb-2">
+                          <motion.div 
+                            className="p-2 rounded-md bg-primary/10 mr-3 group-hover:bg-primary/20 transition-colors duration-300"
+                            whileHover={{ rotate: 360 }}
+                            transition={{ duration: 0.6 }}
+                          >
+                            <Icon className="text-primary" size={18} />
+                          </motion.div>
+                          <h5 className="font-medium">{item.title}</h5>
                         </div>
-                        <h5 className="font-medium">{item.title}</h5>
-                      </div>
-                      <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
-                        {item.items}
-                      </p>
-                    </div>
-                  );
-                })}
-              </div>
-            </motion.div>
+                        <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
+                          {item.items}
+                        </p>
+                      </motion.div>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            </ScrollReveal>
           </motion.div>
           
           {/* Left column with journey text and philosophy */}
@@ -123,54 +231,84 @@ const AboutSection: React.FC = () => {
             whileInView="visible"
             viewport={{ once: true }}
           >
-            <motion.h3 
-              variants={itemVariants}
-              className="text-2xl font-bold mb-2 text-gradient"
+            <ScrollReveal
+              animationStyle="fade"
+              duration={0.6}
             >
-              {about.journey}
-            </motion.h3>
+              <h3 className="text-2xl font-bold mb-2 text-gradient">
+                {about.journey}
+              </h3>
+            </ScrollReveal>
             
             {about.journeyText.map((paragraph, index) => (
-              <motion.p
+              <ScrollReveal
                 key={index}
-                variants={itemVariants}
-                className="text-lg text-foreground/90 leading-relaxed"
+                animationStyle="fade"
+                delay={0.15 * index}
+                direction="left"
+                distance={20}
               >
-                {paragraph}
-              </motion.p>
+                <p className="text-lg text-foreground/90 leading-relaxed">
+                  {paragraph}
+                </p>
+              </ScrollReveal>
             ))}
             
-            {/* Philosophy */}
-            <motion.div 
-              variants={itemVariants}
-              className="mt-6 p-5 bg-card/70 backdrop-blur-sm rounded-xl border border-primary/10 shadow-sm hover:shadow-md transition-all duration-300"
+            {/* Philosophy with animated checkmarks */}
+            <ScrollReveal
+              animationStyle="scale"
+              delay={0.3}
             >
-              <div className="flex items-center mb-4">
-                <div className="p-3 rounded-lg bg-primary/10 mr-4">
-                  <Code2 className="text-primary" size={24} />
-                </div>
-                <h4 className="text-xl font-semibold">{about.codingPhilosophy.title}</h4>
-              </div>
-              
-              <ul className="space-y-3">
-                {philosophyItems.map((item, index) => (
-                  <li 
-                    key={index} 
-                    className="flex items-start gap-3"
+              <motion.div 
+                className="mt-6 p-5 bg-card/70 backdrop-blur-sm rounded-xl border border-primary/10 shadow-sm hover:shadow-md transition-all duration-300"
+                whileHover={{ 
+                  boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)",
+                  borderColor: "hsl(var(--primary) / 0.2)"
+                }}
+              >
+                <div className="flex items-center mb-4">
+                  <motion.div 
+                    className="p-3 rounded-lg bg-primary/10 mr-4"
+                    whileHover={{ rotate: 360, backgroundColor: "hsl(var(--primary) / 0.2)" }}
+                    transition={{ duration: 0.6 }}
                   >
-                    <span className="text-primary bg-primary/10 p-1 rounded-md flex items-center justify-center mt-0.5">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                    </span>
-                    <span className="text-foreground/90">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </motion.div>
+                    <Code2 className="text-primary" size={24} />
+                  </motion.div>
+                  <h4 className="text-xl font-semibold">{about.codingPhilosophy.title}</h4>
+                </div>
+                
+                <ul className="space-y-3">
+                  {philosophyItems.map((item, index) => (
+                    <motion.li 
+                      key={index} 
+                      className="flex items-start gap-3"
+                      custom={index}
+                      variants={checkmarkVariants}
+                      initial="initial"
+                      whileInView="visible"
+                      viewport={{ once: true, margin: "-50px" }}
+                    >
+                      <motion.span 
+                        className="text-primary bg-primary/10 p-1 rounded-md flex items-center justify-center mt-0.5"
+                        whileHover={{ scale: 1.2, backgroundColor: "hsl(var(--primary) / 0.2)" }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                          <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                      </motion.span>
+                      <span className="text-foreground/90">{item}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+              </motion.div>
+            </ScrollReveal>
             
-            {/* Tech Hobbies */}
-            <motion.div variants={itemVariants}>
+            {/* Tech Hobbies with animated collapsible */}
+            <ScrollReveal
+              animationStyle="slide"
+              direction="up"
+              delay={0.4}
+            >
               <Collapsible 
                 open={isHobbyOpen} 
                 onOpenChange={setIsHobbyOpen}
@@ -178,42 +316,84 @@ const AboutSection: React.FC = () => {
               >
                 <CollapsibleTrigger className="flex w-full items-center justify-between p-5 bg-card/70 backdrop-blur-sm rounded-xl border border-accent/10 hover:bg-card/90 transition-all duration-300">
                   <div className="flex items-center">
-                    <div className="p-3 rounded-lg bg-accent/10 mr-4">
+                    <motion.div 
+                      className="p-3 rounded-lg bg-accent/10 mr-4"
+                      whileHover={{ rotate: 360 }}
+                      transition={{ duration: 0.7 }}
+                    >
                       <Server className="text-accent" size={24} />
-                    </div>
+                    </motion.div>
                     <h4 className="text-xl font-semibold">{about.techHobbies.title}</h4>
                   </div>
-                  <ChevronDown 
-                    size={20} 
-                    className={`transform transition-transform duration-300 ${isHobbyOpen ? 'rotate-180' : ''}`}
-                  />
+                  <motion.div
+                    animate={{ rotate: isHobbyOpen ? 180 : 0 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ChevronDown size={20} />
+                  </motion.div>
                 </CollapsibleTrigger>
                 <CollapsibleContent className="overflow-hidden">
-                  <div className="p-5 pt-3 bg-card/60 backdrop-blur-sm rounded-b-xl border-x border-b border-accent/10 shadow-sm">
+                  <motion.div 
+                    className="p-5 pt-3 bg-card/60 backdrop-blur-sm rounded-b-xl border-x border-b border-accent/10 shadow-sm"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ delay: 0.2 }}
+                  >
                     <ul className="space-y-3">
                       {hobbyItems.map((item, index) => (
-                        <li 
+                        <motion.li 
                           key={index} 
                           className="flex items-start gap-3"
+                          initial={{ opacity: 0, x: -20 }}
+                          animate={{ opacity: 1, x: 0 }}
+                          transition={{ delay: 0.1 * index + 0.3 }}
                         >
-                          <span className="text-accent mt-0.5">»</span>
+                          <motion.span 
+                            className="text-accent mt-0.5"
+                            animate={{ 
+                              x: [0, 5, 0],
+                            }}
+                            transition={{ 
+                              duration: 1.5,
+                              repeat: Infinity,
+                              repeatDelay: index * 0.5,
+                            }}
+                          >»</motion.span>
                           <span className="text-foreground/90">{item}</span>
-                        </li>
+                        </motion.li>
                       ))}
                     </ul>
-                  </div>
+                  </motion.div>
                 </CollapsibleContent>
               </Collapsible>
-            </motion.div>
+            </ScrollReveal>
             
-            <motion.div variants={itemVariants}>
-              <a 
+            <ScrollReveal
+              animationStyle="bounce"
+              delay={0.5}
+            >
+              <motion.a 
                 href="#contact"
-                className="inline-block mt-6 px-6 py-2.5 bg-gradient-to-r from-primary to-accent text-white rounded-lg shadow-lg hover:shadow-primary/20 transition-all duration-300 hover:scale-105"
+                className="inline-flex items-center mt-6 px-6 py-2.5 bg-gradient-to-r from-primary to-accent text-white rounded-lg shadow-lg hover:shadow-primary/20 transition-all duration-300"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 {about.contact?.ctaText || "Spolupracujme"}
-              </a>
-            </motion.div>
+                <motion.span
+                  className="ml-2"
+                  animate={{ 
+                    x: [0, 5, 0], 
+                  }}
+                  transition={{ 
+                    duration: 1.2,
+                    repeat: Infinity,
+                    repeatType: "reverse"
+                  }}
+                >
+                  <MoveRight size={18} />
+                </motion.span>
+              </motion.a>
+            </ScrollReveal>
           </motion.div>
         </div>
       </div>
