@@ -47,10 +47,10 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
 
   // Define gradient colors based on the color prop
   const gradientClass = color === 'primary' 
-    ? 'from-blue-600 via-blue-500 to-blue-400' 
+    ? 'from-gold-dark via-gold to-gold-light' 
     : color === 'secondary' 
-      ? 'from-purple-600 via-purple-500 to-purple-400' 
-      : 'from-gold via-gold to-gold-light';
+      ? 'from-purple-dark via-purple to-purple-light' 
+      : 'from-accent via-accent to-accent';
   
   return (
     <div className={`relative ${isHovered ? 'scale-[1.02] transition-transform' : ''}`} ref={ref}>
@@ -62,7 +62,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         >
           {skill}
           <motion.span 
-            className="absolute -bottom-1 left-0 h-[2px] bg-gradient-to-r from-gold-light to-gold"
+            className="absolute -bottom-1 left-0 h-[2px] bg-gradient-to-r from-gold to-gold-light"
             initial={{ width: 0 }}
             whileInView={{ width: '100%' }}
             transition={{ delay: 0.5, duration: 0.8 }}
@@ -75,12 +75,12 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.4, delay: delay + 0.8 }}
         >
-          <motion.span className="text-sm font-mono bg-black/40 px-2 py-0.5 rounded-md backdrop-blur-sm border border-white/10 shadow-lg">
+          <motion.span className="text-sm font-mono bg-black/40 px-2 py-0.5 rounded-md backdrop-blur-sm border border-gold/10 shadow-lg">
             <motion.span>{progressDisplay}</motion.span>%
           </motion.span>
         </motion.div>
       </div>
-      <div className="h-3 rounded-full bg-black/40 overflow-hidden backdrop-blur-sm border border-white/5 relative">
+      <div className="h-3 rounded-full bg-black/40 overflow-hidden backdrop-blur-sm border border-gold/5 relative">
         <motion.div 
           className={`h-full rounded-full relative bg-gradient-to-r ${gradientClass}`}
           initial={{ width: 0 }}
@@ -107,12 +107,15 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
               ease: "linear",
             }}
           />
+          {/* Animated glow effect on hover */}
           <motion.div 
-            className="absolute top-0 right-0 h-full w-1 bg-white/50 opacity-0 group-hover:opacity-100 transition-opacity"
-            animate={{
+            className="absolute top-0 right-0 h-full w-1 bg-white/50"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isHovered ? 0.8 : 0 }}
+            transition={{ duration: 0.2 }}
+            style={{
               boxShadow: isHovered ? '0 0 8px rgba(255, 255, 255, 0.5)' : 'none'
             }}
-            transition={{ duration: 0.2 }}
           />
         </motion.div>
       </div>

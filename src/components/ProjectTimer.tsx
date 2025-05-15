@@ -47,11 +47,11 @@ const ProjectTimer: React.FC<ProjectTimerProps> = ({ launchDate }) => {
     >
       <div className="flex justify-between items-center gap-2">
         <TimeBlock label="Dny" value={timeLeft.days} />
-        <span className="text-gold/80 text-xl">:</span>
+        <span className="text-gold/80 text-2xl font-thin">:</span>
         <TimeBlock label="Hodiny" value={timeLeft.hours} />
-        <span className="text-gold/80 text-xl">:</span>
+        <span className="text-gold/80 text-2xl font-thin">:</span>
         <TimeBlock label="Minuty" value={timeLeft.minutes} />
-        <span className="text-gold/80 text-xl">:</span>
+        <span className="text-gold/80 text-2xl font-thin">:</span>
         <TimeBlock label="Sekundy" value={timeLeft.seconds} />
       </div>
     </motion.div>
@@ -64,12 +64,12 @@ const TimeBlock: React.FC<{ label: string; value: number }> = ({ label, value })
     whileHover={{ y: -2 }}
     transition={{ type: "spring", stiffness: 300 }}
   >
-    <motion.div
+    <motion.div 
       className="relative"
       whileHover={{ scale: 1.05 }}
     >
       <motion.span 
-        className="flex items-center justify-center bg-black/50 border border-purple/20 backdrop-blur-md rounded-lg px-3 py-2 w-14 h-14 text-center relative overflow-hidden"
+        className="flex items-center justify-center bg-black/50 border border-gold/20 backdrop-blur-md rounded-lg px-3 py-2 w-16 h-16 text-center relative overflow-hidden"
         key={value} // This makes the component re-render when the value changes
       >
         <motion.span
@@ -77,14 +77,14 @@ const TimeBlock: React.FC<{ label: string; value: number }> = ({ label, value })
           animate={{ y: 0, opacity: 1 }}
           exit={{ y: 20, opacity: 0 }}
           transition={{ type: "spring", stiffness: 300 }}
-          className="absolute text-xl font-bold text-white"
+          className="absolute text-2xl font-bold text-gradient"
         >
           {value.toString().padStart(2, '0')}
         </motion.span>
         
         {/* Subtle pulsing background */}
         <motion.div
-          className="absolute inset-0 bg-purple/10"
+          className="absolute inset-0 bg-gold/10"
           animate={{ 
             opacity: [0.2, 0.5, 0.2] 
           }}
@@ -97,7 +97,7 @@ const TimeBlock: React.FC<{ label: string; value: number }> = ({ label, value })
         
         {/* Bottom highlight */}
         <motion.div
-          className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-purple/40 to-transparent"
+          className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent"
         />
       </motion.span>
     </motion.div>
