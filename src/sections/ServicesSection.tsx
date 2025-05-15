@@ -1,60 +1,57 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Layout, Zap, Cloud, Shield } from 'lucide-react';
+import { Layout, Zap, Cloud, Shield, Check, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import { Switch } from '@/components/ui/switch';
+import { Card, CardContent } from '@/components/ui/card';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import SectionTitle from '@/components/SectionTitle';
 import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 // Types
 type ServiceCategory = 'websites' | 'design' | 'cloud' | 'maintenance';
 type CustomerType = 'individual' | 'business';
+type BillingType = 'oneTime' | 'subscription';
 
 // Service pricing data
 const servicePricingData = {
   websites: {
     individual: {
       title: "Webové stránky",
-      description: "Profesionální webové stránky pro jednotlivce a malé firmy",
-      price: {
-        monthly: 990,
-        yearly: 9500,
-      },
+      description: "Profesionální webové stránky pro jednotlivce a malé firmy včetně responzivního designu a SEO optimalizace.",
+      price: 9900,
+      billingType: 'oneTime' as BillingType,
       features: [
         "Responzivní design",
         "SEO optimalizace",
         "Kontaktní formulář",
         "Google Analytics",
-        "Základní údržba"
+        "Základní údržba (1 měsíc zdarma)"
       ]
     },
     business: {
       title: "Webové stránky Pro",
-      description: "Pokročilé webové řešení pro střední a velké firmy",
-      price: {
-        monthly: 2990,
-        yearly: 29000,
-      },
+      description: "Pokročilé webové řešení pro střední a velké firmy s vícejazyčnou podporou a pokročilými funkcemi.",
+      price: 29900,
+      billingType: 'oneTime' as BillingType,
       features: [
         "Vše z balíčku pro jednotlivce",
         "Vícejazyčná podpora",
         "Pokročilé analytické nástroje",
         "Integrace s CRM systémy",
-        "Prioritní podpora"
+        "Prioritní podpora (3 měsíce zdarma)"
       ]
     }
   },
   design: {
     individual: {
       title: "UI/UX Design",
-      description: "Uživatelsky přívětivý design pro vaše projekty",
-      price: {
-        monthly: 1490,
-        yearly: 14900,
-      },
+      description: "Uživatelsky přívětivý design pro vaše projekty s prototypováním a testováním použitelnosti.",
+      price: 7900,
+      billingType: 'oneTime' as BillingType,
       features: [
         "Návrh uživatelského rozhraní",
         "Prototypování",
@@ -65,11 +62,9 @@ const servicePricingData = {
     },
     business: {
       title: "Kompletní Brand Design",
-      description: "Komplexní designové služby pro vaši značku",
-      price: {
-        monthly: 3490,
-        yearly: 33900,
-      },
+      description: "Komplexní designové služby pro vaši značku včetně brand identity a marketingových materiálů.",
+      price: 24900,
+      billingType: 'oneTime' as BillingType,
       features: [
         "Vše z UI/UX balíčku",
         "Brand identity",
@@ -82,11 +77,9 @@ const servicePricingData = {
   cloud: {
     individual: {
       title: "Cloud Hosting",
-      description: "Spolehlivý hosting pro vaše projekty",
-      price: {
-        monthly: 390,
-        yearly: 3900,
-      },
+      description: "Spolehlivý hosting pro vaše projekty s denními zálohami a technickou podporou.",
+      price: 390,
+      billingType: 'subscription' as BillingType,
       features: [
         "5GB prostoru",
         "SSL certifikát",
@@ -97,11 +90,9 @@ const servicePricingData = {
     },
     business: {
       title: "Cloud & RDP řešení",
-      description: "Pokročilá cloudová infrastruktura pro firmy",
-      price: {
-        monthly: 1990,
-        yearly: 19900,
-      },
+      description: "Pokročilá cloudová infrastruktura pro firmy s dedikovaným serverem a nepřetržitou podporou.",
+      price: 1990,
+      billingType: 'subscription' as BillingType,
       features: [
         "Neomezený prostor",
         "Dedikovaný server",
@@ -114,11 +105,9 @@ const servicePricingData = {
   maintenance: {
     individual: {
       title: "Základní údržba",
-      description: "Pravidelná údržba pro bezproblémový chod",
-      price: {
-        monthly: 490,
-        yearly: 4900,
-      },
+      description: "Pravidelná údržba pro bezproblémový chod vašeho webu včetně měsíčních aktualizací a monitoringu.",
+      price: 490,
+      billingType: 'subscription' as BillingType,
       features: [
         "Měsíční aktualizace",
         "Bezpečnostní kontroly",
@@ -129,11 +118,9 @@ const servicePricingData = {
     },
     business: {
       title: "Prémiová údržba",
-      description: "Komplexní údržba a podpora pro firemní řešení",
-      price: {
-        monthly: 1490,
-        yearly: 14900,
-      },
+      description: "Komplexní údržba a podpora pro firemní řešení s týdenními aktualizacemi a prioritní podporou.",
+      price: 1490,
+      billingType: 'subscription' as BillingType,
       features: [
         "Týdenní aktualizace",
         "Pokročilé bezpečnostní audity",
@@ -150,33 +137,42 @@ const additionalServices = [
   {
     icon: Layout,
     title: "Redesign webu",
-    description: "Oživte svůj stávající web moderním designem, který zvýší konverze.",
-    price: "od 3 900 Kč"
+    description: "Oživte svůj stávající web moderním designem, který zvýší konverze a vylepší uživatelský zážitek.",
+    price: "od 3 900 Kč",
+    priceType: "jednorázově"
   },
   {
     icon: Zap,
     title: "Optimalizace rychlosti",
-    description: "Zrychlete svůj web pro lepší uživatelský zážitek a vyšší pozice ve vyhledávačích.",
-    price: "od 1 500 Kč"
+    description: "Zrychlete svůj web pro lepší uživatelský zážitek, vyšší konverze a lepší pozice ve vyhledávačích.",
+    price: "od 1 500 Kč",
+    priceType: "jednorázově"
   },
   {
     icon: Shield,
     title: "Zabezpečení webu",
-    description: "Ochraňte svůj web před útoky a zajistěte bezpečnost pro návštěvníky.",
-    price: "od 2 500 Kč"
+    description: "Ochraňte svůj web před útoky a zajistěte bezpečnost pro návštěvníky i vaše citlivá data.",
+    price: "od 2 500 Kč",
+    priceType: "jednorázově"
   },
   {
     icon: Cloud,
     title: "Migrace na cloud",
-    description: "Bezpečná migrace vašeho webu na rychlou a spolehlivou cloudovou infrastrukturu.",
-    price: "od 3 000 Kč"
+    description: "Bezpečná migrace vašeho webu na rychlou a spolehlivou cloudovou infrastrukturu s minimálním výpadkem.",
+    price: "od 3 000 Kč",
+    priceType: "jednorázově"
   }
 ];
 
 const ServicesSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>('websites');
   const [customerType, setCustomerType] = useState<CustomerType>('individual');
-  const [billingCycle, setBillingCycle] = useState<'monthly' | 'yearly'>('monthly');
+
+  // Helper function to get billing type label
+  const getBillingTypeLabel = (category: ServiceCategory) => {
+    const billingType = servicePricingData[category][customerType].billingType;
+    return billingType === 'oneTime' ? 'jednorázově' : 'měsíčně';
+  };
 
   // Animation variants
   const containerVariants = {
@@ -201,7 +197,7 @@ const ServicesSection: React.FC = () => {
       <div className="container-custom">
         <SectionTitle 
           title="Služby a Ceník" 
-          subtitle="Dostupné ceny za profesionální webový vývoj s důrazem na kvalitu"
+          subtitle="Profesionální webový vývoj s transparentními cenami a bez skrytých poplatků"
           className="mb-12"
         />
         
@@ -245,7 +241,7 @@ const ServicesSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.1 }}
-          className="flex justify-center mb-6"
+          className="flex justify-center mb-10"
         >
           <ToggleGroup 
             type="single" 
@@ -271,36 +267,6 @@ const ServicesSection: React.FC = () => {
             </ToggleGroupItem>
           </ToggleGroup>
         </motion.div>
-        
-        {/* Billing cycle toggle */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex justify-center mb-12"
-        >
-          <div className="flex items-center gap-3">
-            <span className={`text-sm ${billingCycle === 'monthly' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
-              Měsíčně
-            </span>
-            <Switch 
-              checked={billingCycle === 'yearly'}
-              onCheckedChange={(checked) => setBillingCycle(checked ? 'yearly' : 'monthly')}
-              className="data-[state=checked]:bg-primary"
-            />
-            <div className="flex items-center">
-              <span className={`text-sm ${billingCycle === 'yearly' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
-                Ročně
-              </span>
-              {billingCycle === 'yearly' && (
-                <span className="ml-2 bg-green-500/20 text-green-400 text-xs px-2 py-0.5 rounded-full">
-                  Sleva 20%
-                </span>
-              )}
-            </div>
-          </div>
-        </motion.div>
 
         {/* Service pricing card */}
         <motion.div
@@ -311,51 +277,68 @@ const ServicesSection: React.FC = () => {
           className="max-w-3xl mx-auto mb-20"
         >
           <div className="rounded-xl overflow-hidden border border-white/10 bg-gradient-to-br from-card/70 to-secondary/30 backdrop-blur-sm">
-            <AspectRatio ratio={16/9} className="relative">
-              <div className="absolute inset-0 p-8 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-xl md:text-2xl font-bold mb-2">
-                    {servicePricingData[selectedCategory][customerType].title}
-                  </h3>
-                  <p className="text-muted-foreground mb-4">
-                    {servicePricingData[selectedCategory][customerType].description}
-                  </p>
+            <div className="p-8 relative">
+              <div className="absolute top-4 right-4">
+                <TooltipProvider>
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
+                        <Info className="h-4 w-4" />
+                        <span className="sr-only">Více informací</span>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p className="max-w-xs">
+                        {servicePricingData[selectedCategory][customerType].billingType === 'oneTime' 
+                          ? 'Jednorázová platba za kompletní dodání služby' 
+                          : 'Opakovaná měsíční platba za průběžné poskytování služby'}
+                      </p>
+                    </TooltipContent>
+                  </Tooltip>
+                </TooltipProvider>
+              </div>
+              <div className="mb-6">
+                <h3 className="text-xl md:text-2xl font-bold mb-2">
+                  {servicePricingData[selectedCategory][customerType].title}
+                </h3>
+                <p className="text-muted-foreground max-w-xl">
+                  {servicePricingData[selectedCategory][customerType].description}
+                </p>
+              </div>
+              
+              <div className="flex flex-col md:flex-row md:items-end justify-between">
+                <div className="mb-4 md:mb-0">
+                  <div className="flex items-baseline">
+                    <span className="text-3xl md:text-4xl font-bold">
+                      {servicePricingData[selectedCategory][customerType].price} 
+                    </span>
+                    <span className="text-muted-foreground ml-2">Kč {getBillingTypeLabel(selectedCategory)}</span>
+                  </div>
+                  <div className="mt-1 inline-flex items-center">
+                    <div className={`px-2 py-0.5 text-xs rounded-full ${
+                      servicePricingData[selectedCategory][customerType].billingType === 'oneTime' 
+                        ? 'bg-blue-500/20 text-blue-400' 
+                        : 'bg-green-500/20 text-green-400'
+                    }`}>
+                      {servicePricingData[selectedCategory][customerType].billingType === 'oneTime' 
+                        ? 'Jednorázová platba' 
+                        : 'Měsíční platba'}
+                    </div>
+                  </div>
                 </div>
                 
-                <div className="flex flex-col md:flex-row md:items-end justify-between">
-                  <div className="mb-4 md:mb-0">
-                    <div className="flex items-baseline">
-                      <span className="text-3xl md:text-4xl font-bold">
-                        {billingCycle === 'yearly' 
-                          ? Math.round(servicePricingData[selectedCategory][customerType].price.yearly / 12)
-                          : servicePricingData[selectedCategory][customerType].price.monthly
-                        } 
-                      </span>
-                      <span className="text-muted-foreground ml-2">Kč / měsíčně</span>
-                    </div>
-                    {billingCycle === 'yearly' && (
-                      <p className="text-sm text-muted-foreground">
-                        Roční platba: {servicePricingData[selectedCategory][customerType].price.yearly} Kč
-                        <span className="text-green-400 ml-2">
-                          (ušetříte {Math.round(servicePricingData[selectedCategory][customerType].price.monthly * 12 - servicePricingData[selectedCategory][customerType].price.yearly)} Kč)
-                        </span>
-                      </p>
-                    )}
-                  </div>
-                  
-                  <Button className="bg-primary hover:bg-primary/90">
-                    Objednat
-                  </Button>
-                </div>
+                <Button className="bg-primary hover:bg-primary/90">
+                  Objednat
+                </Button>
               </div>
-            </AspectRatio>
+            </div>
             
             <div className="p-6 bg-card/40">
               <h4 className="font-medium mb-3">Co je zahrnuto:</h4>
               <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
                 {servicePricingData[selectedCategory][customerType].features.map((feature, index) => (
                   <li key={index} className="flex items-center text-sm">
-                    <span className="text-green-400 mr-2">✓</span>
+                    <Check className="h-4 w-4 text-green-400 mr-2 flex-shrink-0" />
                     {feature}
                   </li>
                 ))}
@@ -390,7 +373,10 @@ const ServicesSection: React.FC = () => {
                 </div>
                 <h4 className="text-lg font-medium mb-2">{service.title}</h4>
                 <p className="text-sm text-muted-foreground mb-4">{service.description}</p>
-                <p className="font-medium text-primary">{service.price}</p>
+                <div className="flex items-center">
+                  <p className="font-medium text-primary">{service.price}</p>
+                  <span className="text-xs text-muted-foreground ml-1">{service.priceType}</span>
+                </div>
               </motion.div>
             ))}
           </motion.div>
