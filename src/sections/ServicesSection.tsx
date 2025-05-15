@@ -1,15 +1,12 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Layout, Zap, Cloud, Shield, Check, Info } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { Layout, Zap, Cloud, Shield, Clock, Check, Info } from 'lucide-react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Switch } from '@/components/ui/switch';
-import { Card, CardContent } from '@/components/ui/card';
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import SectionTitle from '@/components/SectionTitle';
-import { AspectRatio } from '@/components/ui/aspect-ratio';
+import ServiceCard from '@/components/services/ServiceCard';
+import CompactServiceCard from '@/components/services/CompactServiceCard';
 
 // Types
 type ServiceCategory = 'websites' | 'design' | 'cloud' | 'maintenance';
@@ -24,6 +21,7 @@ const servicePricingData = {
       description: "Profesionální webové stránky pro jednotlivce a malé firmy včetně responzivního designu a SEO optimalizace.",
       price: 9900,
       billingType: 'oneTime' as BillingType,
+      isPopular: true,
       features: [
         "Responzivní design",
         "SEO optimalizace",
@@ -173,40 +171,78 @@ const ServicesSection: React.FC = () => {
     const billingType = servicePricingData[category][customerType].billingType;
     return billingType === 'oneTime' ? 'jednorázově' : 'měsíčně';
   };
-
+  
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: { 
       opacity: 1,
-      transition: { staggerChildren: 0.1 }
-    }
-  };
-  
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.5 }
+      transition: { 
+        staggerChildren: 0.1,
+        delayChildren: 0.3
+      }
     }
   };
 
   return (
-    <section id="services" className="py-24 bg-background">
-      <div className="container-custom">
-        <SectionTitle 
-          title="Služby a Ceník" 
-          subtitle="Profesionální webový vývoj s transparentními cenami a bez skrytých poplatků"
-          className="mb-12"
+    <motion.section
+      id="services"
+      className="py-24 bg-background relative overflow-hidden"
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true }}
+      variants={containerVariants}
+    >
+      {/* Background effects */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div 
+          className="absolute top-20 -left-32 w-64 h-64 rounded-full bg-purple/5 blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3]
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
         />
+        
+        <motion.div 
+          className="absolute bottom-20 -right-32 w-80 h-80 rounded-full bg-gold/5 blur-3xl"
+          animate={{
+            scale: [1, 1.15, 1],
+            opacity: [0.2, 0.4, 0.2]
+          }}
+          transition={{
+            duration: 10,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 1
+          }}
+        />
+      </div>
+      
+      <div className="container-custom relative z-10">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6 }}
+        >
+          <SectionTitle 
+            title="Služby a Ceník" 
+            subtitle="Profesionální webový vývoj s transparentními cenami a bez skrytých poplatků"
+            className="mb-12"
+          />
+        </motion.div>
         
         {/* Service category tabs */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, delay: 0.2 }}
           className="flex flex-wrap justify-center mb-8"
         >
           <Tabs 
@@ -215,21 +251,25 @@ const ServicesSection: React.FC = () => {
             className="w-full max-w-3xl mx-auto"
           >
             <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full bg-card/80 backdrop-blur-sm p-1 rounded-lg border border-white/10 shadow-lg">
-              <TabsTrigger value="websites" className="flex items-center gap-2 py-2">
+              <TabsTrigger value="websites" className="flex items-center gap-2 py-2 data-[state=active]:text-gold">
                 <Layout className="w-4 h-4" />
                 <span className="hidden sm:inline">Webové stránky</span>
+                <span className="sm:hidden">Weby</span>
               </TabsTrigger>
-              <TabsTrigger value="design" className="flex items-center gap-2 py-2">
+              <TabsTrigger value="design" className="flex items-center gap-2 py-2 data-[state=active]:text-gold">
                 <Zap className="w-4 h-4" />
                 <span className="hidden sm:inline">Design & UX</span>
+                <span className="sm:hidden">Design</span>
               </TabsTrigger>
-              <TabsTrigger value="cloud" className="flex items-center gap-2 py-2">
+              <TabsTrigger value="cloud" className="flex items-center gap-2 py-2 data-[state=active]:text-gold">
                 <Cloud className="w-4 h-4" />
                 <span className="hidden sm:inline">Cloud & RDP</span>
+                <span className="sm:hidden">Cloud</span>
               </TabsTrigger>
-              <TabsTrigger value="maintenance" className="flex items-center gap-2 py-2">
+              <TabsTrigger value="maintenance" className="flex items-center gap-2 py-2 data-[state=active]:text-gold">
                 <Shield className="w-4 h-4" />
                 <span className="hidden sm:inline">Údržba</span>
+                <span className="sm:hidden">Údržba</span>
               </TabsTrigger>
             </TabsList>
           </Tabs>
@@ -240,7 +280,7 @@ const ServicesSection: React.FC = () => {
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.1 }}
+          transition={{ duration: 0.5, delay: 0.3 }}
           className="flex justify-center mb-10"
         >
           <ToggleGroup 
@@ -254,135 +294,131 @@ const ServicesSection: React.FC = () => {
             <ToggleGroupItem 
               value="individual" 
               aria-label="Jednotlivci & Malé firmy"
-              className="rounded-full px-4 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+              className="rounded-full px-4 data-[state=on]:bg-gold data-[state=on]:text-primary-foreground"
             >
               Jednotlivci & Malé firmy
             </ToggleGroupItem>
             <ToggleGroupItem 
               value="business" 
               aria-label="Střední & Velké firmy"
-              className="rounded-full px-4 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
+              className="rounded-full px-4 data-[state=on]:bg-gold data-[state=on]:text-primary-foreground"
             >
               Střední & Velké firmy
             </ToggleGroupItem>
           </ToggleGroup>
         </motion.div>
-
-        {/* Service pricing card */}
+        
+        {/* Service pricing cards */}
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
+          initial={{ opacity: 0 }}
+          whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="max-w-3xl mx-auto mb-20"
+          className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-20"
         >
-          <div className="rounded-xl overflow-hidden border border-white/10 bg-gradient-to-br from-card/70 to-secondary/30 backdrop-blur-sm">
-            <div className="p-8 relative">
-              <div className="absolute top-4 right-4">
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full">
-                        <Info className="h-4 w-4" />
-                        <span className="sr-only">Více informací</span>
-                      </Button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="max-w-xs">
-                        {servicePricingData[selectedCategory][customerType].billingType === 'oneTime' 
-                          ? 'Jednorázová platba za kompletní dodání služby' 
-                          : 'Opakovaná měsíční platba za průběžné poskytování služby'}
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
-              </div>
-              <div className="mb-6">
-                <h3 className="text-xl md:text-2xl font-bold mb-2">
-                  {servicePricingData[selectedCategory][customerType].title}
-                </h3>
-                <p className="text-muted-foreground max-w-xl">
-                  {servicePricingData[selectedCategory][customerType].description}
-                </p>
-              </div>
+          {/* Individual/Small Business Card */}
+          <ServiceCard
+            title={servicePricingData[selectedCategory][customerType].title}
+            description={servicePricingData[selectedCategory][customerType].description}
+            price={servicePricingData[selectedCategory][customerType].price}
+            billingType={servicePricingData[selectedCategory][customerType].billingType}
+            features={servicePricingData[selectedCategory][customerType].features}
+            isPopular={servicePricingData[selectedCategory][customerType].isPopular}
+          />
+          
+          {/* Custom quote card for businesses */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5, delay: 0.4 }}
+            whileHover={{ y: -8 }}
+          >
+            <motion.div
+              className="relative h-full border rounded-lg border-dashed border-gold/40 bg-card/30 p-6 flex flex-col"
+              whileHover={{ boxShadow: "0 0 30px rgba(212,175,55,0.15)" }}
+              transition={{ duration: 0.5 }}
+            >
+              <h3 className="text-xl font-bold mb-2 text-gold">Individuální řešení</h3>
+              <p className="text-muted-foreground text-sm mb-4">
+                Potřebujete komplexní řešení přesně podle vašich potřeb? Kontaktujte nás pro nezávaznou konzultaci.
+              </p>
               
-              <div className="flex flex-col md:flex-row md:items-end justify-between">
-                <div className="mb-4 md:mb-0">
-                  <div className="flex items-baseline">
-                    <span className="text-3xl md:text-4xl font-bold">
-                      {servicePricingData[selectedCategory][customerType].price} 
-                    </span>
-                    <span className="text-muted-foreground ml-2">Kč {getBillingTypeLabel(selectedCategory)}</span>
-                  </div>
-                  <div className="mt-1 inline-flex items-center">
-                    <div className={`px-2 py-0.5 text-xs rounded-full ${
-                      servicePricingData[selectedCategory][customerType].billingType === 'oneTime' 
-                        ? 'bg-blue-500/20 text-blue-400' 
-                        : 'bg-green-500/20 text-green-400'
-                    }`}>
-                      {servicePricingData[selectedCategory][customerType].billingType === 'oneTime' 
-                        ? 'Jednorázová platba' 
-                        : 'Měsíční platba'}
-                    </div>
-                  </div>
-                </div>
-                
-                <Button className="bg-primary hover:bg-primary/90">
-                  Objednat
-                </Button>
-              </div>
-            </div>
-            
-            <div className="p-6 bg-card/40">
-              <h4 className="font-medium mb-3">Co je zahrnuto:</h4>
-              <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {servicePricingData[selectedCategory][customerType].features.map((feature, index) => (
-                  <li key={index} className="flex items-center text-sm">
-                    <Check className="h-4 w-4 text-green-400 mr-2 flex-shrink-0" />
-                    {feature}
-                  </li>
-                ))}
+              <ul className="space-y-2 mb-6 flex-grow">
+                <li className="flex items-center text-sm">
+                  <Clock className="h-4 w-4 mr-2 flex-shrink-0 text-gold" />
+                  <span className="text-foreground/80">Bezplatná úvodní konzultace</span>
+                </li>
+                <li className="flex items-center text-sm">
+                  <Check className="h-4 w-4 mr-2 flex-shrink-0 text-gold" />
+                  <span className="text-foreground/80">Detailní analýza potřeb</span>
+                </li>
+                <li className="flex items-center text-sm">
+                  <Check className="h-4 w-4 mr-2 flex-shrink-0 text-gold" />
+                  <span className="text-foreground/80">Návrh řešení na míru</span>
+                </li>
+                <li className="flex items-center text-sm">
+                  <Check className="h-4 w-4 mr-2 flex-shrink-0 text-gold" />
+                  <span className="text-foreground/80">Transparentní cenová nabídka</span>
+                </li>
               </ul>
-            </div>
-          </div>
+              
+              <div className="mt-auto">
+                <motion.button
+                  className="w-full border-2 border-gold/50 text-gold hover:bg-gold/5 transition-colors py-2 rounded-md font-medium"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                >
+                  Nezávazná konzultace
+                </motion.button>
+              </div>
+            </motion.div>
+          </motion.div>
         </motion.div>
         
-        {/* Additional services section */}
+        {/* Additional services section with enhanced animations */}
         <div className="mt-24">
-          <h3 className="text-2xl font-bold mb-10 text-center">
-            <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-              Další služby
-            </span>
-          </h3>
-          
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5"
+            transition={{ duration: 0.5 }}
+            className="text-center mb-16"
           >
-            {additionalServices.map((service, index) => (
-              <motion.div
-                key={index}
-                variants={itemVariants}
-                className="bg-card/50 backdrop-blur-sm rounded-xl border border-white/10 p-5 hover:shadow-lg hover:border-primary/20 transition-all"
+            <h3 className="text-2xl font-bold">
+              <motion.span 
+                initial={{ backgroundPosition: "0% 0%" }}
+                whileInView={{ backgroundPosition: "100% 0%" }}
+                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
+                className="bg-clip-text text-transparent bg-gradient-to-r from-gold-dark via-gold to-gold-light"
               >
-                <div className="mb-4 bg-muted/80 w-12 h-12 rounded-lg flex items-center justify-center">
-                  <service.icon className="h-6 w-6 text-primary" />
-                </div>
-                <h4 className="text-lg font-medium mb-2">{service.title}</h4>
-                <p className="text-sm text-muted-foreground mb-4">{service.description}</p>
-                <div className="flex items-center">
-                  <p className="font-medium text-primary">{service.price}</p>
-                  <span className="text-xs text-muted-foreground ml-1">{service.priceType}</span>
-                </div>
-              </motion.div>
-            ))}
+                Další služby
+              </motion.span>
+            </h3>
+            
+            <motion.div 
+              initial={{ width: 0 }}
+              whileInView={{ width: "5rem" }}
+              transition={{ duration: 1, delay: 0.2 }}
+              className="h-1 bg-gradient-to-r from-purple/50 to-gold/50 mx-auto rounded-full my-4"
+            />
           </motion.div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {additionalServices.map((service, index) => (
+              <CompactServiceCard
+                key={index}
+                icon={service.icon}
+                title={service.title}
+                description={service.description}
+                price={service.price}
+                priceType={service.priceType}
+              />
+            ))}
+          </div>
         </div>
       </div>
-    </section>
+    </motion.section>
   );
 };
 

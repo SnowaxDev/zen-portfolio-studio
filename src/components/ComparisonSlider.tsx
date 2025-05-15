@@ -1,118 +1,129 @@
 
 import React, { useState, useRef, useEffect } from 'react';
+import { motion } from 'framer-motion';
 
 interface BeforeAfterComparisonProps {
   beforeImage: string;
   afterImage: string;
-  beforeLabel?: string;
-  afterLabel?: string;
 }
 
-const BeforeAfterComparison: React.FC<BeforeAfterComparisonProps> = ({
-  beforeImage,
-  afterImage,
-  beforeLabel = "Před",
-  afterLabel = "Po"
+export const BeforeAfterComparison: React.FC<BeforeAfterComparisonProps> = ({ 
+  beforeImage, 
+  afterImage 
 }) => {
-  const [position, setPosition] = useState(50); // Start at the middle (50%)
+  const [sliderPosition, setSliderPosition] = useState(50);
+  const [isDragging, setIsDragging] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
-  const isDragging = useRef(false);
 
-  // Handle mouse/touch events
-  const handleMove = (clientX: number) => {
-    if (containerRef.current && isDragging.current) {
-      const rect = containerRef.current.getBoundingClientRect();
-      const x = clientX - rect.left;
-      const percentage = Math.max(0, Math.min(100, (x / rect.width) * 100));
-      setPosition(percentage);
-    }
-  };
-
+  // Handle mouse events for dragging
   const handleMouseDown = () => {
-    isDragging.current = true;
+    setIsDragging(true);
   };
 
   const handleMouseUp = () => {
-    isDragging.current = false;
+    setIsDragging(false);
   };
 
-  const handleMouseMove = (e: MouseEvent) => {
-    handleMove(e.clientX);
+  const handleMouseMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!isDragging || !containerRef.current) return;
+
+    let clientX;
+    if ('touches' in e) {
+      clientX = e.touches[0].clientX;
+    } else {
+      clientX = e.clientX;
+    }
+
+    const containerRect = containerRef.current.getBoundingClientRect();
+    const containerWidth = containerRect.width;
+    const relativeX = clientX - containerRect.left;
+    
+    // Calculate position as percentage
+    let newPosition = (relativeX / containerWidth) * 100;
+    
+    // Clamp between 0 and 100
+    newPosition = Math.max(0, Math.min(100, newPosition));
+    
+    setSliderPosition(newPosition);
   };
 
-  const handleTouchMove = (e: TouchEvent) => {
-    handleMove(e.touches[0].clientX);
-  };
-
-  // Add and remove event listeners
+  // Add event listeners for mouse up event outside component
   useEffect(() => {
-    document.addEventListener('mousemove', handleMouseMove);
-    document.addEventListener('mouseup', handleMouseUp);
-    document.addEventListener('touchmove', handleTouchMove);
-    document.addEventListener('touchend', handleMouseUp);
-
-    return () => {
-      document.removeEventListener('mousemove', handleMouseMove);
-      document.removeEventListener('mouseup', handleMouseUp);
-      document.removeEventListener('touchmove', handleTouchMove);
-      document.removeEventListener('touchend', handleMouseUp);
-    };
-  }, []);
+    if (isDragging) {
+      const handleGlobalMouseUp = () => {
+        setIsDragging(false);
+      };
+      
+      window.addEventListener('mouseup', handleGlobalMouseUp);
+      window.addEventListener('touchend', handleGlobalMouseUp);
+      
+      return () => {
+        window.removeEventListener('mouseup', handleGlobalMouseUp);
+        window.removeEventListener('touchend', handleGlobalMouseUp);
+      };
+    }
+  }, [isDragging]);
 
   return (
-    <div className="w-full h-full" ref={containerRef}>
-      <div className="h-full w-full rounded-lg overflow-hidden relative">
-        {/* After Image (Full size in background) */}
-        <div className="absolute inset-0 w-full h-full">
-          <img 
-            src={afterImage} 
-            alt="After redesign" 
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute bottom-3 right-3 px-2 py-1 bg-background/80 backdrop-blur-sm rounded-md text-xs font-medium">
-            {afterLabel}
-          </div>
-        </div>
-        
-        {/* Before Image (Clipped) */}
-        <div 
-          className="absolute inset-0 overflow-hidden h-full" 
-          style={{ width: `${position}%` }}
-        >
-          <img 
-            src={beforeImage} 
-            alt="Before redesign" 
-            className="absolute top-0 left-0 w-full h-full object-cover"
-            style={{ 
-              width: `${100 / (position/100)}%`, 
-              height: '100%',
-              maxWidth: 'none'
-            }}
-          />
-          <div className="absolute bottom-3 left-3 px-2 py-1 bg-background/80 backdrop-blur-sm rounded-md text-xs font-medium">
-            {beforeLabel}
-          </div>
-        </div>
-        
-        {/* Slider Handle */}
-        <div 
-          className="absolute top-0 bottom-0 w-1 bg-white cursor-ew-resize z-10 group hover:scale-y-125 transition-transform"
-          style={{ left: `${position}%` }}
-          onMouseDown={handleMouseDown}
-          onTouchStart={handleMouseDown}
-        >
-          <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 h-8 w-8 bg-white border-2 border-white rounded-full flex justify-center items-center group-hover:scale-110 transition-transform">
-            <div className="flex">
-              <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="mr-0.5">
-                <path d="M7 1L1 6L7 11" stroke="#000" strokeWidth="1.5" />
-              </svg>
-              <svg width="8" height="12" viewBox="0 0 8 12" fill="none" xmlns="http://www.w3.org/2000/svg" className="ml-0.5">
-                <path d="M1 1L7 6L1 11" stroke="#000" strokeWidth="1.5" />
-              </svg>
-            </div>
-          </div>
+    <div 
+      ref={containerRef}
+      className="relative w-full h-full select-none cursor-col-resize overflow-hidden rounded-lg"
+      onMouseMove={handleMouseMove}
+      onTouchMove={handleMouseMove}
+      onMouseUp={handleMouseUp}
+      onTouchEnd={handleMouseUp}
+    >
+      {/* "After" image (base layer) */}
+      <div className="absolute inset-0 w-full h-full">
+        <img
+          src={afterImage}
+          alt="After"
+          className="object-cover w-full h-full"
+        />
+      </div>
+      
+      {/* "Before" image (top layer with clip-path) */}
+      <div 
+        className="absolute inset-0 w-full h-full"
+        style={{
+          clipPath: `polygon(0 0, ${sliderPosition}% 0, ${sliderPosition}% 100%, 0 100%)`,
+        }}
+      >
+        <img
+          src={beforeImage}
+          alt="Before"
+          className="object-cover w-full h-full"
+        />
+      </div>
+      
+      {/* Slider handle */}
+      <div
+        className="absolute top-0 bottom-0 w-1 bg-white shadow-lg transform -translate-x-1/2 cursor-col-resize z-10"
+        style={{ left: `${sliderPosition}%` }}
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleMouseDown}
+      >
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 rounded-full bg-white shadow-lg flex items-center justify-center">
+          <motion.div
+            animate={{ rotate: isDragging ? 180 : 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            <svg 
+              width="20" 
+              height="20" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M12 4L10.59 5.41L16.17 11H4V13H16.17L10.59 18.59L12 20L20 12L12 4Z" fill="#000000" />
+            </svg>
+          </motion.div>
         </div>
       </div>
+      
+      {/* Before/After labels */}
+      <div className="absolute bottom-4 left-4 text-xs bg-black bg-opacity-50 text-white px-2 py-1 rounded">Před</div>
+      <div className="absolute bottom-4 right-4 text-xs bg-black bg-opacity-50 text-white px-2 py-1 rounded">Po</div>
     </div>
   );
 };
