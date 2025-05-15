@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
 import { projects, sectionMeta, upcomingProjects } from '../lib/section-data';
 import { ArrowRight, Github, Clock, Calendar, Sparkles } from 'lucide-react';
 import ProjectCard from '../components/ProjectCard';
@@ -73,7 +72,7 @@ const ProjectsSection: React.FC = () => {
           ))}
         </motion.div>
         
-        {/* Upcoming Projects Section - Redesigned */}
+        {/* Upcoming Projects Section - Redesigned with centered AI Assistant card */}
         <div className="mt-24 relative">
           {/* Decorative background elements */}
           <motion.div 
@@ -150,19 +149,19 @@ const ProjectsSection: React.FC = () => {
             </motion.p>
           </motion.div>
           
-          {/* Upcoming projects grid - centered layout for better symmetry */}
+          {/* Center AI Asistent Platforma and other upcoming projects */}
           <motion.div 
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="grid md:grid-cols-2 lg:grid-cols-2 gap-10 max-w-4xl mx-auto"
+            className="grid grid-cols-1 md:grid-cols-2 gap-10 max-w-4xl mx-auto"
           >
             {upcomingProjects.map((project, index) => (
               <motion.div 
                 key={index}
                 variants={itemVariants} 
-                className="relative"
+                className={`relative ${project.id === 'ai-assistant' && index % 2 === 0 ? 'md:col-span-2 max-w-2xl mx-auto' : ''}`}
               >
                 <motion.div 
                   className="relative bg-black/60 backdrop-blur-lg rounded-xl border border-purple/20 p-8 hover:shadow-xl hover:shadow-purple/10 transition-all duration-300 overflow-hidden"

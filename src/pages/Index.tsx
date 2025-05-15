@@ -11,7 +11,7 @@ import ContactSection from '../sections/ContactSection';
 import Footer from '../components/Footer';
 import { useIsMobile } from '../hooks/use-mobile';
 
-// Page transition variants
+// Page transition variants - enhanced for smoother entry animations
 const pageVariants = {
   initial: { opacity: 0 },
   animate: { 
@@ -32,7 +32,7 @@ const pageVariants = {
   }
 };
 
-// Enhanced section variants for smoother animations
+// Enhanced section variants for smoother animations with staggered entry
 const sectionVariants = {
   initial: { opacity: 0, y: 30 },
   animate: { 

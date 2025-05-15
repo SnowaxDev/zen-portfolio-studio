@@ -195,6 +195,69 @@ export const projects = [
       'Agresivní lazy loading a vylepšení výkonu pro starší zařízení'
     ]
   },
+  {
+    id: 'portfolio-website',
+    title: 'Portfolio Web',
+    description: 'Moderní portfolio web pro prezentaci projektů a dovedností vývojáře s animacemi a responzivním designem.',
+    longDescription: 'Osobní portfolio web vytvořený s důrazem na moderní design, plynulé animace a optimální uživatelský zážitek. Web slouží k prezentaci projektů, dovedností a nabízených služeb, s důrazem na rychlost načítání a responzivitu na všech zařízeních.',
+    image: 'https://images.unsplash.com/photo-1517433456452-f9633a875f6f?w=500&h=280&fit=crop&q=80',
+    tags: ['React', 'Framer Motion', 'TailwindCSS', 'Vite'],
+    link: '#',
+    github: '#',
+    isUpcoming: false,
+    launchDate: '01.01.2024',
+    type: 'personal',
+    price: null,
+    technicalDetails: [
+      'React a Vite pro rychlý vývoj a optimální výkon',
+      'Framer Motion pro plynulé a interaktivní animace',
+      'Tailwind CSS pro responzivní design',
+      'Optimalizace pro vyhledávače (SEO)',
+      'Přístupnost podle standardů WCAG'
+    ],
+    challenges: [
+      'Vytvoření plynulých animací s optimálním výkonem',
+      'Zajištění konzistentního vzhledu napříč různými zařízeními',
+      'Optimalizace načítání stránky pro co nejrychlejší interakci'
+    ],
+    solutions: [
+      'Použití Framer Motion pro efektivní a plynulé animace',
+      'Implementace mobile-first přístupu pro responzivní design',
+      'Lazy loading a optimalizace obrázků pro rychlejší načítání'
+    ]
+  },
+  {
+    id: 'blog-platform',
+    title: 'Blog Platforma',
+    description: 'Kompletní blogovací platforma s podporou pro více autorů, kategorizaci obsahu a pokročilé formátování.',
+    longDescription: 'Moderní blogovací platforma s podporou pro více autorů, bohatým textovým editorem, systémem pro správu kategorií a tagů, komentáře s moderováním a integrovanou analytiku. Platforma je navržena s důrazem na rychlost, SEO a uživatelský komfort.',
+    image: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?w=500&h=280&fit=crop&q=80',
+    tags: ['Next.js', 'MongoDB', 'Markdown', 'Auth.js'],
+    link: '#',
+    github: '#',
+    isUpcoming: false,
+    launchDate: '25.03.2024',
+    type: 'client',
+    price: '52 000 Kč',
+    clientNotes: 'Klient potřeboval flexibilní publikační platformu pro svůj obsahový tým s důrazem na SEO a rychlé načítání stránek.',
+    technicalDetails: [
+      'Next.js pro server-side rendering a statickou generaci stránek',
+      'MongoDB pro flexibilní ukládání strukturovaného obsahu',
+      'Markdown s rozšířeními pro bohaté formátování obsahu',
+      'Auth.js pro bezpečnou autentizaci a správu uživatelů',
+      'Integrace s analytickými nástroji pro sledování výkonu obsahu'
+    ],
+    challenges: [
+      'Vytvoření uživatelsky přívětivého rozhraní pro autory obsahu',
+      'Implementace rychlého vyhledávání a filtrování obsahu',
+      'Zajištění optimálního SEO pro všechny stránky'
+    ],
+    solutions: [
+      'Vlastní WYSIWYG editor s podporou Markdown a médií',
+      'Implementace full-text search pomocí MongoDB indexů',
+      'Automatická generace SEO metadat a strukturovaných dat'
+    ]
+  }
 ];
 
 // Separate upcoming projects for better organization

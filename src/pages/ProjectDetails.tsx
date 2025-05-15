@@ -13,6 +13,27 @@ import { ExternalLink, Github, ArrowLeft, Clock, CheckCircle } from 'lucide-reac
 // Import project data from our library
 import { projects as allProjects } from '../lib/section-data';
 
+// Page transition variants
+const pageVariants = {
+  initial: { opacity: 0 },
+  animate: { 
+    opacity: 1,
+    transition: { 
+      duration: 0.8,
+      ease: [0.22, 1, 0.36, 1],
+      delayChildren: 0.3,
+      staggerChildren: 0.3
+    }
+  },
+  exit: { 
+    opacity: 0,
+    transition: { 
+      duration: 0.6, 
+      ease: [0.22, 1, 0.36, 1] 
+    }
+  }
+};
+
 const ProjectDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
@@ -42,9 +63,10 @@ const ProjectDetails: React.FC = () => {
   
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.5 }}
+      variants={pageVariants}
+      initial="initial"
+      animate="animate"
+      exit="exit"
       className="min-h-screen overflow-x-hidden"
     >
       <Header />
