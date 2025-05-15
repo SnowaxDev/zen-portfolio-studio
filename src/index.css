@@ -1,7 +1,6 @@
 
-/* Import Space Grotesk and Merriweather fonts */
+/* Import Space Grotesk font */
 @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Merriweather:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -75,15 +74,15 @@
   }
   
   body {
-    @apply bg-background text-foreground font-affirage scroll-smooth;
+    @apply bg-background text-foreground font-sans scroll-smooth;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-affirage font-bold;
+    @apply font-sans font-bold;
   }
 
   p {
-    @apply leading-relaxed font-affirage;
+    @apply leading-relaxed font-sans;
   }
   
   /* Smoothing for all transitions */
@@ -205,6 +204,14 @@
     @apply absolute -bottom-2 left-0 w-1/2 h-1 bg-gradient-to-r from-primary to-accent rounded-full;
   }
   
+  .badge {
+    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary;
+  }
+  
+  .tech-pill {
+    @apply px-3 py-1 rounded-full text-sm bg-secondary border border-white/5 hover:border-primary/30 transition-all;
+  }
+  
   /* Mobile-specific components */
   @media (max-width: 767px) {
     .mobile-button {
@@ -222,4 +229,3 @@
 }
 
 /* ... keep existing code (keyframes, animations, scroll reveal) */
-
