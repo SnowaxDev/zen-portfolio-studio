@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Layout, Zap, Cloud, Shield, Clock, Check, Info } from 'lucide-react';
@@ -18,7 +19,7 @@ interface ServiceData {
   description: string;
   price: number;
   billingType: BillingType;
-  isPopular: boolean; // Make isPopular required for all service data
+  isPopular: boolean;
   features: string[];
 }
 
@@ -217,8 +218,9 @@ const ServicesSection: React.FC = () => {
       viewport={{ once: true }}
       variants={containerVariants}
     >
-      {/* Background effects */}
+      {/* Asymmetric background elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Left blob */}
         <motion.div 
           className="absolute top-20 -left-32 w-64 h-64 rounded-full bg-purple/5 blur-3xl"
           animate={{
@@ -232,6 +234,7 @@ const ServicesSection: React.FC = () => {
           }}
         />
         
+        {/* Right blob */}
         <motion.div 
           className="absolute bottom-20 -right-32 w-80 h-80 rounded-full bg-gold/5 blur-3xl"
           animate={{
@@ -245,6 +248,27 @@ const ServicesSection: React.FC = () => {
             delay: 1
           }}
         />
+        
+        {/* Diagonal accent line */}
+        <motion.div 
+          className="absolute top-40 -right-20 w-[800px] h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent transform rotate-[35deg]"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: [0, 1, 0] }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+            delay: 3
+          }}
+        />
+        
+        {/* Asymmetric grid pattern */}
+        <div className="absolute inset-0 opacity-5">
+          <div className="absolute top-0 left-0 right-0 bottom-0 
+                          bg-[linear-gradient(rgba(212,175,55,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(212,175,55,0.1)_1px,transparent_1px)]
+                          bg-[size:60px_60px]">
+          </div>
+        </div>
       </div>
       
       <div className="container-custom relative z-10">
@@ -253,27 +277,43 @@ const ServicesSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
+          className="mb-12"
         >
           <SectionTitle 
             title="Služby a Ceník" 
             subtitle="Profesionální webový vývoj s transparentními cenami a bez skrytých poplatků"
-            className="mb-12"
+            alignment="center"
+            accentColor="gold"
           />
         </motion.div>
         
-        {/* Service category tabs - Enhanced tab design */}
+        {/* Service category tabs - Enhanced tab design with asymmetric elements */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-wrap justify-center mb-12"
+          className="flex flex-wrap justify-center mb-16"
         >
           <Tabs 
             value={selectedCategory}
             onValueChange={(value) => setSelectedCategory(value as ServiceCategory)}
-            className="w-full max-w-3xl mx-auto"
+            className="w-full max-w-3xl mx-auto relative"
           >
+            {/* Asymmetric accent element */}
+            <motion.div
+              className="absolute -top-8 right-10 h-10 w-20 bg-gradient-to-br from-gold/10 to-purple/10 blur-xl rounded-full"
+              animate={{ 
+                x: [0, 10, 0], 
+                opacity: [0.3, 0.6, 0.3] 
+              }}
+              transition={{ 
+                duration: 5, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+            />
+            
             <div className="relative">
               {/* Decorative underline that animates with tab selection */}
               <motion.div 
@@ -283,7 +323,7 @@ const ServicesSection: React.FC = () => {
                 transition={{ delay: 0.5 }}
               />
               
-              <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full bg-card/80 backdrop-blur-sm p-1 rounded-xl border border-white/10 shadow-lg">
+              <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full bg-card/80 backdrop-blur-sm p-1 rounded-xl border border-white/10 shadow-lg transform -rotate-[0.5deg]">
                 {tabsConfig.map((tab) => {
                   const TabIcon = tab.icon;
                   const isActive = selectedCategory === tab.value;
@@ -309,7 +349,16 @@ const ServicesSection: React.FC = () => {
                         />
                       )}
                       
-                      <TabIcon className={`w-5 h-5 ${isActive ? 'text-gold' : ''}`} />
+                      {/* Asymmetric icon positioning */}
+                      <motion.div
+                        animate={isActive ? {
+                          rotateZ: [0, 5, 0],
+                          transition: { duration: 1, repeat: Infinity, repeatDelay: 3 }
+                        } : {}}
+                      >
+                        <TabIcon className={`w-5 h-5 ${isActive ? 'text-gold' : ''}`} />
+                      </motion.div>
+                      
                       <span className="hidden sm:inline">{tab.label}</span>
                       <span className="sm:hidden">{tab.shortLabel}</span>
                       
@@ -331,7 +380,7 @@ const ServicesSection: React.FC = () => {
           </Tabs>
         </motion.div>
         
-        {/* Customer type toggle - Enhanced design */}
+        {/* Customer type toggle - Enhanced asymmetric design */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -339,7 +388,7 @@ const ServicesSection: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="flex justify-center mb-16"
         >
-          <div className="relative bg-card/30 p-1 rounded-full border border-white/10 shadow-lg overflow-hidden">
+          <div className="relative bg-card/30 p-1 rounded-full border border-white/10 shadow-lg overflow-hidden transform rotate-[0.7deg]">
             {/* Animated background for selected toggle */}
             <motion.div
               className="absolute h-full top-0 rounded-full bg-gradient-to-r from-gold/90 to-gold-light/90"
@@ -382,7 +431,7 @@ const ServicesSection: React.FC = () => {
           </div>
         </motion.div>
         
-        {/* Service pricing cards */}
+        {/* Service pricing cards with asymmetric layout */}
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
@@ -390,29 +439,52 @@ const ServicesSection: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.3 }}
           className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-20"
         >
-          {/* Service Card - Now with fixed isPopular prop type */}
-          <ServiceCard
-            title={servicePricingData[selectedCategory][customerType].title}
-            description={servicePricingData[selectedCategory][customerType].description}
-            price={servicePricingData[selectedCategory][customerType].price}
-            billingType={servicePricingData[selectedCategory][customerType].billingType}
-            features={servicePricingData[selectedCategory][customerType].features}
-            isPopular={servicePricingData[selectedCategory][customerType].isPopular}
-          />
-          
-          {/* Custom quote card for businesses */}
+          {/* Main service card - Asymmetrically positioned */}
           <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -20, y: 15 }}
+            whileInView={{ opacity: 1, x: 0, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.5, delay: 0.4 }}
+            transition={{ duration: 0.6 }}
+            className="md:translate-y-4"
+          >
+            <ServiceCard
+              title={servicePricingData[selectedCategory][customerType].title}
+              description={servicePricingData[selectedCategory][customerType].description}
+              price={servicePricingData[selectedCategory][customerType].price}
+              billingType={servicePricingData[selectedCategory][customerType].billingType}
+              features={servicePricingData[selectedCategory][customerType].features}
+              isPopular={servicePricingData[selectedCategory][customerType].isPopular}
+            />
+          </motion.div>
+          
+          {/* Custom quote card for businesses - With asymmetric elements */}
+          <motion.div
+            initial={{ opacity: 0, x: 20, y: -15 }}
+            whileInView={{ opacity: 1, x: 0, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.2 }}
             whileHover={{ y: -8 }}
+            className="md:-translate-y-4"
           >
             <motion.div
-              className="relative h-full border rounded-lg border-dashed border-gold/40 bg-card/30 p-6 flex flex-col"
+              className="relative h-full border rounded-lg border-dashed border-gold/40 bg-card/30 p-6 flex flex-col transform rotate-[0.3deg] overflow-hidden"
               whileHover={{ boxShadow: "0 0 30px rgba(212,175,55,0.15)" }}
               transition={{ duration: 0.5 }}
             >
+              {/* Asymmetric accent element */}
+              <motion.div
+                className="absolute -bottom-10 -right-10 w-32 h-32 rounded-full bg-gold/5 blur-xl"
+                animate={{
+                  scale: [1, 1.2, 1],
+                  opacity: [0.2, 0.3, 0.2]
+                }}
+                transition={{
+                  duration: 8,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+              
               <h3 className="text-xl font-bold mb-2 text-gold">Individuální řešení</h3>
               <p className="text-muted-foreground text-sm mb-4">
                 Potřebujete komplexní řešení přesně podle vašich potřeb? Kontaktujte nás pro nezávaznou konzultaci.
@@ -437,7 +509,7 @@ const ServicesSection: React.FC = () => {
                 </li>
               </ul>
               
-              <div className="mt-auto">
+              <div className="mt-auto relative z-10">
                 <motion.button
                   className="w-full border-2 border-gold/50 text-gold hover:bg-gold/5 transition-colors py-2 rounded-md font-medium"
                   whileHover={{ scale: 1.03 }}
@@ -450,8 +522,23 @@ const ServicesSection: React.FC = () => {
           </motion.div>
         </motion.div>
         
-        {/* Additional services section with enhanced animations */}
-        <div className="mt-24">
+        {/* Additional services section with asymmetric layout */}
+        <div className="mt-24 relative">
+          {/* Asymmetric decorative element */}
+          <motion.div
+            className="absolute -top-20 left-1/3 w-40 h-40 rounded-full bg-purple/5 blur-3xl opacity-40"
+            animate={{
+              scale: [1, 1.2, 1],
+              x: [0, 20, 0],
+              opacity: [0.2, 0.4, 0.2]
+            }}
+            transition={{
+              duration: 10,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -479,16 +566,26 @@ const ServicesSection: React.FC = () => {
           </motion.div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {additionalServices.map((service, index) => (
-              <CompactServiceCard
-                key={index}
-                icon={service.icon}
-                title={service.title}
-                description={service.description}
-                price={service.price}
-                priceType={service.priceType}
-              />
-            ))}
+            {additionalServices.map((service, index) => {
+              // Create asymmetric layout by applying different transforms
+              const isEven = index % 2 === 0;
+              const isLast = index === additionalServices.length - 1;
+              const transform = isEven 
+                ? `rotate-[-0.5deg] ${isLast ? 'translate-y-2' : ''}` 
+                : `rotate-[0.5deg] ${isLast ? '-translate-y-2' : ''}`;
+                
+              return (
+                <CompactServiceCard
+                  key={index}
+                  icon={service.icon}
+                  title={service.title}
+                  description={service.description}
+                  price={service.price}
+                  priceType={service.priceType}
+                  className={transform}
+                />
+              );
+            })}
           </div>
         </div>
       </div>

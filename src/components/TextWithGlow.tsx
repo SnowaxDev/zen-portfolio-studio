@@ -10,6 +10,8 @@ interface TextWithGlowProps {
   pulsate?: boolean;
   delay?: number;
   duration?: number;
+  hover?: boolean;
+  shimmer?: boolean;
 }
 
 const TextWithGlow: React.FC<TextWithGlowProps> = ({
@@ -20,6 +22,8 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
   pulsate = true,
   delay = 0,
   duration = 2,
+  hover = true,
+  shimmer = false,
 }) => {
   // Set shadow intensity based on prop
   const getShadowIntensity = () => {
@@ -45,14 +49,25 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
         delay: delay
       }
     },
-    hover: {
+    hover: hover ? {
       textShadow: intensity === 'strong' 
         ? `0 0 15px ${color}, 0 0 25px ${color}, 0 0 40px ${color}70` 
         : `0 0 15px ${color}, 0 0 25px ${color}60`,
       scale: 1.05,
       transition: { duration: 0.3 }
-    }
+    } : {}
   };
+
+  // Add shimmering effect for a more dynamic appearance
+  const shimmerStyles = shimmer ? {
+    backgroundImage: `linear-gradient(90deg, ${color}00 0%, ${color}60 50%, ${color}00 100%)`,
+    backgroundSize: '200% 100%',
+    backgroundRepeat: 'no-repeat',
+    backgroundClip: 'text',
+    WebkitBackgroundClip: 'text',
+    WebkitTextFillColor: 'transparent',
+    animation: 'shimmer 2s infinite linear',
+  } : {};
 
   return (
     <motion.span
@@ -60,7 +75,8 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
       variants={textGlowVariants}
       initial="initial"
       animate="animate"
-      whileHover="hover"
+      whileHover={hover ? "hover" : undefined}
+      style={shimmer ? shimmerStyles : {}}
     >
       {children}
     </motion.span>
