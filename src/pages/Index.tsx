@@ -5,6 +5,7 @@ import Header from '../components/Header';
 import HeroSection from '../sections/HeroSection';
 import AboutSection from '../sections/AboutSection';
 import ProjectsSection from '../sections/ProjectsSection';
+import MyProjectsSection from '../sections/MyProjectsSection';
 import SkillsSection from '../sections/SkillsSection';
 import ServicesSection from '../sections/ServicesSection';
 import ContactSection from '../sections/ContactSection';
@@ -109,13 +110,14 @@ const Index = () => {
           <AboutSection />
         </motion.div>
         
+        {/* Replace ProjectsSection with MyProjectsSection */}
         <motion.div 
           variants={sectionVariants}
           initial="initial"
           whileInView="animate"
           viewport={{ once: true, margin: "-100px" }}
         >
-          <ProjectsSection />
+          <MyProjectsSection />
         </motion.div>
         
         <motion.div 
