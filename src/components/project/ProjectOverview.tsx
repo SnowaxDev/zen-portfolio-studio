@@ -9,7 +9,7 @@ interface ProjectOverviewProps {
   image: string;
   longDescription?: string;
   description: string;
-  type?: string;
+  type?: 'client' | 'personal' | 'redesign';
   beforeImage?: string;
   technicalDetails?: string[];
 }

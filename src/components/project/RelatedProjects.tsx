@@ -14,6 +14,19 @@ interface Project {
   image: string;
   tags: string[];
   type?: 'client' | 'personal' | 'redesign';
+  link?: string | null;
+  github?: string | null;
+  price?: string | null;
+  longDescription?: string;
+  isUpcoming?: boolean;
+  launchDate?: string;
+  clientNotes?: string;
+  technicalDetails?: string[];
+  challenges?: string[];
+  solutions?: string[];
+  beforeImage?: string;
+  gallery?: string[];
+  reviews?: any[];
 }
 
 interface RelatedProjectsProps {

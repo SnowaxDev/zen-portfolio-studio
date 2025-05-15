@@ -17,6 +17,29 @@ import RelatedProjects from '../components/project/RelatedProjects';
 // Import project data
 import { projects as allProjects } from '../lib/section-data';
 
+// Define Project interface to match what's in section-data.ts
+interface Project {
+  id: string;
+  title: string;
+  description: string;
+  image: string;
+  tags: string[];
+  type?: 'client' | 'personal' | 'redesign';
+  link?: string | null;
+  github?: string | null;
+  price?: string | null;
+  longDescription?: string;
+  isUpcoming?: boolean;
+  launchDate?: string;
+  clientNotes?: string;
+  technicalDetails?: string[];
+  challenges?: string[];
+  solutions?: string[];
+  beforeImage?: string;
+  gallery?: string[];
+  reviews?: any[];
+}
+
 // Page transition variants
 const pageVariants = {
   initial: { opacity: 0 },
@@ -41,11 +64,12 @@ const pageVariants = {
 const ProjectDetails: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const [project, setProject] = useState<any>(undefined);
+  const [project, setProject] = useState<Project | undefined>(undefined);
   
   useEffect(() => {
     if (id) {
-      const projectData = allProjects.find(p => p.id === id);
+      // Ensure the type-casting here
+      const projectData = allProjects.find(p => p.id === id) as Project | undefined;
       setProject(projectData);
       
       // Update page title
@@ -115,7 +139,7 @@ const ProjectDetails: React.FC = () => {
               
               {/* Related Projects Section */}
               <RelatedProjects 
-                projects={allProjects}
+                projects={allProjects as Project[]}
                 currentProjectId={project.id}
               />
             </div>

@@ -35,6 +35,7 @@ const servicePricingData = {
       description: "Pokročilé webové řešení pro střední a velké firmy s vícejazyčnou podporou a pokročilými funkcemi.",
       price: 29900,
       billingType: 'oneTime' as BillingType,
+      isPopular: false,
       features: [
         "Vše z balíčku pro jednotlivce",
         "Vícejazyčná podpora",
@@ -50,6 +51,7 @@ const servicePricingData = {
       description: "Uživatelsky přívětivý design pro vaše projekty s prototypováním a testováním použitelnosti.",
       price: 7900,
       billingType: 'oneTime' as BillingType,
+      isPopular: false,
       features: [
         "Návrh uživatelského rozhraní",
         "Prototypování",
@@ -63,6 +65,7 @@ const servicePricingData = {
       description: "Komplexní designové služby pro vaši značku včetně brand identity a marketingových materiálů.",
       price: 24900,
       billingType: 'oneTime' as BillingType,
+      isPopular: false,
       features: [
         "Vše z UI/UX balíčku",
         "Brand identity",
@@ -78,6 +81,7 @@ const servicePricingData = {
       description: "Spolehlivý hosting pro vaše projekty s denními zálohami a technickou podporou.",
       price: 390,
       billingType: 'subscription' as BillingType,
+      isPopular: false,
       features: [
         "5GB prostoru",
         "SSL certifikát",
@@ -91,6 +95,7 @@ const servicePricingData = {
       description: "Pokročilá cloudová infrastruktura pro firmy s dedikovaným serverem a nepřetržitou podporou.",
       price: 1990,
       billingType: 'subscription' as BillingType,
+      isPopular: false,
       features: [
         "Neomezený prostor",
         "Dedikovaný server",
@@ -106,6 +111,7 @@ const servicePricingData = {
       description: "Pravidelná údržba pro bezproblémový chod vašeho webu včetně měsíčních aktualizací a monitoringu.",
       price: 490,
       billingType: 'subscription' as BillingType,
+      isPopular: false,
       features: [
         "Měsíční aktualizace",
         "Bezpečnostní kontroly",
@@ -119,6 +125,7 @@ const servicePricingData = {
       description: "Komplexní údržba a podpora pro firemní řešení s týdenními aktualizacemi a prioritní podporou.",
       price: 1490,
       billingType: 'subscription' as BillingType,
+      isPopular: false,
       features: [
         "Týdenní aktualizace",
         "Pokročilé bezpečnostní audity",

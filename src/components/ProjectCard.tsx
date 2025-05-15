@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Badge } from './ui/badge';
@@ -15,7 +14,7 @@ interface ProjectCardProps {
   github: string | null;
   id: string;
   type?: 'client' | 'personal' | 'redesign';
-  price?: string;
+  price?: string | null;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
@@ -30,6 +29,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   price
 }) => {
   return (
+    
     <motion.div 
       className="group rounded-xl overflow-hidden transition-all duration-500 h-full"
       whileHover={{ y: -8 }}
