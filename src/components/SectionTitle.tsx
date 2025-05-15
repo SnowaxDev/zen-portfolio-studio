@@ -1,14 +1,19 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
+
 interface SectionTitleProps {
   title: string;
   subtitle?: string;
+  className?: string; // Added className property to fix the error
 }
+
 const SectionTitle: React.FC<SectionTitleProps> = ({
   title,
-  subtitle
+  subtitle,
+  className = '' // Default to empty string if not provided
 }) => {
-  return <div className="mb-16 text-center">
+  return <div className={`mb-16 text-center ${className}`}>
       <motion.div className="inline-block" initial={{
       opacity: 0,
       y: 20
@@ -56,4 +61,5 @@ const SectionTitle: React.FC<SectionTitleProps> = ({
       
     </div>;
 };
+
 export default SectionTitle;
