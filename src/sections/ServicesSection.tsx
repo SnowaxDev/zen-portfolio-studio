@@ -3,10 +3,175 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Layout, Zap, Cloud, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Switch } from '@/components/ui/switch';
+import SectionTitle from '@/components/SectionTitle';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
 
 // Types
 type ServiceCategory = 'websites' | 'design' | 'cloud' | 'maintenance';
 type CustomerType = 'individual' | 'business';
+
+// Service pricing data
+const servicePricingData = {
+  websites: {
+    individual: {
+      title: "Webové stránky",
+      description: "Profesionální webové stránky pro jednotlivce a malé firmy",
+      price: {
+        monthly: 990,
+        yearly: 9500,
+      },
+      features: [
+        "Responzivní design",
+        "SEO optimalizace",
+        "Kontaktní formulář",
+        "Google Analytics",
+        "Základní údržba"
+      ]
+    },
+    business: {
+      title: "Webové stránky Pro",
+      description: "Pokročilé webové řešení pro střední a velké firmy",
+      price: {
+        monthly: 2990,
+        yearly: 29000,
+      },
+      features: [
+        "Vše z balíčku pro jednotlivce",
+        "Vícejazyčná podpora",
+        "Pokročilé analytické nástroje",
+        "Integrace s CRM systémy",
+        "Prioritní podpora"
+      ]
+    }
+  },
+  design: {
+    individual: {
+      title: "UI/UX Design",
+      description: "Uživatelsky přívětivý design pro vaše projekty",
+      price: {
+        monthly: 1490,
+        yearly: 14900,
+      },
+      features: [
+        "Návrh uživatelského rozhraní",
+        "Prototypování",
+        "Testování použitelnosti",
+        "Responzivní design",
+        "2 revize"
+      ]
+    },
+    business: {
+      title: "Kompletní Brand Design",
+      description: "Komplexní designové služby pro vaši značku",
+      price: {
+        monthly: 3490,
+        yearly: 33900,
+      },
+      features: [
+        "Vše z UI/UX balíčku",
+        "Brand identity",
+        "Logo a vizuální styl",
+        "Marketingové materiály",
+        "Neomezené revize"
+      ]
+    }
+  },
+  cloud: {
+    individual: {
+      title: "Cloud Hosting",
+      description: "Spolehlivý hosting pro vaše projekty",
+      price: {
+        monthly: 390,
+        yearly: 3900,
+      },
+      features: [
+        "5GB prostoru",
+        "SSL certifikát",
+        "Denní zálohy",
+        "Emailová schránka",
+        "Technická podpora"
+      ]
+    },
+    business: {
+      title: "Cloud & RDP řešení",
+      description: "Pokročilá cloudová infrastruktura pro firmy",
+      price: {
+        monthly: 1990,
+        yearly: 19900,
+      },
+      features: [
+        "Neomezený prostor",
+        "Dedikovaný server",
+        "RDP přístup",
+        "Pokročilé zabezpečení",
+        "24/7 technická podpora"
+      ]
+    }
+  },
+  maintenance: {
+    individual: {
+      title: "Základní údržba",
+      description: "Pravidelná údržba pro bezproblémový chod",
+      price: {
+        monthly: 490,
+        yearly: 4900,
+      },
+      features: [
+        "Měsíční aktualizace",
+        "Bezpečnostní kontroly",
+        "Monitoring dostupnosti",
+        "Základní optimalizace",
+        "Email podpora"
+      ]
+    },
+    business: {
+      title: "Prémiová údržba",
+      description: "Komplexní údržba a podpora pro firemní řešení",
+      price: {
+        monthly: 1490,
+        yearly: 14900,
+      },
+      features: [
+        "Týdenní aktualizace",
+        "Pokročilé bezpečnostní audity",
+        "Optimalizace výkonu",
+        "Monitoring 24/7",
+        "Prioritní telefonická podpora"
+      ]
+    }
+  }
+};
+
+// Additional services data
+const additionalServices = [
+  {
+    icon: Layout,
+    title: "Redesign webu",
+    description: "Oživte svůj stávající web moderním designem, který zvýší konverze.",
+    price: "od 3 900 Kč"
+  },
+  {
+    icon: Zap,
+    title: "Optimalizace rychlosti",
+    description: "Zrychlete svůj web pro lepší uživatelský zážitek a vyšší pozice ve vyhledávačích.",
+    price: "od 1 500 Kč"
+  },
+  {
+    icon: Shield,
+    title: "Zabezpečení webu",
+    description: "Ochraňte svůj web před útoky a zajistěte bezpečnost pro návštěvníky.",
+    price: "od 2 500 Kč"
+  },
+  {
+    icon: Cloud,
+    title: "Migrace na cloud",
+    description: "Bezpečná migrace vašeho webu na rychlou a spolehlivou cloudovou infrastrukturu.",
+    price: "od 3 000 Kč"
+  }
+];
 
 const ServicesSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>('websites');
@@ -31,40 +196,14 @@ const ServicesSection: React.FC = () => {
     }
   };
 
-  // Additional services data
-  const additionalServices = [
-    {
-      icon: Layout,
-      title: "Redesign webu",
-      description: "Oživte svůj stávající web moderním designem, který zvýší konverze."
-    },
-    {
-      icon: Zap,
-      title: "Optimalizace rychlosti",
-      description: "Zrychlete svůj web pro lepší uživatelský zážitek a vyšší pozice ve vyhledávačích."
-    },
-    {
-      icon: Shield,
-      title: "Zabezpečení webu",
-      description: "Ochraňte svůj web před útoky a zajistěte bezpečnost pro návštěvníky."
-    },
-    {
-      icon: Cloud,
-      title: "Migrace na cloud",
-      description: "Bezpečná migrace vašeho webu na rychlou a spolehlivou cloudovou infrastrukturu."
-    }
-  ];
-
   return (
     <section id="services" className="py-24 bg-background">
       <div className="container-custom">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4">Služby a Ceník</h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-primary to-accent mx-auto rounded-full"></div>
-          <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            Dostupné ceny za profesionální webový vývoj s důrazem na kvalitu
-          </p>
-        </div>
+        <SectionTitle 
+          title="Služby a Ceník" 
+          subtitle="Dostupné ceny za profesionální webový vývoj s důrazem na kvalitu"
+          className="mb-12"
+        />
         
         {/* Service category tabs */}
         <motion.div 
@@ -74,44 +213,30 @@ const ServicesSection: React.FC = () => {
           transition={{ duration: 0.5 }}
           className="flex flex-wrap justify-center mb-8"
         >
-          <div className="inline-flex bg-card/80 backdrop-blur-sm p-1 rounded-lg border border-white/10 shadow-lg">
-            <Button
-              variant={selectedCategory === 'websites' ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setSelectedCategory('websites')}
-              className="px-4 py-2 text-sm"
-            >
-              <Layout className="w-4 h-4 mr-2" />
-              Webové stránky
-            </Button>
-            <Button
-              variant={selectedCategory === 'design' ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setSelectedCategory('design')}
-              className="px-4 py-2 text-sm"
-            >
-              <Zap className="w-4 h-4 mr-2" />
-              Design & UX
-            </Button>
-            <Button
-              variant={selectedCategory === 'cloud' ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setSelectedCategory('cloud')}
-              className="px-4 py-2 text-sm"
-            >
-              <Cloud className="w-4 h-4 mr-2" />
-              Cloud & RDP
-            </Button>
-            <Button
-              variant={selectedCategory === 'maintenance' ? "default" : "ghost"}
-              size="sm"
-              onClick={() => setSelectedCategory('maintenance')}
-              className="px-4 py-2 text-sm"
-            >
-              <Shield className="w-4 h-4 mr-2" />
-              Údržba
-            </Button>
-          </div>
+          <Tabs 
+            value={selectedCategory}
+            onValueChange={(value) => setSelectedCategory(value as ServiceCategory)}
+            className="w-full max-w-3xl mx-auto"
+          >
+            <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full bg-card/80 backdrop-blur-sm p-1 rounded-lg border border-white/10 shadow-lg">
+              <TabsTrigger value="websites" className="flex items-center gap-2 py-2">
+                <Layout className="w-4 h-4" />
+                <span className="hidden sm:inline">Webové stránky</span>
+              </TabsTrigger>
+              <TabsTrigger value="design" className="flex items-center gap-2 py-2">
+                <Zap className="w-4 h-4" />
+                <span className="hidden sm:inline">Design & UX</span>
+              </TabsTrigger>
+              <TabsTrigger value="cloud" className="flex items-center gap-2 py-2">
+                <Cloud className="w-4 h-4" />
+                <span className="hidden sm:inline">Cloud & RDP</span>
+              </TabsTrigger>
+              <TabsTrigger value="maintenance" className="flex items-center gap-2 py-2">
+                <Shield className="w-4 h-4" />
+                <span className="hidden sm:inline">Údržba</span>
+              </TabsTrigger>
+            </TabsList>
+          </Tabs>
         </motion.div>
         
         {/* Customer type toggle */}
@@ -122,24 +247,29 @@ const ServicesSection: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="flex justify-center mb-6"
         >
-          <div className="inline-flex bg-card/50 p-1 rounded-full border border-white/10">
-            <Button
-              variant={customerType === 'individual' ? "default" : "ghost"}
-              size="sm"
-              className="rounded-full px-4"
-              onClick={() => setCustomerType('individual')}
+          <ToggleGroup 
+            type="single" 
+            value={customerType} 
+            onValueChange={(value) => {
+              if (value) setCustomerType(value as CustomerType);
+            }}
+            className="inline-flex bg-card/50 p-1 rounded-full border border-white/10"
+          >
+            <ToggleGroupItem 
+              value="individual" 
+              aria-label="Jednotlivci & Malé firmy"
+              className="rounded-full px-4 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
             >
               Jednotlivci & Malé firmy
-            </Button>
-            <Button
-              variant={customerType === 'business' ? "default" : "ghost"}
-              size="sm"
-              className="rounded-full px-4"
-              onClick={() => setCustomerType('business')}
+            </ToggleGroupItem>
+            <ToggleGroupItem 
+              value="business" 
+              aria-label="Střední & Velké firmy"
+              className="rounded-full px-4 data-[state=on]:bg-primary data-[state=on]:text-primary-foreground"
             >
               Střední & Velké firmy
-            </Button>
-          </div>
+            </ToggleGroupItem>
+          </ToggleGroup>
         </motion.div>
         
         {/* Billing cycle toggle */}
@@ -154,15 +284,11 @@ const ServicesSection: React.FC = () => {
             <span className={`text-sm ${billingCycle === 'monthly' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
               Měsíčně
             </span>
-            <button 
-              onClick={() => setBillingCycle(billingCycle === 'monthly' ? 'yearly' : 'monthly')}
-              className={`relative w-14 h-7 rounded-full transition-colors duration-300 focus:outline-none ${billingCycle === 'yearly' ? 'bg-primary' : 'bg-muted'}`}
-              aria-label={billingCycle === 'yearly' ? "Přepnout na měsíční platbu" : "Přepnout na roční platbu"}
-            >
-              <div 
-                className={`absolute top-1 w-5 h-5 rounded-full bg-white shadow-md transition-transform duration-300 ${billingCycle === 'yearly' ? 'translate-x-8' : 'translate-x-1'}`}
-              />
-            </button>
+            <Switch 
+              checked={billingCycle === 'yearly'}
+              onCheckedChange={(checked) => setBillingCycle(checked ? 'yearly' : 'monthly')}
+              className="data-[state=checked]:bg-primary"
+            />
             <div className="flex items-center">
               <span className={`text-sm ${billingCycle === 'yearly' ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>
                 Ročně
@@ -176,10 +302,67 @@ const ServicesSection: React.FC = () => {
           </div>
         </motion.div>
 
-        {/* Service cards will go here - hidden for now */}
-        <div className="relative h-64 flex items-center justify-center rounded-xl border border-white/10 bg-gradient-to-br from-card/70 to-secondary/30 backdrop-blur-sm">
-          <p className="text-muted-foreground">Service pricing cards would be displayed here based on selections</p>
-        </div>
+        {/* Service pricing card */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.3 }}
+          className="max-w-3xl mx-auto mb-20"
+        >
+          <div className="rounded-xl overflow-hidden border border-white/10 bg-gradient-to-br from-card/70 to-secondary/30 backdrop-blur-sm">
+            <AspectRatio ratio={16/9} className="relative">
+              <div className="absolute inset-0 p-8 flex flex-col justify-between">
+                <div>
+                  <h3 className="text-xl md:text-2xl font-bold mb-2">
+                    {servicePricingData[selectedCategory][customerType].title}
+                  </h3>
+                  <p className="text-muted-foreground mb-4">
+                    {servicePricingData[selectedCategory][customerType].description}
+                  </p>
+                </div>
+                
+                <div className="flex flex-col md:flex-row md:items-end justify-between">
+                  <div className="mb-4 md:mb-0">
+                    <div className="flex items-baseline">
+                      <span className="text-3xl md:text-4xl font-bold">
+                        {billingCycle === 'yearly' 
+                          ? Math.round(servicePricingData[selectedCategory][customerType].price.yearly / 12)
+                          : servicePricingData[selectedCategory][customerType].price.monthly
+                        } 
+                      </span>
+                      <span className="text-muted-foreground ml-2">Kč / měsíčně</span>
+                    </div>
+                    {billingCycle === 'yearly' && (
+                      <p className="text-sm text-muted-foreground">
+                        Roční platba: {servicePricingData[selectedCategory][customerType].price.yearly} Kč
+                        <span className="text-green-400 ml-2">
+                          (ušetříte {Math.round(servicePricingData[selectedCategory][customerType].price.monthly * 12 - servicePricingData[selectedCategory][customerType].price.yearly)} Kč)
+                        </span>
+                      </p>
+                    )}
+                  </div>
+                  
+                  <Button className="bg-primary hover:bg-primary/90">
+                    Objednat
+                  </Button>
+                </div>
+              </div>
+            </AspectRatio>
+            
+            <div className="p-6 bg-card/40">
+              <h4 className="font-medium mb-3">Co je zahrnuto:</h4>
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {servicePricingData[selectedCategory][customerType].features.map((feature, index) => (
+                  <li key={index} className="flex items-center text-sm">
+                    <span className="text-green-400 mr-2">✓</span>
+                    {feature}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </motion.div>
         
         {/* Additional services section */}
         <div className="mt-24">
@@ -206,7 +389,8 @@ const ServicesSection: React.FC = () => {
                   <service.icon className="h-6 w-6 text-primary" />
                 </div>
                 <h4 className="text-lg font-medium mb-2">{service.title}</h4>
-                <p className="text-sm text-muted-foreground">{service.description}</p>
+                <p className="text-sm text-muted-foreground mb-4">{service.description}</p>
+                <p className="font-medium text-primary">{service.price}</p>
               </motion.div>
             ))}
           </motion.div>
