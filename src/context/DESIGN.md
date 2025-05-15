@@ -3,11 +3,11 @@
 
 ## Color Palette
 
-The application uses a carefully selected color palette that balances dark aesthetics with luxurious golden accents:
+The application uses a dark luxurious theme with gold and purple accents:
 
 - **Primary**: Gold hue (#D4AF37) - Represents luxury and premium feel
 - **Accent**: Purple hue (#8B5CF6) - Adds a creative touch and visual interest
-- **Background**: Dark blue-black gradient - Creates depth with subtle purple radial gradient
+- **Background**: Deep dark blue-black gradient (#0A0914) - Creates depth with subtle purple radial gradients
 - **Text**: Light golden tones with varying opacity for hierarchy
 - **Cards/UI Elements**: Dark backgrounds with gold border accents and glow effects
 
@@ -25,6 +25,18 @@ The application uses a single cohesive font family for better consistency:
   - Bold (700) for headings
   - Medium (500) for subheadings
   - Regular (400) for body text
+
+## Design Effects
+
+The application uses several visual effects to enhance the luxury feel:
+
+- **Gradient Backgrounds**: Subtle purple and gold gradients that shift with scroll and mouse movement
+- **Glassmorphism**: Transparent glass-like effects on cards and UI elements
+- **Gold Glows**: Subtle golden glows on interactive elements
+- **Grid Overlay**: Subtle grid pattern that fades with scroll
+- **Moving Particles**: Small animated dots in the background
+- **Text Effects**: Gradient and shimmer effects on important text
+- **Animated Lines**: Subtle animated gold and purple lines in the background
 
 ## Layout System
 
@@ -64,3 +76,4 @@ Common animations include:
 - Expansion/collapse of sections
 - Progress bar fills with gradient animations
 - Subtle floating/breathing effects for certain UI elements
+- Background elements that react to user scroll and mouse movement

@@ -8,32 +8,32 @@
 
 @layer base {
   :root {
-    --background: 250 30% 5%;
+    --background: 252 30% 4%;
     --foreground: 45 80% 98%;
     
-    --card: 250 30% 7%;
+    --card: 252 30% 6%;
     --card-foreground: 45 80% 98%;
     
-    --popover: 250 30% 5%;
+    --popover: 252 30% 4%;
     --popover-foreground: 45 80% 98%;
     
     --primary: 45 80% 52%;
-    --primary-foreground: 250 30% 5%;
+    --primary-foreground: 252 30% 4%;
     
-    --secondary: 250 30% 10%;
+    --secondary: 252 30% 8%;
     --secondary-foreground: 45 80% 98%;
     
-    --muted: 250 30% 10%;
+    --muted: 252 30% 8%;
     --muted-foreground: 45 25% 70%;
     
     --accent: 270 70% 65%;
-    --accent-foreground: 250 30% 5%;
+    --accent-foreground: 252 30% 4%;
     
     --destructive: 0 84% 60%;
     --destructive-foreground: 45 80% 98%;
     
-    --border: 250 30% 15%;
-    --input: 250 30% 15%;
+    --border: 252 30% 15%;
+    --input: 252 30% 15%;
     --ring: 45 80% 52%;
     
     --radius: 0.75rem;
@@ -41,22 +41,22 @@
   
   .light {
     --background: 0 0% 98%;
-    --foreground: 250 30% 5%;
+    --foreground: 252 30% 4%;
     
     --card: 0 0% 100%;
-    --card-foreground: 250 30% 5%;
+    --card-foreground: 252 30% 4%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 250 30% 5%;
+    --popover-foreground: 252 30% 4%;
     
     --primary: 45 80% 42%;
     --primary-foreground: 0 0% 98%;
     
     --secondary: 0 0% 96%;
-    --secondary-foreground: 250 30% 5%;
+    --secondary-foreground: 252 30% 4%;
     
     --muted: 0 0% 96%;
-    --muted-foreground: 250 15% 40%;
+    --muted-foreground: 252 15% 40%;
     
     --accent: 270 70% 55%;
     --accent-foreground: 0 0% 98%;
@@ -223,6 +223,15 @@
   
   .tech-pill {
     @apply px-3 py-1 rounded-full text-sm bg-secondary border border-gold/5 hover:border-gold/30 transition-all;
+  }
+  
+  /* New glowing elements */
+  .glow-border {
+    @apply border border-gold/30 animate-glow-pulse;
+  }
+  
+  .shimmer-text {
+    @apply bg-clip-text text-transparent bg-[linear-gradient(110deg,#D4AF3700,#D4AF3740_20%,#D4AF37_60%,#D4AF3740_80%,#D4AF3700)] bg-[length:200%_100%] animate-shimmer;
   }
   
   /* Mobile-specific components */
