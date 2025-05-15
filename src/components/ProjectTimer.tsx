@@ -38,29 +38,56 @@ const ProjectTimer: React.FC<ProjectTimerProps> = ({ launchDate }) => {
     return () => clearInterval(timer);
   }, [launchDate]);
   
+  // Parent container animation
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        when: "beforeChildren",
+        staggerChildren: 0.1
+      }
+    }
+  };
+  
+  // Child animation for each time block
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { type: "spring", stiffness: 300 }
+    }
+  };
+  
   return (
     <motion.div 
       className="w-full"
-      initial={{ opacity: 0, y: 10 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
     >
       <div className="flex justify-between items-center gap-2">
-        <TimeBlock label="Dny" value={timeLeft.days} />
+        <TimeBlock label="Dny" value={timeLeft.days} variants={itemVariants} />
         <span className="text-gold/80 text-2xl font-thin">:</span>
-        <TimeBlock label="Hodiny" value={timeLeft.hours} />
+        <TimeBlock label="Hodiny" value={timeLeft.hours} variants={itemVariants} />
         <span className="text-gold/80 text-2xl font-thin">:</span>
-        <TimeBlock label="Minuty" value={timeLeft.minutes} />
+        <TimeBlock label="Minuty" value={timeLeft.minutes} variants={itemVariants} />
         <span className="text-gold/80 text-2xl font-thin">:</span>
-        <TimeBlock label="Sekundy" value={timeLeft.seconds} />
+        <TimeBlock label="Sekundy" value={timeLeft.seconds} variants={itemVariants} />
       </div>
     </motion.div>
   );
 };
 
-const TimeBlock: React.FC<{ label: string; value: number }> = ({ label, value }) => (
+const TimeBlock: React.FC<{ 
+  label: string; 
+  value: number;
+  variants: any;
+}> = ({ label, value, variants }) => (
   <motion.div 
     className="flex flex-col items-center"
+    variants={variants}
     whileHover={{ y: -2 }}
     transition={{ type: "spring", stiffness: 300 }}
   >
@@ -68,38 +95,25 @@ const TimeBlock: React.FC<{ label: string; value: number }> = ({ label, value })
       className="relative"
       whileHover={{ scale: 1.05 }}
     >
-      <motion.span 
+      <motion.div 
         className="flex items-center justify-center bg-black/50 border border-gold/20 backdrop-blur-md rounded-lg px-3 py-2 w-16 h-16 text-center relative overflow-hidden"
-        key={value} // This makes the component re-render when the value changes
       >
         <motion.span
-          initial={{ y: -20, opacity: 0 }}
+          className="text-2xl font-bold text-gold"
+          key={value} // This makes the component re-render when the value changes
+          initial={{ y: -10, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          exit={{ y: 20, opacity: 0 }}
+          exit={{ y: 10, opacity: 0 }}
           transition={{ type: "spring", stiffness: 300 }}
-          className="absolute text-2xl font-bold text-gradient"
         >
           {value.toString().padStart(2, '0')}
         </motion.span>
-        
-        {/* Subtle pulsing background */}
-        <motion.div
-          className="absolute inset-0 bg-gold/10"
-          animate={{ 
-            opacity: [0.2, 0.5, 0.2] 
-          }}
-          transition={{ 
-            duration: 2, 
-            repeat: Infinity,
-            repeatType: "mirror" 
-          }}
-        />
         
         {/* Bottom highlight */}
         <motion.div
           className="absolute bottom-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent"
         />
-      </motion.span>
+      </motion.div>
     </motion.div>
     <span className="text-xs text-foreground/60 mt-2">{label}</span>
   </motion.div>

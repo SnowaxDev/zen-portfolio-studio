@@ -13,19 +13,18 @@ import { useIsMobile } from '../hooks/use-mobile';
 
 // Page transition variants
 const pageVariants = {
-  initial: { opacity: 0, y: 20 },
+  initial: { opacity: 0 },
   animate: { 
-    opacity: 1, 
-    y: 0,
+    opacity: 1,
     transition: { 
-      duration: 0.8, 
+      duration: 0.8,
       ease: [0.22, 1, 0.36, 1],
-      staggerChildren: 0.2
+      delayChildren: 0.3,
+      staggerChildren: 0.3
     }
   },
   exit: { 
-    opacity: 0, 
-    y: -20,
+    opacity: 0,
     transition: { 
       duration: 0.6, 
       ease: [0.22, 1, 0.36, 1] 
@@ -34,9 +33,10 @@ const pageVariants = {
 };
 
 const sectionVariants = {
-  initial: { opacity: 0 },
+  initial: { opacity: 0, y: 30 },
   animate: { 
     opacity: 1,
+    y: 0,
     transition: {
       duration: 0.6,
     }
@@ -110,7 +110,7 @@ const Index = () => {
         >
           <div className="bg-card/80 backdrop-blur-sm p-2.5 rounded-full border border-white/10 shadow-lg">
             <motion.div 
-              className="w-1 h-6 bg-gradient-to-b from-primary to-accent rounded-full"
+              className="w-1 h-6 bg-gradient-to-b from-gold to-purple rounded-full"
               animate={{ 
                 scaleY: [1, 0.3, 1],
                 opacity: [1, 0.6, 1],
@@ -135,10 +135,10 @@ const Index = () => {
         >
           <a 
             href="#contact"
-            className="flex items-center justify-center w-12 h-12 bg-primary rounded-full shadow-lg"
+            className="flex items-center justify-center w-12 h-12 bg-gold rounded-full shadow-lg"
             aria-label="Contact Me"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </a>
