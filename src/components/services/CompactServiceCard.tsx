@@ -11,6 +11,7 @@ interface CompactServiceCardProps {
   description: string;
   price: string;
   priceType: string;
+  className?: string; // Added className prop as optional
 }
 
 const CompactServiceCard: React.FC<CompactServiceCardProps> = ({ 
@@ -18,7 +19,8 @@ const CompactServiceCard: React.FC<CompactServiceCardProps> = ({
   title, 
   description, 
   price, 
-  priceType 
+  priceType,
+  className = '' // Default to empty string
 }) => {
   // Animation variants
   const cardVariants = {
@@ -68,7 +70,7 @@ const CompactServiceCard: React.FC<CompactServiceCardProps> = ({
       viewport={{ once: true, margin: "-50px" }}
       whileHover="hover"
       variants={cardVariants}
-      className="h-full"
+      className={`h-full ${className}`} // Added className here
     >
       <Card className="bg-card/50 backdrop-blur-sm rounded-xl border border-white/10 h-full hover:border-gold/30 transition-all overflow-hidden">
         <CardContent className="pt-6 h-full flex flex-col">
