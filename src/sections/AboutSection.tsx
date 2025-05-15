@@ -135,7 +135,6 @@ const AboutSection: React.FC = () => {
                   variants={itemVariants}
                   className="bg-card/70 backdrop-blur-sm border border-white/5 rounded-xl p-6 flex flex-col justify-center shadow-sm hover:shadow-md transition-all duration-300"
                   whileHover="hover"
-                  variants={statVariants}
                   onHoverStart={() => setHoveredStat(index)}
                   onHoverEnd={() => setHoveredStat(null)}
                 >
