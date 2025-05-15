@@ -8,65 +8,65 @@
 
 @layer base {
   :root {
-    --background: 220 35% 9%;
-    --foreground: 210 40% 98%;
+    --background: 250 30% 5%;
+    --foreground: 45 80% 98%;
     
-    --card: 220 35% 11%;
-    --card-foreground: 210 40% 98%;
+    --card: 250 30% 7%;
+    --card-foreground: 45 80% 98%;
     
-    --popover: 220 35% 9%;
-    --popover-foreground: 210 40% 98%;
+    --popover: 250 30% 5%;
+    --popover-foreground: 45 80% 98%;
     
-    --primary: 230 100% 67%;
-    --primary-foreground: 220 35% 9%;
+    --primary: 45 80% 52%;
+    --primary-foreground: 250 30% 5%;
     
-    --secondary: 220 35% 15%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: 250 30% 10%;
+    --secondary-foreground: 45 80% 98%;
     
-    --muted: 220 35% 15%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 250 30% 10%;
+    --muted-foreground: 45 25% 70%;
     
-    --accent: 280 100% 70%;
-    --accent-foreground: 220 35% 9%;
+    --accent: 270 70% 65%;
+    --accent-foreground: 250 30% 5%;
     
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 45 80% 98%;
     
-    --border: 220 35% 20%;
-    --input: 220 35% 20%;
-    --ring: 230 100% 67%;
+    --border: 250 30% 15%;
+    --input: 250 30% 15%;
+    --ring: 45 80% 52%;
     
     --radius: 0.75rem;
   }
   
   .light {
-    --background: 210 40% 98%;
-    --foreground: 220 35% 9%;
+    --background: 0 0% 98%;
+    --foreground: 250 30% 5%;
     
     --card: 0 0% 100%;
-    --card-foreground: 220 35% 9%;
+    --card-foreground: 250 30% 5%;
     
     --popover: 0 0% 100%;
-    --popover-foreground: 220 35% 9%;
+    --popover-foreground: 250 30% 5%;
     
-    --primary: 230 100% 47%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 45 80% 42%;
+    --primary-foreground: 0 0% 98%;
     
-    --secondary: 210 40% 96%;
-    --secondary-foreground: 220 35% 9%;
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 250 30% 5%;
     
-    --muted: 210 40% 96%;
-    --muted-foreground: 215 16% 47%;
+    --muted: 0 0% 96%;
+    --muted-foreground: 250 15% 40%;
     
-    --accent: 280 100% 50%;
-    --accent-foreground: 210 40% 98%;
+    --accent: 270 70% 55%;
+    --accent-foreground: 0 0% 98%;
     
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive-foreground: 0 0% 98%;
     
-    --border: 214 32% 91%;
-    --input: 214 32% 91%;
-    --ring: 230 100% 47%;
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 45 80% 42%;
   }
 
   * {
@@ -75,6 +75,7 @@
   
   body {
     @apply bg-background text-foreground font-sans scroll-smooth;
+    background-image: radial-gradient(circle at 50% 50%, rgba(139, 92, 246, 0.05) 0%, rgba(0, 0, 0, 0) 80%);
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -155,15 +156,27 @@
   }
   
   .text-gradient {
-    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-gold to-gold-light;
+  }
+  
+  .text-gradient-purple {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-purple to-accent;
   }
   
   .glassmorphism {
     @apply backdrop-blur-lg bg-card/60 border border-white/10;
   }
   
+  .gold-glow {
+    @apply animate-glow;
+  }
+  
+  .text-gold-glow {
+    @apply animate-text-glow;
+  }
+  
   .card-hover {
-    @apply transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg hover:shadow-primary/20;
+    @apply transition-all duration-300 hover:translate-y-[-5px] hover:shadow-lg hover:shadow-gold/20;
   }
   
   .button-pulse {
@@ -180,19 +193,19 @@
   
   /* New design system components */
   .card-modern {
-    @apply bg-card/80 backdrop-blur-sm border border-white/10 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-primary/10;
+    @apply bg-card/80 backdrop-blur-sm border border-gold/10 rounded-xl p-6 shadow-lg transition-all duration-300 hover:shadow-gold/20;
   }
   
   .button-primary {
-    @apply px-6 py-2.5 bg-gradient-to-r from-primary to-accent text-white rounded-lg shadow-lg hover:shadow-primary/20 transition-all duration-300 hover:scale-105;
+    @apply px-6 py-2.5 bg-gradient-to-r from-gold-dark to-gold text-background rounded-lg shadow-lg hover:shadow-gold/30 transition-all duration-300 hover:scale-105;
   }
   
   .button-secondary {
-    @apply px-6 py-2.5 bg-secondary border border-primary/20 hover:bg-secondary/80 text-white rounded-lg transition-all duration-300 hover:-translate-y-1;
+    @apply px-6 py-2.5 bg-secondary border border-gold/20 hover:bg-secondary/80 text-foreground rounded-lg transition-all duration-300 hover:-translate-y-1;
   }
   
   .input-modern {
-    @apply bg-secondary/50 border border-white/10 rounded-lg p-3 focus:ring-2 focus:ring-primary/30 focus:border-primary/50 transition-all duration-300;
+    @apply bg-secondary/50 border border-gold/10 rounded-lg p-3 focus:ring-2 focus:ring-gold/30 focus:border-gold/50 transition-all duration-300;
   }
   
   .section-heading {
@@ -201,15 +214,15 @@
   
   .section-heading::after {
     content: '';
-    @apply absolute -bottom-2 left-0 w-1/2 h-1 bg-gradient-to-r from-primary to-accent rounded-full;
+    @apply absolute -bottom-2 left-0 w-1/2 h-1 bg-gradient-to-r from-gold to-purple rounded-full;
   }
   
   .badge {
-    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-primary/20 text-primary;
+    @apply inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-gold/20 text-gold-light;
   }
   
   .tech-pill {
-    @apply px-3 py-1 rounded-full text-sm bg-secondary border border-white/5 hover:border-primary/30 transition-all;
+    @apply px-3 py-1 rounded-full text-sm bg-secondary border border-gold/5 hover:border-gold/30 transition-all;
   }
   
   /* Mobile-specific components */
@@ -219,7 +232,7 @@
     }
     
     .mobile-card {
-      @apply rounded-xl mx-2 border border-white/5 p-4 mb-4 shadow-lg;
+      @apply rounded-xl mx-2 border border-gold/5 p-4 mb-4 shadow-lg;
     }
     
     .mobile-nav-item {

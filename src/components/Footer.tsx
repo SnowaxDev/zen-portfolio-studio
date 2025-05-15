@@ -30,7 +30,7 @@ const Footer: React.FC = () => {
   };
   
   return (
-    <footer className="bg-secondary/30 py-12 border-t border-primary/5">
+    <footer className="bg-secondary/30 py-12 border-t border-gold/5">
       <div className="container-custom">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <motion.div 
@@ -40,7 +40,7 @@ const Footer: React.FC = () => {
             transition={{ duration: 0.5 }}
             className="mb-6 md:mb-0"
           >
-            <a href="#hero" className="text-2xl font-bold text-primary">
+            <a href="#hero" className="text-2xl font-bold text-gold">
               Jan.dev
             </a>
             <p className="text-foreground/70 mt-2">
@@ -60,8 +60,11 @@ const Footer: React.FC = () => {
                   <motion.a
                     key={index}
                     href={social.url}
-                    className="bg-card/50 hover:bg-card p-2 rounded-lg text-foreground/60 hover:text-primary transition-colors duration-300"
-                    whileHover={{ scale: 1.1 }}
+                    className="bg-card/50 hover:bg-card p-2 rounded-lg text-foreground/60 hover:text-gold transition-colors duration-300"
+                    whileHover={{ 
+                      scale: 1.1,
+                      boxShadow: "0 0 15px 0 rgba(212, 175, 55, 0.3)"
+                    }}
                     whileTap={{ scale: 0.9 }}
                     aria-label={social.name}
                   >
@@ -82,13 +85,13 @@ const Footer: React.FC = () => {
             <div className="flex flex-col md:flex-row gap-8 md:gap-16 mb-8">
               {/* Quick Links */}
               <motion.div variants={itemVariants} className="flex flex-col">
-                <h3 className="text-sm uppercase font-bold mb-3 text-foreground/70">Navigace</h3>
+                <h3 className="text-sm uppercase font-bold mb-3 text-gold/70">Navigace</h3>
                 <ul className="space-y-2">
                   {['O mně', 'Dovednosti', 'Projekty', 'Služby', 'Kontakt'].map((item, i) => (
                     <li key={i}>
                       <a 
                         href={`#${item.toLowerCase().replace(' ', '-')}`}
-                        className="text-foreground/60 hover:text-primary transition-colors"
+                        className="text-foreground/60 hover:text-gold transition-colors"
                       >
                         {item}
                       </a>
@@ -99,15 +102,15 @@ const Footer: React.FC = () => {
               
               {/* Contact Info */}
               <motion.div variants={itemVariants} className="flex flex-col">
-                <h3 className="text-sm uppercase font-bold mb-3 text-foreground/70">Kontakt</h3>
+                <h3 className="text-sm uppercase font-bold mb-3 text-gold/70">Kontakt</h3>
                 <ul className="space-y-2">
                   <li>
-                    <a href="mailto:info@jannovak.cz" className="text-foreground/60 hover:text-primary transition-colors">
+                    <a href="mailto:info@jannovak.cz" className="text-foreground/60 hover:text-gold transition-colors">
                       info@jannovak.cz
                     </a>
                   </li>
                   <li>
-                    <a href="tel:+420123456789" className="text-foreground/60 hover:text-primary transition-colors">
+                    <a href="tel:+420123456789" className="text-foreground/60 hover:text-gold transition-colors">
                       +420 123 456 789
                     </a>
                   </li>
@@ -119,7 +122,7 @@ const Footer: React.FC = () => {
             </div>
             
             <motion.div variants={itemVariants}>
-              <div className="bg-gradient-to-r from-primary/10 to-accent/10 rounded-lg p-4 backdrop-blur-sm">
+              <div className="bg-gradient-to-r from-gold/10 to-purple/10 rounded-lg p-4 backdrop-blur-sm">
                 <p className="text-sm text-foreground/70">
                   &copy; {currentYear} Jan Novák. Všechna práva vyhrazena.
                 </p>
@@ -137,7 +140,7 @@ const Footer: React.FC = () => {
         viewport={{ once: true }}
       >
         <AspectRatio ratio={16/1}>
-          <div className="w-full h-full bg-gradient-to-r from-primary via-transparent to-accent" />
+          <div className="w-full h-full bg-gradient-to-r from-gold via-transparent to-purple" />
         </AspectRatio>
       </motion.div>
     </footer>

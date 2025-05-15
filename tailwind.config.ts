@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -54,6 +55,16 @@ export default {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
+        },
+        gold: {
+          DEFAULT: "#D4AF37",
+          light: "#F8D568",
+          dark: "#A67C00",
+        },
+        purple: {
+          DEFAULT: "#8B5CF6",
+          light: "#A78BFA",
+          dark: "#6D28D9",
         },
       },
       borderRadius: {
@@ -135,6 +146,22 @@ export default {
           "50%": {
             transform: "translateY(-5px)"
           }
+        },
+        "glow": {
+          "0%, 100%": {
+            boxShadow: "0 0 15px 0 rgba(212, 175, 55, 0.4)"
+          },
+          "50%": {
+            boxShadow: "0 0 30px 5px rgba(212, 175, 55, 0.7)"
+          }
+        },
+        "text-glow": {
+          "0%, 100%": {
+            textShadow: "0 0 10px rgba(212, 175, 55, 0.4)"
+          },
+          "50%": {
+            textShadow: "0 0 15px rgba(212, 175, 55, 0.7)"
+          }
         }
       },
       animation: {
@@ -147,7 +174,9 @@ export default {
         "float": "float 5s ease-in-out infinite",
         "shimmer": "shimmer 2s infinite",
         "spin-slow": "spin-slow 8s linear infinite",
-        "bounce-gentle": "bounce-gentle 2s ease-in-out infinite"
+        "bounce-gentle": "bounce-gentle 2s ease-in-out infinite",
+        "glow": "glow 2s ease-in-out infinite",
+        "text-glow": "text-glow 2s ease-in-out infinite"
       },
     },
   },

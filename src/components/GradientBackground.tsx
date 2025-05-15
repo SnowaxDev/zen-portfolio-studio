@@ -25,7 +25,7 @@ const GradientBackground: React.FC = () => {
       
       {/* Animated gradients */}
       <motion.div 
-        className="absolute top-0 right-0 w-[800px] h-[800px] opacity-20 bg-primary blur-[150px] -z-10" 
+        className="absolute top-0 right-0 w-[800px] h-[800px] opacity-20 bg-purple blur-[150px] -z-10" 
         style={{ y: backgroundY1, x: backgroundX1, opacity: opacity1 }}
         animate={{ 
           scale: [1, 1.05, 1],
@@ -38,7 +38,7 @@ const GradientBackground: React.FC = () => {
         }}
       />
       <motion.div 
-        className="absolute bottom-0 left-0 w-[800px] h-[800px] opacity-30 bg-accent blur-[150px] -z-10" 
+        className="absolute bottom-0 left-0 w-[800px] h-[800px] opacity-20 bg-gold blur-[150px] -z-10" 
         style={{ y: backgroundY2, x: backgroundX2, opacity: opacity2 }}
         animate={{ 
           scale: [1, 1.08, 1],
@@ -52,7 +52,7 @@ const GradientBackground: React.FC = () => {
       />
       
       <motion.div 
-        className="absolute top-1/3 left-1/4 w-[300px] h-[300px] opacity-20 bg-purple-500 blur-[100px] -z-10" 
+        className="absolute top-1/3 left-1/4 w-[300px] h-[300px] opacity-20 bg-purple-light blur-[100px] -z-10" 
         animate={{ 
           scale: [1, 1.3, 1],
           x: [0, 30, 0],
@@ -67,7 +67,7 @@ const GradientBackground: React.FC = () => {
       
       {/* Grid overlay with animation */}
       <motion.div 
-        className="absolute inset-0 bg-[linear-gradient(to_right,#8882_1px,transparent_1px),linear-gradient(to_bottom,#8882_1px,transparent_1px)] bg-[size:50px_50px]"
+        className="absolute inset-0 bg-[linear-gradient(to_right,#D4AF3715_1px,transparent_1px),linear-gradient(to_bottom,#D4AF3715_1px,transparent_1px)] bg-[size:50px_50px]"
         style={{ opacity: gridOpacity }}
       />
       
@@ -76,7 +76,7 @@ const GradientBackground: React.FC = () => {
         {[...Array(20)].map((_, i) => (
           <motion.div
             key={i}
-            className={`absolute w-1 h-1 rounded-full ${i % 3 === 0 ? 'bg-primary/30' : i % 3 === 1 ? 'bg-accent/30' : 'bg-white/30'}`}
+            className={`absolute w-1 h-1 rounded-full ${i % 3 === 0 ? 'bg-gold/40' : i % 3 === 1 ? 'bg-purple/40' : 'bg-white/30'}`}
             initial={{
               x: Math.random() * 100 + "%",
               y: Math.random() * 100 + "%",
@@ -105,7 +105,7 @@ const GradientBackground: React.FC = () => {
       </div>
       
       {/* Subtle glow effect */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/5 to-primary/5 opacity-30" />
+      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/5 to-gold/5 opacity-30" />
     </div>
   );
 };

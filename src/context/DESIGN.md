@@ -3,13 +3,13 @@
 
 ## Color Palette
 
-The application uses a carefully selected color palette that balances professionalism with creativity:
+The application uses a carefully selected color palette that balances dark aesthetics with luxurious golden accents:
 
-- **Primary**: Blue hue (#4361EE) - Represents professionalism and reliability
-- **Accent**: Purple hue (#B721FF) - Adds a creative touch and visual interest
-- **Background**: Dark blue-black gradient - Creates depth and focuses attention on content
-- **Text**: Light colors with varying opacity for hierarchy
-- **Cards/UI Elements**: Subtle transparent backgrounds with blur effects
+- **Primary**: Gold hue (#D4AF37) - Represents luxury and premium feel
+- **Accent**: Purple hue (#8B5CF6) - Adds a creative touch and visual interest
+- **Background**: Dark blue-black gradient - Creates depth with subtle purple radial gradient
+- **Text**: Light golden tones with varying opacity for hierarchy
+- **Cards/UI Elements**: Dark backgrounds with gold border accents and glow effects
 
 ## Typography
 
@@ -40,13 +40,13 @@ The layout uses a combination of:
 
 The application includes the following carefully crafted UI components:
 
-- **Cards**: With subtle hover effects and shadows
-- **Buttons**: Primary, secondary, and outline variants
-- **Progress Bars**: Interactive with animation
+- **Cards**: With subtle gold glow effects and dark backgrounds
+- **Buttons**: Gold gradient primary, dark outline secondary variants
+- **Progress Bars**: Interactive with animation and purple/gold gradients
 - **Navigation**: Responsive with mobile adaptation
 - **Collapsible Sections**: For better information organization
-- **Badges/Tags**: To categorize projects and skills
-- **Icons**: Used consistently to enhance visual communication
+- **Badges/Tags**: Gold accented to categorize projects and skills
+- **Icons**: Used consistently with subtle glow effects
 
 ## Animation Guidelines
 
@@ -60,7 +60,7 @@ Animations follow these principles:
 
 Common animations include:
 - Fade-in on scroll/page load
-- Hover state transitions
+- Gold glow hover states
 - Expansion/collapse of sections
-- Progress bar fills
+- Progress bar fills with gradient animations
 - Subtle floating/breathing effects for certain UI elements
