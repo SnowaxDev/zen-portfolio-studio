@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Code2, Server, Cpu, ChevronDown, MoveRight, MoveUp, RotateCw, CheckCircle } from 'lucide-react';
+import { Code2, Server, Cpu, ChevronDown, RotateCw } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { statsData, techStackData, philosophyItems, hobbyItems, sectionMeta } from '../lib/section-data';
 import ScrollReveal from '@/components/ScrollReveal';
@@ -10,39 +10,59 @@ import TextWithGlow from '@/components/TextWithGlow';
 import AnimatedSection from '@/components/AnimatedSection';
 import AnimatedLink from '@/components/AnimatedLink';
 import { usePrefersReducedMotion } from '@/hooks/use-reduced-motion';
+import StatBox from '@/components/about/StatBox';
+import TechStackItem from '@/components/about/TechStackItem';
+import PhilosophyItem from '@/components/about/PhilosophyItem';
+import HobbyItem from '@/components/about/HobbyItem';
 
 const AboutSection: React.FC = () => {
-  const { about } = sectionMeta;
   const [isHobbyOpen, setIsHobbyOpen] = useState(false);
   const [hoveredStat, setHoveredStat] = useState<number | null>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
-
-  // Animation variants for staggered animations
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-        delayChildren: 0.3,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.5, ease: "easeOut" }
-    }
-  };
 
   // Stat animation handler
   const handleStatHover = (index: number | null) => {
     if (prefersReducedMotion) return;
     setHoveredStat(index);
   };
+
+  // Stats data
+  const stats = [
+    { value: '2+', label: 'Roky zkušeností', rotation: -1, translateY: 6 },
+    { value: '10+', label: 'Dokončených projektů', rotation: 0.5, translateY: 0 },
+    { value: '5+', label: 'Spokojených klientů', rotation: -0.7, translateY: 4 },
+    { value: '3+', label: 'Open source příspěvků', rotation: 1, translateY: 0 }
+  ];
+
+  // Tech stack data
+  const techStack = [
+    { 
+      title: 'Frontend', 
+      technologies: 'React, TypeScript, Next.js, Tailwind CSS, Framer Motion',
+      icon: Code2,
+      translateX: 2
+    },
+    { 
+      title: 'Backend', 
+      technologies: 'Node.js, MongoDB',
+      icon: Server,
+      translateX: -1
+    },
+    { 
+      title: 'Nástroje', 
+      technologies: 'Git, Figma, Linux, Bash, VS Code',
+      icon: Cpu,
+      translateX: 3
+    }
+  ];
+
+  // Philosophy items
+  const philosophyData = [
+    'Píšu čistý, modulární kód, který je snadné udržovat a škálovat.',
+    'Upřednostňuji přístupnost a výkon ve všem, co vytvářím.',
+    'Využívám moderní nástroje a technologie pro efektivní vývoj.',
+    'Neustále se učím novým technologiím, abych zůstal v popředí webového vývoje.'
+  ];
 
   return (
     <section id="about" className="relative py-20 md:py-28 overflow-hidden bg-background">
@@ -83,14 +103,6 @@ const AboutSection: React.FC = () => {
           }}
           initial={{ opacity: 0.3, scale: 1 }}
         />
-        
-        {/* Diagonal line with optimized animation */}
-        <motion.div
-          className="absolute left-0 top-1/4 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent transform rotate-[5deg]"
-          initial={{ opacity: 0, scaleX: 0 }}
-          animate={{ opacity: 1, scaleX: 1 }}
-          transition={{ duration: 1.5, delay: 0.5 }}
-        />
       </AnimatedSection>
       
       <div className="container-custom relative z-10">
@@ -106,149 +118,36 @@ const AboutSection: React.FC = () => {
           />
         </div>
         
-        {/* Enhanced stats grid with improved visuals and interactions */}
+        {/* Stats grid matching the screenshot design */}
         <AnimatedSection 
           className="grid grid-cols-2 md:grid-cols-4 gap-4 gap-y-8 mb-16" 
           staggerChildren={true}
           staggerDelay={0.08}
         >
-          {/* First stat card with asymmetric positioning */}
-          <motion.div 
-            className="bg-card/70 backdrop-blur-sm border border-gold/10 rounded-xl p-5 hover:border-gold/30 transition-all duration-300 transform rotate-[-1deg] md:translate-y-6"
-            variants={itemVariants}
-            whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(212, 175, 55, 0.1)" }}
-            onHoverStart={() => handleStatHover(0)}
-            onHoverEnd={() => handleStatHover(null)}
-          >
-            <motion.h3 
-              className="text-3xl font-bold mb-1 flex items-center"
-              animate={{ y: hoveredStat === 0 ? [0, -3, 0] : 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" gradient={true} gradientColors="from-gold to-gold-light">
-                2+
-              </TextWithGlow>
-              
-              <motion.span 
-                className="ml-1 text-gold/80"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ 
-                  opacity: hoveredStat === 0 ? 1 : 0,
-                  scale: hoveredStat === 0 ? 1 : 0,
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                <MoveUp size={16} />
-              </motion.span>
-            </motion.h3>
-            <p className="text-sm text-foreground/70">Roky zkušeností</p>
-          </motion.div>
-          
-          {/* Second stat card with asymmetric positioning */}
-          <motion.div 
-            className="bg-card/70 backdrop-blur-sm border border-gold/10 rounded-xl p-5 hover:border-gold/30 transition-all duration-300 transform rotate-[0.5deg]"
-            variants={itemVariants}
-            whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(212, 175, 55, 0.1)" }}
-            onHoverStart={() => handleStatHover(1)}
-            onHoverEnd={() => handleStatHover(null)}
-          >
-            <motion.h3 
-              className="text-3xl font-bold mb-1 flex items-center"
-              animate={{ y: hoveredStat === 1 ? [0, -3, 0] : 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" gradient={true} gradientColors="from-gold to-gold-light">
-                10+
-              </TextWithGlow>
-              
-              <motion.span 
-                className="ml-1 text-gold/80"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ 
-                  opacity: hoveredStat === 1 ? 1 : 0,
-                  scale: hoveredStat === 1 ? 1 : 0,
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                <MoveUp size={16} />
-              </motion.span>
-            </motion.h3>
-            <p className="text-sm text-foreground/70">Dokončených projektů</p>
-          </motion.div>
-          
-          {/* Third stat card with asymmetric positioning */}
-          <motion.div 
-            className="bg-card/70 backdrop-blur-sm border border-gold/10 rounded-xl p-5 hover:border-gold/30 transition-all duration-300 transform rotate-[-0.7deg] md:translate-y-4"
-            variants={itemVariants}
-            whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(212, 175, 55, 0.1)" }}
-            onHoverStart={() => handleStatHover(2)}
-            onHoverEnd={() => handleStatHover(null)}
-          >
-            <motion.h3 
-              className="text-3xl font-bold mb-1 flex items-center"
-              animate={{ y: hoveredStat === 2 ? [0, -3, 0] : 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" gradient={true} gradientColors="from-gold to-gold-light">
-                5+
-              </TextWithGlow>
-              
-              <motion.span 
-                className="ml-1 text-gold/80"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ 
-                  opacity: hoveredStat === 2 ? 1 : 0,
-                  scale: hoveredStat === 2 ? 1 : 0,
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                <MoveUp size={16} />
-              </motion.span>
-            </motion.h3>
-            <p className="text-sm text-foreground/70">Spokojených klientů</p>
-          </motion.div>
-          
-          {/* Fourth stat card with asymmetric positioning */}
-          <motion.div 
-            className="bg-card/70 backdrop-blur-sm border border-gold/10 rounded-xl p-5 hover:border-gold/30 transition-all duration-300 transform rotate-[1deg]"
-            variants={itemVariants}
-            whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(212, 175, 55, 0.1)" }}
-            onHoverStart={() => handleStatHover(3)}
-            onHoverEnd={() => handleStatHover(null)}
-          >
-            <motion.h3 
-              className="text-3xl font-bold mb-1 flex items-center"
-              animate={{ y: hoveredStat === 3 ? [0, -3, 0] : 0 }}
-              transition={{ duration: 0.5 }}
-            >
-              <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" gradient={true} gradientColors="from-gold to-gold-light">
-                3+
-              </TextWithGlow>
-              
-              <motion.span 
-                className="ml-1 text-gold/80"
-                initial={{ opacity: 0, scale: 0 }}
-                animate={{ 
-                  opacity: hoveredStat === 3 ? 1 : 0,
-                  scale: hoveredStat === 3 ? 1 : 0,
-                }}
-                transition={{ duration: 0.2 }}
-              >
-                <MoveUp size={16} />
-              </motion.span>
-            </motion.h3>
-            <p className="text-sm text-foreground/70">Open source příspěvků</p>
-          </motion.div>
+          {stats.map((stat, index) => (
+            <StatBox 
+              key={index}
+              value={stat.value}
+              label={stat.label}
+              index={index}
+              hoveredStat={hoveredStat}
+              handleStatHover={handleStatHover}
+              rotationDegree={stat.rotation}
+              translateY={stat.translateY}
+            />
+          ))}
         </AnimatedSection>
         
+        {/* Main content area with tech stack and journey */}
         <div className="flex flex-col-reverse lg:flex-row gap-12">
-          {/* Enhanced Tech Stack Column with better animations */}
+          {/* Left column - Tech Stack */}
           <div className="lg:w-1/2 space-y-8">
             <ScrollReveal
               animationStyle="slide"
               direction="right"
               delay={0.2}
             >
+              {/* Development Stack Card */}
               <motion.div 
                 className="bg-card/70 backdrop-blur-sm border border-white/5 rounded-xl p-6 shadow-sm hover:shadow-lg hover:border-gold/20 transition-all duration-500 transform rotate-[-0.5deg]"
                 whileHover={{ y: -5 }}
@@ -266,97 +165,29 @@ const AboutSection: React.FC = () => {
                       Můj Vývojový Stack
                     </TextWithGlow>
                   </h4>
-                  
-                  {/* Enhanced decorative element */}
-                  <motion.div
-                    className="absolute -top-4 right-4 w-12 h-12 rounded-full bg-gradient-to-br from-purple/10 to-gold/10 blur-xl"
-                    animate={{
-                      scale: [1, 1.2, 1],
-                      opacity: [0.3, 0.5, 0.3]
-                    }}
-                    transition={{
-                      duration: 6,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  />
                 </div>
                 
-                {/* Frontend Stack with enhanced animations */}
+                {/* Tech stack items */}
                 <ScrollReveal
                   animationStyle="fade"
-                  direction="right"
-                  delay={0.1}
-                  className="mb-6 transform translate-x-2"
+                  staggerChildren={true}
+                  staggerDelay={0.1}
                 >
-                  <div className="flex items-center mb-2 group">
-                    <motion.div 
-                      className="p-2 rounded-md bg-gold/10 mr-3 group-hover:bg-gold/20 transition-colors duration-300"
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.6 }}
-                    >
-                      <Code2 className="text-gold" size={18} />
-                    </motion.div>
-                    <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" pulsate={false} hover={true}>
-                      <h5 className="font-medium">Frontend</h5>
-                    </TextWithGlow>
-                  </div>
-                  <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
-                    React, TypeScript, Next.js, Tailwind CSS, Framer Motion
-                  </p>
-                </ScrollReveal>
-                
-                {/* Backend Stack with enhanced animations */}
-                <ScrollReveal
-                  animationStyle="fade"
-                  direction="right"
-                  delay={0.2}
-                  className="mb-6 transform -translate-x-1"
-                >
-                  <div className="flex items-center mb-2 group">
-                    <motion.div 
-                      className="p-2 rounded-md bg-gold/10 mr-3 group-hover:bg-gold/20 transition-colors duration-300"
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.6 }}
-                    >
-                      <Server className="text-gold" size={18} />
-                    </motion.div>
-                    <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" pulsate={false} hover={true}>
-                      <h5 className="font-medium">Backend</h5>
-                    </TextWithGlow>
-                  </div>
-                  <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
-                    Node.js, MongoDB
-                  </p>
-                </ScrollReveal>
-                
-                {/* Tools Stack with enhanced animations */}
-                <ScrollReveal
-                  animationStyle="fade"
-                  direction="right"
-                  delay={0.3}
-                  className="transform translate-x-3"
-                >
-                  <div className="flex items-center mb-2 group">
-                    <motion.div 
-                      className="p-2 rounded-md bg-gold/10 mr-3 group-hover:bg-gold/20 transition-colors duration-300"
-                      whileHover={{ rotate: 360 }}
-                      transition={{ duration: 0.6 }}
-                    >
-                      <Cpu className="text-gold" size={18} />
-                    </motion.div>
-                    <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" pulsate={false} hover={true}>
-                      <h5 className="font-medium">Nástroje</h5>
-                    </TextWithGlow>
-                  </div>
-                  <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
-                    Git, Figma, Linux, Bash, VS Code
-                  </p>
+                  {techStack.map((item, index) => (
+                    <TechStackItem
+                      key={index}
+                      title={item.title}
+                      technologies={item.technologies}
+                      icon={item.icon}
+                      delay={index * 0.1}
+                      translateX={item.translateX}
+                    />
+                  ))}
                 </ScrollReveal>
               </motion.div>
             </ScrollReveal>
             
-            {/* Enhanced Coding Philosophy with better animations */}
+            {/* Coding Philosophy Card */}
             <ScrollReveal
               animationStyle="scale"
               delay={0.3}
@@ -381,20 +212,6 @@ const AboutSection: React.FC = () => {
                       Moje Kódovací Filosofie
                     </TextWithGlow>
                   </h4>
-                  
-                  {/* Enhanced decorative element */}
-                  <motion.div
-                    className="absolute -bottom-3 right-10 w-16 h-16 rounded-full bg-gradient-to-br from-gold/5 to-gold/15 blur-xl"
-                    animate={{
-                      scale: [1, 1.3, 1],
-                      opacity: [0.2, 0.4, 0.2]
-                    }}
-                    transition={{
-                      duration: 8,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  />
                 </div>
                 
                 <ScrollReveal
@@ -403,52 +220,19 @@ const AboutSection: React.FC = () => {
                   staggerDelay={0.1}
                   className="space-y-3.5"
                 >
-                  {/* Philosophy items with enhanced animations */}
-                  <div className="flex items-start gap-3 transform translate-x-1">
-                    <motion.div 
-                      className="text-gold bg-gold/10 p-1 rounded-md flex items-center justify-center mt-0.5 h-6 w-6"
-                      whileHover={{ scale: 1.2, backgroundColor: "hsl(var(--gold) / 0.2)" }}
-                    >
-                      <CheckCircle size={16} />
-                    </motion.div>
-                    <span className="text-foreground/90">Píšu čistý, modulární kód, který je snadné udržovat a škálovat.</span>
-                  </div>
-                  
-                  <div className="flex items-start gap-3 transform -translate-x-1">
-                    <motion.div 
-                      className="text-gold bg-gold/10 p-1 rounded-md flex items-center justify-center mt-0.5 h-6 w-6"
-                      whileHover={{ scale: 1.2, backgroundColor: "hsl(var(--gold) / 0.2)" }}
-                    >
-                      <CheckCircle size={16} />
-                    </motion.div>
-                    <span className="text-foreground/90">Upřednostňuji přístupnost a výkon ve všem, co vytvářím.</span>
-                  </div>
-                  
-                  <div className="flex items-start gap-3 transform translate-x-2">
-                    <motion.div 
-                      className="text-gold bg-gold/10 p-1 rounded-md flex items-center justify-center mt-0.5 h-6 w-6"
-                      whileHover={{ scale: 1.2, backgroundColor: "hsl(var(--gold) / 0.2)" }}
-                    >
-                      <CheckCircle size={16} />
-                    </motion.div>
-                    <span className="text-foreground/90">Využívám moderní nástroje a technologie pro efektivní vývoj.</span>
-                  </div>
-                  
-                  <div className="flex items-start gap-3 transform -translate-x-1">
-                    <motion.div 
-                      className="text-gold bg-gold/10 p-1 rounded-md flex items-center justify-center mt-0.5 h-6 w-6"
-                      whileHover={{ scale: 1.2, backgroundColor: "hsl(var(--gold) / 0.2)" }}
-                    >
-                      <CheckCircle size={16} />
-                    </motion.div>
-                    <span className="text-foreground/90">Neustále se učím novým technologiím, abych zůstal v popředí webového vývoje.</span>
-                  </div>
+                  {philosophyData.map((item, index) => (
+                    <PhilosophyItem 
+                      key={index} 
+                      text={item}
+                      translateX={index % 2 === 0 ? 1 : -1}
+                    />
+                  ))}
                 </ScrollReveal>
               </motion.div>
             </ScrollReveal>
           </div>
           
-          {/* Enhanced Journey Column with better visual design */}
+          {/* Right column - Journey */}
           <div className="lg:w-1/2 space-y-6">
             <ScrollReveal
               animationStyle="fade"
@@ -462,7 +246,7 @@ const AboutSection: React.FC = () => {
             </ScrollReveal>
             
             <div className="relative">
-              {/* Enhanced decorative element */}
+              {/* Decorative element */}
               <motion.div
                 className="absolute -left-4 top-1/2 w-1 h-20 bg-gradient-to-b from-transparent via-gold/30 to-transparent rounded-full"
                 initial={{ scaleY: 0, opacity: 0 }}
@@ -506,7 +290,7 @@ const AboutSection: React.FC = () => {
               </div>
             </div>
             
-            {/* Enhanced IT Contacts Section with better interactions */}
+            {/* IT Hobbies Section */}
             <ScrollReveal
               animationStyle="slide"
               direction="up"
@@ -531,20 +315,6 @@ const AboutSection: React.FC = () => {
                         Moje IT Koníčky
                       </TextWithGlow>
                     </h4>
-                    
-                    {/* Enhanced decorative element */}
-                    <motion.div
-                      className="absolute top-2 right-14 w-8 h-8 rounded-full bg-purple/10 blur-lg"
-                      animate={{
-                        scale: [1, 1.5, 1],
-                        opacity: [0.2, 0.4, 0.2]
-                      }}
-                      transition={{
-                        duration: 4,
-                        repeat: Infinity,
-                        ease: "easeInOut"
-                      }}
-                    />
                   </div>
                   <motion.div
                     animate={{ rotate: isHobbyOpen ? 180 : 0 }}
@@ -566,34 +336,21 @@ const AboutSection: React.FC = () => {
                       staggerDelay={0.08}
                       className="space-y-3"
                     >
-                      {hobbyItems.map((item, index) => {
-                        // Add asymmetric positioning to each item
-                        const transformX = index % 2 === 0 ? 'translate-x-1' : '-translate-x-1';
-                        
-                        return (
-                          <div key={index} className={`flex items-start gap-3 transform ${transformX}`}>
-                            <motion.span 
-                              className="text-purple mt-0.5"
-                              animate={{ 
-                                x: [0, 5, 0],
-                              }}
-                              transition={{ 
-                                duration: 1.5,
-                                repeat: Infinity,
-                                repeatDelay: index * 0.5,
-                              }}
-                            >»</motion.span>
-                            <span className="text-foreground/90">{item}</span>
-                          </div>
-                        );
-                      })}
+                      {hobbyItems.map((item, index) => (
+                        <HobbyItem
+                          key={index}
+                          text={item}
+                          index={index}
+                          translateX={index % 2 === 0 ? 1 : -1}
+                        />
+                      ))}
                     </ScrollReveal>
                   </motion.div>
                 </CollapsibleContent>
               </Collapsible>
             </ScrollReveal>
             
-            {/* Enhanced CTA with better interaction */}
+            {/* CTA Button */}
             <ScrollReveal
               animationStyle="bounce"
               delay={0.5}

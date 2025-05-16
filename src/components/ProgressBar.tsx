@@ -35,11 +35,10 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Fix: Use the correct overload for animate
+          // Fix: Use the correct TypeScript-compatible animation approach
           animate(progressValue, percentage, {
             duration: 1.2,
             ease: "easeOut",
-            // Use a different property instead of driver
             onUpdate: (latest) => progressValue.set(latest)
           });
         }
