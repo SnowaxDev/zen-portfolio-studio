@@ -49,7 +49,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-    hover: { y: -8, transition: { duration: 0.3 } }
+    hover: { y: -10, boxShadow: "0 20px 25px -5px rgba(212,175,55,0.1), 0 10px 10px -5px rgba(212,175,55,0.04)" }
   };
 
   const featureVariants = {
@@ -64,6 +64,32 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     })
   };
 
+  const priceAnimationVariants = {
+    pulse: {
+      scale: [1, 1.05, 1],
+      transition: { 
+        duration: 2, 
+        repeat: Infinity,
+        repeatType: "reverse" as const
+      }
+    }
+  };
+
+  const buttonVariants = {
+    rest: { scale: 1 },
+    hover: { 
+      scale: 1.05,
+      boxShadow: isPopular 
+        ? "0 0 15px 5px rgba(212,175,55,0.3)" 
+        : "0 0 15px 2px rgba(139,92,246,0.3)",
+      transition: {
+        duration: 0.3,
+        ease: "easeOut"
+      }
+    },
+    tap: { scale: 0.95 }
+  };
+
   return (
     <motion.div
       initial="hidden"
@@ -74,8 +100,10 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       className="h-full"
     >
       <Card className={cn(
-        "overflow-hidden border h-full relative",
-        isPopular ? "border-gold/30 bg-gradient-to-b from-card to-black/70" : "border-white/10 bg-card/50",
+        "overflow-hidden border h-full relative transition-all duration-300",
+        isPopular 
+          ? "border-gold/30 bg-gradient-to-b from-card to-black/70 hover:border-gold/50" 
+          : "border-white/10 bg-card/50 hover:border-white/30",
         className
       )}>
         {isPopular && (
@@ -131,7 +159,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-6">
             <div>
-              <div className="flex items-baseline">
+              <motion.div 
+                className="flex items-baseline"
+                variants={priceAnimationVariants}
+                animate={isPopular ? "pulse" : undefined}
+              >
                 <motion.span 
                   className={cn(
                     "text-3xl md:text-4xl font-bold",
@@ -155,7 +187,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                 >
                   Kč {billingType === 'oneTime' ? 'jednorázově' : 'měsíčně'}
                 </motion.span>
-              </div>
+              </motion.div>
               <motion.div 
                 className="mt-1 inline-flex items-center"
                 initial={{ opacity: 0, y: 5 }}
@@ -210,10 +242,15 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                   whileInView="visible"
                   viewport={{ once: true }}
                 >
-                  <Check className={cn(
-                    "h-4 w-4 mr-2 flex-shrink-0", 
-                    isPopular ? "text-gold" : "text-green-400"
-                  )} />
+                  <motion.div
+                    whileHover={{ scale: 1.2, rotate: [0, 10, -10, 0] }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <Check className={cn(
+                      "h-4 w-4 mr-2 flex-shrink-0", 
+                      isPopular ? "text-gold" : "text-green-400"
+                    )} />
+                  </motion.div>
                   <span className="text-foreground/80">{feature}</span>
                 </motion.li>
               ))}
@@ -222,19 +259,29 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           
           <div className="mt-auto">
             <motion.div
-              whileHover={{ scale: 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 + features.length * 0.05 }}
+              variants={buttonVariants}
+              initial="rest"
+              whileHover="hover"
+              whileTap="tap"
+              transition={{ duration: 0.3 }}
             >
               <Button 
-                className={cn("w-full", 
+                className={cn("w-full relative overflow-hidden group", 
                   isPopular 
                     ? "bg-gold hover:bg-gold-light text-primary-foreground" 
                     : "bg-primary hover:bg-primary/90"
                 )}
               >
+                <motion.span
+                  className={`absolute inset-0 bg-gradient-to-r ${
+                    isPopular 
+                      ? "from-gold-light/0 via-white/20 to-gold-light/0" 
+                      : "from-purple/0 via-white/20 to-purple/0"
+                  }`}
+                  initial={{ x: "-100%", opacity: 0 }}
+                  whileHover={{ x: "100%", opacity: 1 }}
+                  transition={{ duration: 0.8 }}
+                />
                 Objednat
               </Button>
             </motion.div>
