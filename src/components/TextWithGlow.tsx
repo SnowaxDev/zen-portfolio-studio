@@ -101,23 +101,25 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
     >
       {children}
       
-      {/* Add global style for shimmer effect if needed */}
+      {/* Fix style JSX syntax */}
       {shimmer && (
-        <style jsx global>{`
-          .shimmer-effect {
-            position: relative;
-            background-size: 200% 100%;
-            background-repeat: no-repeat;
-            background-clip: text;
-            -webkit-background-clip: text;
-            background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%);
-            animation: shimmer 2s infinite linear;
-          }
-          @keyframes shimmer {
-            0% { background-position: -100% 0; }
-            100% { background-position: 200% 0; }
-          }
-        `}</style>
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            .shimmer-effect {
+              position: relative;
+              background-size: 200% 100%;
+              background-repeat: no-repeat;
+              background-clip: text;
+              -webkit-background-clip: text;
+              background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%);
+              animation: shimmer 2s infinite linear;
+            }
+            @keyframes shimmer {
+              0% { background-position: -100% 0; }
+              100% { background-position: 200% 0; }
+            }
+          `
+        }}/>
       )}
     </motion.span>
   );

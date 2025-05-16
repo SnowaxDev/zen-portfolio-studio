@@ -35,12 +35,12 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Use a more optimized animation with lower CPU usage
+          // Fix: Use the correct overload for animate
           animate(progressValue, percentage, {
             duration: 1.2,
             ease: "easeOut",
-            // Optimize for performance by reducing the number of updates
-            driver: "motionValue"
+            // Use a different property instead of driver
+            onUpdate: (latest) => progressValue.set(latest)
           });
         }
       },
