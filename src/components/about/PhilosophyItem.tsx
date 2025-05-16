@@ -5,20 +5,14 @@ import { CheckCircle } from 'lucide-react';
 
 interface PhilosophyItemProps {
   text: string;
-  translateX?: number;
 }
 
-const PhilosophyItem: React.FC<PhilosophyItemProps> = ({ 
-  text,
-  translateX = 0
-}) => {
-  const transformClass = translateX ? `transform translate-x-${translateX}` : '';
-  
+const PhilosophyItem: React.FC<PhilosophyItemProps> = ({ text }) => {
   return (
-    <div className={`flex items-start gap-3 ${transformClass}`}>
+    <div className="flex items-start gap-3 mb-2.5">
       <motion.div 
-        className="text-gold bg-gold/10 p-1 rounded-md flex items-center justify-center mt-0.5 h-6 w-6"
-        whileHover={{ scale: 1.2, backgroundColor: "hsl(var(--gold) / 0.2)" }}
+        className="text-gold bg-gold/5 p-1 rounded-md flex items-center justify-center mt-0.5 h-6 w-6"
+        whileHover={{ scale: 1.1, backgroundColor: "hsl(var(--gold) / 0.2)" }}
       >
         <CheckCircle size={16} />
       </motion.div>

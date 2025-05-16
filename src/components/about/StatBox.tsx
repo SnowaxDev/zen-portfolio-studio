@@ -28,13 +28,13 @@ const StatBox: React.FC<StatBoxProps> = ({
   
   return (
     <motion.div 
-      className={`bg-card/70 backdrop-blur-sm border border-gold/10 rounded-xl p-5 hover:border-gold/30 transition-all duration-300 transform ${rotateStyle} ${translateYStyle}`}
-      whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(212, 175, 55, 0.1)" }}
+      className={`bg-card/60 backdrop-blur-sm border border-gold/5 rounded-xl p-4 hover:border-gold/30 transition-all duration-300 transform ${rotateStyle} ${translateYStyle}`}
+      whileHover={{ y: -4, boxShadow: "0 10px 25px -5px rgba(212, 175, 55, 0.1)" }}
       onHoverStart={() => handleStatHover(index)}
       onHoverEnd={() => handleStatHover(null)}
     >
       <motion.h3 
-        className="text-3xl font-bold mb-1 flex items-center"
+        className="text-2xl font-bold mb-1 flex items-center justify-center"
         animate={{ y: hoveredStat === index ? [0, -3, 0] : 0 }}
         transition={{ duration: 0.5 }}
       >
@@ -59,7 +59,7 @@ const StatBox: React.FC<StatBoxProps> = ({
           <MoveUp size={16} />
         </motion.span>
       </motion.h3>
-      <p className="text-sm text-foreground/70">{label}</p>
+      <p className="text-sm text-foreground/70 text-center">{label}</p>
     </motion.div>
   );
 };

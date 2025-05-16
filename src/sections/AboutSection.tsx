@@ -28,10 +28,10 @@ const AboutSection: React.FC = () => {
 
   // Stats data
   const stats = [
-    { value: '2+', label: 'Roky zkušeností', rotation: -1, translateY: 6 },
-    { value: '10+', label: 'Dokončených projektů', rotation: 0.5, translateY: 0 },
-    { value: '5+', label: 'Spokojených klientů', rotation: -0.7, translateY: 4 },
-    { value: '3+', label: 'Open source příspěvků', rotation: 1, translateY: 0 }
+    { value: '2+', label: 'Roky zkušeností', rotation: 0, translateY: 0 },
+    { value: '10+', label: 'Dokončených projektů', rotation: 0, translateY: 0 },
+    { value: '5+', label: 'Spokojených klientů', rotation: 0, translateY: 0 },
+    { value: '3+', label: 'Open source příspěvků', rotation: 0, translateY: 0 }
   ];
 
   // Tech stack data
@@ -39,20 +39,17 @@ const AboutSection: React.FC = () => {
     { 
       title: 'Frontend', 
       technologies: 'React, TypeScript, Next.js, Tailwind CSS, Framer Motion',
-      icon: Code2,
-      translateX: 2
+      icon: Code2
     },
     { 
       title: 'Backend', 
       technologies: 'Node.js, MongoDB',
-      icon: Server,
-      translateX: -1
+      icon: Server
     },
     { 
       title: 'Nástroje', 
       technologies: 'Git, Figma, Linux, Bash, VS Code',
-      icon: Cpu,
-      translateX: 3
+      icon: Cpu
     }
   ];
 
@@ -65,19 +62,19 @@ const AboutSection: React.FC = () => {
   ];
 
   return (
-    <section id="about" className="relative py-20 md:py-28 overflow-hidden bg-background">
-      {/* Enhanced background elements with better performance */}
+    <section id="about" className="relative py-16 md:py-20 overflow-hidden bg-background">
+      {/* Background elements with improved aesthetics */}
       <AnimatedSection 
         className="absolute inset-0 pointer-events-none" 
         withOverflow={true}
         direction="none"
       >
-        {/* Primary background accent */}
+        {/* Subtle background accents */}
         <motion.div 
           className="absolute top-40 left-10 w-64 h-64 rounded-full bg-primary/5 blur-3xl"
           animate={{
             scale: [1, 1.1, 1],
-            opacity: [0.4, 0.6, 0.4],
+            opacity: [0.3, 0.5, 0.3],
           }}
           transition={{ 
             duration: 8,
@@ -85,7 +82,7 @@ const AboutSection: React.FC = () => {
             repeatType: "reverse",
             ease: "easeInOut"
           }}
-          initial={{ opacity: 0.4, scale: 1 }}
+          initial={{ opacity: 0.3, scale: 1 }}
         />
         
         {/* Secondary background accent */}
@@ -93,7 +90,7 @@ const AboutSection: React.FC = () => {
           className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-accent/5 blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
-            opacity: [0.3, 0.5, 0.3],
+            opacity: [0.2, 0.4, 0.2],
           }}
           transition={{ 
             duration: 10,
@@ -101,13 +98,13 @@ const AboutSection: React.FC = () => {
             repeatType: "reverse",
             ease: "easeInOut"
           }}
-          initial={{ opacity: 0.3, scale: 1 }}
+          initial={{ opacity: 0.2, scale: 1 }}
         />
       </AnimatedSection>
       
       <div className="container-custom relative z-10">
-        {/* Enhanced section title with improved animations */}
-        <div className="mb-16">
+        {/* Section title */}
+        <div className="mb-12 md:mb-16 text-center md:text-left">
           <SectionTitle 
             title="O Mně" 
             subtitle="Student s vášní pro webový vývoj a technologie"
@@ -118,9 +115,9 @@ const AboutSection: React.FC = () => {
           />
         </div>
         
-        {/* Stats grid matching the screenshot design */}
+        {/* Stats grid - more symmetric and evenly spaced */}
         <AnimatedSection 
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 gap-y-8 mb-16" 
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-14" 
           staggerChildren={true}
           staggerDelay={0.08}
         >
@@ -138,23 +135,22 @@ const AboutSection: React.FC = () => {
           ))}
         </AnimatedSection>
         
-        {/* Main content area with tech stack and journey */}
-        <div className="flex flex-col-reverse lg:flex-row gap-12">
-          {/* Left column - Tech Stack */}
-          <div className="lg:w-1/2 space-y-8">
+        {/* Main content in a symmetric layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          {/* Left column - Tech information */}
+          <div className="space-y-8">
             <ScrollReveal
               animationStyle="slide"
               direction="right"
-              delay={0.2}
+              delay={0.1}
             >
-              {/* Development Stack Card */}
               <motion.div 
-                className="bg-card/70 backdrop-blur-sm border border-white/5 rounded-xl p-6 shadow-sm hover:shadow-lg hover:border-gold/20 transition-all duration-500 transform rotate-[-0.5deg]"
+                className="bg-card/50 backdrop-blur-sm border border-white/5 rounded-xl p-6 shadow-sm hover:shadow-lg hover:border-gold/20 transition-all duration-500"
                 whileHover={{ y: -5 }}
               >
-                <div className="flex items-center mb-6 relative">
+                <div className="flex items-center mb-6">
                   <motion.div 
-                    className="p-3 rounded-lg bg-gold/10 mr-4"
+                    className="p-3 rounded-lg bg-gold/5 mr-4"
                     whileHover={{ rotate: 360 }}
                     transition={{ duration: 0.7 }}
                   >
@@ -167,11 +163,11 @@ const AboutSection: React.FC = () => {
                   </h4>
                 </div>
                 
-                {/* Tech stack items */}
                 <ScrollReveal
                   animationStyle="fade"
                   staggerChildren={true}
                   staggerDelay={0.1}
+                  className="space-y-2"
                 >
                   {techStack.map((item, index) => (
                     <TechStackItem
@@ -180,29 +176,28 @@ const AboutSection: React.FC = () => {
                       technologies={item.technologies}
                       icon={item.icon}
                       delay={index * 0.1}
-                      translateX={item.translateX}
                     />
                   ))}
                 </ScrollReveal>
               </motion.div>
             </ScrollReveal>
             
-            {/* Coding Philosophy Card */}
+            {/* My Coding Philosophy */}
             <ScrollReveal
               animationStyle="scale"
-              delay={0.3}
+              delay={0.2}
             >
               <motion.div 
-                className="mt-6 p-6 bg-card/70 backdrop-blur-sm rounded-xl border border-gold/10 shadow-sm hover:shadow-md transition-all duration-300 transform rotate-[0.7deg]"
+                className="p-6 bg-card/50 backdrop-blur-sm rounded-xl border border-gold/5 shadow-sm hover:shadow-md transition-all duration-300"
                 whileHover={{ 
                   boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)",
                   borderColor: "hsl(var(--gold) / 0.2)"
                 }}
               >
-                <div className="flex items-center mb-6 relative">
+                <div className="flex items-center mb-6">
                   <motion.div 
-                    className="p-3 rounded-lg bg-gold/10 mr-4"
-                    whileHover={{ rotate: 360, backgroundColor: "hsl(var(--gold) / 0.2)" }}
+                    className="p-3 rounded-lg bg-gold/5 mr-4"
+                    whileHover={{ rotate: 360, backgroundColor: "hsl(var(--gold) / 0.15)" }}
                     transition={{ duration: 0.6 }}
                   >
                     <Code2 className="text-gold" size={24} />
@@ -218,13 +213,12 @@ const AboutSection: React.FC = () => {
                   animationStyle="fade"
                   staggerChildren={true}
                   staggerDelay={0.1}
-                  className="space-y-3.5"
+                  className="space-y-2"
                 >
                   {philosophyData.map((item, index) => (
                     <PhilosophyItem 
                       key={index} 
                       text={item}
-                      translateX={index % 2 === 0 ? 1 : -1}
                     />
                   ))}
                 </ScrollReveal>
@@ -232,13 +226,13 @@ const AboutSection: React.FC = () => {
             </ScrollReveal>
           </div>
           
-          {/* Right column - Journey */}
-          <div className="lg:w-1/2 space-y-6">
+          {/* Right column - My Journey and Hobbies */}
+          <div className="space-y-6">
             <ScrollReveal
               animationStyle="fade"
               duration={0.6}
             >
-              <h3 className="text-2xl font-bold mb-2 transform -rotate-[0.5deg]">
+              <h3 className="text-2xl font-bold mb-3">
                 <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" shimmer={true} gradient={true}>
                   Moje Cesta
                 </TextWithGlow>
@@ -246,22 +240,22 @@ const AboutSection: React.FC = () => {
             </ScrollReveal>
             
             <div className="relative">
-              {/* Decorative element */}
+              {/* Decorative accent */}
               <motion.div
-                className="absolute -left-4 top-1/2 w-1 h-20 bg-gradient-to-b from-transparent via-gold/30 to-transparent rounded-full"
+                className="absolute -left-4 top-0 h-full w-1 bg-gradient-to-b from-transparent via-gold/20 to-transparent rounded-full"
                 initial={{ scaleY: 0, opacity: 0 }}
                 animate={{ scaleY: 1, opacity: 1 }}
                 transition={{ duration: 0.8, delay: 0.3 }}
               />
               
-              <div className="pl-4 border-l border-gold/10 space-y-6">
+              <div className="pl-4 border-l border-gold/5 space-y-6">
                 <ScrollReveal
                   animationStyle="fade"
                   delay={0.15}
                   direction="left"
                   distance={20}
                 >
-                  <p className="text-lg text-foreground/90 leading-relaxed transform translate-x-1">
+                  <p className="text-lg text-foreground/90 leading-relaxed">
                     Jako student experimentující s webovým vývojem mám velký zájem o vytváření moderních, přístupných a vizuálně atraktivních webových aplikací. Neustále se vzdělávám a hledám nové příležitosti k rozšíření svých dovedností.
                   </p>
                 </ScrollReveal>
@@ -272,7 +266,7 @@ const AboutSection: React.FC = () => {
                   direction="left"
                   distance={20}
                 >
-                  <p className="text-lg text-foreground/90 leading-relaxed transform -translate-x-1 translate-y-1">
+                  <p className="text-lg text-foreground/90 leading-relaxed">
                     Momentálně hledám zákazníky pro své první komerční projekty, kde mohu aplikovat nabyté znalosti a dále růst jako vývojář. Mým cílem je poskytovat kvalitní webové služby za dostupné ceny, zejména pro začínající podnikatele a malé firmy.
                   </p>
                 </ScrollReveal>
@@ -283,7 +277,7 @@ const AboutSection: React.FC = () => {
                   direction="left"
                   distance={20}
                 >
-                  <p className="text-lg text-foreground/90 leading-relaxed transform translate-x-2">
+                  <p className="text-lg text-foreground/90 leading-relaxed">
                     Když nekóduji, najdete mě při experimentování s novým hardwarem, konfigurací síťových služeb nebo při studiu odborné literatury. Vždy hledám nové výzvy a příležitosti k osobnímu i profesnímu růstu.
                   </p>
                 </ScrollReveal>
@@ -294,17 +288,17 @@ const AboutSection: React.FC = () => {
             <ScrollReveal
               animationStyle="slide"
               direction="up"
-              delay={0.4}
+              delay={0.3}
             >
               <Collapsible 
                 open={isHobbyOpen} 
                 onOpenChange={setIsHobbyOpen}
-                className="w-full mt-10"
+                className="w-full mt-8"
               >
-                <CollapsibleTrigger className="flex w-full items-center justify-between p-5 bg-card/70 backdrop-blur-sm rounded-xl border border-purple/10 hover:bg-card/90 transition-all duration-300 transform rotate-[0.4deg]">
+                <CollapsibleTrigger className="flex w-full items-center justify-between p-5 bg-card/50 backdrop-blur-sm rounded-xl border border-purple/5 hover:bg-card/80 transition-all duration-300">
                   <div className="flex items-center">
                     <motion.div 
-                      className="p-3 rounded-lg bg-purple/10 mr-4"
+                      className="p-3 rounded-lg bg-purple/5 mr-4"
                       whileHover={{ rotate: 360 }}
                       transition={{ duration: 0.7 }}
                     >
@@ -325,7 +319,7 @@ const AboutSection: React.FC = () => {
                 </CollapsibleTrigger>
                 <CollapsibleContent className="overflow-hidden">
                   <motion.div 
-                    className="p-5 pt-3 bg-card/60 backdrop-blur-sm rounded-b-xl border-x border-b border-purple/10 shadow-sm transform -rotate-[0.3deg]"
+                    className="p-5 pt-3 bg-card/40 backdrop-blur-sm rounded-b-xl border-x border-b border-purple/5 shadow-sm"
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     transition={{ delay: 0.1, duration: 0.3 }}
@@ -334,14 +328,13 @@ const AboutSection: React.FC = () => {
                       animationStyle="fade"
                       staggerChildren={true}
                       staggerDelay={0.08}
-                      className="space-y-3"
+                      className="space-y-1 pt-2"
                     >
                       {hobbyItems.map((item, index) => (
                         <HobbyItem
                           key={index}
                           text={item}
                           index={index}
-                          translateX={index % 2 === 0 ? 1 : -1}
                         />
                       ))}
                     </ScrollReveal>
@@ -350,21 +343,22 @@ const AboutSection: React.FC = () => {
               </Collapsible>
             </ScrollReveal>
             
-            {/* CTA Button */}
+            {/* CTA Button - Perfectly centered */}
             <ScrollReveal
               animationStyle="bounce"
-              delay={0.5}
+              delay={0.4}
             >
-              <AnimatedLink 
-                href="#contact"
-                variant="gold"
-                size="lg"
-                withArrow={true}
-                arrowAnimation="bounce"
-                className="mt-8"
-              >
-                Spolupracujme
-              </AnimatedLink>
+              <div className="flex justify-center md:justify-start mt-8">
+                <AnimatedLink 
+                  href="#contact"
+                  variant="gold"
+                  size="lg"
+                  withArrow={true}
+                  arrowAnimation="bounce"
+                >
+                  Spolupracujme
+                </AnimatedLink>
+              </div>
             </ScrollReveal>
           </div>
         </div>

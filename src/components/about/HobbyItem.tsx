@@ -5,22 +5,15 @@ import { motion } from 'framer-motion';
 interface HobbyItemProps {
   text: string;
   index: number;
-  translateX?: number;
 }
 
-const HobbyItem: React.FC<HobbyItemProps> = ({ 
-  text, 
-  index,
-  translateX = 0
-}) => {
-  const transformClass = translateX !== 0 ? `transform ${translateX > 0 ? 'translate-x-1' : '-translate-x-1'}` : '';
-  
+const HobbyItem: React.FC<HobbyItemProps> = ({ text, index }) => {
   return (
-    <div className={`flex items-start gap-3 ${transformClass}`}>
+    <div className="flex items-start gap-3 mb-2.5">
       <motion.span 
         className="text-purple mt-0.5"
         animate={{ 
-          x: [0, 5, 0],
+          x: [0, 3, 0],
         }}
         transition={{ 
           duration: 1.5,

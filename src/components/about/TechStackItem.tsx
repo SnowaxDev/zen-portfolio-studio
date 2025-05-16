@@ -19,13 +19,11 @@ const TechStackItem: React.FC<TechStackItemProps> = ({
   delay = 0,
   translateX = 0
 }) => {
-  const transformClass = translateX ? `transform translate-x-${translateX}` : '';
-  
   return (
-    <div className={`mb-6 ${transformClass}`}>
+    <div className="mb-4">
       <div className="flex items-center mb-2 group">
         <motion.div 
-          className="p-2 rounded-md bg-gold/10 mr-3 group-hover:bg-gold/20 transition-colors duration-300"
+          className="p-2 rounded-md bg-gold/5 mr-3 group-hover:bg-gold/15 transition-colors duration-300"
           whileHover={{ rotate: 360 }}
           transition={{ duration: 0.6 }}
         >
