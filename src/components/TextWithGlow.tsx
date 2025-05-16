@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { usePrefersReducedMotion } from '../hooks/use-reduced-motion';
 
 interface TextWithGlowProps {
   children: React.ReactNode;
@@ -12,6 +13,9 @@ interface TextWithGlowProps {
   duration?: number;
   hover?: boolean;
   shimmer?: boolean;
+  animateOnScroll?: boolean;
+  gradient?: boolean;
+  gradientColors?: string;
 }
 
 const TextWithGlow: React.FC<TextWithGlowProps> = ({
@@ -24,7 +28,12 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
   duration = 2,
   hover = true,
   shimmer = false,
+  animateOnScroll = false,
+  gradient = false,
+  gradientColors = 'from-gold to-gold-light',
 }) => {
+  const prefersReducedMotion = usePrefersReducedMotion();
+  
   // Set shadow intensity based on prop
   const getShadowIntensity = () => {
     switch (intensity) {
@@ -33,6 +42,11 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
       default: return `0 0 10px ${color}, 0 0 18px ${color}50`;
     }
   };
+
+  // Skip animations for users who prefer reduced motion
+  if (prefersReducedMotion) {
+    return <span className={className}>{children}</span>;
+  }
 
   // Dynamic text glow variants with customized timing
   const textGlowVariants = {
@@ -58,7 +72,7 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
     } : {}
   };
 
-  // Add shimmering effect for a more dynamic appearance
+  // Shimmering gradient style
   const shimmerStyles = shimmer ? {
     backgroundImage: `linear-gradient(90deg, ${color}00 0%, ${color}60 50%, ${color}00 100%)`,
     backgroundSize: '200% 100%',
@@ -69,14 +83,32 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
     animation: 'shimmer 2s infinite linear',
   } : {};
 
+  // Combined styles
+  const combinedStyles = {
+    ...(shimmer ? shimmerStyles : {}),
+    ...(gradient ? {
+      backgroundImage: `linear-gradient(to right, var(--gold), var(--gold-light))`,
+      backgroundClip: 'text',
+      WebkitBackgroundClip: 'text',
+      WebkitTextFillColor: 'transparent',
+    } : {})
+  };
+
+  // Add gradient class if needed
+  const gradientClass = gradient 
+    ? `bg-gradient-to-r ${gradientColors} bg-clip-text text-transparent` 
+    : '';
+
   return (
     <motion.span
-      className={className}
+      className={`${className} ${gradientClass}`}
       variants={textGlowVariants}
-      initial="initial"
+      initial={animateOnScroll ? "initial" : "animate"}
       animate="animate"
+      whileInView={animateOnScroll ? "animate" : undefined}
+      viewport={animateOnScroll ? { once: true, margin: "-100px" } : undefined}
       whileHover={hover ? "hover" : undefined}
-      style={shimmer ? shimmerStyles : {}}
+      style={combinedStyles}
     >
       {children}
     </motion.span>

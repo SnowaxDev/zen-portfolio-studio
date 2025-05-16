@@ -1,17 +1,21 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Code2, Server, Cpu, ChevronDown, MoveRight, MoveUp, RotateCw } from 'lucide-react';
+import { Code2, Server, Cpu, ChevronDown, MoveRight, MoveUp, RotateCw, CheckCircle } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 import { statsData, techStackData, philosophyItems, hobbyItems, sectionMeta } from '../lib/section-data';
 import ScrollReveal from '@/components/ScrollReveal';
 import SectionTitle from '@/components/SectionTitle';
 import TextWithGlow from '@/components/TextWithGlow';
+import AnimatedSection from '@/components/AnimatedSection';
+import AnimatedLink from '@/components/AnimatedLink';
+import { usePrefersReducedMotion } from '@/hooks/use-reduced-motion';
 
 const AboutSection: React.FC = () => {
   const { about } = sectionMeta;
   const [isHobbyOpen, setIsHobbyOpen] = useState(false);
   const [hoveredStat, setHoveredStat] = useState<number | null>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
 
   // Animation variants for staggered animations
   const containerVariants = {
@@ -34,84 +38,97 @@ const AboutSection: React.FC = () => {
     }
   };
 
+  // Stat animation handler
+  const handleStatHover = (index: number | null) => {
+    if (prefersReducedMotion) return;
+    setHoveredStat(index);
+  };
+
   return (
     <section id="about" className="relative py-20 md:py-28 overflow-hidden bg-background">
-      {/* Asymmetric animated background elements */}
-      <motion.div 
-        className="absolute top-40 left-10 w-64 h-64 rounded-full bg-primary/5 blur-3xl"
-        animate={{
-          scale: [1, 1.1, 1],
-          opacity: [0.5, 0.7, 0.5],
-        }}
-        transition={{ 
-          duration: 8,
-          repeat: Infinity,
-          repeatType: "reverse",
-          ease: "easeInOut"
-        }}
-        initial={{ opacity: 0, scale: 0.8 }}
-        whileInView={{ opacity: 0.5, scale: 1 }}
-        viewport={{ once: true }}
-      />
-      
-      <motion.div 
-        className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-accent/5 blur-3xl"
-        animate={{
-          scale: [1, 1.2, 1],
-          opacity: [0.4, 0.6, 0.4],
-        }}
-        transition={{ 
-          duration: 10,
-          repeat: Infinity,
-          repeatType: "reverse",
-          ease: "easeInOut"
-        }}
-        initial={{ opacity: 0, scale: 0.8 }}
-        whileInView={{ opacity: 0.4, scale: 1 }}
-        viewport={{ once: true }}
-      />
-      
-      {/* Asymmetric diagonal line */}
-      <motion.div
-        className="absolute left-0 top-1/4 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent transform rotate-[5deg]"
-        initial={{ opacity: 0, scaleX: 0 }}
-        animate={{ opacity: 1, scaleX: 1 }}
-        transition={{ duration: 1.5, delay: 0.5 }}
-      />
+      {/* Enhanced background elements with better performance */}
+      <AnimatedSection 
+        className="absolute inset-0 pointer-events-none" 
+        withOverflow={true}
+        direction="none"
+      >
+        {/* Primary background accent */}
+        <motion.div 
+          className="absolute top-40 left-10 w-64 h-64 rounded-full bg-primary/5 blur-3xl"
+          animate={{
+            scale: [1, 1.1, 1],
+            opacity: [0.4, 0.6, 0.4],
+          }}
+          transition={{ 
+            duration: 8,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut"
+          }}
+          initial={{ opacity: 0.4, scale: 1 }}
+        />
+        
+        {/* Secondary background accent */}
+        <motion.div 
+          className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-accent/5 blur-3xl"
+          animate={{
+            scale: [1, 1.2, 1],
+            opacity: [0.3, 0.5, 0.3],
+          }}
+          transition={{ 
+            duration: 10,
+            repeat: Infinity,
+            repeatType: "reverse",
+            ease: "easeInOut"
+          }}
+          initial={{ opacity: 0.3, scale: 1 }}
+        />
+        
+        {/* Diagonal line with optimized animation */}
+        <motion.div
+          className="absolute left-0 top-1/4 w-full h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent transform rotate-[5deg]"
+          initial={{ opacity: 0, scaleX: 0 }}
+          animate={{ opacity: 1, scaleX: 1 }}
+          transition={{ duration: 1.5, delay: 0.5 }}
+        />
+      </AnimatedSection>
       
       <div className="container-custom relative z-10">
-        {/* Section title with asymmetric alignment */}
+        {/* Enhanced section title with improved animations */}
         <div className="mb-16">
           <SectionTitle 
             title="O Mně" 
             subtitle="Student s vášní pro webový vývoj a technologie"
             alignment="left"
             accentColor="gold"
+            withGradient={true}
+            titleSize="lg"
           />
         </div>
         
-        {/* Stats Grid with asymmetric layout */}
-        <motion.div 
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 gap-y-8 mb-16"
-          initial="hidden" 
-          whileInView="visible"
-          variants={containerVariants}
-          viewport={{ once: true, margin: "-50px" }}
+        {/* Enhanced stats grid with improved visuals and interactions */}
+        <AnimatedSection 
+          className="grid grid-cols-2 md:grid-cols-4 gap-4 gap-y-8 mb-16" 
+          staggerChildren={true}
+          staggerDelay={0.08}
         >
           {/* First stat card with asymmetric positioning */}
           <motion.div 
             className="bg-card/70 backdrop-blur-sm border border-gold/10 rounded-xl p-5 hover:border-gold/30 transition-all duration-300 transform rotate-[-1deg] md:translate-y-6"
             variants={itemVariants}
             whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(212, 175, 55, 0.1)" }}
-            onHoverStart={() => setHoveredStat(0)}
-            onHoverEnd={() => setHoveredStat(null)}
+            onHoverStart={() => handleStatHover(0)}
+            onHoverEnd={() => handleStatHover(null)}
           >
             <motion.h3 
-              className="text-3xl font-bold text-gold mb-1 flex items-center"
+              className="text-3xl font-bold mb-1 flex items-center"
               animate={{ y: hoveredStat === 0 ? [0, -3, 0] : 0 }}
               transition={{ duration: 0.5 }}
             >
-              2+
+              <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" gradient={true} gradientColors="from-gold to-gold-light">
+                2+
+              </TextWithGlow>
+              
               <motion.span 
                 className="ml-1 text-gold/80"
                 initial={{ opacity: 0, scale: 0 }}
@@ -132,15 +149,18 @@ const AboutSection: React.FC = () => {
             className="bg-card/70 backdrop-blur-sm border border-gold/10 rounded-xl p-5 hover:border-gold/30 transition-all duration-300 transform rotate-[0.5deg]"
             variants={itemVariants}
             whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(212, 175, 55, 0.1)" }}
-            onHoverStart={() => setHoveredStat(1)}
-            onHoverEnd={() => setHoveredStat(null)}
+            onHoverStart={() => handleStatHover(1)}
+            onHoverEnd={() => handleStatHover(null)}
           >
             <motion.h3 
-              className="text-3xl font-bold text-gold mb-1 flex items-center"
+              className="text-3xl font-bold mb-1 flex items-center"
               animate={{ y: hoveredStat === 1 ? [0, -3, 0] : 0 }}
               transition={{ duration: 0.5 }}
             >
-              10+
+              <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" gradient={true} gradientColors="from-gold to-gold-light">
+                10+
+              </TextWithGlow>
+              
               <motion.span 
                 className="ml-1 text-gold/80"
                 initial={{ opacity: 0, scale: 0 }}
@@ -161,15 +181,18 @@ const AboutSection: React.FC = () => {
             className="bg-card/70 backdrop-blur-sm border border-gold/10 rounded-xl p-5 hover:border-gold/30 transition-all duration-300 transform rotate-[-0.7deg] md:translate-y-4"
             variants={itemVariants}
             whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(212, 175, 55, 0.1)" }}
-            onHoverStart={() => setHoveredStat(2)}
-            onHoverEnd={() => setHoveredStat(null)}
+            onHoverStart={() => handleStatHover(2)}
+            onHoverEnd={() => handleStatHover(null)}
           >
             <motion.h3 
-              className="text-3xl font-bold text-gold mb-1 flex items-center"
+              className="text-3xl font-bold mb-1 flex items-center"
               animate={{ y: hoveredStat === 2 ? [0, -3, 0] : 0 }}
               transition={{ duration: 0.5 }}
             >
-              5+
+              <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" gradient={true} gradientColors="from-gold to-gold-light">
+                5+
+              </TextWithGlow>
+              
               <motion.span 
                 className="ml-1 text-gold/80"
                 initial={{ opacity: 0, scale: 0 }}
@@ -190,15 +213,18 @@ const AboutSection: React.FC = () => {
             className="bg-card/70 backdrop-blur-sm border border-gold/10 rounded-xl p-5 hover:border-gold/30 transition-all duration-300 transform rotate-[1deg]"
             variants={itemVariants}
             whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(212, 175, 55, 0.1)" }}
-            onHoverStart={() => setHoveredStat(3)}
-            onHoverEnd={() => setHoveredStat(null)}
+            onHoverStart={() => handleStatHover(3)}
+            onHoverEnd={() => handleStatHover(null)}
           >
             <motion.h3 
-              className="text-3xl font-bold text-gold mb-1 flex items-center"
+              className="text-3xl font-bold mb-1 flex items-center"
               animate={{ y: hoveredStat === 3 ? [0, -3, 0] : 0 }}
               transition={{ duration: 0.5 }}
             >
-              3+
+              <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" gradient={true} gradientColors="from-gold to-gold-light">
+                3+
+              </TextWithGlow>
+              
               <motion.span 
                 className="ml-1 text-gold/80"
                 initial={{ opacity: 0, scale: 0 }}
@@ -213,17 +239,11 @@ const AboutSection: React.FC = () => {
             </motion.h3>
             <p className="text-sm text-foreground/70">Open source příspěvků</p>
           </motion.div>
-        </motion.div>
+        </AnimatedSection>
         
         <div className="flex flex-col-reverse lg:flex-row gap-12">
-          {/* Tech Stack Column with asymmetric elements */}
-          <motion.div 
-            className="lg:w-1/2 space-y-8"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
+          {/* Enhanced Tech Stack Column with better animations */}
+          <div className="lg:w-1/2 space-y-8">
             <ScrollReveal
               animationStyle="slide"
               direction="right"
@@ -233,7 +253,7 @@ const AboutSection: React.FC = () => {
                 className="bg-card/70 backdrop-blur-sm border border-white/5 rounded-xl p-6 shadow-sm hover:shadow-lg hover:border-gold/20 transition-all duration-500 transform rotate-[-0.5deg]"
                 whileHover={{ y: -5 }}
               >
-                <div className="flex items-center mb-6">
+                <div className="flex items-center mb-6 relative">
                   <motion.div 
                     className="p-3 rounded-lg bg-gold/10 mr-4"
                     whileHover={{ rotate: 360 }}
@@ -241,9 +261,13 @@ const AboutSection: React.FC = () => {
                   >
                     <RotateCw className="text-gold" size={24} />
                   </motion.div>
-                  <h4 className="text-xl font-semibold">Můj Vývojový Stack</h4>
+                  <h4 className="text-xl font-semibold">
+                    <TextWithGlow intensity="light" pulsate={false}>
+                      Můj Vývojový Stack
+                    </TextWithGlow>
+                  </h4>
                   
-                  {/* Asymmetric decorative element */}
+                  {/* Enhanced decorative element */}
                   <motion.div
                     className="absolute -top-4 right-4 w-12 h-12 rounded-full bg-gradient-to-br from-purple/10 to-gold/10 blur-xl"
                     animate={{
@@ -258,15 +282,14 @@ const AboutSection: React.FC = () => {
                   />
                 </div>
                 
-                {/* Frontend Stack with slight asymmetric positioning */}
-                <motion.div 
+                {/* Frontend Stack with enhanced animations */}
+                <ScrollReveal
+                  animationStyle="fade"
+                  direction="right"
+                  delay={0.1}
                   className="mb-6 transform translate-x-2"
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5 }}
                 >
-                  <div className="flex items-center mb-2">
+                  <div className="flex items-center mb-2 group">
                     <motion.div 
                       className="p-2 rounded-md bg-gold/10 mr-3 group-hover:bg-gold/20 transition-colors duration-300"
                       whileHover={{ rotate: 360 }}
@@ -281,17 +304,16 @@ const AboutSection: React.FC = () => {
                   <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
                     React, TypeScript, Next.js, Tailwind CSS, Framer Motion
                   </p>
-                </motion.div>
+                </ScrollReveal>
                 
-                {/* Backend Stack with asymmetric positioning */}
-                <motion.div 
+                {/* Backend Stack with enhanced animations */}
+                <ScrollReveal
+                  animationStyle="fade"
+                  direction="right"
+                  delay={0.2}
                   className="mb-6 transform -translate-x-1"
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.1, duration: 0.5 }}
                 >
-                  <div className="flex items-center mb-2">
+                  <div className="flex items-center mb-2 group">
                     <motion.div 
                       className="p-2 rounded-md bg-gold/10 mr-3 group-hover:bg-gold/20 transition-colors duration-300"
                       whileHover={{ rotate: 360 }}
@@ -306,17 +328,16 @@ const AboutSection: React.FC = () => {
                   <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
                     Node.js, MongoDB
                   </p>
-                </motion.div>
+                </ScrollReveal>
                 
-                {/* Tools Stack with asymmetric positioning */}
-                <motion.div 
+                {/* Tools Stack with enhanced animations */}
+                <ScrollReveal
+                  animationStyle="fade"
+                  direction="right"
+                  delay={0.3}
                   className="transform translate-x-3"
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.2, duration: 0.5 }}
                 >
-                  <div className="flex items-center mb-2">
+                  <div className="flex items-center mb-2 group">
                     <motion.div 
                       className="p-2 rounded-md bg-gold/10 mr-3 group-hover:bg-gold/20 transition-colors duration-300"
                       whileHover={{ rotate: 360 }}
@@ -331,23 +352,23 @@ const AboutSection: React.FC = () => {
                   <p className="text-sm text-foreground/80 pl-9 leading-relaxed">
                     Git, Figma, Linux, Bash, VS Code
                   </p>
-                </motion.div>
+                </ScrollReveal>
               </motion.div>
             </ScrollReveal>
             
-            {/* Coding Philosophy with asymmetric elements */}
+            {/* Enhanced Coding Philosophy with better animations */}
             <ScrollReveal
               animationStyle="scale"
               delay={0.3}
             >
               <motion.div 
-                className="mt-6 p-5 bg-card/70 backdrop-blur-sm rounded-xl border border-gold/10 shadow-sm hover:shadow-md transition-all duration-300 transform rotate-[0.7deg]"
+                className="mt-6 p-6 bg-card/70 backdrop-blur-sm rounded-xl border border-gold/10 shadow-sm hover:shadow-md transition-all duration-300 transform rotate-[0.7deg]"
                 whileHover={{ 
                   boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)",
                   borderColor: "hsl(var(--gold) / 0.2)"
                 }}
               >
-                <div className="flex items-center mb-4">
+                <div className="flex items-center mb-6 relative">
                   <motion.div 
                     className="p-3 rounded-lg bg-gold/10 mr-4"
                     whileHover={{ rotate: 360, backgroundColor: "hsl(var(--gold) / 0.2)" }}
@@ -355,9 +376,13 @@ const AboutSection: React.FC = () => {
                   >
                     <Code2 className="text-gold" size={24} />
                   </motion.div>
-                  <h4 className="text-xl font-semibold">Moje Kódovací Filosofie</h4>
+                  <h4 className="text-xl font-semibold">
+                    <TextWithGlow intensity="light" gradient={true} gradientColors="from-gold to-gold-light">
+                      Moje Kódovací Filosofie
+                    </TextWithGlow>
+                  </h4>
                   
-                  {/* Asymmetric decorative element */}
+                  {/* Enhanced decorative element */}
                   <motion.div
                     className="absolute -bottom-3 right-10 w-16 h-16 rounded-full bg-gradient-to-br from-gold/5 to-gold/15 blur-xl"
                     animate={{
@@ -372,105 +397,72 @@ const AboutSection: React.FC = () => {
                   />
                 </div>
                 
-                <ul className="space-y-3">
-                  {/* Philosophy items with asymmetric animations */}
-                  <motion.li 
-                    className="flex items-start gap-3 transform translate-x-1"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.1 }}
-                  >
-                    <motion.span 
-                      className="text-gold bg-gold/10 p-1 rounded-md flex items-center justify-center mt-0.5"
+                <ScrollReveal
+                  animationStyle="fade"
+                  staggerChildren={true}
+                  staggerDelay={0.1}
+                  className="space-y-3.5"
+                >
+                  {/* Philosophy items with enhanced animations */}
+                  <div className="flex items-start gap-3 transform translate-x-1">
+                    <motion.div 
+                      className="text-gold bg-gold/10 p-1 rounded-md flex items-center justify-center mt-0.5 h-6 w-6"
                       whileHover={{ scale: 1.2, backgroundColor: "hsl(var(--gold) / 0.2)" }}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                    </motion.span>
+                      <CheckCircle size={16} />
+                    </motion.div>
                     <span className="text-foreground/90">Píšu čistý, modulární kód, který je snadné udržovat a škálovat.</span>
-                  </motion.li>
+                  </div>
                   
-                  <motion.li 
-                    className="flex items-start gap-3 transform -translate-x-1"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.2 }}
-                  >
-                    <motion.span 
-                      className="text-gold bg-gold/10 p-1 rounded-md flex items-center justify-center mt-0.5"
+                  <div className="flex items-start gap-3 transform -translate-x-1">
+                    <motion.div 
+                      className="text-gold bg-gold/10 p-1 rounded-md flex items-center justify-center mt-0.5 h-6 w-6"
                       whileHover={{ scale: 1.2, backgroundColor: "hsl(var(--gold) / 0.2)" }}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                    </motion.span>
+                      <CheckCircle size={16} />
+                    </motion.div>
                     <span className="text-foreground/90">Upřednostňuji přístupnost a výkon ve všem, co vytvářím.</span>
-                  </motion.li>
+                  </div>
                   
-                  <motion.li 
-                    className="flex items-start gap-3 transform translate-x-2"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3 }}
-                  >
-                    <motion.span 
-                      className="text-gold bg-gold/10 p-1 rounded-md flex items-center justify-center mt-0.5"
+                  <div className="flex items-start gap-3 transform translate-x-2">
+                    <motion.div 
+                      className="text-gold bg-gold/10 p-1 rounded-md flex items-center justify-center mt-0.5 h-6 w-6"
                       whileHover={{ scale: 1.2, backgroundColor: "hsl(var(--gold) / 0.2)" }}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                    </motion.span>
+                      <CheckCircle size={16} />
+                    </motion.div>
                     <span className="text-foreground/90">Využívám moderní nástroje a technologie pro efektivní vývoj.</span>
-                  </motion.li>
+                  </div>
                   
-                  <motion.li 
-                    className="flex items-start gap-3 transform -translate-x-1"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.4 }}
-                  >
-                    <motion.span 
-                      className="text-gold bg-gold/10 p-1 rounded-md flex items-center justify-center mt-0.5"
+                  <div className="flex items-start gap-3 transform -translate-x-1">
+                    <motion.div 
+                      className="text-gold bg-gold/10 p-1 rounded-md flex items-center justify-center mt-0.5 h-6 w-6"
                       whileHover={{ scale: 1.2, backgroundColor: "hsl(var(--gold) / 0.2)" }}
                     >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                        <polyline points="20 6 9 17 4 12"></polyline>
-                      </svg>
-                    </motion.span>
+                      <CheckCircle size={16} />
+                    </motion.div>
                     <span className="text-foreground/90">Neustále se učím novým technologiím, abych zůstal v popředí webového vývoje.</span>
-                  </motion.li>
-                </ul>
+                  </div>
+                </ScrollReveal>
               </motion.div>
             </ScrollReveal>
-          </motion.div>
+          </div>
           
-          {/* Journey Column with asymmetric layout */}
-          <motion.div 
-            className="lg:w-1/2 space-y-6"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true }}
-          >
+          {/* Enhanced Journey Column with better visual design */}
+          <div className="lg:w-1/2 space-y-6">
             <ScrollReveal
               animationStyle="fade"
               duration={0.6}
             >
               <h3 className="text-2xl font-bold mb-2 transform -rotate-[0.5deg]">
-                <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" shimmer={true}>
+                <TextWithGlow color="rgba(212, 175, 55, 0.8)" intensity="medium" shimmer={true} gradient={true}>
                   Moje Cesta
                 </TextWithGlow>
               </h3>
             </ScrollReveal>
             
             <div className="relative">
-              {/* Asymmetric decorative element */}
+              {/* Enhanced decorative element */}
               <motion.div
                 className="absolute -left-4 top-1/2 w-1 h-20 bg-gradient-to-b from-transparent via-gold/30 to-transparent rounded-full"
                 initial={{ scaleY: 0, opacity: 0 }}
@@ -514,7 +506,7 @@ const AboutSection: React.FC = () => {
               </div>
             </div>
             
-            {/* IT Contacts Section with asymmetric design */}
+            {/* Enhanced IT Contacts Section with better interactions */}
             <ScrollReveal
               animationStyle="slide"
               direction="up"
@@ -534,9 +526,13 @@ const AboutSection: React.FC = () => {
                     >
                       <Server className="text-purple" size={24} />
                     </motion.div>
-                    <h4 className="text-xl font-semibold">Moje IT Koníčky</h4>
+                    <h4 className="text-xl font-semibold">
+                      <TextWithGlow color="rgba(139, 92, 246, 0.8)" intensity="light">
+                        Moje IT Koníčky
+                      </TextWithGlow>
+                    </h4>
                     
-                    {/* Asymmetric decorative element */}
+                    {/* Enhanced decorative element */}
                     <motion.div
                       className="absolute top-2 right-14 w-8 h-8 rounded-full bg-purple/10 blur-lg"
                       animate={{
@@ -560,23 +556,22 @@ const AboutSection: React.FC = () => {
                 <CollapsibleContent className="overflow-hidden">
                   <motion.div 
                     className="p-5 pt-3 bg-card/60 backdrop-blur-sm rounded-b-xl border-x border-b border-purple/10 shadow-sm transform -rotate-[0.3deg]"
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.2 }}
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    transition={{ delay: 0.1, duration: 0.3 }}
                   >
-                    <ul className="space-y-3">
+                    <ScrollReveal
+                      animationStyle="fade"
+                      staggerChildren={true}
+                      staggerDelay={0.08}
+                      className="space-y-3"
+                    >
                       {hobbyItems.map((item, index) => {
                         // Add asymmetric positioning to each item
                         const transformX = index % 2 === 0 ? 'translate-x-1' : '-translate-x-1';
                         
                         return (
-                          <motion.li 
-                            key={index} 
-                            className={`flex items-start gap-3 transform ${transformX}`}
-                            initial={{ opacity: 0, x: -20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            transition={{ delay: 0.1 * index + 0.3 }}
-                          >
+                          <div key={index} className={`flex items-start gap-3 transform ${transformX}`}>
                             <motion.span 
                               className="text-purple mt-0.5"
                               animate={{ 
@@ -589,42 +584,32 @@ const AboutSection: React.FC = () => {
                               }}
                             >»</motion.span>
                             <span className="text-foreground/90">{item}</span>
-                          </motion.li>
+                          </div>
                         );
                       })}
-                    </ul>
+                    </ScrollReveal>
                   </motion.div>
                 </CollapsibleContent>
               </Collapsible>
             </ScrollReveal>
             
+            {/* Enhanced CTA with better interaction */}
             <ScrollReveal
               animationStyle="bounce"
               delay={0.5}
             >
-              <motion.a 
+              <AnimatedLink 
                 href="#contact"
-                className="inline-flex items-center mt-8 px-6 py-2.5 bg-gradient-to-r from-gold to-gold-light text-background font-medium rounded-lg shadow-lg hover:shadow-gold/20 transition-all duration-300 transform rotate-[0.5deg]"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
+                variant="gold"
+                size="lg"
+                withArrow={true}
+                arrowAnimation="bounce"
+                className="mt-8"
               >
                 Spolupracujme
-                <motion.span
-                  className="ml-2"
-                  animate={{ 
-                    x: [0, 5, 0], 
-                  }}
-                  transition={{ 
-                    duration: 1.2,
-                    repeat: Infinity,
-                    repeatType: "reverse"
-                  }}
-                >
-                  <MoveRight size={18} />
-                </motion.span>
-              </motion.a>
+              </AnimatedLink>
             </ScrollReveal>
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

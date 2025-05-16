@@ -1,6 +1,6 @@
 
 import React, { ReactNode } from 'react';
-import { motion } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { usePrefersReducedMotion } from '../hooks/use-reduced-motion';
 
 interface AnimatedSectionProps {
@@ -13,6 +13,10 @@ interface AnimatedSectionProps {
   once?: boolean;
   duration?: number;
   threshold?: number;
+  staggerChildren?: boolean;
+  staggerDelay?: number;
+  customVariants?: Variants;
+  withOverflow?: boolean;
 }
 
 const AnimatedSection: React.FC<AnimatedSectionProps> = ({
@@ -25,6 +29,10 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   once = true,
   duration = 0.7,
   threshold = 0.1,
+  staggerChildren = false,
+  staggerDelay = 0.1,
+  customVariants,
+  withOverflow = false,
 }) => {
   const prefersReducedMotion = usePrefersReducedMotion();
   
@@ -51,7 +59,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   };
   
   // Animation variants
-  const variants = {
+  const defaultVariants = {
     hidden: getInitialState(),
     visible: {
       opacity: 1,
@@ -61,18 +69,21 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
         duration: prefersReducedMotion ? 0.3 : duration,
         ease: [0.22, 1, 0.36, 1],
         delay: prefersReducedMotion ? 0 : delay,
-        staggerChildren: 0.1,
-        delayChildren: delay + 0.1,
+        staggerChildren: staggerChildren ? staggerDelay : 0,
+        delayChildren: staggerChildren ? delay : 0,
       }
     }
   };
+
+  // Choose between default and custom variants
+  const variants = customVariants || defaultVariants;
 
   // Use simpler animation if user prefers reduced motion
   if (prefersReducedMotion) {
     return (
       <motion.section
         id={id}
-        className={className}
+        className={`${className} ${withOverflow ? '' : 'overflow-hidden'}`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
@@ -85,7 +96,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   return (
     <motion.section
       id={id}
-      className={className}
+      className={`${className} ${withOverflow ? '' : 'overflow-hidden'}`}
       initial="hidden"
       whileInView="visible"
       viewport={{ once, margin: "-50px", amount: threshold }}
