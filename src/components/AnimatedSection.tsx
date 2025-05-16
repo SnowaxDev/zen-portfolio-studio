@@ -11,6 +11,8 @@ interface AnimatedSectionProps {
   direction?: 'up' | 'down' | 'left' | 'right' | 'none';
   distance?: number;
   once?: boolean;
+  duration?: number;
+  threshold?: number;
 }
 
 const AnimatedSection: React.FC<AnimatedSectionProps> = ({
@@ -21,6 +23,8 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   direction = 'up',
   distance = 50,
   once = true,
+  duration = 0.7,
+  threshold = 0.1,
 }) => {
   const prefersReducedMotion = usePrefersReducedMotion();
   
@@ -54,14 +58,29 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       x: 0,
       y: 0,
       transition: {
-        duration: prefersReducedMotion ? 0.3 : 0.7,
+        duration: prefersReducedMotion ? 0.3 : duration,
         ease: [0.22, 1, 0.36, 1],
-        delay: delay,
+        delay: prefersReducedMotion ? 0 : delay,
         staggerChildren: 0.1,
         delayChildren: delay + 0.1,
       }
     }
   };
+
+  // Use simpler animation if user prefers reduced motion
+  if (prefersReducedMotion) {
+    return (
+      <motion.section
+        id={id}
+        className={className}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3 }}
+      >
+        {children}
+      </motion.section>
+    );
+  }
 
   return (
     <motion.section
@@ -69,7 +88,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       className={className}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, margin: "-50px" }}
+      viewport={{ once, margin: "-50px", amount: threshold }}
       variants={variants}
     >
       {children}

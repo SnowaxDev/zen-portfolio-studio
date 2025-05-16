@@ -1,16 +1,20 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { motion, useScroll, useSpring, useMotionTemplate } from 'framer-motion';
 import Header from '../components/Header';
 import HeroSection from '../sections/HeroSection';
-import AboutSection from '../sections/AboutSection';
-import ProjectsSection from '../sections/ProjectsSection';
-import SkillsSection from '../sections/SkillsSection';
-import ServicesSection from '../sections/ServicesSection';
-import ContactSection from '../sections/ContactSection';
 import Footer from '../components/Footer';
 import { useIsMobile } from '../hooks/use-mobile';
 import { FloatingGrid } from '../components/DecorativeElements';
+import { usePrefersReducedMotion } from '../hooks/use-reduced-motion';
+import { Loader } from 'lucide-react';
+
+// Lazy load sections for better performance
+const AboutSection = lazy(() => import('../sections/AboutSection'));
+const ProjectsSection = lazy(() => import('../sections/ProjectsSection'));
+const SkillsSection = lazy(() => import('../sections/SkillsSection'));
+const ServicesSection = lazy(() => import('../sections/ServicesSection'));
+const ContactSection = lazy(() => import('../sections/ContactSection'));
 
 // Enhanced page transition variants with improved timing and easing
 const pageVariants = {
@@ -33,22 +37,17 @@ const pageVariants = {
   }
 };
 
-// Enhanced section variants with more natural animation
-const sectionVariants = {
-  initial: { opacity: 0, y: 40 },
-  animate: { 
-    opacity: 1,
-    y: 0,
-    transition: {
-      duration: 0.9,
-      ease: [0.25, 0.1, 0.25, 1]
-    }
-  }
-};
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-[200px]">
+    <Loader className="h-8 w-8 animate-spin text-gold" />
+  </div>
+);
 
 const Index = () => {
   const isMobile = useIsMobile();
+  const prefersReducedMotion = usePrefersReducedMotion();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [isLoaded, setIsLoaded] = useState(false);
   
   // Get scroll progress for scroll-based animations
   const { scrollYProgress } = useScroll();
@@ -74,6 +73,8 @@ const Index = () => {
   
   // Track mouse position for interactive cursor
   useEffect(() => {
+    if (prefersReducedMotion || isMobile) return;
+    
     const handleMouseMove = (e: MouseEvent) => {
       cursorX.set(e.clientX - 15);
       cursorY.set(e.clientY - 15);
@@ -103,9 +104,9 @@ const Index = () => {
       document.body.removeEventListener('mouseenter', handleMouseEnter);
       document.body.removeEventListener('mouseleave', handleMouseLeave);
     };
-  }, [cursorX, cursorY, cursorSize, cursorOpacity]);
+  }, [cursorX, cursorY, cursorSize, cursorOpacity, isMobile, prefersReducedMotion]);
   
-  // Update metadata to Czech
+  // Update metadata to Czech and preload critical assets
   useEffect(() => {
     document.title = "Jan Novák | Frontend Vývojář & UI/UX Designer";
     const metaDescription = document.querySelector('meta[name="description"]');
@@ -122,11 +123,12 @@ const Index = () => {
     }
     viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1');
     
-    // Add prefers-reduced-motion media query support
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (mediaQuery.matches) {
-      document.documentElement.classList.add('reduce-motion');
-    }
+    // Simulate asset loading
+    const timer = setTimeout(() => {
+      setIsLoaded(true);
+    }, 500);
+    
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -138,7 +140,7 @@ const Index = () => {
       className="overflow-x-hidden flex flex-col min-h-screen"
     >
       {/* Interactive cursor effect for desktop */}
-      {!isMobile && (
+      {!isMobile && !prefersReducedMotion && (
         <motion.div
           className="fixed inset-0 z-50 pointer-events-none"
           style={{
@@ -157,66 +159,54 @@ const Index = () => {
       
       <Header />
       
-      <main className="flex-grow">
-        <motion.div 
-          variants={sectionVariants}
-          initial="initial"
-          animate="animate"
-          viewport={{ once: true }}
-        >
-          <HeroSection />
-        </motion.div>
+      <main className="flex-grow relative">
+        <HeroSection />
         
-        <motion.div 
-          variants={sectionVariants}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, margin: "-100px" }}
-        >
+        <Suspense fallback={<LoadingFallback />}>
           <AboutSection />
-        </motion.div>
+        </Suspense>
         
-        <motion.div 
-          variants={sectionVariants}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, margin: "-100px" }}
-        >
+        <Suspense fallback={<LoadingFallback />}>
           <ProjectsSection />
-        </motion.div>
+        </Suspense>
         
-        <motion.div 
-          variants={sectionVariants}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, margin: "-100px" }}
-        >
+        <Suspense fallback={<LoadingFallback />}>
           <SkillsSection />
-        </motion.div>
+        </Suspense>
         
-        <motion.div 
-          variants={sectionVariants}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, margin: "-100px" }}
-        >
+        <Suspense fallback={<LoadingFallback />}>
           <ServicesSection />
-        </motion.div>
+        </Suspense>
         
-        <motion.div 
-          variants={sectionVariants}
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true, margin: "-100px" }}
-        >
+        <Suspense fallback={<LoadingFallback />}>
           <ContactSection />
-        </motion.div>
+        </Suspense>
+        
+        {/* Dynamic decorative elements that respond to mouse position */}
+        {isLoaded && !prefersReducedMotion && (
+          <>
+            <div 
+              className="fixed top-20 left-10 w-32 h-32 bg-purple/10 rounded-full filter blur-3xl opacity-30 pointer-events-none"
+              style={{
+                transform: `translate(${mousePosition.x * -30}px, ${mousePosition.y * -20}px)`,
+                transition: 'transform 0.3s ease-out'
+              }}
+            />
+            <div 
+              className="fixed bottom-40 right-10 w-48 h-48 bg-gold/10 rounded-full filter blur-3xl opacity-20 pointer-events-none"
+              style={{
+                transform: `translate(${mousePosition.x * 30}px, ${mousePosition.y * 20}px)`,
+                transition: 'transform 0.3s ease-out'
+              }}
+            />
+          </>
+        )}
       </main>
       
       <Footer />
       
       {/* Enhanced desktop scroll indicator */}
-      {!isMobile && (
+      {!isMobile && !prefersReducedMotion && (
         <motion.div 
           className="fixed bottom-5 right-5 flex flex-col items-center z-40"
           initial={{ opacity: 0, scale: 0.8 }}
@@ -267,23 +257,7 @@ const Index = () => {
       )}
       
       {/* Animated background grid */}
-      <FloatingGrid />
-      
-      {/* Dynamic decorative elements that respond to mouse position */}
-      <div 
-        className="fixed top-20 left-10 w-32 h-32 bg-purple/10 rounded-full filter blur-3xl opacity-30 pointer-events-none"
-        style={{
-          transform: `translate(${mousePosition.x * -30}px, ${mousePosition.y * -20}px)`,
-          transition: 'transform 0.3s ease-out'
-        }}
-      />
-      <div 
-        className="fixed bottom-40 right-10 w-48 h-48 bg-gold/10 rounded-full filter blur-3xl opacity-20 pointer-events-none"
-        style={{
-          transform: `translate(${mousePosition.x * 30}px, ${mousePosition.y * 20}px)`,
-          transition: 'transform 0.3s ease-out'
-        }}
-      />
+      {isLoaded && <FloatingGrid />}
     </motion.div>
   );
 };

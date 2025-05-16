@@ -7,18 +7,58 @@ import ProjectDetails from './pages/ProjectDetails';
 import NotFound from './pages/NotFound';
 import GradientBackground from './components/GradientBackground';
 import { Toaster } from "./components/ui/toaster";
+import { initEmailJS } from './utils/emailHelpers';
+import { usePrefersReducedMotion } from './hooks/use-reduced-motion';
 
 function App() {
   const [isLoading, setIsLoading] = useState(true);
+  const prefersReducedMotion = usePrefersReducedMotion();
   
   useEffect(() => {
+    // Initialize EmailJS for contact form
+    initEmailJS();
+    
     // Simulate loading time and then set loading to false
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500); // Increased to make animation more noticeable
+    }, prefersReducedMotion ? 500 : 1500);
     
     return () => clearTimeout(timer);
-  }, []);
+  }, [prefersReducedMotion]);
+  
+  const loadingVariants = {
+    initial: { opacity: 1 },
+    exit: { 
+      opacity: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeInOut"
+      }
+    }
+  };
+
+  const mainContentVariants = {
+    initial: { opacity: 0 },
+    animate: { 
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  // Simplified loading animation for reduced motion
+  if (prefersReducedMotion && isLoading) {
+    return (
+      <div className="fixed inset-0 z-50 flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-t-gold border-r-gold/40 border-b-gold/20 border-l-gold/5 rounded-full animate-spin"></div>
+          <p className="mt-4 text-foreground/80">Načítání...</p>
+        </div>
+      </div>
+    );
+  }
   
   return (
     <AnimatePresence mode="wait">
@@ -27,8 +67,9 @@ function App() {
         <motion.div 
           key="loader"
           className="fixed inset-0 z-50 flex items-center justify-center bg-background"
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8, ease: "easeInOut" }}
+          variants={loadingVariants}
+          initial="initial"
+          exit="exit"
         >
           <motion.div 
             className="relative"
@@ -77,9 +118,9 @@ function App() {
         // Main application with enhanced enter animation
         <motion.div
           key="app"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
+          variants={mainContentVariants}
+          initial="initial"
+          animate="animate"
           className="relative z-10"
         >
           {/* Apply gradient background to the entire app */}
