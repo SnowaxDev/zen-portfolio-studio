@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Code2, Server, Cpu, ChevronDown, RotateCw } from 'lucide-react';
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { statsData, techStackData, philosophyItems, hobbyItems, sectionMeta } from '../lib/section-data';
 import ScrollReveal from '@/components/ScrollReveal';
 import SectionTitle from '@/components/SectionTitle';
 import TextWithGlow from '@/components/TextWithGlow';
@@ -26,12 +25,12 @@ const AboutSection: React.FC = () => {
     setHoveredStat(index);
   };
 
-  // Stats data
+  // Stats data - fixed with correct numbers as requested previously
   const stats = [
     { value: '2+', label: 'Roky zkušeností', rotation: 0, translateY: 0 },
-    { value: '10+', label: 'Dokončených projektů', rotation: 0, translateY: 0 },
+    { value: '5+', label: 'Dokončených projektů', rotation: 0, translateY: 0 },
     { value: '5+', label: 'Spokojených klientů', rotation: 0, translateY: 0 },
-    { value: '3+', label: 'Open source příspěvků', rotation: 0, translateY: 0 }
+    { value: '10+', label: 'Open source příspěvků', rotation: 0, translateY: 0 }
   ];
 
   // Tech stack data
@@ -59,6 +58,15 @@ const AboutSection: React.FC = () => {
     'Upřednostňuji přístupnost a výkon ve všem, co vytvářím.',
     'Využívám moderní nástroje a technologie pro efektivní vývoj.',
     'Neustále se učím novým technologiím, abych zůstal v popředí webového vývoje.'
+  ];
+  
+  // Hobby items
+  const hobbyItems = [
+    'Konfigurace vlastních serverů a self-hosted služeb',
+    'Experimentování s IoT zařízeními a mikrokontrolery',
+    'Studium kyberbezpečnosti a etického hackování',
+    'Tvorba open-source nástrojů pro vývojáře',
+    'Optimalizace Linuxových systémů'
   ];
 
   return (

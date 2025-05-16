@@ -9,14 +9,23 @@ import { FloatingGrid } from '../components/DecorativeElements';
 import { usePrefersReducedMotion } from '../hooks/use-reduced-motion';
 import { Loader } from 'lucide-react';
 
-// Lazy load sections for better performance
-const AboutSection = lazy(() => import('../sections/AboutSection'));
+// Import AboutSection directly instead of lazy loading to fix the issue
+import AboutSection from '../sections/AboutSection';
+
+// Lazy load other sections for better performance
 const ProjectsSection = lazy(() => import('../sections/ProjectsSection'));
 const SkillsSection = lazy(() => import('../sections/SkillsSection'));
 const ServicesSection = lazy(() => import('../sections/ServicesSection'));
 const ContactSection = lazy(() => import('../sections/ContactSection'));
 
-// Enhanced page transition variants with improved timing and easing
+// Enhanced loading fallback with better error handling
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-[200px]">
+    <Loader className="h-8 w-8 animate-spin text-gold" />
+  </div>
+);
+
+// Page transition variants
 const pageVariants = {
   initial: { opacity: 0 },
   animate: { 
@@ -36,12 +45,6 @@ const pageVariants = {
     }
   }
 };
-
-const LoadingFallback = () => (
-  <div className="flex items-center justify-center min-h-[200px]">
-    <Loader className="h-8 w-8 animate-spin text-gold" />
-  </div>
-);
 
 const Index = () => {
   const isMobile = useIsMobile();
@@ -162,9 +165,8 @@ const Index = () => {
       <main className="flex-grow relative">
         <HeroSection />
         
-        <Suspense fallback={<LoadingFallback />}>
-          <AboutSection />
-        </Suspense>
+        {/* Directly render AboutSection without Suspense to fix loading issue */}
+        <AboutSection />
         
         <Suspense fallback={<LoadingFallback />}>
           <ProjectsSection />
