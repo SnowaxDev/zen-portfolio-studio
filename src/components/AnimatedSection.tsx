@@ -81,29 +81,29 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   // Use simpler animation if user prefers reduced motion
   if (prefersReducedMotion) {
     return (
-      <motion.section
+      <motion.div
         id={id}
-        className={`${className} ${withOverflow ? '' : 'overflow-hidden'}`}
+        className={`${className} relative ${withOverflow ? '' : 'overflow-hidden'}`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
         {children}
-      </motion.section>
+      </motion.div>
     );
   }
 
   return (
-    <motion.section
+    <motion.div
       id={id}
-      className={`${className} ${withOverflow ? '' : 'overflow-hidden'}`}
+      className={`${className} relative ${withOverflow ? '' : 'overflow-hidden'}`}
       initial="hidden"
       whileInView="visible"
       viewport={{ once, margin: "-50px", amount: threshold }}
       variants={variants}
     >
       {children}
-    </motion.section>
+    </motion.div>
   );
 };
 

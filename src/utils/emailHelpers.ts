@@ -10,36 +10,29 @@ interface EmailParams {
   subject?: string;
 }
 
+// More robust email validation regex
+const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 export const sendContactEmail = async (params: EmailParams): Promise<boolean> => {
   try {
-    // Form validation
-    if (!params.name.trim()) {
-      toast.error('Prosím vyplňte vaše jméno');
+    // Form validation with more robust checks
+    const validationResult = validateForm(params);
+    
+    if (!validationResult.isValid) {
+      toast.error(validationResult.errors[0]);
       return false;
     }
     
-    if (!params.email.trim()) {
-      toast.error('Prosím vyplňte váš email');
-      return false;
-    }
-    
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(params.email)) {
-      toast.error('Prosím zadejte platný email');
-      return false;
-    }
-    
-    if (!params.message.trim()) {
-      toast.error('Prosím napište vaši zprávu');
-      return false;
-    }
-    
-    // Show sending notification
-    toast.loading('Odesílání zprávy...');
+    // Show sending notification with a unique ID to allow dismissal
+    const loadingToastId = toast.loading('Odesílání zprávy...', {
+      id: 'sending-email',
+      duration: 10000, // Set reasonable timeout
+    });
     
     const templateParams = {
-      from_name: params.name,
-      reply_to: params.email,
-      message: params.message,
+      from_name: params.name.trim(),
+      reply_to: params.email.trim(),
+      message: params.message.trim(),
       to_email: params.to_email || 'Snowax.dev@proton.me',
       subject: params.subject || 'Nová zpráva z kontaktního formuláře'
     };
@@ -51,12 +44,17 @@ export const sendContactEmail = async (params: EmailParams): Promise<boolean> =>
       import.meta.env.VITE_EMAILJS_PUBLIC_KEY
     );
     
-    // Show success notification
+    // Dismiss the loading toast and show success
+    toast.dismiss('sending-email');
     toast.success('Zpráva byla úspěšně odeslána!');
     return true;
   } catch (error) {
     console.error('Failed to send email:', error);
-    // Show error notification
+    
+    // Dismiss the loading toast and show a detailed error
+    toast.dismiss('sending-email');
+    
+    // More user-friendly error message
     toast.error('Při odesílání zprávy došlo k chybě. Zkuste to prosím znovu později.');
     return false;
   }
@@ -64,8 +62,15 @@ export const sendContactEmail = async (params: EmailParams): Promise<boolean> =>
 
 export const initEmailJS = () => {
   if (import.meta.env.VITE_EMAILJS_PUBLIC_KEY) {
-    emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
-    console.log('EmailJS initialized successfully');
+    try {
+      emailjs.init(import.meta.env.VITE_EMAILJS_PUBLIC_KEY);
+      console.log('EmailJS initialized successfully');
+    } catch (error) {
+      console.error('Failed to initialize EmailJS:', error);
+      if (import.meta.env.DEV) {
+        toast.warning('Problém při inicializaci EmailJS. Kontaktní formulář nemusí fungovat správně.');
+      }
+    }
   } else {
     console.warn('EmailJS public key not found. Contact form will not work correctly.');
     // Show warning notification only in development
@@ -75,7 +80,7 @@ export const initEmailJS = () => {
   }
 };
 
-// Helper for form validation
+// Helper for form validation with more robust checks
 export const validateForm = (params: Partial<EmailParams>): { isValid: boolean; errors: string[] } => {
   const errors: string[] = [];
   
@@ -85,12 +90,14 @@ export const validateForm = (params: Partial<EmailParams>): { isValid: boolean; 
   
   if (!params.email?.trim()) {
     errors.push('Prosím vyplňte váš email');
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(params.email)) {
+  } else if (!EMAIL_REGEX.test(params.email.trim())) {
     errors.push('Prosím zadejte platný email');
   }
   
   if (!params.message?.trim()) {
     errors.push('Prosím napište vaši zprávu');
+  } else if (params.message.trim().length < 10) {
+    errors.push('Zpráva je příliš krátká. Napište prosím alespoň 10 znaků.');
   }
   
   return {

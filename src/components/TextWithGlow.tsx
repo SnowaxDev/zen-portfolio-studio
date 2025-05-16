@@ -72,27 +72,16 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
     } : {}
   };
 
-  // Shimmering gradient style
-  const shimmerStyles = shimmer ? {
-    backgroundImage: `linear-gradient(90deg, ${color}00 0%, ${color}60 50%, ${color}00 100%)`,
-    backgroundSize: '200% 100%',
-    backgroundRepeat: 'no-repeat',
+  // Shimmer styles - fixed to avoid the backgroundSize animation warning
+  const shimmerClass = shimmer ? 'shimmer-effect' : '';
+
+  // Combined styles for gradient
+  const gradientStyle = gradient ? {
+    backgroundImage: `linear-gradient(to right, var(--gold), var(--gold-light))`,
     backgroundClip: 'text',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
-    animation: 'shimmer 2s infinite linear',
   } : {};
-
-  // Combined styles
-  const combinedStyles = {
-    ...(shimmer ? shimmerStyles : {}),
-    ...(gradient ? {
-      backgroundImage: `linear-gradient(to right, var(--gold), var(--gold-light))`,
-      backgroundClip: 'text',
-      WebkitBackgroundClip: 'text',
-      WebkitTextFillColor: 'transparent',
-    } : {})
-  };
 
   // Add gradient class if needed
   const gradientClass = gradient 
@@ -101,16 +90,35 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
 
   return (
     <motion.span
-      className={`${className} ${gradientClass}`}
+      className={`${className} ${gradientClass} ${shimmerClass}`}
       variants={textGlowVariants}
       initial={animateOnScroll ? "initial" : "animate"}
       animate="animate"
       whileInView={animateOnScroll ? "animate" : undefined}
       viewport={animateOnScroll ? { once: true, margin: "-100px" } : undefined}
       whileHover={hover ? "hover" : undefined}
-      style={combinedStyles}
+      style={gradientStyle}
     >
       {children}
+      
+      {/* Add global style for shimmer effect if needed */}
+      {shimmer && (
+        <style jsx global>{`
+          .shimmer-effect {
+            position: relative;
+            background-size: 200% 100%;
+            background-repeat: no-repeat;
+            background-clip: text;
+            -webkit-background-clip: text;
+            background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%);
+            animation: shimmer 2s infinite linear;
+          }
+          @keyframes shimmer {
+            0% { background-position: -100% 0; }
+            100% { background-position: 200% 0; }
+          }
+        `}</style>
+      )}
     </motion.span>
   );
 };

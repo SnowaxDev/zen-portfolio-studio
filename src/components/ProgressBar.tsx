@@ -1,6 +1,7 @@
 
 import React, { useRef, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
+import { usePrefersReducedMotion } from '../hooks/use-reduced-motion';
 
 interface ProgressBarProps {
   skill: string;
@@ -22,14 +23,24 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   const progressValue = useMotionValue(0);
   const progressDisplay = useTransform(progressValue, Math.round);
   const ref = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = usePrefersReducedMotion();
   
   useEffect(() => {
+    // Skip animation for reduced motion preference
+    if (prefersReducedMotion) {
+      progressValue.set(percentage);
+      return;
+    }
+    
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
+          // Use a more optimized animation with lower CPU usage
           animate(progressValue, percentage, {
             duration: 1.2,
-            ease: "easeOut"
+            ease: "easeOut",
+            // Optimize for performance by reducing the number of updates
+            driver: "motionValue"
           });
         }
       },
@@ -43,7 +54,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     return () => {
       if (ref.current) observer.unobserve(ref.current);
     };
-  }, [percentage, progressValue]);
+  }, [percentage, progressValue, prefersReducedMotion]);
 
   // Colors based on the prop
   const barColors = {
@@ -52,8 +63,33 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     accent: "bg-gradient-to-r from-accent to-accent-light"
   };
   
+  // Simplified version for reduced motion
+  if (prefersReducedMotion) {
+    return (
+      <div className={`relative w-full ${className}`} ref={ref}>
+        <div className="flex justify-between mb-2 items-center">
+          <span className="text-sm font-medium">{skill}</span>
+          <div className="flex items-center">
+            <span className="text-sm font-mono bg-black/40 px-2 py-0.5 rounded-md backdrop-blur-sm border border-gold/10">
+              {percentage}%
+            </span>
+          </div>
+        </div>
+        <div className="h-2 rounded-full bg-black/50 overflow-hidden backdrop-blur-sm border border-white/5">
+          <div 
+            className={`h-full rounded-full ${barColors[color]}`}
+            style={{ width: `${percentage}%` }}
+          />
+        </div>
+      </div>
+    );
+  }
+  
   return (
-    <div className={`relative w-full ${isHovered ? 'scale-[1.02] transition-transform' : ''} ${className}`} ref={ref}>
+    <div 
+      className={`relative w-full ${isHovered ? 'scale-[1.02] transition-transform' : ''} ${className}`} 
+      ref={ref}
+    >
       <div className="flex justify-between mb-2 items-center">
         <motion.span 
           className="text-sm font-medium"
