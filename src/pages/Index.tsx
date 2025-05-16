@@ -1,6 +1,6 @@
 
-import React, { useEffect } from 'react';
-import { motion, useScroll, useSpring } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, useScroll, useSpring, useMotionTemplate } from 'framer-motion';
 import Header from '../components/Header';
 import HeroSection from '../sections/HeroSection';
 import AboutSection from '../sections/AboutSection';
@@ -10,6 +10,7 @@ import ServicesSection from '../sections/ServicesSection';
 import ContactSection from '../sections/ContactSection';
 import Footer from '../components/Footer';
 import { useIsMobile } from '../hooks/use-mobile';
+import { FloatingGrid } from '../components/DecorativeElements';
 
 // Enhanced page transition variants with improved timing and easing
 const pageVariants = {
@@ -47,6 +48,7 @@ const sectionVariants = {
 
 const Index = () => {
   const isMobile = useIsMobile();
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
   // Get scroll progress for scroll-based animations
   const { scrollYProgress } = useScroll();
@@ -55,6 +57,53 @@ const Index = () => {
     damping: 30, 
     restDelta: 0.001 
   });
+  
+  // Interactive cursor effect
+  const cursorSize = useSpring(12, { stiffness: 100, damping: 25 });
+  const cursorOpacity = useSpring(0, { stiffness: 100, damping: 25 });
+  const cursorX = useSpring(0, { stiffness: 80, damping: 20 });
+  const cursorY = useSpring(0, { stiffness: 80, damping: 20 });
+  
+  const cursorStyle = useMotionTemplate`
+    radial-gradient(
+      ${cursorSize}px circle,
+      rgba(212, 175, 55, ${cursorOpacity}),
+      transparent 60%
+    )
+  `;
+  
+  // Track mouse position for interactive cursor
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      cursorX.set(e.clientX - 15);
+      cursorY.set(e.clientY - 15);
+      
+      setMousePosition({
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight
+      });
+    };
+    
+    const handleMouseEnter = () => {
+      cursorSize.set(40);
+      cursorOpacity.set(0.3);
+    };
+    
+    const handleMouseLeave = () => {
+      cursorSize.set(12);
+      cursorOpacity.set(0);
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    document.body.addEventListener('mouseenter', handleMouseEnter);
+    document.body.addEventListener('mouseleave', handleMouseLeave);
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.body.removeEventListener('mouseenter', handleMouseEnter);
+      document.body.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [cursorX, cursorY, cursorSize, cursorOpacity]);
   
   // Update metadata to Czech
   useEffect(() => {
@@ -72,6 +121,12 @@ const Index = () => {
       document.getElementsByTagName('head')[0].appendChild(viewport);
     }
     viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1');
+    
+    // Add prefers-reduced-motion media query support
+    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (mediaQuery.matches) {
+      document.documentElement.classList.add('reduce-motion');
+    }
   }, []);
 
   return (
@@ -82,6 +137,18 @@ const Index = () => {
       exit="exit"
       className="overflow-x-hidden flex flex-col min-h-screen"
     >
+      {/* Interactive cursor effect for desktop */}
+      {!isMobile && (
+        <motion.div
+          className="fixed inset-0 z-50 pointer-events-none"
+          style={{
+            background: cursorStyle,
+            left: cursorX,
+            top: cursorY,
+          }}
+        />
+      )}
+      
       {/* Scroll progress indicator */}
       <motion.div 
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold via-purple to-gold-light z-50"
@@ -151,7 +218,7 @@ const Index = () => {
       {/* Enhanced desktop scroll indicator */}
       {!isMobile && (
         <motion.div 
-          className="fixed bottom-5 right-5 flex flex-col items-center z-50"
+          className="fixed bottom-5 right-5 flex flex-col items-center z-40"
           initial={{ opacity: 0, scale: 0.8 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 1.8, duration: 0.5 }}
@@ -180,7 +247,7 @@ const Index = () => {
       {/* Enhanced mobile floating buttons */}
       {isMobile && (
         <motion.div
-          className="fixed bottom-5 right-5 z-50"
+          className="fixed bottom-5 right-5 z-40"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1, duration: 0.5 }}
@@ -199,9 +266,24 @@ const Index = () => {
         </motion.div>
       )}
       
-      {/* Decorative elements */}
-      <div className="fixed top-20 left-10 w-32 h-32 bg-purple/10 rounded-full filter blur-3xl opacity-30 animate-pulse pointer-events-none" />
-      <div className="fixed bottom-40 right-10 w-48 h-48 bg-gold/10 rounded-full filter blur-3xl opacity-20 animate-pulse pointer-events-none" />
+      {/* Animated background grid */}
+      <FloatingGrid />
+      
+      {/* Dynamic decorative elements that respond to mouse position */}
+      <div 
+        className="fixed top-20 left-10 w-32 h-32 bg-purple/10 rounded-full filter blur-3xl opacity-30 pointer-events-none"
+        style={{
+          transform: `translate(${mousePosition.x * -30}px, ${mousePosition.y * -20}px)`,
+          transition: 'transform 0.3s ease-out'
+        }}
+      />
+      <div 
+        className="fixed bottom-40 right-10 w-48 h-48 bg-gold/10 rounded-full filter blur-3xl opacity-20 pointer-events-none"
+        style={{
+          transform: `translate(${mousePosition.x * 30}px, ${mousePosition.y * 20}px)`,
+          transition: 'transform 0.3s ease-out'
+        }}
+      />
     </motion.div>
   );
 };
