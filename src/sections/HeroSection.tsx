@@ -83,8 +83,8 @@ const HeroSection: React.FC = () => {
   };
   
   return (
-    <section id="hero" className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
-      {/* Enhanced particle background with more particles and interaction */}
+    <section id="hero" className="min-h-screen flex items-center justify-center pt-16 pb-8 relative overflow-hidden">
+      {/* Enhanced particle background with fewer particles on mobile */}
       <ParticleBackground />
       
       {/* Asymmetric background elements */}
@@ -118,9 +118,9 @@ const HeroSection: React.FC = () => {
       />
       
       <div className="container-custom flex flex-col md:flex-row items-center justify-between relative z-10">
-        {/* Text content side - Taking more space on larger screens */}
+        {/* Improved mobile text content side */}
         <motion.div 
-          className="md:w-7/12 lg:w-3/5 mb-10 md:mb-0 px-4 sm:px-0"
+          className="w-full md:w-7/12 lg:w-3/5 mb-6 md:mb-0 px-4 sm:px-0 text-center md:text-left"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -129,7 +129,7 @@ const HeroSection: React.FC = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="mb-2 relative"
+            className="mb-4 md:mb-2 relative flex justify-center md:justify-start"
             style={{
               x: isMobile ? 0 : mousePosition.x * -15,
               y: isMobile ? 0 : mousePosition.y * -10,
@@ -152,7 +152,7 @@ const HeroSection: React.FC = () => {
           </motion.div>
           
           {isMobile ? (
-            <h1 className="text-4xl sm:text-5xl font-bold mb-6 leading-tight">
+            <h1 className="text-4xl font-bold mb-6 leading-tight px-3">
               <TextWithSparkles>{hero.title}</TextWithSparkles>
             </h1>
           ) : (
@@ -172,7 +172,7 @@ const HeroSection: React.FC = () => {
           )}
           
           <motion.p 
-            className="text-foreground/80 mb-8 max-w-lg md:max-w-xl text-lg relative"
+            className="text-foreground/80 mb-8 max-w-lg md:max-w-xl text-lg px-4 md:px-0 mx-auto md:mx-0 relative"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.7 }}
@@ -193,7 +193,7 @@ const HeroSection: React.FC = () => {
           </motion.p>
           
           <motion.div 
-            className="flex flex-col sm:flex-row gap-5 justify-center md:justify-start relative"
+            className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start relative"
             style={{
               x: isMobile ? 0 : mousePosition.x * -5,
               y: isMobile ? 0 : mousePosition.y * -3,
@@ -256,9 +256,9 @@ const HeroSection: React.FC = () => {
           </motion.div>
         </motion.div>
         
-        {/* Profile image side with enhanced styling - Taking less space, positioned asymmetrically */}
+        {/* Improved mobile profile image size and spacing */}
         <motion.div 
-          className="md:w-5/12 lg:w-2/5 relative"
+          className="w-full md:w-5/12 lg:w-2/5 relative"
           variants={imageVariants}
           initial="hidden"
           animate="visible"
@@ -269,7 +269,7 @@ const HeroSection: React.FC = () => {
             y: isMobile ? 0 : mousePosition.y * 20
           }}
         >
-          <div className="relative w-64 h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 mx-auto">
+          <div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 mx-auto">
             {/* Animated background glow with parallax */}
             <motion.div 
               className="absolute -inset-6 rounded-full bg-gradient-to-tr from-gold/30 to-purple/30 opacity-70 blur-3xl"
@@ -304,35 +304,39 @@ const HeroSection: React.FC = () => {
               transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
             />
             
-            {/* Decorative orbiting elements */}
-            <motion.div
-              className="absolute -right-6 -top-6 w-12 h-12 rounded-full bg-purple/20 backdrop-blur-md border border-purple/40"
-              animate={{ 
-                y: [0, -10, 0],
-                x: [0, 5, 0],
-                scale: [1, 1.1, 1], 
-              }}
-              transition={{ 
-                duration: 5, 
-                repeat: Infinity,
-                ease: "easeInOut" 
-              }}
-            />
-            
-            <motion.div
-              className="absolute -left-8 top-1/2 w-16 h-16 rounded-full bg-gold/10 backdrop-blur-md border border-gold/30"
-              animate={{ 
-                y: [0, 10, 0],
-                x: [0, -5, 0],
-                scale: [1, 0.9, 1], 
-              }}
-              transition={{ 
-                duration: 7, 
-                repeat: Infinity,
-                ease: "easeInOut",
-                delay: 0.5
-              }}
-            />
+            {/* Decorative orbiting elements - reduced for mobile */}
+            {!isMobile && (
+              <>
+                <motion.div
+                  className="absolute -right-6 -top-6 w-12 h-12 rounded-full bg-purple/20 backdrop-blur-md border border-purple/40"
+                  animate={{ 
+                    y: [0, -10, 0],
+                    x: [0, 5, 0],
+                    scale: [1, 1.1, 1], 
+                  }}
+                  transition={{ 
+                    duration: 5, 
+                    repeat: Infinity,
+                    ease: "easeInOut" 
+                  }}
+                />
+                
+                <motion.div
+                  className="absolute -left-8 top-1/2 w-16 h-16 rounded-full bg-gold/10 backdrop-blur-md border border-gold/30"
+                  animate={{ 
+                    y: [0, 10, 0],
+                    x: [0, -5, 0],
+                    scale: [1, 0.9, 1], 
+                  }}
+                  transition={{ 
+                    duration: 7, 
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: 0.5
+                  }}
+                />
+              </>
+            )}
             
             <motion.div
               className="absolute bottom-0 right-0 w-10 h-10 rounded-full bg-purple-light/20 backdrop-blur-sm"
@@ -371,21 +375,13 @@ const HeroSection: React.FC = () => {
                 transition={{ duration: 0.3 }}
               />
             </motion.div>
-            
-            {/* Extra profile highlighting */}
-            <motion.div
-              className="absolute -inset-1 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300"
-              style={{ 
-                background: `radial-gradient(circle at ${50 + mousePosition.x * 50}% ${50 + mousePosition.y * 50}%, rgba(212, 175, 55, 0.3) 0%, rgba(212, 175, 55, 0) 70%)` 
-              }}
-            />
           </div>
         </motion.div>
       </div>
       
-      {/* Enhanced scroll indicator with interactive animation */}
+      {/* Enhanced scroll indicator - more visible on mobile */}
       <motion.div 
-        className="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-10"
+        className="absolute bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-10"
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 1.2, duration: 0.5 }}
@@ -410,10 +406,6 @@ const HeroSection: React.FC = () => {
           <ArrowDown className="h-4 w-4 text-gold group-hover:text-gold-light transition-colors duration-300" />
         </motion.div>
       </motion.div>
-      
-      {/* Additional background decorative elements */}
-      <div className="absolute top-1/4 left-1/6 w-1 h-20 bg-gradient-to-b from-gold/0 via-gold/20 to-gold/0 rotate-45 opacity-70" />
-      <div className="absolute bottom-1/4 right-1/6 w-1 h-16 bg-gradient-to-b from-purple/0 via-purple/20 to-purple/0 -rotate-45 opacity-70" />
     </section>
   );
 };

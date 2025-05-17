@@ -7,7 +7,7 @@ import Footer from '../components/Footer';
 import { useIsMobile } from '../hooks/use-mobile';
 import { FloatingGrid } from '../components/DecorativeElements';
 import { usePrefersReducedMotion } from '../hooks/use-reduced-motion';
-import { Loader } from 'lucide-react';
+import { Loader, ArrowUp } from 'lucide-react';
 
 // Import AboutSection directly instead of lazy loading to fix the issue
 import AboutSection from '../sections/AboutSection';
@@ -51,6 +51,7 @@ const Index = () => {
   const prefersReducedMotion = usePrefersReducedMotion();
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
+  const [showScrollTop, setShowScrollTop] = useState(false);
   
   // Get scroll progress for scroll-based animations
   const { scrollYProgress } = useScroll();
@@ -109,6 +110,28 @@ const Index = () => {
     };
   }, [cursorX, cursorY, cursorSize, cursorOpacity, isMobile, prefersReducedMotion]);
   
+  // Show/hide scroll-to-top button based on scroll position
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > window.innerHeight) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+    
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+  
+  // Scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+  
   // Update metadata to Czech and preload critical assets
   useEffect(() => {
     document.title = "Jan Novák | Frontend Vývojář & UI/UX Designer";
@@ -125,6 +148,15 @@ const Index = () => {
       document.getElementsByTagName('head')[0].appendChild(viewport);
     }
     viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1');
+    
+    // Add theme-color meta tag for mobile browser UI
+    let themeColor = document.querySelector('meta[name="theme-color"]');
+    if (!themeColor) {
+      themeColor = document.createElement('meta');
+      themeColor.setAttribute('name', 'theme-color');
+      document.getElementsByTagName('head')[0].appendChild(themeColor);
+    }
+    themeColor.setAttribute('content', '#1A1F2C');
     
     // Simulate asset loading
     const timer = setTimeout(() => {
@@ -207,7 +239,25 @@ const Index = () => {
       
       <Footer />
       
-      {/* Enhanced desktop scroll indicator */}
+      {/* Enhanced scroll-to-top button - better for mobile */}
+      <AnimatePresence>
+        {showScrollTop && (
+          <motion.button
+            className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-card/80 backdrop-blur-md border border-gold/20 shadow-lg hover:border-gold/50 transition-colors"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={scrollToTop}
+            aria-label="Scroll to top"
+          >
+            <ArrowUp className="h-5 w-5 text-gold" />
+          </motion.button>
+        )}
+      </AnimatePresence>
+      
+      {/* Enhanced desktop scroll indicator - hide on mobile */}
       {!isMobile && !prefersReducedMotion && (
         <motion.div 
           className="fixed bottom-5 right-5 flex flex-col items-center z-40"
@@ -236,7 +286,7 @@ const Index = () => {
         </motion.div>
       )}
       
-      {/* Enhanced mobile floating buttons */}
+      {/* Enhanced mobile floating contact button - only on mobile */}
       {isMobile && (
         <motion.div
           className="fixed bottom-5 right-5 z-40"
@@ -246,20 +296,20 @@ const Index = () => {
         >
           <motion.a 
             href="#contact"
-            className="flex items-center justify-center w-14 h-14 bg-gradient-to-r from-gold to-gold-light rounded-full shadow-lg shadow-gold/20"
+            className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-gold to-gold-light rounded-full shadow-lg shadow-gold/20"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Contact Me"
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
             </svg>
           </motion.a>
         </motion.div>
       )}
       
-      {/* Animated background grid */}
-      {isLoaded && <FloatingGrid />}
+      {/* Animated background grid - reduce density on mobile */}
+      {isLoaded && <FloatingGrid density={isMobile ? 0.5 : 1} />}
     </motion.div>
   );
 };

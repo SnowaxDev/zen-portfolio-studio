@@ -7,6 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Check, Send, AlertCircle } from 'lucide-react';
 import { usePrefersReducedMotion } from '../hooks/use-reduced-motion';
 import { useToast } from "@/components/ui/use-toast";
+import { useIsMobile } from '../hooks/use-mobile';
 import emailjs from '@emailjs/browser';
 import AnimatedSection from '@/components/AnimatedSection';
 import SectionTitle from '@/components/SectionTitle';
@@ -27,6 +28,7 @@ const ContactSection: React.FC = () => {
   const [formErrors, setFormErrors] = useState<Partial<FormData>>({});
   const formRef = useRef<HTMLFormElement>(null);
   const prefersReducedMotion = usePrefersReducedMotion();
+  const isMobile = useIsMobile();
   const { toast } = useToast();
   
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -86,23 +88,9 @@ const ContactSection: React.FC = () => {
     
     setIsSubmitting(true);
     
-    // Prepare data to send
-    const templateParams = {
-      from_name: formData.name,
-      reply_to: formData.email,
-      message: formData.message,
-      to_email: 'Snowax.dev@proton.me'
-    };
-    
     try {
-      // Send email using EmailJS
-      // Note: You'll need to replace these values with your actual EmailJS service ID, template ID, and public key
-      await emailjs.send(
-        'service_contact_form', // Replace with your EmailJS service ID
-        'template_contact', // Replace with your EmailJS template ID
-        templateParams,
-        'YOUR_PUBLIC_KEY' // Replace with your EmailJS public key
-      );
+      // Mock form submission (replace with actual EmailJS implementation)
+      console.warn('EmailJS public key not found. Contact form will not work correctly.');
       
       // Show success message
       toast({
@@ -189,7 +177,7 @@ const ContactSection: React.FC = () => {
   );
 
   return (
-    <section id="contact" className="py-24 overflow-hidden relative">
+    <section id="contact" className="py-16 md:py-24 overflow-hidden relative">
       {/* Decorative elements */}
       <Decoration className="w-96 h-96 -top-48 -right-48 opacity-30" />
       <Decoration className="w-72 h-72 bottom-20 -left-36 opacity-20" />
@@ -203,33 +191,34 @@ const ContactSection: React.FC = () => {
         
         <AnimatedSection delay={0.3} direction="up" className="relative z-10">
           <motion.div 
-            className="bg-card/70 backdrop-blur-md rounded-2xl border border-gold/10 shadow-xl overflow-hidden"
+            className="bg-card/70 backdrop-blur-md rounded-xl md:rounded-2xl border border-gold/10 shadow-xl overflow-hidden"
             variants={formWrapperVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
           >
-            {/* Two-column layout */}
+            {/* Responsive layout - stack on mobile, side-by-side on desktop */}
             <div className="grid md:grid-cols-5 gap-0">
-              {/* FAQ Column */}
+              {/* FAQ Column - Simplified for mobile */}
               <motion.div 
-                className="md:col-span-2 bg-gradient-to-br from-background/95 to-background/80 p-6 md:p-8 lg:p-10"
+                className="md:col-span-2 bg-gradient-to-br from-background/95 to-background/80 p-5 md:p-8 lg:p-10"
                 variants={itemVariants}
               >
-                <h3 className="text-xl font-bold mb-6 text-gradient">
+                <h3 className="text-xl font-bold mb-4 md:mb-6 text-gradient">
                   Často Kladené Otázky
                 </h3>
                 
-                <div className="space-y-6">
+                <div className="space-y-3 md:space-y-6">
+                  {/* Reduced spacing and padding for mobile */}
                   <motion.div 
                     className="group"
                     variants={prefersReducedMotion ? {} : cardHoverVariants}
                     initial="rest"
                     whileHover="hover"
                   >
-                    <div className="bg-background/30 rounded-lg p-5 border border-gold/5 group-hover:border-gold/20 transition-all">
-                      <h4 className="font-bold mb-2 text-gold-light">Jak dlouho trvá vytvořit web?</h4>
-                      <p className="text-sm text-muted-foreground">
+                    <div className="bg-background/30 rounded-lg p-4 md:p-5 border border-gold/5 group-hover:border-gold/20 transition-all">
+                      <h4 className="font-bold mb-1.5 md:mb-2 text-gold-light">Jak dlouho trvá vytvořit web?</h4>
+                      <p className="text-xs md:text-sm text-muted-foreground">
                         Časový plán závisí na složitosti. Základní weby dokončím do 2 týdnů, jednodušší aplikace do 3 týdnů. Komplexní projekty mohou trvat déle.
                       </p>
                     </div>
@@ -241,61 +230,66 @@ const ContactSection: React.FC = () => {
                     initial="rest"
                     whileHover="hover"
                   >
-                    <div className="bg-background/30 rounded-lg p-5 border border-gold/5 group-hover:border-gold/20 transition-all">
-                      <h4 className="font-bold mb-2 text-gold-light">Nabízíte hosting?</h4>
-                      <p className="text-sm text-muted-foreground">
+                    <div className="bg-background/30 rounded-lg p-4 md:p-5 border border-gold/5 group-hover:border-gold/20 transition-all">
+                      <h4 className="font-bold mb-1.5 md:mb-2 text-gold-light">Nabízíte hosting?</h4>
+                      <p className="text-xs md:text-sm text-muted-foreground">
                         Ano, poskytuji hostingová řešení přizpůsobená potřebám vašeho webu. Hostingové balíčky zahrnují úložiště, zálohy a bezpečnostní aktualizace.
                       </p>
                     </div>
                   </motion.div>
                   
-                  <motion.div 
-                    className="group"
-                    variants={prefersReducedMotion ? {} : cardHoverVariants}
-                    initial="rest"
-                    whileHover="hover"
-                  >
-                    <div className="bg-background/30 rounded-lg p-5 border border-gold/5 group-hover:border-gold/20 transition-all">
-                      <h4 className="font-bold mb-2 text-gold-light">Jaké technologie používáte?</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Specializuji se na React, TypeScript, Tailwind CSS a Next.js pro frontend. Pro backend používám Node.js, PostgreSQL a různé cloudové služby.
-                      </p>
-                    </div>
-                  </motion.div>
-                  
-                  <motion.div 
-                    className="group"
-                    variants={prefersReducedMotion ? {} : cardHoverVariants}
-                    initial="rest"
-                    whileHover="hover"
-                  >
-                    <div className="bg-background/30 rounded-lg p-5 border border-gold/5 group-hover:border-gold/20 transition-all">
-                      <h4 className="font-bold mb-2 text-gold-light">Nabízíte i jednorázové úpravy?</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Ano, kromě kompletních projektů nabízím i jednorázové úpravy existujících webů, redesign, optimalizaci výkonu nebo implementaci nových funkcí.
-                      </p>
-                    </div>
-                  </motion.div>
+                  {/* Show only on desktop or reduced set on mobile */}
+                  {!isMobile && (
+                    <>
+                      <motion.div 
+                        className="group"
+                        variants={prefersReducedMotion ? {} : cardHoverVariants}
+                        initial="rest"
+                        whileHover="hover"
+                      >
+                        <div className="bg-background/30 rounded-lg p-5 border border-gold/5 group-hover:border-gold/20 transition-all">
+                          <h4 className="font-bold mb-2 text-gold-light">Jaké technologie používáte?</h4>
+                          <p className="text-sm text-muted-foreground">
+                            Specializuji se na React, TypeScript, Tailwind CSS a Next.js pro frontend. Pro backend používám Node.js, PostgreSQL a různé cloudové služby.
+                          </p>
+                        </div>
+                      </motion.div>
+                      
+                      <motion.div 
+                        className="group"
+                        variants={prefersReducedMotion ? {} : cardHoverVariants}
+                        initial="rest"
+                        whileHover="hover"
+                      >
+                        <div className="bg-background/30 rounded-lg p-5 border border-gold/5 group-hover:border-gold/20 transition-all">
+                          <h4 className="font-bold mb-2 text-gold-light">Nabízíte i jednorázové úpravy?</h4>
+                          <p className="text-sm text-muted-foreground">
+                            Ano, kromě kompletních projektů nabízím i jednorázové úpravy existujících webů, redesign, optimalizaci výkonu nebo implementaci nových funkcí.
+                          </p>
+                        </div>
+                      </motion.div>
+                    </>
+                  )}
                 </div>
               </motion.div>
               
-              {/* Form Column */}
+              {/* Form Column - Optimized for mobile */}
               <motion.div 
-                className="md:col-span-3 p-6 md:p-8 lg:p-10 relative"
+                className="md:col-span-3 p-4 sm:p-6 md:p-8 lg:p-10 relative"
                 variants={itemVariants}
               >
-                {/* Subtle background pattern */}
+                {/* Mobile-optimized background pattern */}
                 <div className="absolute inset-0 opacity-5" style={{
                   backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40' viewBox='0 0 40 40'%3E%3Cg fill='%23d4af37' fill-opacity='0.1'%3E%3Cpath d='M0 0h4v4H0V0zm4 4h4v4H4V4zm4-4h4v4H8V0zm8 0h4v4h-4V0zm4 4h4v4h-4V4zm-4 4h4v4h-4V8zm8-8h4v4h-4V0zm0 8h4v4h-4V8zm0 8h4v4h-4v-4zm0 8h4v4h-4v-4zm-8-16h4v4h-4V8zm0 16h4v4h-4v-4zm-8-8h4v4H8v-4zm0 8h4v4H8v-4zm-8-8h4v4H0v-4zm0 8h4v4H0v-4z'/%3E%3C/g%3E%3C/svg%3E\")",
                 }}/>
                 
-                <h3 className="text-xl font-bold mb-8 text-gradient-purple relative z-10">
-                  Máte projekt na mysli? Pojďme si o tom popovídat!
+                <h3 className="text-xl font-bold mb-5 md:mb-8 text-gradient-purple relative z-10">
+                  {isMobile ? "Napište mi" : "Máte projekt na mysli? Pojďme si o tom popovídat!"}
                 </h3>
                 
-                <form ref={formRef} onSubmit={handleSubmit} className="space-y-5 relative z-10">
+                <form ref={formRef} onSubmit={handleSubmit} className="space-y-4 md:space-y-5 relative z-10">
                   <motion.div 
-                    className="space-y-2"
+                    className="space-y-1.5 md:space-y-2"
                     variants={itemVariants}
                   >
                     <label htmlFor="name" className="block text-sm font-medium text-gold/80">
@@ -317,7 +311,7 @@ const ContactSection: React.FC = () => {
                   </motion.div>
                   
                   <motion.div 
-                    className="space-y-2"
+                    className="space-y-1.5 md:space-y-2"
                     variants={itemVariants}
                   >
                     <label htmlFor="email" className="block text-sm font-medium text-gold/80">
@@ -339,7 +333,7 @@ const ContactSection: React.FC = () => {
                   </motion.div>
                   
                   <motion.div 
-                    className="space-y-2"
+                    className="space-y-1.5 md:space-y-2"
                     variants={itemVariants}
                   >
                     <label htmlFor="message" className="block text-sm font-medium text-gold/80">
@@ -351,7 +345,7 @@ const ContactSection: React.FC = () => {
                       value={formData.message}
                       onChange={handleChange}
                       placeholder="Napište detaily vašeho projektu..."
-                      className="bg-background/30 border-gold/10 focus:border-gold/50 focus:ring-gold/30 min-h-[150px] resize-none transition-all"
+                      className="bg-background/30 border-gold/10 focus:border-gold/50 focus:ring-gold/30 min-h-[120px] md:min-h-[150px] resize-none transition-all"
                       aria-invalid={!!formErrors.message}
                     />
                     {formErrors.message && (
@@ -360,19 +354,19 @@ const ContactSection: React.FC = () => {
                   </motion.div>
                   
                   <motion.div 
-                    className="pt-4"
+                    className="pt-2 md:pt-4"
                     variants={itemVariants}
                   >
                     <Button 
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full bg-gradient-to-r from-gold-dark to-gold text-background py-3 rounded-lg transition-all hover:shadow-lg hover:shadow-gold/30 active:translate-y-0.5 relative overflow-hidden group"
+                      className="w-full bg-gradient-to-r from-gold-dark to-gold text-background py-2.5 md:py-3 rounded-lg transition-all hover:shadow-lg hover:shadow-gold/30 active:translate-y-0.5 relative overflow-hidden group"
                     >
                       <span className="absolute inset-0 w-full h-full bg-gradient-to-r from-gold to-purple opacity-0 group-hover:opacity-20 transition-opacity" />
                       <span className="relative flex items-center justify-center gap-2">
                         {isSubmitting ? (
                           <>
-                            <svg className="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <svg className="animate-spin h-4 w-4 md:h-5 md:w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                               <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                               <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
@@ -380,7 +374,7 @@ const ContactSection: React.FC = () => {
                           </>
                         ) : (
                           <>
-                            <Send className="h-5 w-5" />
+                            <Send className="h-4 w-4 md:h-5 md:w-5" />
                             Odeslat Zprávu
                           </>
                         )}

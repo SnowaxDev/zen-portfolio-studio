@@ -148,11 +148,11 @@ const Header: React.FC = () => {
           </NavigationMenu>
         )}
         
-        {/* Mobile Menu Button */}
+        {/* Mobile Menu Button - Enhanced for better visibility */}
         {isMobile && (
           <div className="flex items-center">
             <motion.button
-              className="p-1.5 bg-card/30 rounded-md backdrop-blur-md border border-white/5 text-foreground shadow-lg"
+              className="p-2 bg-card/50 rounded-md backdrop-blur-md border border-white/10 text-foreground shadow-lg"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
               aria-label="Toggle mobile menu"
@@ -167,7 +167,7 @@ const Header: React.FC = () => {
                     exit={{ opacity: 0, rotate: 90 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <X className="h-6 w-6" />
+                    <X className="h-5 w-5" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -177,7 +177,7 @@ const Header: React.FC = () => {
                     exit={{ opacity: 0, rotate: -90 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Menu className="h-6 w-6" />
+                    <Menu className="h-5 w-5" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -186,18 +186,18 @@ const Header: React.FC = () => {
         )}
       </div>
 
-      {/* Mobile Navigation */}
+      {/* Improved Mobile Navigation - Full screen with better styling */}
       <AnimatePresence>
         {isMobile && mobileMenuOpen && (
           <motion.div
-            className="absolute top-full left-0 right-0 mobile-menu py-4"
+            className="fixed top-[49px] left-0 right-0 bottom-0 bg-background/95 backdrop-blur-xl z-40 flex flex-col justify-start pt-6 overflow-y-auto"
             initial="closed"
             animate="open"
             exit="closed"
             variants={mobileMenuVariants}
           >
             <nav className="container-custom">
-              <ul className="flex flex-col space-y-1">
+              <ul className="flex flex-col space-y-2.5">
                 {navItems.map((item, index) => {
                   const IconComponent = item.icon;
                   const active = isActive(item.href);
@@ -219,20 +219,38 @@ const Header: React.FC = () => {
                     >
                       <a
                         href={item.href}
-                        className={`mobile-nav-item ${
+                        className={`flex items-center gap-3 px-5 py-3.5 rounded-lg transition-all ${
                           active 
-                            ? 'bg-accent/10 text-accent font-medium' 
-                            : 'text-foreground/80 hover:bg-accent/5'
+                            ? 'bg-gold/10 text-gold font-medium shadow-sm' 
+                            : 'text-foreground/80 hover:bg-white/5'
                         }`}
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        <IconComponent className={`h-5 w-5 ${active ? 'text-accent' : ''}`} />
-                        <span>{item.label}</span>
+                        <div className={`p-2 rounded-lg ${active ? 'bg-gold/10' : 'bg-white/5'}`}>
+                          <IconComponent className={`h-5 w-5 ${active ? 'text-gold' : ''}`} />
+                        </div>
+                        <span className="text-lg">{item.label}</span>
                       </a>
                     </motion.li>
                   );
                 })}
               </ul>
+              
+              {/* Mobile contact button at bottom of menu */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="mt-8 pt-6 border-t border-white/10"
+              >
+                <a
+                  href="#contact"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center w-full py-3.5 bg-gradient-to-r from-gold to-gold-light text-background rounded-lg font-medium shadow-lg"
+                >
+                  Kontaktujte Mě
+                </a>
+              </motion.div>
             </nav>
           </motion.div>
         )}
