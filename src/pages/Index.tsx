@@ -1,6 +1,5 @@
-
 import React, { useEffect, useState, Suspense, lazy } from 'react';
-import { motion, useScroll, useSpring, useMotionTemplate } from 'framer-motion';
+import { motion, useScroll, useSpring, useMotionTemplate, AnimatePresence } from 'framer-motion';
 import Header from '../components/Header';
 import HeroSection from '../sections/HeroSection';
 import Footer from '../components/Footer';
@@ -308,8 +307,8 @@ const Index = () => {
         </motion.div>
       )}
       
-      {/* Animated background grid - reduce density on mobile */}
-      {isLoaded && <FloatingGrid density={isMobile ? 0.5 : 1} />}
+      {/* Animated background grid - removed density prop since it doesn't exist in component props */}
+      {isLoaded && <FloatingGrid />}
     </motion.div>
   );
 };

@@ -131,11 +131,16 @@ export const FloatingLine: React.FC<FloatingLineProps> = ({
 
 interface FloatingGridProps {
   className?: string;
+  density?: number;  // Added density prop to the interface
 }
 
 export const FloatingGrid: React.FC<FloatingGridProps> = ({
   className = '',
+  density = 1,  // Default value for density
 }) => {
+  // Use density to adjust the grid size
+  const gridSize = `${50 / (density || 1)}px ${50 / (density || 1)}px`;
+  
   return (
     <motion.div 
       className={`absolute inset-0 opacity-20 ${className}`}
@@ -144,7 +149,7 @@ export const FloatingGrid: React.FC<FloatingGridProps> = ({
       transition={{ duration: 1 }}
       style={{
         backgroundImage: 'linear-gradient(to right, rgba(212, 175, 55, 0.1) 1px, transparent 1px), linear-gradient(to bottom, rgba(212, 175, 55, 0.1) 1px, transparent 1px)',
-        backgroundSize: '50px 50px',
+        backgroundSize: gridSize,
       }}
     >
       <motion.div
