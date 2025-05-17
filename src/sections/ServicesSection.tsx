@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Layout, Zap, Cloud, Shield, Clock, Check, Info, Star } from 'lucide-react';
@@ -8,6 +7,8 @@ import SectionTitle from '@/components/SectionTitle';
 import ServiceCard from '@/components/services/ServiceCard';
 import CompactServiceCard from '@/components/services/CompactServiceCard';
 import TextWithGlow from '@/components/TextWithGlow';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { useMobileUtils } from '@/hooks/use-mobile-utils';
 
 // Types
 type ServiceCategory = 'websites' | 'design' | 'cloud' | 'maintenance';
@@ -250,7 +251,9 @@ const tabsConfig = [
 const ServicesSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>('websites');
   const [customerType, setCustomerType] = useState<CustomerType>('individual');
-
+  const isMobile = useIsMobile();
+  const { getMobileSpacing } = useMobileUtils();
+  
   // Helper function to get billing type label
   const getBillingTypeLabel = (category: ServiceCategory) => {
     const billingType = servicePricingData[category][customerType].billingType;
@@ -272,7 +275,7 @@ const ServicesSection: React.FC = () => {
   return (
     <motion.section
       id="services"
-      className="py-24 bg-background relative overflow-hidden"
+      className={`py-${isMobile ? '16' : '24'} bg-background relative overflow-hidden`}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: "-100px" }}
@@ -337,7 +340,7 @@ const ServicesSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="mb-12"
+          className={`mb-${isMobile ? '8' : '12'}`}
         >
           <SectionTitle 
             title="Služby a Ceník" 
@@ -353,7 +356,7 @@ const ServicesSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="flex flex-wrap justify-center mb-16"
+          className={`flex flex-wrap justify-center mb-${isMobile ? '10' : '16'}`}
         >
           <Tabs 
             value={selectedCategory}
@@ -380,7 +383,7 @@ const ServicesSection: React.FC = () => {
                       key={tab.value}
                       value={tab.value} 
                       className={`
-                        flex items-center justify-center gap-2 py-3 px-1
+                        flex items-center justify-center gap-2 py-${isMobile ? '2' : '3'} px-1
                         relative overflow-hidden transition-all duration-300 rounded-lg
                         ${isActive ? 'text-gold font-medium' : 'text-muted-foreground hover:text-muted-foreground/80'}
                       `}
@@ -405,11 +408,11 @@ const ServicesSection: React.FC = () => {
                         whileHover={{ scale: 1.1, rotate: 5 }}
                         className={`p-0.5 ${isActive ? 'bg-gold/10 rounded-md' : ''}`}
                       >
-                        <TabIcon className={`w-5 h-5 ${isActive ? 'text-gold' : ''}`} />
+                        <TabIcon className={`w-${isMobile ? '4' : '5'} h-${isMobile ? '4' : '5'} ${isActive ? 'text-gold' : ''}`} />
                       </motion.div>
                       
-                      <span className="hidden sm:inline">{tab.label}</span>
-                      <span className="sm:hidden">{tab.shortLabel}</span>
+                      <span className={`hidden ${isMobile ? 'xs:inline' : 'sm:inline'}`}>{tab.label}</span>
+                      <span className={`${isMobile ? 'xs:hidden' : 'sm:hidden'}`}>{tab.shortLabel}</span>
                       
                       {/* Symmetrical animated underline for active tab */}
                       {isActive && (
@@ -435,7 +438,7 @@ const ServicesSection: React.FC = () => {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="flex justify-center mb-16"
+          className={`flex justify-center mb-${isMobile ? '10' : '16'}`}
         >
           <div className="relative bg-card/30 p-1 rounded-full border border-white/10 shadow-lg overflow-hidden">
             {/* Animated background for selected toggle */}
@@ -463,16 +466,16 @@ const ServicesSection: React.FC = () => {
               <ToggleGroupItem 
                 value="budget" 
                 aria-label="Nízký rozpočet"
-                className="rounded-full px-6 py-2 transition-all duration-300 data-[state=on]:text-primary-foreground data-[state=off]:text-foreground/70"
+                className={`rounded-full px-${isMobile ? '2' : '6'} py-${isMobile ? '1.5' : '2'} transition-all duration-300 data-[state=on]:text-primary-foreground data-[state=off]:text-foreground/70 ${isMobile ? 'text-xs' : ''}`}
               >
                 <TextWithGlow intensity="light" color="rgba(255, 255, 255, 0.9)" pulsate={false}>
-                  Nízký rozpočet
+                  {isMobile ? 'Nízký' : 'Nízký rozpočet'}
                 </TextWithGlow>
               </ToggleGroupItem>
               <ToggleGroupItem 
                 value="individual" 
                 aria-label="Jednotlivci & Malé firmy"
-                className="rounded-full px-6 py-2 transition-all duration-300 data-[state=on]:text-primary-foreground data-[state=off]:text-foreground/70"
+                className={`rounded-full px-${isMobile ? '2' : '6'} py-${isMobile ? '1.5' : '2'} transition-all duration-300 data-[state=on]:text-primary-foreground data-[state=off]:text-foreground/70 ${isMobile ? 'text-xs' : ''}`}
               >
                 <TextWithGlow intensity="light" color="rgba(255, 255, 255, 0.9)" pulsate={false}>
                   Jednotlivci
@@ -481,7 +484,7 @@ const ServicesSection: React.FC = () => {
               <ToggleGroupItem 
                 value="business" 
                 aria-label="Střední & Velké firmy"
-                className="rounded-full px-6 py-2 transition-all duration-300 data-[state=on]:text-primary-foreground data-[state=off]:text-foreground/70"
+                className={`rounded-full px-${isMobile ? '2' : '6'} py-${isMobile ? '1.5' : '2'} transition-all duration-300 data-[state=on]:text-primary-foreground data-[state=off]:text-foreground/70 ${isMobile ? 'text-xs' : ''}`}
               >
                 <TextWithGlow intensity="light" color="rgba(255, 255, 255, 0.9)" pulsate={false}>
                   Firmy
@@ -497,7 +500,7 @@ const ServicesSection: React.FC = () => {
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-20"
+          className={`grid grid-cols-1 ${isMobile ? 'gap-5' : 'md:grid-cols-2 gap-8'} max-w-4xl mx-auto mb-${isMobile ? '16' : '20'}`}
         >
           {/* Main service card - Symmetrically positioned */}
           <motion.div
@@ -516,16 +519,16 @@ const ServicesSection: React.FC = () => {
             />
           </motion.div>
           
-          {/* Custom quote card with enhanced design */}
+          {/* Custom quote card with enhanced design - For mobile, display conditionally or with different styling */}
           <motion.div
             initial={{ opacity: 0, y: 15 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: 0.2 }}
-            whileHover={{ y: -8 }}
+            whileHover={{ y: isMobile ? 0 : -8 }}
           >
             <motion.div
-              className="relative h-full border rounded-lg border-dashed border-gold/40 bg-gradient-to-b from-card to-black/80 p-6 flex flex-col overflow-hidden"
+              className={`relative h-full border rounded-lg border-dashed border-gold/40 bg-gradient-to-b from-card to-black/80 p-${isMobile ? '4' : '6'} flex flex-col overflow-hidden`}
               whileHover={{ 
                 boxShadow: "0 0 30px rgba(212,175,55,0.15)",
                 borderColor: "rgba(212,175,55,0.6)"
@@ -562,67 +565,67 @@ const ServicesSection: React.FC = () => {
               
               {/* Premium badge */}
               <motion.div 
-                className="absolute -top-3 right-5"
+                className={`absolute -top-3 ${isMobile ? 'right-2' : 'right-5'}`}
                 initial={{ opacity: 0, y: -10, rotate: -15 }}
                 animate={{ opacity: 1, y: 0, rotate: 0 }}
                 transition={{ delay: 0.8, duration: 0.5 }}
               >
                 <TextWithGlow 
                   intensity="strong" 
-                  className="bg-purple text-primary-foreground text-xs font-semibold px-3 py-1 rounded-full shadow-lg flex items-center gap-1"
+                  className={`bg-purple text-primary-foreground ${isMobile ? 'text-xs' : 'text-xs'} font-semibold px-3 py-1 rounded-full shadow-lg flex items-center gap-1`}
                 >
-                  <Star className="h-3 w-3" /> Premium
+                  <Star className={`h-${isMobile ? '2.5' : '3'} w-${isMobile ? '2.5' : '3'}`} /> Premium
                 </TextWithGlow>
               </motion.div>
               
-              <h3 className="text-xl font-bold mb-2 text-gold">Individuální řešení</h3>
-              <p className="text-muted-foreground text-sm mb-4">
+              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold ${isMobile ? 'mb-1' : 'mb-2'} text-gold`}>Individuální řešení</h3>
+              <p className={`text-muted-foreground ${isMobile ? 'text-xs mb-3' : 'text-sm mb-4'}`}>
                 Potřebujete komplexní řešení přesně podle vašich potřeb? Kontaktujte nás pro nezávaznou konzultaci.
               </p>
               
-              <ul className="space-y-2 mb-6 flex-grow">
+              <ul className={`space-y-${isMobile ? '1.5' : '2'} mb-${isMobile ? '4' : '6'} flex-grow`}>
                 <motion.li 
-                  className="flex items-center text-sm"
+                  className={`flex items-center ${isMobile ? 'text-xs' : 'text-sm'}`}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.6 }}
                 >
-                  <Clock className="h-4 w-4 mr-2 flex-shrink-0 text-gold" />
+                  <Clock className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2 flex-shrink-0 text-gold`} />
                   <span className="text-foreground/80">Bezplatná úvodní konzultace</span>
                 </motion.li>
                 <motion.li 
-                  className="flex items-center text-sm"
+                  className={`flex items-center ${isMobile ? 'text-xs' : 'text-sm'}`}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.7 }}
                 >
-                  <Check className="h-4 w-4 mr-2 flex-shrink-0 text-gold" />
+                  <Check className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2 flex-shrink-0 text-gold`} />
                   <span className="text-foreground/80">Detailní analýza potřeb</span>
                 </motion.li>
                 <motion.li 
-                  className="flex items-center text-sm"
+                  className={`flex items-center ${isMobile ? 'text-xs' : 'text-sm'}`}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.8 }}
                 >
-                  <Check className="h-4 w-4 mr-2 flex-shrink-0 text-gold" />
+                  <Check className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2 flex-shrink-0 text-gold`} />
                   <span className="text-foreground/80">Návrh řešení na míru</span>
                 </motion.li>
                 <motion.li 
-                  className="flex items-center text-sm"
+                  className={`flex items-center ${isMobile ? 'text-xs' : 'text-sm'}`}
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.9 }}
                 >
-                  <Check className="h-4 w-4 mr-2 flex-shrink-0 text-gold" />
+                  <Check className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2 flex-shrink-0 text-gold`} />
                   <span className="text-foreground/80">Transparentní cenová nabídka</span>
                 </motion.li>
               </ul>
               
               <div className="mt-auto relative z-10">
                 <motion.button
-                  className="w-full relative overflow-hidden bg-transparent border-2 border-gold/50 text-gold hover:border-gold transition-colors py-2 rounded-md font-medium"
-                  whileHover={{ scale: 1.03 }}
+                  className={`w-full relative overflow-hidden bg-transparent border-2 border-gold/50 text-gold hover:border-gold transition-colors py-${isMobile ? '1.5' : '2'} rounded-md font-medium ${isMobile ? 'text-sm' : ''}`}
+                  whileHover={{ scale: isMobile ? 1.02 : 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >
                   <motion.span
@@ -639,7 +642,7 @@ const ServicesSection: React.FC = () => {
         </motion.div>
         
         {/* Additional services section with symmetrical layout */}
-        <div className="mt-24 relative">
+        <div className={`mt-${isMobile ? '16' : '24'} relative`}>
           {/* Symmetrical decorative elements */}
           <motion.div
             className="absolute -top-20 left-1/4 w-40 h-40 rounded-full bg-purple/5 blur-3xl opacity-40"
@@ -673,9 +676,9 @@ const ServicesSection: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
-            className="text-center mb-16"
+            className={`text-center mb-${isMobile ? '10' : '16'}`}
           >
-            <h3 className="text-2xl font-bold mb-2">
+            <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold mb-2`}>
               <motion.span 
                 initial={{ backgroundPosition: "0% 0%" }}
                 whileInView={{ backgroundPosition: "100% 0%" }}
@@ -686,19 +689,19 @@ const ServicesSection: React.FC = () => {
               </motion.span>
             </h3>
             
-            <p className="text-muted-foreground max-w-lg mx-auto mb-4">
+            <p className={`text-muted-foreground ${isMobile ? 'text-sm' : ''} max-w-lg mx-auto mb-4`}>
               Doplňkové služby pro vylepšení vašeho webu a online podnikání
             </p>
             
             <motion.div 
               initial={{ width: 0 }}
-              whileInView={{ width: "5rem" }}
+              whileInView={{ width: isMobile ? "4rem" : "5rem" }}
               transition={{ duration: 1, delay: 0.2 }}
               className="h-1 bg-gradient-to-r from-purple/50 via-gold/50 to-purple/50 mx-auto rounded-full my-4"
             />
           </motion.div>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className={`grid grid-cols-1 ${isMobile ? 'gap-4' : 'md:grid-cols-2 lg:grid-cols-4 gap-6'}`}>
             {additionalServices.map((service, index) => (
               <CompactServiceCard
                 key={index}

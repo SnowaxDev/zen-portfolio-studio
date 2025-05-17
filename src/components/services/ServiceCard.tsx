@@ -7,6 +7,7 @@ import { Check, Info } from 'lucide-react';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
 import { cn } from '@/lib/utils';
 import TextWithGlow from '../TextWithGlow';
+import { useMobileUtils } from '@/hooks/use-mobile-utils';
 
 interface ServiceCardProps {
   title: string;
@@ -28,6 +29,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   isPopular = false
 }) => {
   const controls = useAnimation();
+  const { isMobile, getMobileSpacing } = useMobileUtils();
 
   const shimmerEffect = async () => {
     await controls.start({
@@ -49,7 +51,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   const cardVariants = {
     hidden: { opacity: 0, y: 30 },
     visible: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-    hover: { y: -10, boxShadow: "0 20px 25px -5px rgba(212,175,55,0.1), 0 10px 10px -5px rgba(212,175,55,0.04)" }
+    hover: { y: isMobile ? 0 : -10, boxShadow: "0 20px 25px -5px rgba(212,175,55,0.1), 0 10px 10px -5px rgba(212,175,55,0.04)" }
   };
 
   const featureVariants = {
@@ -78,7 +80,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   const buttonVariants = {
     rest: { scale: 1 },
     hover: { 
-      scale: 1.05,
+      scale: isMobile ? 1.02 : 1.05,
       boxShadow: isPopular 
         ? "0 0 15px 5px rgba(212,175,55,0.3)" 
         : "0 0 15px 2px rgba(139,92,246,0.3)",
@@ -89,6 +91,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
     },
     tap: { scale: 0.95 }
   };
+
+  const cardPadding = isMobile ? "p-4" : "p-6";
 
   return (
     <motion.div
@@ -108,7 +112,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       )}>
         {isPopular && (
           <motion.div 
-            className="absolute -top-3 left-0 right-0 flex justify-center"
+            className={`absolute -top-3 ${isMobile ? 'left-1/2 transform -translate-x-1/2' : 'left-0 right-0 flex justify-center'}`}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.5 }}
@@ -128,13 +132,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         />
         
         <CardContent className={cn(
-          "p-6 z-10 relative flex flex-col h-full",
-          isPopular ? "pt-8" : "pt-6"
+          `${cardPadding} z-10 relative flex flex-col h-full`,
+          isPopular ? isMobile ? "pt-6" : "pt-8" : isMobile ? "pt-4" : "pt-6"
         )}>
-          <div className="mb-6">
+          <div className={isMobile ? "mb-3" : "mb-6"}>
             <motion.h3 
               className={cn(
-                "text-xl font-bold mb-2",
+                `${isMobile ? "text-lg" : "text-xl"} font-bold ${isMobile ? "mb-1" : "mb-2"}`,
                 isPopular ? "text-gold" : "text-foreground"
               )}
               initial={{ opacity: 0, y: 10 }}
@@ -148,7 +152,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
               ) : title}
             </motion.h3>
             <motion.p 
-              className="text-muted-foreground text-sm"
+              className={`text-muted-foreground ${isMobile ? "text-xs" : "text-sm"}`}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.3 }}
@@ -157,7 +161,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             </motion.p>
           </div>
           
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-6">
+          <div className={`flex flex-col ${isMobile ? "mb-3" : "md:flex-row md:items-end justify-between mb-6"}`}>
             <div>
               <motion.div 
                 className="flex items-baseline"
@@ -166,7 +170,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
               >
                 <motion.span 
                   className={cn(
-                    "text-3xl md:text-4xl font-bold",
+                    `${isMobile ? "text-2xl" : "text-3xl md:text-4xl"} font-bold`,
                     isPopular ? "text-gold" : "text-foreground"
                   )}
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -180,7 +184,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                   ) : price.toLocaleString()}
                 </motion.span>
                 <motion.span 
-                  className="text-muted-foreground ml-2"
+                  className={`text-muted-foreground ml-2 ${isMobile ? "text-xs" : ""}`}
                   initial={{ opacity: 0 }}
                   whileInView={{ opacity: 1 }}
                   transition={{ delay: 0.5 }}
@@ -204,38 +208,40 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                     : 'Měsíční platba'}
                 </div>
                 
-                <TooltipProvider>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <Info className="h-4 w-4 ml-1 text-muted-foreground" />
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p className="max-w-xs">
-                        {billingType === 'oneTime' 
-                          ? 'Jednorázová platba za kompletní dodání služby' 
-                          : 'Opakovaná měsíční platba za průběžné poskytování služby'}
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                </TooltipProvider>
+                {!isMobile && (
+                  <TooltipProvider>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <Info className="h-4 w-4 ml-1 text-muted-foreground" />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p className="max-w-xs">
+                          {billingType === 'oneTime' 
+                            ? 'Jednorázová platba za kompletní dodání služby' 
+                            : 'Opakovaná měsíční platba za průběžné poskytování služby'}
+                        </p>
+                      </TooltipContent>
+                    </Tooltip>
+                  </TooltipProvider>
+                )}
               </motion.div>
             </div>
           </div>
           
           <div className="flex-grow">
             <motion.h4 
-              className="font-medium mb-3 text-sm"
+              className={`font-medium ${isMobile ? "mb-2 text-xs" : "mb-3 text-sm"}`}
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ delay: 0.6 }}
             >
               Co je zahrnuto:
             </motion.h4>
-            <ul className="space-y-2 mb-6">
+            <ul className={`space-y-${isMobile ? "1.5" : "2"} mb-6`}>
               {features.map((feature, index) => (
                 <motion.li 
                   key={index} 
-                  className="flex items-center text-sm"
+                  className={`flex items-center ${isMobile ? "text-xs" : "text-sm"}`}
                   custom={index}
                   variants={featureVariants}
                   initial="hidden"
@@ -243,11 +249,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                   viewport={{ once: true }}
                 >
                   <motion.div
-                    whileHover={{ scale: 1.2, rotate: [0, 10, -10, 0] }}
+                    whileHover={{ scale: isMobile ? 1.1 : 1.2, rotate: [0, 10, -10, 0] }}
                     transition={{ duration: 0.5 }}
                   >
                     <Check className={cn(
-                      "h-4 w-4 mr-2 flex-shrink-0", 
+                      `${isMobile ? "h-3 w-3" : "h-4 w-4"} mr-2 flex-shrink-0`, 
                       isPopular ? "text-gold" : "text-green-400"
                     )} />
                   </motion.div>
@@ -266,7 +272,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
               transition={{ duration: 0.3 }}
             >
               <Button 
-                className={cn("w-full relative overflow-hidden group", 
+                className={cn(`w-full relative overflow-hidden group ${isMobile ? "py-1.5 text-sm" : ""}`, 
                   isPopular 
                     ? "bg-gold hover:bg-gold-light text-primary-foreground" 
                     : "bg-primary hover:bg-primary/90"

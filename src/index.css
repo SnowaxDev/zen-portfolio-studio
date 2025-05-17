@@ -98,6 +98,31 @@
     .mobile-text-center {
       @apply text-center;
     }
+    
+    /* Mobile service card adjustments */
+    .service-card-mobile {
+      @apply shadow-md p-3 rounded-lg;
+    }
+    
+    /* Mobile price display */
+    .price-mobile {
+      @apply text-2xl font-bold;
+    }
+    
+    /* Mobile feature list */
+    .features-mobile li {
+      @apply text-xs my-1.5;
+    }
+  }
+}
+
+/* Extra small devices */
+@media (max-width: 390px) {
+  .xs\:hidden {
+    display: none;
+  }
+  .xs\:inline {
+    display: inline;
   }
 }
 
