@@ -1,8 +1,7 @@
 
 import React, { ReactNode } from 'react';
-import { motion, Variants } from 'framer-motion';
-import { usePrefersReducedMotion } from '../hooks/use-reduced-motion';
-import { useIsMobile } from '../hooks/use-mobile';
+import { motion, Variants, AnimationProps } from 'framer-motion';
+import { useMobileAnimationSettings } from '../hooks/use-mobile-animation-settings';
 
 interface AnimatedSectionProps {
   children: ReactNode;
@@ -35,16 +34,24 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   customVariants,
   withOverflow = false,
 }) => {
-  const prefersReducedMotion = usePrefersReducedMotion();
-  const isMobile = useIsMobile();
-  const shouldReduceAnimations = prefersReducedMotion || isMobile;
+  const { 
+    shouldReduceAnimations,
+    getAnimationDuration,
+    getAnimationDelay
+  } = useMobileAnimationSettings();
   
-  // Determine the initial animation based on direction with reduced effects for mobile
+  // Calculate optimized animation parameters
+  const optimizedDuration = getAnimationDuration(duration);
+  const optimizedDelay = getAnimationDelay(delay);
+  
+  // Determine the initial animation based on direction with optimized effects
   const getInitialState = () => {
     if (shouldReduceAnimations) {
+      // Simplified animation for mobile/reduced motion
       return { opacity: 0 };
     }
     
+    // Full animations for desktop
     switch (direction) {
       case 'up':
         return { opacity: 0, y: distance };
@@ -69,11 +76,12 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       x: 0,
       y: 0,
       transition: {
-        duration: shouldReduceAnimations ? 0.15 : duration,
-        ease: [0.22, 1, 0.36, 1], // Enhanced cubic bezier curve for more natural motion
-        delay: shouldReduceAnimations ? 0 : delay,
-        staggerChildren: staggerChildren ? staggerDelay : 0,
-        delayChildren: staggerChildren ? delay : 0,
+        duration: optimizedDuration,
+        // More natural and smoother easing
+        ease: [0.25, 0.1, 0.25, 1], 
+        delay: optimizedDelay,
+        staggerChildren: staggerChildren ? staggerDelay * (shouldReduceAnimations ? 0.5 : 1) : 0,
+        delayChildren: staggerChildren ? optimizedDelay : 0,
       }
     }
   };
@@ -89,7 +97,10 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
         className={`${className} relative ${withOverflow ? '' : 'overflow-hidden'}`}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 0.15 }}
+        transition={{ 
+          duration: optimizedDuration > 0 ? Math.max(0.15, optimizedDuration) : 0.15,
+          ease: [0.25, 0.1, 0.25, 1]
+        }}
       >
         {children}
       </motion.div>
