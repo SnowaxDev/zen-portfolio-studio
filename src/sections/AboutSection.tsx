@@ -1,10 +1,11 @@
+
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Clock, CheckSquare, Users, Github } from 'lucide-react';
-import StatBox from '@/components/about/StatBox';
-import SectionWrapper from '@/components/SectionWrapper';
-import { useMobileUtils } from '@/hooks/use-mobile-utils';
-import ScrollReveal from '@/components/ScrollReveal';
+import StatBox from '../components/about/StatBox';
+import SectionWrapper from '../components/SectionWrapper';
+import { useMobileUtils } from '../hooks/use-mobile-utils';
+import ScrollReveal from '../components/ScrollReveal';
 
 const AboutSection: React.FC = () => {
   const { isMobile, getMobileSpacing } = useMobileUtils();
