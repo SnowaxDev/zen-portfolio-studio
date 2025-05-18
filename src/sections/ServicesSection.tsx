@@ -1,12 +1,14 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Layout, Zap, Cloud, Shield, ArrowRight } from 'lucide-react';
+import { Layout, Zap, Cloud, Shield, ArrowRight, Info } from 'lucide-react';
 import AnimatedSection from '@/components/AnimatedSection';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Badge } from '@/components/ui/badge';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 
 // Types
 type ServiceCategory = 'websites' | 'design' | 'cloud' | 'maintenance';
@@ -270,7 +272,7 @@ const customerTypeConfig = [
   { value: 'business', label: 'Firmy' },
 ];
 
-// Service Card Component
+// Service Card Component with improved animation and interaction
 const ServiceCard: React.FC<ServiceCardProps> = ({ 
   title, 
   description, 
@@ -291,15 +293,44 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       className="h-full"
     >
       <div className={cn(
-        "relative h-full flex flex-col rounded-2xl border-2 p-6 bg-black overflow-hidden",
+        "group relative h-full flex flex-col rounded-2xl border-2 p-6 bg-gradient-to-b from-black/90 to-black overflow-hidden",
         isPrimary 
           ? "border-yellow-500/70" 
           : isCustom 
             ? "border-purple-500/50" 
-            : "border-zinc-800"
+            : "border-zinc-800 hover:border-zinc-700"
       )}>
+        {/* Enhanced hover effect */}
+        <motion.div 
+          className={cn(
+            "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+            isPrimary 
+              ? "bg-yellow-500/5" 
+              : isCustom 
+                ? "bg-purple-500/5" 
+                : "bg-zinc-800/10"
+          )}
+        />
+        
+        {/* Shimmer effect on hover */}
+        <motion.div
+          className="absolute -inset-x-full top-0 bottom-0 h-full w-[200%] opacity-0 group-hover:opacity-100"
+          style={{
+            background: isPrimary 
+              ? 'linear-gradient(90deg, transparent, rgba(234, 179, 8, 0.08), transparent)'
+              : isCustom 
+                ? 'linear-gradient(90deg, transparent, rgba(139, 92, 246, 0.08), transparent)'
+                : 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent)',
+            backgroundSize: '200% 100%'
+          }}
+          animate={{ 
+            x: ['100%', '-100%'],
+            transition: { duration: 1.5, repeat: Infinity, repeatType: 'loop', ease: 'linear' } 
+          }}
+        />
+        
         {/* Header with optional badge */}
-        <div className="mb-5">
+        <div className="mb-5 relative z-10">
           {isPrimary && (
             <motion.div 
               initial={{ opacity: 0, y: -10 }}
@@ -307,7 +338,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
               transition={{ delay: 0.2 }}
               className="absolute -top-3 right-6"
             >
-              <Badge className="bg-yellow-500 text-black font-medium">
+              <Badge className="bg-yellow-500 text-black font-medium border-yellow-600 shadow-lg shadow-yellow-500/20">
                 Nejoblíbenější
               </Badge>
             </motion.div>
@@ -319,7 +350,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
               transition={{ delay: 0.2 }}
               className="absolute -top-3 right-6"
             >
-              <Badge className="bg-purple-500 text-white font-medium">
+              <Badge className="bg-purple-500 text-white font-medium border-purple-600 shadow-lg shadow-purple-500/20">
                 Doporučeno
               </Badge>
             </motion.div>
@@ -337,9 +368,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
           </p>
         </div>
         
-        {/* Price */}
-        <div className="mb-6">
-          <div className="flex items-baseline">
+        {/* Price with improved animation */}
+        <div className="mb-6 relative z-10">
+          <motion.div 
+            className="flex items-baseline"
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: "spring", stiffness: 400, damping: 10 }}
+          >
             <span className={cn(
               "text-3xl md:text-4xl font-bold",
               isPrimary ? "text-yellow-500" : isCustom ? "text-purple-400" : "text-white"
@@ -349,9 +384,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             <span className="text-zinc-400 ml-2 text-sm">
               Kč {isOneTime ? 'jednorázově' : 'měsíčně'}
             </span>
-          </div>
+          </motion.div>
           
-          <div className="mt-1">
+          <div className="mt-1 flex items-center">
             <span className={cn(
               "text-xs px-2 py-1 rounded-full",
               isOneTime 
@@ -360,11 +395,28 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             )}>
               {isOneTime ? 'Jednorázová platba' : 'Měsíční platba'}
             </span>
+            
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="ml-1.5">
+                    <Info className="h-3.5 w-3.5 text-zinc-500 cursor-pointer" />
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent className="bg-zinc-900 border-zinc-700">
+                  <p className="text-xs">
+                    {isOneTime 
+                      ? 'Jednorázová platba za kompletní dodání služby' 
+                      : 'Opakovaná platba za průběžné poskytování služby'}
+                  </p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
           </div>
         </div>
         
-        {/* Features */}
-        <div className="mb-6">
+        {/* Features with improved animation */}
+        <div className="mb-6 relative z-10">
           <h4 className="text-sm text-zinc-300 font-medium mb-3">
             Co je zahrnuto:
           </h4>
@@ -375,30 +427,35 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * index }}
-                className="flex items-start gap-2"
+                className="flex items-start gap-2 group/feature"
               >
-                <div className={cn(
-                  "mt-1 p-1 rounded-full flex-shrink-0",
-                  isPrimary ? "bg-yellow-500/20" : isCustom ? "bg-purple-500/20" : "bg-zinc-800"
-                )}>
-                  <motion.div
-                    whileHover={{ rotate: 180 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    <ArrowRight className={cn(
-                      "h-3 w-3",
-                      isPrimary ? "text-yellow-500" : isCustom ? "text-purple-400" : "text-zinc-400"
-                    )} />
-                  </motion.div>
-                </div>
-                <span className="text-sm text-zinc-300">{feature}</span>
+                <motion.div 
+                  className={cn(
+                    "mt-1 p-1 rounded-full flex-shrink-0 transition-colors duration-300",
+                    isPrimary 
+                      ? "bg-yellow-500/20 group-hover/feature:bg-yellow-500/30" 
+                      : isCustom 
+                        ? "bg-purple-500/20 group-hover/feature:bg-purple-500/30" 
+                        : "bg-zinc-800 group-hover/feature:bg-zinc-700"
+                  )}
+                  whileHover={{ rotate: 180 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <ArrowRight className={cn(
+                    "h-3 w-3",
+                    isPrimary ? "text-yellow-500" : isCustom ? "text-purple-400" : "text-zinc-400"
+                  )} />
+                </motion.div>
+                <span className="text-sm text-zinc-300 group-hover/feature:text-zinc-100 transition-colors duration-300">
+                  {feature}
+                </span>
               </motion.div>
             ))}
           </div>
         </div>
         
-        {/* Button */}
-        <div className="mt-auto pt-4">
+        {/* Button with enhanced effects */}
+        <div className="mt-auto pt-4 relative z-10">
           <motion.div
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
@@ -436,7 +493,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   );
 };
 
-// AdditionalServiceCard Component
+// AdditionalServiceCard Component with improved animation
 const AdditionalServiceCard: React.FC<{service: AdditionalService}> = ({ service }) => {
   const { icon: Icon, title, description, price, buttonText, highlight } = service;
   
@@ -449,19 +506,42 @@ const AdditionalServiceCard: React.FC<{service: AdditionalService}> = ({ service
       className="h-full"
     >
       <div className={cn(
-        "h-full rounded-2xl border-2 bg-black p-5 flex flex-col relative overflow-hidden",
-        highlight ? "border-yellow-500/40" : "border-zinc-800"
+        "group h-full rounded-2xl border-2 bg-gradient-to-b from-black/90 to-black p-5 flex flex-col relative overflow-hidden",
+        highlight ? "border-yellow-500/40 hover:border-yellow-500/60" : "border-zinc-800 hover:border-zinc-700"
       )}>
+        {/* Enhanced hover effect */}
+        <motion.div 
+          className={cn(
+            "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300",
+            highlight ? "bg-yellow-500/5" : "bg-zinc-800/10"
+          )}
+        />
+        
+        {/* Shimmer effect on hover */}
         <motion.div
+          className="absolute -inset-x-full top-0 bottom-0 h-full w-[200%] opacity-0 group-hover:opacity-100"
+          style={{
+            background: highlight 
+              ? 'linear-gradient(90deg, transparent, rgba(234, 179, 8, 0.08), transparent)'
+              : 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent)',
+            backgroundSize: '200% 100%'
+          }}
+          animate={{ 
+            x: ['100%', '-100%'],
+            transition: { duration: 1.5, repeat: Infinity, repeatType: 'loop', ease: 'linear' } 
+          }}
+        />
+        
+        <motion.div
+          className={cn(
+            "w-12 h-12 rounded-xl flex items-center justify-center mb-4 relative z-10",
+            highlight ? "bg-yellow-500/20" : "bg-zinc-800"
+          )}
           whileHover={{ 
             rotate: [0, -10, 10, -5, 0], 
             scale: 1.05,
             transition: { duration: 0.5 }
           }}
-          className={cn(
-            "w-12 h-12 rounded-xl flex items-center justify-center mb-4",
-            highlight ? "bg-yellow-500/20" : "bg-zinc-800"
-          )}
         >
           <Icon className={cn(
             "w-6 h-6",
@@ -470,24 +550,28 @@ const AdditionalServiceCard: React.FC<{service: AdditionalService}> = ({ service
         </motion.div>
         
         <h3 className={cn(
-          "text-xl font-bold mb-2",
+          "text-xl font-bold mb-2 relative z-10",
           highlight ? "text-yellow-500" : "text-white"
         )}>
           {title}
         </h3>
         
-        <p className="text-zinc-400 text-sm mb-4 flex-grow">
+        <p className="text-zinc-400 text-sm mb-4 flex-grow relative z-10">
           {description}
         </p>
         
-        <div className="mt-auto">
+        <div className="mt-auto relative z-10">
           <div className="flex items-baseline mb-3">
-            <span className={cn(
-              "text-2xl font-bold",
-              highlight ? "text-yellow-500" : "text-white"
-            )}>
+            <motion.span 
+              className={cn(
+                "text-2xl font-bold",
+                highlight ? "text-yellow-500" : "text-white"
+              )}
+              whileHover={{ scale: 1.05 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
               {price}
-            </span>
+            </motion.span>
             <span className="text-zinc-400 text-xs ml-2">jednorázově</span>
           </div>
           
@@ -535,20 +619,40 @@ const ServicesSection: React.FC = () => {
   
   return (
     <section id="services" className="bg-zinc-950 py-20 relative overflow-hidden">
-      {/* Background elements */}
+      {/* Enhanced background elements */}
       <div className="absolute top-0 inset-0 pointer-events-none">
-        {/* Grid pattern */}
-        <div className="absolute inset-0 opacity-5">
+        {/* Grid pattern with subtle animation */}
+        <motion.div 
+          className="absolute inset-0 opacity-5"
+          animate={{
+            backgroundPosition: ['0px 0px', '40px 40px'],
+            transition: { duration: 20, repeat: Infinity, ease: "linear" }
+          }}
+        >
           <div className="h-full w-full bg-[linear-gradient(rgba(255,215,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,215,0,0.1)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-        </div>
+        </motion.div>
         
-        {/* Glow effects */}
-        <div className="absolute -top-40 -left-40 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"></div>
-        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"></div>
+        {/* Enhanced glow effects */}
+        <motion.div 
+          className="absolute -top-40 -left-40 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"
+          animate={{
+            opacity: [0.5, 0.8, 0.5],
+            scale: [1, 1.05, 1],
+          }}
+          transition={{ duration: 8, repeat: Infinity, repeatType: "reverse" }}
+        />
+        <motion.div 
+          className="absolute -bottom-40 -right-40 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"
+          animate={{
+            opacity: [0.5, 0.8, 0.5],
+            scale: [1, 1.1, 1],
+          }}
+          transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", delay: 2 }}
+        />
       </div>
       
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
+        {/* Section Header with improved animation */}
         <AnimatedSection delay={0.1} direction="up" className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-3 relative inline-block">
             <span className="bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
@@ -568,117 +672,139 @@ const ServicesSection: React.FC = () => {
           </p>
         </AnimatedSection>
         
-        {/* Service Categories */}
+        {/* Service Categories with improved tab design */}
         <AnimatedSection delay={0.2} direction="up" className="mb-12">
-          <div className="flex flex-wrap justify-center gap-2 md:gap-4">
-            {tabsConfig.map((tab) => {
-              const TabIcon = tab.icon;
-              const isActive = selectedCategory === tab.value;
-              
-              return (
-                <motion.button
-                  key={tab.value}
-                  onClick={() => setSelectedCategory(tab.value as ServiceCategory)}
-                  className={cn(
-                    "flex items-center gap-2 px-4 py-3 rounded-xl transition-all relative overflow-hidden",
-                    isActive 
-                      ? "text-black font-medium" 
-                      : "text-zinc-400 hover:text-zinc-200"
-                  )}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {/* Active background */}
-                  {isActive && (
-                    <motion.div 
-                      className="absolute inset-0 bg-yellow-500 rounded-xl"
-                      layoutId="activeServiceTab"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  )}
+          <Tabs
+            defaultValue="websites"
+            value={selectedCategory}
+            onValueChange={(value) => setSelectedCategory(value as ServiceCategory)}
+            className="w-full"
+          >
+            <div className="flex justify-center">
+              <TabsList className="bg-zinc-900/60 p-1 mb-8">
+                {tabsConfig.map((tab) => {
+                  const TabIcon = tab.icon;
+                  const isActive = selectedCategory === tab.value;
                   
-                  <span className="relative z-10">
-                    <TabIcon className={cn(
-                      "w-5 h-5", 
-                      isActive ? "text-black" : "text-zinc-400"
-                    )} />
-                  </span>
-                  
-                  <span className="relative z-10">
-                    {tab.label}
-                  </span>
-                </motion.button>
-              );
-            })}
-          </div>
-        </AnimatedSection>
-        
-        {/* Customer Type Selector */}
-        <AnimatedSection delay={0.3} direction="up" className="mb-12">
-          <div className="bg-zinc-900/60 rounded-2xl p-1.5 flex max-w-sm mx-auto relative">
-            {/* Moving background */}
-            <motion.div 
-              className="absolute h-full top-0 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-xl"
-              style={{ 
-                width: `${100 / customerTypeConfig.length}%` 
-              }}
-              animate={{ 
-                left: `${customerTypeConfig.findIndex(c => c.value === customerType) * (100 / customerTypeConfig.length)}%` 
-              }}
-              transition={{ type: "spring", stiffness: 300, damping: 30 }}
-            />
+                  return (
+                    <TabsTrigger 
+                      key={tab.value} 
+                      value={tab.value}
+                      className={cn(
+                        "flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all relative data-[state=active]:text-black",
+                        isActive 
+                          ? "text-black font-medium" 
+                          : "text-zinc-400 hover:text-zinc-200"
+                      )}
+                    >
+                      {/* Active background with improved animation */}
+                      {isActive && (
+                        <motion.span
+                          layoutId="activeTab"
+                          className="absolute inset-0 bg-yellow-500 rounded-lg"
+                          transition={{ 
+                            type: "spring", 
+                            stiffness: 300, 
+                            damping: 30 
+                          }}
+                        />
+                      )}
+                      
+                      <span className="relative z-10">
+                        <TabIcon className={cn(
+                          "w-5 h-5", 
+                          isActive ? "text-black" : "text-zinc-400"
+                        )} />
+                      </span>
+                      
+                      <span className="relative z-10">
+                        {tab.label}
+                      </span>
+                    </TabsTrigger>
+                  );
+                })}
+              </TabsList>
+            </div>
             
-            {customerTypeConfig.map((type) => (
-              <motion.button
-                key={type.value}
-                onClick={() => setCustomerType(type.value as CustomerType)}
-                className={cn(
-                  "flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors relative z-10",
-                  customerType === type.value ? "text-black" : "text-zinc-400"
-                )}
-                whileTap={{ scale: 0.95 }}
+            {/* Tab content with animations */}
+            {tabsConfig.map((tab) => (
+              <TabsContent 
+                key={tab.value} 
+                value={tab.value}
+                className="animate-in fade-in-50 duration-300"
               >
-                {type.label}
-              </motion.button>
+                {/* Customer Type Selector with improved design */}
+                <AnimatedSection delay={0.3} direction="up" className="mb-12">
+                  <div className="bg-zinc-900/60 rounded-2xl p-1.5 flex max-w-sm mx-auto relative">
+                    {/* Moving background with smoother animation */}
+                    <motion.div 
+                      className="absolute h-full top-0 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-xl"
+                      style={{ 
+                        width: `${100 / customerTypeConfig.length}%` 
+                      }}
+                      animate={{ 
+                        left: `${customerTypeConfig.findIndex(c => c.value === customerType) * (100 / customerTypeConfig.length)}%` 
+                      }}
+                      transition={{ 
+                        type: "spring", 
+                        stiffness: 300, 
+                        damping: 30 
+                      }}
+                    />
+                    
+                    {customerTypeConfig.map((type) => (
+                      <motion.button
+                        key={type.value}
+                        onClick={() => setCustomerType(type.value as CustomerType)}
+                        className={cn(
+                          "flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors relative z-10",
+                          customerType === type.value ? "text-black" : "text-zinc-400"
+                        )}
+                        whileHover={customerType !== type.value ? { scale: 1.05 } : {}}
+                        whileTap={{ scale: 0.95 }}
+                      >
+                        {type.label}
+                      </motion.button>
+                    ))}
+                  </div>
+                </AnimatedSection>
+                
+                {/* Service Cards with improved animation */}
+                <AnimatedSection delay={0.4} direction="up" className="mb-24">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <ServiceCard
+                      title={currentService.title}
+                      description={currentService.description}
+                      price={currentService.price}
+                      isOneTime={currentService.billingType === 'oneTime'}
+                      features={currentService.features}
+                      isPrimary={currentService.isPopular}
+                    />
+                    
+                    <ServiceCard
+                      title="Individuální řešení"
+                      description="Potřebujete komplexní řešení přesně podle vašich potřeb? Kontaktujte nás pro nezávaznou konzultaci."
+                      price={null}
+                      isOneTime={true}
+                      features={[
+                        "Bezplatná úvodní konzultace",
+                        "Detailní analýza potřeb",
+                        "Návrh řešení na míru",
+                        "Transparentní cenová nabídka",
+                        "Prioritní realizace"
+                      ]}
+                      isCustom={true}
+                    />
+                  </div>
+                </AnimatedSection>
+              </TabsContent>
             ))}
-          </div>
+          </Tabs>
         </AnimatedSection>
         
-        {/* Services Cards */}
-        <AnimatedSection delay={0.4} direction="up" className="mb-24">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <ServiceCard
-              title={currentService.title}
-              description={currentService.description}
-              price={currentService.price}
-              isOneTime={currentService.billingType === 'oneTime'}
-              features={currentService.features}
-              isPrimary={currentService.isPopular}
-            />
-            
-            <ServiceCard
-              title="Individuální řešení"
-              description="Potřebujete komplexní řešení přesně podle vašich potřeb? Kontaktujte nás pro nezávaznou konzultaci."
-              price={null}
-              isOneTime={true}
-              features={[
-                "Bezplatná úvodní konzultace",
-                "Detailní analýza potřeb",
-                "Návrh řešení na míru",
-                "Transparentní cenová nabídka",
-                "Prioritní realizace"
-              ]}
-              isCustom={true}
-            />
-          </div>
-        </AnimatedSection>
-        
-        {/* Additional Services */}
+        {/* Additional Services with improved divider */}
         <div className="mt-12 relative">
-          {/* Decorative line */}
+          {/* Enhanced decorative line */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-md h-px overflow-hidden">
             <motion.div 
               className="w-full h-full bg-gradient-to-r from-transparent via-yellow-500/70 to-transparent"

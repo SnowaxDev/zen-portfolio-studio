@@ -99,7 +99,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       className={`${className} relative ${withOverflow ? '' : 'overflow-hidden'}`}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, margin: "0px", amount: threshold }}
+      viewport={{ once, margin: "-10px", amount: threshold }}
       variants={variants}
     >
       {children}

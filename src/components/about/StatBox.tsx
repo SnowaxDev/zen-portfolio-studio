@@ -28,7 +28,7 @@ const StatBox: React.FC<StatBoxProps> = ({
   
   return (
     <motion.div 
-      className={`bg-black/60 backdrop-blur-sm border border-yellow-500/20 rounded-xl p-5 hover:border-yellow-500/50 transition-all duration-300 transform ${rotateStyle} ${translateYStyle}`}
+      className={`group bg-black/60 backdrop-blur-sm border border-yellow-500/20 rounded-xl p-5 hover:border-yellow-500/50 transition-all duration-300 transform ${rotateStyle} ${translateYStyle}`}
       whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(234, 179, 8, 0.2)" }}
       onHoverStart={() => handleStatHover(index)}
       onHoverEnd={() => handleStatHover(null)}
