@@ -29,23 +29,23 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.4 }}
+      transition={{ duration: 0.3 }}
       className="h-full"
     >
       <motion.div 
         whileHover={{ 
           y: -5, 
-          transition: { duration: 0.2 },
+          transition: { duration: 0.15 },
           boxShadow: highlight 
-            ? "0 15px 30px -10px rgba(242, 201, 76, 0.25)" 
-            : "0 15px 25px -10px rgba(0, 0, 0, 0.35)"
+            ? "0 15px 30px -10px rgba(234, 179, 8, 0.3)" 
+            : "0 15px 25px -10px rgba(0, 0, 0, 0.4)"
         }}
         className="h-full"
       >
         <Card className={cn(
           "h-full overflow-hidden transition-all duration-200 border-2",
           highlight 
-            ? "border-yellow-500/30 hover:border-yellow-500/60 bg-gradient-to-b from-zinc-900 to-black/90" 
+            ? "border-yellow-500/40 hover:border-yellow-500/80 bg-gradient-to-b from-zinc-900 via-zinc-900 to-black/90" 
             : "border-zinc-800 hover:border-zinc-700 bg-gradient-to-b from-zinc-900 to-black/80",
           className
         )}>
@@ -56,10 +56,10 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
                   "p-2 rounded-lg", 
                   highlight ? "bg-yellow-500/20" : "bg-zinc-800"
                 )}
-                whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.4 } }}
+                whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.3 } }}
               >
                 <Icon className={cn(
-                  "h-6 w-6", 
+                  "h-5 w-5", 
                   highlight ? "text-yellow-500" : "text-yellow-100/80"
                 )} />
               </motion.div>
@@ -90,10 +90,10 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
                 className={cn(
                   "mt-3 w-full py-1.5 text-sm rounded-md transition-colors",
                   highlight 
-                    ? "bg-yellow-500/10 border border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/20" 
+                    ? "bg-yellow-500/20 border border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/30" 
                     : "bg-zinc-800 border border-zinc-700 text-zinc-200 hover:bg-zinc-700"
                 )}
-                whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
+                whileHover={{ scale: 1.03, transition: { duration: 0.15 } }}
                 whileTap={{ scale: 0.98 }}
               >
                 Více informací

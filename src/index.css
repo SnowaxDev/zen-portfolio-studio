@@ -1,4 +1,3 @@
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -192,12 +191,54 @@
   @apply absolute h-[1px] bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent;
 }
 
-.service-tab {
-  @apply transition-all duration-200 hover:text-foreground;
+/* Service Tab Styling */
+.tab-item {
+  @apply relative flex items-center justify-center gap-2 py-3 px-4 rounded-lg transition-all duration-200;
 }
 
-.service-tab-active {
-  @apply text-yellow-500 font-medium;
+.tab-item-active {
+  @apply text-yellow-400 font-medium;
+}
+
+.tab-item-icon {
+  @apply transition-transform duration-200;
+}
+
+.tab-item-bg {
+  @apply absolute inset-0 bg-yellow-500/10 rounded-lg opacity-0 transition-opacity duration-200;
+}
+
+.tab-item-indicator {
+  @apply absolute bottom-0 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-yellow-500/50 via-yellow-400 to-yellow-500/50 scale-x-0 opacity-0 transition-all duration-200;
+}
+
+.tab-item:hover .tab-item-bg {
+  @apply opacity-50;
+}
+
+.tab-item-active .tab-item-bg {
+  @apply opacity-100;
+}
+
+.tab-item-active .tab-item-indicator {
+  @apply opacity-100 scale-x-100;
+}
+
+/* Customer type selector styling */
+.type-selector {
+  @apply relative bg-zinc-900/60 p-1 rounded-full border border-zinc-800 shadow-lg overflow-hidden;
+}
+
+.type-selector-item {
+  @apply rounded-full py-2 px-4 transition-all duration-200 text-zinc-400 relative z-10;
+}
+
+.type-selector-item-active {
+  @apply text-black font-medium;
+}
+
+.type-selector-bg {
+  @apply absolute h-full top-0 rounded-full bg-gradient-to-r from-yellow-500/90 via-yellow-400 to-yellow-500/90 transition-all duration-300;
 }
 
 /* Improved animation classes */
@@ -224,4 +265,26 @@
 @keyframes shimmer {
   0% { background-position: -200% 0; }
   100% { background-position: 200% 0; }
+}
+
+/* Additional services card styling */
+.service-card-compact {
+  @apply relative overflow-hidden border-2 border-zinc-800 rounded-xl bg-zinc-900 hover:border-yellow-500/30 transition-all duration-300;
+}
+
+.service-card-compact:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px -15px rgba(234, 179, 8, 0.3);
+}
+
+.service-card-compact-title {
+  @apply font-bold text-lg text-yellow-50 mb-1;
+}
+
+.service-card-compact-price {
+  @apply font-bold text-xl text-yellow-400 mt-auto;
+}
+
+.service-card-compact-button {
+  @apply mt-3 w-full py-2 rounded-lg border border-yellow-500/30 text-yellow-500 bg-yellow-500/5 hover:bg-yellow-500/15 transition-colors duration-200 text-sm font-medium;
 }
