@@ -58,7 +58,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
     }
   };
   
-  // Animation variants
+  // Animation variants with improved dynamics
   const defaultVariants = {
     hidden: getInitialState(),
     visible: {
@@ -67,7 +67,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       y: 0,
       transition: {
         duration: prefersReducedMotion ? 0.3 : duration,
-        ease: [0.22, 1, 0.36, 1],
+        ease: [0.22, 1, 0.36, 1], // Improved easing curve for smoother animations
         delay: prefersReducedMotion ? 0 : delay,
         staggerChildren: staggerChildren ? staggerDelay : 0,
         delayChildren: staggerChildren ? delay : 0,

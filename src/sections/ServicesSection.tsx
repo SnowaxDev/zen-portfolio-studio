@@ -1,12 +1,14 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Layout, Zap, Cloud, Shield, Clock, Check, Info, Star } from 'lucide-react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
+import { Layout, Zap, Cloud, Shield, Clock, Info } from 'lucide-react';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import SectionTitle from '@/components/SectionTitle';
-import ServiceCard from '@/components/services/ServiceCard';
-import CompactServiceCard from '@/components/services/CompactServiceCard';
+import ModernServiceCard from '@/components/services/ModernServiceCard';
+import ModernCompactServiceCard from '@/components/services/ModernCompactServiceCard';
 import TextWithGlow from '@/components/TextWithGlow';
+import AnimatedSection from '@/components/AnimatedSection';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { useMobileUtils } from '@/hooks/use-mobile-utils';
 
@@ -254,12 +256,6 @@ const ServicesSection: React.FC = () => {
   const isMobile = useIsMobile();
   const { getMobileSpacing } = useMobileUtils();
   
-  // Helper function to get billing type label
-  const getBillingTypeLabel = (category: ServiceCategory) => {
-    const billingType = servicePricingData[category][customerType].billingType;
-    return billingType === 'oneTime' ? 'jednorázově' : 'měsíčně';
-  };
-  
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -273,19 +269,14 @@ const ServicesSection: React.FC = () => {
   };
 
   return (
-    <motion.section
+    <section
       id="services"
-      className={`py-${isMobile ? '16' : '24'} bg-background relative overflow-hidden`}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-100px" }}
-      variants={containerVariants}
+      className="service-section"
     >
-      {/* Animated background elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Left blob */}
+      {/* Decorative elements */}
+      <div className="service-section-background">
         <motion.div 
-          className="absolute top-20 -left-32 w-64 h-64 rounded-full bg-purple/5 blur-3xl"
+          className="decorative-blob top-20 -left-32 w-64 h-64 bg-purple/5"
           animate={{
             scale: [1, 1.2, 1],
             opacity: [0.3, 0.5, 0.3]
@@ -297,9 +288,8 @@ const ServicesSection: React.FC = () => {
           }}
         />
         
-        {/* Right blob */}
         <motion.div 
-          className="absolute bottom-20 -right-32 w-80 h-80 rounded-full bg-gold/5 blur-3xl"
+          className="decorative-blob bottom-20 -right-32 w-80 h-80 bg-gold/5"
           animate={{
             scale: [1, 1.15, 1],
             opacity: [0.2, 0.4, 0.2]
@@ -312,9 +302,8 @@ const ServicesSection: React.FC = () => {
           }}
         />
         
-        {/* Diagonal accent line */}
         <motion.div 
-          className="absolute top-40 -right-20 w-[800px] h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent transform rotate-[35deg]"
+          className="decorative-line top-40 -right-20 w-[800px] rotate-[35deg]"
           initial={{ opacity: 0 }}
           animate={{ opacity: [0, 1, 0] }}
           transition={{
@@ -325,47 +314,34 @@ const ServicesSection: React.FC = () => {
           }}
         />
         
-        {/* Asymmetric grid pattern */}
+        {/* Subtle grid background */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute top-0 left-0 right-0 bottom-0 
-                          bg-[linear-gradient(rgba(212,175,55,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(212,175,55,0.1)_1px,transparent_1px)]
-                          bg-[size:60px_60px]">
+          <div className="absolute inset-0 
+                      bg-[linear-gradient(rgba(212,175,55,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(212,175,55,0.1)_1px,transparent_1px)]
+                      bg-[size:60px_60px]">
           </div>
         </div>
       </div>
       
-      <div className="container-custom relative z-10">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className={`mb-${isMobile ? '8' : '12'}`}
-        >
+      <div className="service-section-content">
+        <AnimatedSection delay={0.2} className="mb-12" direction="up">
           <SectionTitle 
             title="Služby a Ceník" 
             subtitle="Profesionální webový vývoj s transparentními cenami a bez skrytých poplatků"
             alignment="center"
             accentColor="gold"
           />
-        </motion.div>
+        </AnimatedSection>
         
-        {/* Service category tabs - Enhanced tab design with symmetrical layout */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.2 }}
-          className={`flex flex-wrap justify-center mb-${isMobile ? '10' : '16'}`}
-        >
+        {/* Service category tabs with improved design */}
+        <AnimatedSection delay={0.4} direction="up" className="mb-12">
           <Tabs 
             value={selectedCategory}
             onValueChange={(value) => setSelectedCategory(value as ServiceCategory)}
-            className="w-full max-w-3xl mx-auto relative"
+            className="w-full max-w-3xl mx-auto"
           >
-            {/* Tab container with enhanced styling */}
             <div className="relative">
-              {/* Decorative underline with symmetrical gradient */}
+              {/* Decorative underline */}
               <motion.div 
                 className="absolute -bottom-1 left-0 right-0 h-0.5 bg-gradient-to-r from-purple/30 via-gold/50 to-purple/30 rounded-full"
                 initial={{ opacity: 0, scaleX: 0 }}
@@ -388,7 +364,6 @@ const ServicesSection: React.FC = () => {
                         ${isActive ? 'text-gold font-medium' : 'text-muted-foreground hover:text-muted-foreground/80'}
                       `}
                     >
-                      {/* Symmetrical background glow effect for active tab */}
                       {isActive && (
                         <motion.div
                           className="absolute inset-0 bg-gradient-to-r from-gold/5 via-gold/10 to-gold/5 rounded-lg"
@@ -399,11 +374,10 @@ const ServicesSection: React.FC = () => {
                         />
                       )}
                       
-                      {/* Animated icon */}
                       <motion.div
                         animate={isActive ? {
                           scale: [1, 1.2, 1],
-                          transition: { duration: 0.5, repeat: 0 }
+                          transition: { duration: 0.5 }
                         } : {}}
                         whileHover={{ scale: 1.1, rotate: 5 }}
                         className={`p-0.5 ${isActive ? 'bg-gold/10 rounded-md' : ''}`}
@@ -414,7 +388,6 @@ const ServicesSection: React.FC = () => {
                       <span className={`hidden ${isMobile ? 'xs:inline' : 'sm:inline'}`}>{tab.label}</span>
                       <span className={`${isMobile ? 'xs:hidden' : 'sm:hidden'}`}>{tab.shortLabel}</span>
                       
-                      {/* Symmetrical animated underline for active tab */}
                       {isActive && (
                         <motion.div
                           className="absolute bottom-0 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-gold/50 via-gold to-gold/50"
@@ -430,17 +403,11 @@ const ServicesSection: React.FC = () => {
               </TabsList>
             </div>
           </Tabs>
-        </motion.div>
+        </AnimatedSection>
         
-        {/* Customer type toggle - With symmetrical design and enhanced animations */}
-        <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className={`flex justify-center mb-${isMobile ? '10' : '16'}`}
-        >
-          <div className="relative bg-card/30 p-1 rounded-full border border-white/10 shadow-lg overflow-hidden">
+        {/* Customer type selector with improved design */}
+        <AnimatedSection delay={0.6} direction="up" className="mb-12">
+          <div className="relative bg-card/30 p-1 rounded-full border border-white/10 shadow-lg overflow-hidden max-w-md mx-auto">
             {/* Animated background for selected toggle */}
             <motion.div
               className="absolute h-full top-0 rounded-full bg-gradient-to-r from-gold/90 via-gold to-gold-light/90"
@@ -492,196 +459,46 @@ const ServicesSection: React.FC = () => {
               </ToggleGroupItem>
             </ToggleGroup>
           </div>
-        </motion.div>
+        </AnimatedSection>
         
-        {/* Service pricing cards with symmetrical layout */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.5, delay: 0.3 }}
-          className={`grid grid-cols-1 ${isMobile ? 'gap-5' : 'md:grid-cols-2 gap-8'} max-w-4xl mx-auto mb-${isMobile ? '16' : '20'}`}
-        >
-          {/* Main service card - Symmetrically positioned */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <ServiceCard
+        {/* Service cards with new modern design */}
+        <AnimatedSection delay={0.8} direction="up" className="mb-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <ModernServiceCard
               title={servicePricingData[selectedCategory][customerType].title}
               description={servicePricingData[selectedCategory][customerType].description}
               price={servicePricingData[selectedCategory][customerType].price}
-              billingType={servicePricingData[selectedCategory][customerType].billingType}
+              isOneTime={servicePricingData[selectedCategory][customerType].billingType === 'oneTime'}
               features={servicePricingData[selectedCategory][customerType].features}
-              isPopular={servicePricingData[selectedCategory][customerType].isPopular}
+              isPrimary={servicePricingData[selectedCategory][customerType].isPopular}
             />
-          </motion.div>
-          
-          {/* Custom quote card with enhanced design - For mobile, display conditionally or with different styling */}
-          <motion.div
-            initial={{ opacity: 0, y: 15 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            whileHover={{ y: isMobile ? 0 : -8 }}
-          >
-            <motion.div
-              className={`relative h-full border rounded-lg border-dashed border-gold/40 bg-gradient-to-b from-card to-black/80 p-${isMobile ? '4' : '6'} flex flex-col overflow-hidden`}
-              whileHover={{ 
-                boxShadow: "0 0 30px rgba(212,175,55,0.15)",
-                borderColor: "rgba(212,175,55,0.6)"
-              }}
-              transition={{ duration: 0.5 }}
-            >
-              {/* Symmetrical accent elements */}
-              <motion.div
-                className="absolute -top-10 -left-10 w-32 h-32 rounded-full bg-gold/5 blur-xl"
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.2, 0.3, 0.2]
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-              
-              <motion.div
-                className="absolute -bottom-10 -right-10 w-32 h-32 rounded-full bg-gold/5 blur-xl"
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.2, 0.3, 0.2]
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 4
-                }}
-              />
-              
-              {/* Premium badge */}
-              <motion.div 
-                className={`absolute -top-3 ${isMobile ? 'right-2' : 'right-5'}`}
-                initial={{ opacity: 0, y: -10, rotate: -15 }}
-                animate={{ opacity: 1, y: 0, rotate: 0 }}
-                transition={{ delay: 0.8, duration: 0.5 }}
-              >
-                <TextWithGlow 
-                  intensity="strong" 
-                  className={`bg-purple text-primary-foreground ${isMobile ? 'text-xs' : 'text-xs'} font-semibold px-3 py-1 rounded-full shadow-lg flex items-center gap-1`}
-                >
-                  <Star className={`h-${isMobile ? '2.5' : '3'} w-${isMobile ? '2.5' : '3'}`} /> Premium
-                </TextWithGlow>
-              </motion.div>
-              
-              <h3 className={`${isMobile ? 'text-lg' : 'text-xl'} font-bold ${isMobile ? 'mb-1' : 'mb-2'} text-gold`}>Individuální řešení</h3>
-              <p className={`text-muted-foreground ${isMobile ? 'text-xs mb-3' : 'text-sm mb-4'}`}>
-                Potřebujete komplexní řešení přesně podle vašich potřeb? Kontaktujte nás pro nezávaznou konzultaci.
-              </p>
-              
-              <ul className={`space-y-${isMobile ? '1.5' : '2'} mb-${isMobile ? '4' : '6'} flex-grow`}>
-                <motion.li 
-                  className={`flex items-center ${isMobile ? 'text-xs' : 'text-sm'}`}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.6 }}
-                >
-                  <Clock className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2 flex-shrink-0 text-gold`} />
-                  <span className="text-foreground/80">Bezplatná úvodní konzultace</span>
-                </motion.li>
-                <motion.li 
-                  className={`flex items-center ${isMobile ? 'text-xs' : 'text-sm'}`}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.7 }}
-                >
-                  <Check className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2 flex-shrink-0 text-gold`} />
-                  <span className="text-foreground/80">Detailní analýza potřeb</span>
-                </motion.li>
-                <motion.li 
-                  className={`flex items-center ${isMobile ? 'text-xs' : 'text-sm'}`}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.8 }}
-                >
-                  <Check className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2 flex-shrink-0 text-gold`} />
-                  <span className="text-foreground/80">Návrh řešení na míru</span>
-                </motion.li>
-                <motion.li 
-                  className={`flex items-center ${isMobile ? 'text-xs' : 'text-sm'}`}
-                  initial={{ opacity: 0, x: -10 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.9 }}
-                >
-                  <Check className={`${isMobile ? 'h-3 w-3' : 'h-4 w-4'} mr-2 flex-shrink-0 text-gold`} />
-                  <span className="text-foreground/80">Transparentní cenová nabídka</span>
-                </motion.li>
-              </ul>
-              
-              <div className="mt-auto relative z-10">
-                <motion.button
-                  className={`w-full relative overflow-hidden bg-transparent border-2 border-gold/50 text-gold hover:border-gold transition-colors py-${isMobile ? '1.5' : '2'} rounded-md font-medium ${isMobile ? 'text-sm' : ''}`}
-                  whileHover={{ scale: isMobile ? 1.02 : 1.03 }}
-                  whileTap={{ scale: 0.97 }}
-                >
-                  <motion.span
-                    className="absolute inset-0 bg-gradient-to-r from-gold/0 via-gold/10 to-gold/0"
-                    initial={{ x: "-100%" }}
-                    whileHover={{ x: "100%" }}
-                    transition={{ duration: 1.2 }}
-                  />
-                  Nezávazná konzultace
-                </motion.button>
-              </div>
-            </motion.div>
-          </motion.div>
-        </motion.div>
+            
+            {/* Custom quote card with modern design */}
+            <ModernServiceCard
+              title="Individuální řešení"
+              description="Potřebujete komplexní řešení přesně podle vašich potřeb? Kontaktujte nás pro nezávaznou konzultaci."
+              price={0}
+              isOneTime={true}
+              features={[
+                "Bezplatná úvodní konzultace",
+                "Detailní analýza potřeb",
+                "Návrh řešení na míru",
+                "Transparentní cenová nabídka",
+                "Prioritní realizace"
+              ]}
+              highlighted={true}
+              ctaText="Nezávazná konzultace"
+            />
+          </div>
+        </AnimatedSection>
         
-        {/* Additional services section with symmetrical layout */}
-        <div className={`mt-${isMobile ? '16' : '24'} relative`}>
-          {/* Symmetrical decorative elements */}
-          <motion.div
-            className="absolute -top-20 left-1/4 w-40 h-40 rounded-full bg-purple/5 blur-3xl opacity-40"
-            animate={{
-              scale: [1, 1.2, 1],
-              opacity: [0.2, 0.4, 0.2]
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-          
-          <motion.div
-            className="absolute -top-20 right-1/4 w-40 h-40 rounded-full bg-gold/5 blur-3xl opacity-40"
-            animate={{
-              scale: [1.1, 0.9, 1.1],
-              opacity: [0.2, 0.3, 0.2]
-            }}
-            transition={{
-              duration: 10,
-              repeat: Infinity,
-              ease: "easeInOut",
-              delay: 5
-            }}
-          />
-          
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
-            className={`text-center mb-${isMobile ? '10' : '16'}`}
-          >
-            <h3 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-bold mb-2`}>
+        {/* Additional services section with improved design */}
+        <div className="mt-24">
+          <AnimatedSection delay={0.3} direction="up" className="text-center mb-12">
+            <h3 className="text-2xl font-bold mb-2">
               <motion.span 
                 initial={{ backgroundPosition: "0% 0%" }}
-                whileInView={{ backgroundPosition: "100% 0%" }}
+                animate={{ backgroundPosition: "100% 0%" }}
                 transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
                 className="bg-clip-text text-transparent bg-gradient-to-r from-gold-dark via-gold to-gold-light"
               >
@@ -689,7 +506,7 @@ const ServicesSection: React.FC = () => {
               </motion.span>
             </h3>
             
-            <p className={`text-muted-foreground ${isMobile ? 'text-sm' : ''} max-w-lg mx-auto mb-4`}>
+            <p className="text-muted-foreground max-w-lg mx-auto mb-4">
               Doplňkové služby pro vylepšení vašeho webu a online podnikání
             </p>
             
@@ -699,24 +516,30 @@ const ServicesSection: React.FC = () => {
               transition={{ duration: 1, delay: 0.2 }}
               className="h-1 bg-gradient-to-r from-purple/50 via-gold/50 to-purple/50 mx-auto rounded-full my-4"
             />
-          </motion.div>
+          </AnimatedSection>
           
-          <div className={`grid grid-cols-1 ${isMobile ? 'gap-4' : 'md:grid-cols-2 lg:grid-cols-4 gap-6'}`}>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {additionalServices.map((service, index) => (
-              <CompactServiceCard
+              <AnimatedSection 
                 key={index}
-                icon={service.icon}
-                title={service.title}
-                description={service.description}
-                price={service.price}
-                priceType={service.priceType}
-                className={service.highlight ? "border-gold/30" : ""}
-              />
+                delay={0.2 + index * 0.1}
+                direction="up"
+                distance={20}
+              >
+                <ModernCompactServiceCard
+                  icon={service.icon}
+                  title={service.title}
+                  description={service.description}
+                  price={service.price}
+                  priceType={service.priceType}
+                  highlight={service.highlight}
+                />
+              </AnimatedSection>
             ))}
           </div>
         </div>
       </div>
-    </motion.section>
+    </section>
   );
 };
 
