@@ -12,7 +12,7 @@ const AboutSection: React.FC = () => {
 
   return (
     <SectionWrapper id="about" className="pt-24 pb-16">
-      <div className={getMobileSpacing()}>
+      <div className={getMobileSpacing("px-4 md:px-8")}>
         <div className="text-center mb-12">
           <ScrollReveal>
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
@@ -57,7 +57,7 @@ const AboutSection: React.FC = () => {
           </ScrollReveal>
           <ScrollReveal delay={0.6}>
             <p className="text-foreground/80 text-sm md:text-base">
-              Během své kariéry jsem úspěšně dokončil více než {45} projektů pro klienty z různých odvětví. Mám hluboké znalosti v oblasti responzivního designu, optimalizace výkonu a přístupnosti webu.
+              Během své kariéry jsem úspěšně dokončil více než {48} projektů pro klienty z různých odvětví. Mám hluboké znalosti v oblasti responzivního designu, optimalizace výkonu a přístupnosti webu.
             </p>
           </ScrollReveal>
           <ScrollReveal delay={0.8}>
