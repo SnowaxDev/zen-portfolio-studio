@@ -25,9 +25,9 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   className = '',
   id,
   direction = 'up',
-  distance = 50,
+  distance = 30,
   once = true,
-  duration = 0.4, // Faster animations for better UX
+  duration = 0.5,
   threshold = 0.1,
   staggerChildren = false,
   staggerDelay = 0.1,
@@ -58,7 +58,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
     }
   };
   
-  // Animation variants with improved dynamics - faster and more responsive
+  // Animation variants with improved dynamics
   const defaultVariants = {
     hidden: getInitialState(),
     visible: {
@@ -67,7 +67,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       y: 0,
       transition: {
         duration: prefersReducedMotion ? 0.15 : duration,
-        ease: [0.2, 0.65, 0.3, 0.9], // Improved easing curve for snappier animations
+        ease: [0.25, 0.1, 0.25, 1], // Improved cubic bezier curve
         delay: prefersReducedMotion ? 0 : delay,
         staggerChildren: staggerChildren ? staggerDelay : 0,
         delayChildren: staggerChildren ? delay : 0,

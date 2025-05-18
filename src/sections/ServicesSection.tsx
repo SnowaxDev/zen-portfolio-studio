@@ -1,15 +1,12 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Layout, Zap, Cloud, Shield, Clock, Info } from 'lucide-react';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import SectionTitle from '@/components/SectionTitle';
-import ModernServiceCard from '@/components/services/ModernServiceCard';
-import ModernCompactServiceCard from '@/components/services/ModernCompactServiceCard';
-import TextWithGlow from '@/components/TextWithGlow';
+import { Layout, Zap, Cloud, Shield, ArrowRight } from 'lucide-react';
 import AnimatedSection from '@/components/AnimatedSection';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { useMobileUtils } from '@/hooks/use-mobile-utils';
+import { Badge } from '@/components/ui/badge';
 
 // Types
 type ServiceCategory = 'websites' | 'design' | 'cloud' | 'maintenance';
@@ -25,7 +22,27 @@ interface ServiceData {
   features: string[];
 }
 
-// Service pricing data with explicit typing
+interface ServiceCardProps {
+  title: string;
+  description: string;
+  price: number | null;
+  isOneTime: boolean;
+  features: string[];
+  isPrimary?: boolean;
+  isCustom?: boolean;
+  onButtonClick?: () => void;
+}
+
+interface AdditionalService {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  price: string;
+  buttonText: string;
+  highlight?: boolean;
+}
+
+// Service pricing data
 const servicePricingData: Record<ServiceCategory, Record<CustomerType, ServiceData>> = {
   websites: {
     budget: {
@@ -206,13 +223,13 @@ const servicePricingData: Record<ServiceCategory, Record<CustomerType, ServiceDa
 };
 
 // Additional services data
-const additionalServices = [
+const additionalServices: AdditionalService[] = [
   {
     icon: Layout,
     title: "Redesign webu",
     description: "Oživte svůj stávající web moderním designem, který zvýší konverze a vylepší uživatelský zážitek.",
     price: "od 3 900 Kč",
-    priceType: "jednorázově",
+    buttonText: "Více informací",
     highlight: true
   },
   {
@@ -220,253 +237,432 @@ const additionalServices = [
     title: "Optimalizace rychlosti",
     description: "Zrychlete svůj web pro lepší uživatelský zážitek, vyšší konverze a lepší pozice ve vyhledávačích.",
     price: "od 1 500 Kč",
-    priceType: "jednorázově",
-    highlight: false
+    buttonText: "Více informací"
   },
   {
     icon: Shield,
     title: "Zabezpečení webu",
     description: "Ochraňte svůj web před útoky a zajistěte bezpečnost pro návštěvníky i vaše citlivá data.",
     price: "od 2 500 Kč",
-    priceType: "jednorázově",
-    highlight: false
+    buttonText: "Více informací"
   },
   {
     icon: Cloud,
     title: "Migrace na cloud",
     description: "Bezpečná migrace vašeho webu na rychlou a spolehlivou cloudovou infrastrukturu s minimálním výpadkem.",
     price: "od 3 000 Kč",
-    priceType: "jednorázově",
-    highlight: false
+    buttonText: "Více informací"
   }
 ];
 
-// Tab icons and labels configuration
+// Tab configuration
 const tabsConfig = [
-  { value: 'websites', icon: Layout, label: 'Webové stránky', shortLabel: 'Weby' },
-  { value: 'design', icon: Zap, label: 'Design & UX', shortLabel: 'Design' },
-  { value: 'cloud', icon: Cloud, label: 'Cloud & RDP', shortLabel: 'Cloud' },
-  { value: 'maintenance', icon: Shield, label: 'Údržba', shortLabel: 'Údržba' },
+  { value: 'websites', icon: Layout, label: 'Webové stránky' },
+  { value: 'design', icon: Zap, label: 'Design & UX' },
+  { value: 'cloud', icon: Cloud, label: 'Cloud & RDP' },
+  { value: 'maintenance', icon: Shield, label: 'Údržba' },
 ];
+
+// Customer type config
+const customerTypeConfig = [
+  { value: 'budget', label: 'Nízký rozpočet' },
+  { value: 'individual', label: 'Jednotlivci' },
+  { value: 'business', label: 'Firmy' },
+];
+
+// Service Card Component
+const ServiceCard: React.FC<ServiceCardProps> = ({ 
+  title, 
+  description, 
+  price, 
+  isOneTime, 
+  features, 
+  isPrimary = false,
+  isCustom = false,
+  onButtonClick 
+}) => {
+  const isMobile = useIsMobile();
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.4 }}
+      className="h-full"
+    >
+      <div className={cn(
+        "relative h-full flex flex-col rounded-2xl border-2 p-6 bg-black overflow-hidden",
+        isPrimary 
+          ? "border-yellow-500/70" 
+          : isCustom 
+            ? "border-purple-500/50" 
+            : "border-zinc-800"
+      )}>
+        {/* Header with optional badge */}
+        <div className="mb-5">
+          {isPrimary && (
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="absolute -top-3 right-6"
+            >
+              <Badge className="bg-yellow-500 text-black font-medium">
+                Nejoblíbenější
+              </Badge>
+            </motion.div>
+          )}
+          {isCustom && (
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+              className="absolute -top-3 right-6"
+            >
+              <Badge className="bg-purple-500 text-white font-medium">
+                Doporučeno
+              </Badge>
+            </motion.div>
+          )}
+          
+          <h3 className={cn(
+            "text-xl md:text-2xl font-bold mb-2",
+            isPrimary ? "text-yellow-500" : isCustom ? "text-purple-400" : "text-white"
+          )}>
+            {title}
+          </h3>
+          
+          <p className="text-zinc-400 text-sm">
+            {description}
+          </p>
+        </div>
+        
+        {/* Price */}
+        <div className="mb-6">
+          <div className="flex items-baseline">
+            <span className={cn(
+              "text-3xl md:text-4xl font-bold",
+              isPrimary ? "text-yellow-500" : isCustom ? "text-purple-400" : "text-white"
+            )}>
+              {price === null ? "0" : price.toLocaleString()}
+            </span>
+            <span className="text-zinc-400 ml-2 text-sm">
+              Kč {isOneTime ? 'jednorázově' : 'měsíčně'}
+            </span>
+          </div>
+          
+          <div className="mt-1">
+            <span className={cn(
+              "text-xs px-2 py-1 rounded-full",
+              isOneTime 
+                ? "bg-blue-500/20 text-blue-300" 
+                : "bg-green-500/20 text-green-300"
+            )}>
+              {isOneTime ? 'Jednorázová platba' : 'Měsíční platba'}
+            </span>
+          </div>
+        </div>
+        
+        {/* Features */}
+        <div className="mb-6">
+          <h4 className="text-sm text-zinc-300 font-medium mb-3">
+            Co je zahrnuto:
+          </h4>
+          <div className="space-y-3">
+            {features.map((feature, index) => (
+              <motion.div 
+                key={index}
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.1 * index }}
+                className="flex items-start gap-2"
+              >
+                <div className={cn(
+                  "mt-1 p-1 rounded-full flex-shrink-0",
+                  isPrimary ? "bg-yellow-500/20" : isCustom ? "bg-purple-500/20" : "bg-zinc-800"
+                )}>
+                  <motion.div
+                    whileHover={{ rotate: 180 }}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <ArrowRight className={cn(
+                      "h-3 w-3",
+                      isPrimary ? "text-yellow-500" : isCustom ? "text-purple-400" : "text-zinc-400"
+                    )} />
+                  </motion.div>
+                </div>
+                <span className="text-sm text-zinc-300">{feature}</span>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Button */}
+        <div className="mt-auto pt-4">
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Button 
+              className={cn(
+                "w-full font-medium relative overflow-hidden",
+                isPrimary 
+                  ? "bg-yellow-500 hover:bg-yellow-400 text-black border-yellow-600" 
+                  : isCustom
+                    ? "bg-purple-500/30 hover:bg-purple-500/50 text-purple-200 border border-purple-500/50"
+                    : "bg-zinc-800 hover:bg-zinc-700 text-white border-zinc-700"
+              )}
+              onClick={onButtonClick}
+            >
+              <motion.span
+                className={cn(
+                  "absolute inset-0 opacity-0",
+                  isPrimary 
+                    ? "bg-gradient-to-r from-yellow-400/0 via-white/30 to-yellow-400/0" 
+                    : isCustom
+                      ? "bg-gradient-to-r from-purple-500/0 via-white/20 to-purple-500/0"
+                      : "bg-gradient-to-r from-zinc-700/0 via-white/10 to-zinc-700/0"
+                )}
+                initial={{ x: "-100%" }}
+                whileHover={{ x: "100%", opacity: 1 }}
+                transition={{ duration: 0.6 }}
+              />
+              {isCustom ? "Nezávazná konzultace" : "Objednat"}
+            </Button>
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
+// AdditionalServiceCard Component
+const AdditionalServiceCard: React.FC<{service: AdditionalService}> = ({ service }) => {
+  const { icon: Icon, title, description, price, buttonText, highlight } = service;
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4 }}
+      className="h-full"
+    >
+      <div className={cn(
+        "h-full rounded-2xl border-2 bg-black p-5 flex flex-col relative overflow-hidden",
+        highlight ? "border-yellow-500/40" : "border-zinc-800"
+      )}>
+        <motion.div
+          whileHover={{ 
+            rotate: [0, -10, 10, -5, 0], 
+            scale: 1.05,
+            transition: { duration: 0.5 }
+          }}
+          className={cn(
+            "w-12 h-12 rounded-xl flex items-center justify-center mb-4",
+            highlight ? "bg-yellow-500/20" : "bg-zinc-800"
+          )}
+        >
+          <Icon className={cn(
+            "w-6 h-6",
+            highlight ? "text-yellow-500" : "text-zinc-300"
+          )} />
+        </motion.div>
+        
+        <h3 className={cn(
+          "text-xl font-bold mb-2",
+          highlight ? "text-yellow-500" : "text-white"
+        )}>
+          {title}
+        </h3>
+        
+        <p className="text-zinc-400 text-sm mb-4 flex-grow">
+          {description}
+        </p>
+        
+        <div className="mt-auto">
+          <div className="flex items-baseline mb-3">
+            <span className={cn(
+              "text-2xl font-bold",
+              highlight ? "text-yellow-500" : "text-white"
+            )}>
+              {price}
+            </span>
+            <span className="text-zinc-400 text-xs ml-2">jednorázově</span>
+          </div>
+          
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Button 
+              variant="outline" 
+              className={cn(
+                "w-full border relative overflow-hidden",
+                highlight 
+                  ? "border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/10" 
+                  : "border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+              )}
+            >
+              <motion.span
+                className={cn(
+                  "absolute inset-0 opacity-0",
+                  highlight 
+                    ? "bg-gradient-to-r from-yellow-500/0 via-yellow-500/20 to-yellow-500/0" 
+                    : "bg-gradient-to-r from-zinc-700/0 via-zinc-700/30 to-zinc-700/0"
+                )}
+                initial={{ x: "-100%" }}
+                whileHover={{ x: "100%", opacity: 1 }}
+                transition={{ duration: 0.6 }}
+              />
+              {buttonText}
+            </Button>
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
 
 const ServicesSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>('websites');
   const [customerType, setCustomerType] = useState<CustomerType>('individual');
   const isMobile = useIsMobile();
-  const { getMobileSpacing } = useMobileUtils();
   
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
-      transition: { 
-        staggerChildren: 0.08,
-        delayChildren: 0.2
-      }
-    }
-  };
-
+  // Service data for the current selection
+  const currentService = servicePricingData[selectedCategory][customerType];
+  const isSubscription = currentService.billingType === 'subscription';
+  
   return (
-    <section
-      id="services"
-      className="service-section bg-zinc-950"
-    >
-      {/* Dynamic background elements */}
-      <div className="service-section-background">
-        <div className="absolute top-0 left-0 w-full h-full opacity-20">
-          <div className="absolute top-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent"></div>
-          <div className="absolute bottom-0 left-0 w-full h-[1px] bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent"></div>
-        </div>
-        
-        <motion.div 
-          className="decorative-blob top-20 -left-32 w-64 h-64 bg-yellow-500/5"
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.3, 0.4, 0.3]
-          }}
-          transition={{
-            duration: 6,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
-        
-        <motion.div 
-          className="decorative-blob bottom-20 -right-32 w-72 h-72 bg-yellow-500/5"
-          animate={{
-            scale: [1, 1.1, 1],
-            opacity: [0.2, 0.3, 0.2]
-          }}
-          transition={{
-            duration: 7,
-            repeat: Infinity,
-            ease: "easeInOut",
-            delay: 0.5
-          }}
-        />
-        
-        {/* Subtle grid background */}
+    <section id="services" className="bg-zinc-950 py-20 relative overflow-hidden">
+      {/* Background elements */}
+      <div className="absolute top-0 inset-0 pointer-events-none">
+        {/* Grid pattern */}
         <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0 
-                      bg-[linear-gradient(rgba(234,179,8,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(234,179,8,0.1)_1px,transparent_1px)]
-                      bg-[size:50px_50px]">
-          </div>
+          <div className="h-full w-full bg-[linear-gradient(rgba(255,215,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,215,0,0.1)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
         </div>
+        
+        {/* Glow effects */}
+        <div className="absolute -top-40 -left-40 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"></div>
       </div>
       
-      <div className="service-section-content">
-        <AnimatedSection delay={0.1} className="mb-10" direction="up">
-          <SectionTitle 
-            title="Služby a Ceník" 
-            subtitle="Profesionální webový vývoj s transparentními cenami a bez skrytých poplatků"
-            alignment="center"
-            accentColor="gold"
-          />
+      <div className="container mx-auto px-4 relative z-10">
+        {/* Section Header */}
+        <AnimatedSection delay={0.1} direction="up" className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-bold mb-3 relative inline-block">
+            <span className="bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
+              Služby a Ceník
+            </span>
+            <motion.span 
+              className="absolute -bottom-2 left-0 h-1 w-full bg-gradient-to-r from-yellow-500/50 via-yellow-400 to-yellow-500/50 rounded"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.5 }}
+            />
+          </h2>
+          
+          <p className="text-zinc-400 max-w-2xl mx-auto mt-4">
+            Profesionální webový vývoj s transparentními cenami a bez skrytých poplatků
+          </p>
         </AnimatedSection>
         
-        {/* Service category tabs with improved design */}
-        <AnimatedSection delay={0.2} direction="up" className="mb-8">
-          <Tabs 
-            value={selectedCategory}
-            onValueChange={(value) => setSelectedCategory(value as ServiceCategory)}
-            className="w-full max-w-3xl mx-auto"
-          >
-            <div className="relative mx-auto">
-              <TabsList className="grid grid-cols-2 md:grid-cols-4 w-full bg-zinc-900/80 backdrop-blur-sm p-1 rounded-xl border border-zinc-800 shadow-lg">
-                {tabsConfig.map((tab) => {
-                  const TabIcon = tab.icon;
-                  const isActive = selectedCategory === tab.value;
+        {/* Service Categories */}
+        <AnimatedSection delay={0.2} direction="up" className="mb-12">
+          <div className="flex flex-wrap justify-center gap-2 md:gap-4">
+            {tabsConfig.map((tab) => {
+              const TabIcon = tab.icon;
+              const isActive = selectedCategory === tab.value;
+              
+              return (
+                <motion.button
+                  key={tab.value}
+                  onClick={() => setSelectedCategory(tab.value as ServiceCategory)}
+                  className={cn(
+                    "flex items-center gap-2 px-4 py-3 rounded-xl transition-all relative overflow-hidden",
+                    isActive 
+                      ? "text-black font-medium" 
+                      : "text-zinc-400 hover:text-zinc-200"
+                  )}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {/* Active background */}
+                  {isActive && (
+                    <motion.div 
+                      className="absolute inset-0 bg-yellow-500 rounded-xl"
+                      layoutId="activeServiceTab"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  )}
                   
-                  return (
-                    <TabsTrigger 
-                      key={tab.value}
-                      value={tab.value} 
-                      className={`
-                        flex items-center justify-center gap-2 py-${isMobile ? '2' : '3'} px-1
-                        relative overflow-hidden transition-all duration-200 rounded-lg
-                        ${isActive ? 'text-yellow-400 font-medium' : 'text-zinc-400 hover:text-zinc-300'}
-                      `}
-                    >
-                      {isActive && (
-                        <motion.div
-                          className="absolute inset-0 bg-yellow-500/10 rounded-lg"
-                          layoutId="activeTabBackground"
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ type: "spring", duration: 0.3 }}
-                        />
-                      )}
-                      
-                      <motion.div
-                        animate={isActive ? {
-                          scale: [1, 1.2, 1],
-                          transition: { duration: 0.3 }
-                        } : {}}
-                        whileHover={{ scale: 1.1 }}
-                        className={`p-0.5 ${isActive ? 'bg-yellow-500/10 rounded-md' : ''}`}
-                      >
-                        <TabIcon className={`w-${isMobile ? '4' : '5'} h-${isMobile ? '4' : '5'} ${isActive ? 'text-yellow-400' : ''}`} />
-                      </motion.div>
-                      
-                      <span className={`hidden ${isMobile ? 'xs:inline' : 'sm:inline'}`}>{tab.label}</span>
-                      <span className={`${isMobile ? 'xs:hidden' : 'sm:hidden'}`}>{tab.shortLabel}</span>
-                      
-                      {isActive && (
-                        <motion.div
-                          className="absolute bottom-0 left-[10%] right-[10%] h-0.5 bg-gradient-to-r from-yellow-500/50 via-yellow-400 to-yellow-500/50"
-                          layoutId="activeTabIndicator"
-                          initial={{ opacity: 0, scaleX: 0 }}
-                          animate={{ opacity: 1, scaleX: 1 }}
-                          transition={{ type: "spring", duration: 0.3 }}
-                        />
-                      )}
-                    </TabsTrigger>
-                  );
-                })}
-              </TabsList>
-            </div>
-          </Tabs>
+                  <span className="relative z-10">
+                    <TabIcon className={cn(
+                      "w-5 h-5", 
+                      isActive ? "text-black" : "text-zinc-400"
+                    )} />
+                  </span>
+                  
+                  <span className="relative z-10">
+                    {tab.label}
+                  </span>
+                </motion.button>
+              );
+            })}
+          </div>
         </AnimatedSection>
         
-        {/* Customer type selector with improved design */}
-        <AnimatedSection delay={0.3} direction="up" className="mb-10">
-          <div className="relative bg-zinc-900/60 p-1 rounded-full border border-zinc-800 shadow-lg overflow-hidden max-w-md mx-auto">
-            {/* Animated background for selected toggle */}
-            <motion.div
-              className="absolute h-full top-0 rounded-full bg-gradient-to-r from-yellow-500/90 via-yellow-400 to-yellow-500/90"
-              initial={{ width: '33.33%', x: 0 }}
+        {/* Customer Type Selector */}
+        <AnimatedSection delay={0.3} direction="up" className="mb-12">
+          <div className="bg-zinc-900/60 rounded-2xl p-1.5 flex max-w-sm mx-auto relative">
+            {/* Moving background */}
+            <motion.div 
+              className="absolute h-full top-0 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-xl"
+              style={{ 
+                width: `${100 / customerTypeConfig.length}%` 
+              }}
               animate={{ 
-                x: customerType === 'budget' 
-                  ? 0 
-                  : customerType === 'individual' 
-                  ? '100%' 
-                  : '200%'
+                left: `${customerTypeConfig.findIndex(c => c.value === customerType) * (100 / customerTypeConfig.length)}%` 
               }}
               transition={{ type: "spring", stiffness: 300, damping: 30 }}
             />
             
-            <ToggleGroup 
-              type="single" 
-              value={customerType} 
-              onValueChange={(value) => {
-                if (value) setCustomerType(value as CustomerType);
-              }}
-              className="relative z-10 grid grid-cols-3"
-            >
-              <ToggleGroupItem 
-                value="budget" 
-                aria-label="Nízký rozpočet"
-                className={`rounded-full px-${isMobile ? '2' : '4'} py-${isMobile ? '1.5' : '2'} transition-all duration-200 data-[state=on]:text-black data-[state=off]:text-zinc-400 ${isMobile ? 'text-xs' : ''}`}
+            {customerTypeConfig.map((type) => (
+              <motion.button
+                key={type.value}
+                onClick={() => setCustomerType(type.value as CustomerType)}
+                className={cn(
+                  "flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors relative z-10",
+                  customerType === type.value ? "text-black" : "text-zinc-400"
+                )}
+                whileTap={{ scale: 0.95 }}
               >
-                <TextWithGlow intensity="light" color="rgba(255, 255, 255, 0.9)" pulsate={false}>
-                  {isMobile ? 'Nízký' : 'Nízký rozpočet'}
-                </TextWithGlow>
-              </ToggleGroupItem>
-              <ToggleGroupItem 
-                value="individual" 
-                aria-label="Jednotlivci & Malé firmy"
-                className={`rounded-full px-${isMobile ? '2' : '4'} py-${isMobile ? '1.5' : '2'} transition-all duration-200 data-[state=on]:text-black data-[state=off]:text-zinc-400 ${isMobile ? 'text-xs' : ''}`}
-              >
-                <TextWithGlow intensity="light" color="rgba(255, 255, 255, 0.9)" pulsate={false}>
-                  Jednotlivci
-                </TextWithGlow>
-              </ToggleGroupItem>
-              <ToggleGroupItem 
-                value="business" 
-                aria-label="Střední & Velké firmy"
-                className={`rounded-full px-${isMobile ? '2' : '4'} py-${isMobile ? '1.5' : '2'} transition-all duration-200 data-[state=on]:text-black data-[state=off]:text-zinc-400 ${isMobile ? 'text-xs' : ''}`}
-              >
-                <TextWithGlow intensity="light" color="rgba(255, 255, 255, 0.9)" pulsate={false}>
-                  Firmy
-                </TextWithGlow>
-              </ToggleGroupItem>
-            </ToggleGroup>
+                {type.label}
+              </motion.button>
+            ))}
           </div>
         </AnimatedSection>
         
-        {/* Service cards with new modern design */}
-        <AnimatedSection delay={0.4} direction="up" className="mb-20">
-          <motion.div 
-            variants={containerVariants}
-            initial="hidden"
-            animate="visible"
-            className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto"
-          >
-            <ModernServiceCard
-              title={servicePricingData[selectedCategory][customerType].title}
-              description={servicePricingData[selectedCategory][customerType].description}
-              price={servicePricingData[selectedCategory][customerType].price}
-              isOneTime={servicePricingData[selectedCategory][customerType].billingType === 'oneTime'}
-              features={servicePricingData[selectedCategory][customerType].features}
-              isPrimary={servicePricingData[selectedCategory][customerType].isPopular}
+        {/* Services Cards */}
+        <AnimatedSection delay={0.4} direction="up" className="mb-24">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <ServiceCard
+              title={currentService.title}
+              description={currentService.description}
+              price={currentService.price}
+              isOneTime={currentService.billingType === 'oneTime'}
+              features={currentService.features}
+              isPrimary={currentService.isPopular}
             />
             
-            {/* Custom quote card with modern design */}
-            <ModernServiceCard
+            <ServiceCard
               title="Individuální řešení"
               description="Potřebujete komplexní řešení přesně podle vašich potřeb? Kontaktujte nás pro nezávaznou konzultaci."
-              price={0}
+              price={null}
               isOneTime={true}
               features={[
                 "Bezplatná úvodní konzultace",
@@ -475,66 +671,49 @@ const ServicesSection: React.FC = () => {
                 "Transparentní cenová nabídka",
                 "Prioritní realizace"
               ]}
-              highlighted={true}
-              ctaText="Nezávazná konzultace"
+              isCustom={true}
             />
-          </motion.div>
+          </div>
         </AnimatedSection>
         
-        {/* Additional services section with improved design */}
-        <div className="mt-24 relative">
-          <motion.div 
-            className="absolute -top-10 left-1/2 transform -translate-x-1/2 h-px w-1/3"
-            initial={{ scaleX: 0, opacity: 0 }}
-            whileInView={{ scaleX: 1, opacity: 0.5 }}
-            transition={{ duration: 1, delay: 0.3 }}
-            viewport={{ once: true }}
-            style={{
-              background: 'linear-gradient(90deg, transparent, rgba(234, 179, 8, 0.3), transparent)'
-            }}
-          />
+        {/* Additional Services */}
+        <div className="mt-12 relative">
+          {/* Decorative line */}
+          <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-md h-px overflow-hidden">
+            <motion.div 
+              className="w-full h-full bg-gradient-to-r from-transparent via-yellow-500/70 to-transparent"
+              initial={{ scaleX: 0, opacity: 0 }}
+              whileInView={{ scaleX: 1, opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 1 }}
+            />
+          </div>
           
-          <AnimatedSection delay={0.3} direction="up" className="text-center mb-10">
-            <h3 className="text-2xl font-bold mb-2">
-              <motion.span 
-                initial={{ backgroundPosition: "0% 0%" }}
-                animate={{ backgroundPosition: "100% 0%" }}
-                transition={{ duration: 3, repeat: Infinity, repeatType: "reverse" }}
-                className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-600 via-yellow-400 to-yellow-500"
-              >
+          <AnimatedSection delay={0.3} direction="up" className="text-center mb-12 pt-16">
+            <h3 className="text-3xl font-bold mb-3 relative inline-block">
+              <span className="bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
                 Další služby
-              </motion.span>
+              </span>
+              <motion.span 
+                className="absolute -bottom-2 left-0 h-0.5 w-full bg-gradient-to-r from-yellow-500/50 via-yellow-300 to-yellow-500/50 rounded"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.5 }}
+              />
             </h3>
             
-            <p className="text-zinc-400 max-w-lg mx-auto mb-4">
+            <p className="text-zinc-400 max-w-lg mx-auto mt-3">
               Doplňkové služby pro vylepšení vašeho webu a online podnikání
             </p>
-            
-            <motion.div 
-              initial={{ width: 0 }}
-              whileInView={{ width: isMobile ? "3rem" : "4rem" }}
-              transition={{ duration: 0.8, delay: 0.1 }}
-              className="h-1 bg-gradient-to-r from-yellow-600/20 via-yellow-400 to-yellow-600/20 mx-auto rounded-full my-4"
-            />
           </AnimatedSection>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {additionalServices.map((service, index) => (
-              <AnimatedSection 
-                key={index}
-                delay={0.1 + index * 0.08}
-                direction="up"
-                distance={15}
-              >
-                <ModernCompactServiceCard
-                  icon={service.icon}
-                  title={service.title}
-                  description={service.description}
-                  price={service.price}
-                  priceType={service.priceType}
-                  highlight={service.highlight}
-                />
-              </AnimatedSection>
+              <AdditionalServiceCard 
+                key={index} 
+                service={service} 
+              />
             ))}
           </div>
         </div>
