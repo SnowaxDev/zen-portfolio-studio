@@ -41,6 +41,9 @@
   }
   body {
     @apply bg-background text-foreground;
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   html {
     @apply scroll-smooth;
@@ -112,6 +115,19 @@
     /* Mobile feature list */
     .features-mobile li {
       @apply text-xs my-1.5;
+    }
+    
+    /* Fix stat box display on mobile */
+    .stat-box-mobile {
+      @apply p-3;
+    }
+    
+    .stat-box-mobile p:first-child {
+      @apply text-xs;
+    }
+    
+    .stat-box-mobile p:last-child {
+      @apply text-xl font-bold;
     }
   }
 }
