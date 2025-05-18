@@ -25,9 +25,10 @@
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
     
-    --gold: 43 78% 52%;
-    --gold-light: 43 78% 62%;
-    --gold-dark: 43 78% 42%;
+    /* Updated color palette - dark theme with yellow accent */
+    --gold: 45 95% 62%;
+    --gold-light: 45 95% 72%;
+    --gold-dark: 45 95% 52%;
     --purple: 262 84% 76%;
     --purple-light: 262 84% 86%;
     
@@ -162,7 +163,7 @@
 
 /* Text gradient styles */
 .text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-gold to-gold-light;
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-200;
 }
 
 .text-gradient-purple {
@@ -188,36 +189,36 @@
 }
 
 .decorative-line {
-  @apply absolute h-[1px] bg-gradient-to-r from-transparent via-gold/30 to-transparent;
+  @apply absolute h-[1px] bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent;
 }
 
 .service-tab {
-  @apply transition-all duration-300 hover:text-foreground;
+  @apply transition-all duration-200 hover:text-foreground;
 }
 
 .service-tab-active {
-  @apply text-gold font-medium;
+  @apply text-yellow-500 font-medium;
 }
 
 /* Improved animation classes */
 .hover-lift {
-  @apply transition-transform duration-300 hover:-translate-y-1;
+  @apply transition-transform duration-200 hover:-translate-y-1;
 }
 
 .hover-glow {
-  @apply transition-all duration-300;
+  @apply transition-all duration-200;
 }
 
 .hover-glow:hover {
   @apply shadow-lg;
-  box-shadow: 0 10px 25px -5px rgba(212, 175, 55, 0.2);
+  box-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.2);
 }
 
 /* Shimmer effect */
 .shimmer {
   background: linear-gradient(90deg, transparent, rgba(255,255,255,0.05), transparent);
   background-size: 200% 100%;
-  animation: shimmer 3s infinite;
+  animation: shimmer 2s infinite;
 }
 
 @keyframes shimmer {

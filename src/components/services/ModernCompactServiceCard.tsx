@@ -29,23 +29,24 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
+      transition={{ duration: 0.4 }}
       className="h-full"
     >
       <motion.div 
         whileHover={{ 
           y: -5, 
+          transition: { duration: 0.2 },
           boxShadow: highlight 
-            ? "0 20px 30px -10px rgba(212, 175, 55, 0.15)" 
-            : "0 20px 30px -10px rgba(0, 0, 0, 0.3)"
+            ? "0 15px 30px -10px rgba(242, 201, 76, 0.25)" 
+            : "0 15px 25px -10px rgba(0, 0, 0, 0.35)"
         }}
         className="h-full"
       >
         <Card className={cn(
-          "h-full overflow-hidden transition-all duration-300",
+          "h-full overflow-hidden transition-all duration-200 border-2",
           highlight 
-            ? "border-gold/20 hover:border-gold/50 bg-gradient-to-b from-black/60 to-card/80" 
-            : "border-white/10 hover:border-white/30 bg-gradient-to-b from-black/40 to-card/60",
+            ? "border-yellow-500/30 hover:border-yellow-500/60 bg-gradient-to-b from-zinc-900 to-black/90" 
+            : "border-zinc-800 hover:border-zinc-700 bg-gradient-to-b from-zinc-900 to-black/80",
           className
         )}>
           <CardContent className="p-5 h-full flex flex-col">
@@ -53,35 +54,34 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
               <motion.div 
                 className={cn(
                   "p-2 rounded-lg", 
-                  highlight ? "bg-gold/10" : "bg-white/5"
+                  highlight ? "bg-yellow-500/20" : "bg-zinc-800"
                 )}
-                whileHover={{ rotate: [0, -10, 10, -5, 0] }}
-                transition={{ duration: 0.5 }}
+                whileHover={{ rotate: [0, -10, 10, 0], transition: { duration: 0.4 } }}
               >
                 <Icon className={cn(
                   "h-6 w-6", 
-                  highlight ? "text-gold" : "text-foreground"
+                  highlight ? "text-yellow-500" : "text-yellow-100/80"
                 )} />
               </motion.div>
               <h3 className={cn(
                 "font-bold", 
-                highlight ? "text-gold" : "text-foreground"
+                highlight ? "text-yellow-500" : "text-yellow-100"
               )}>
                 {title}
               </h3>
             </div>
             
-            <p className="text-sm text-muted-foreground mb-4">{description}</p>
+            <p className="text-sm text-zinc-400 mb-4">{description}</p>
             
             <div className="mt-auto">
               <div className="flex items-baseline">
                 <span className={cn(
                   "text-lg font-bold", 
-                  highlight ? "text-gold" : "text-foreground"
+                  highlight ? "text-yellow-500" : "text-yellow-100"
                 )}>
                   {price}
                 </span>
-                <span className="text-xs text-muted-foreground ml-1">
+                <span className="text-xs text-zinc-400 ml-1">
                   {priceType}
                 </span>
               </div>
@@ -90,10 +90,10 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
                 className={cn(
                   "mt-3 w-full py-1.5 text-sm rounded-md transition-colors",
                   highlight 
-                    ? "bg-transparent border border-gold/50 text-gold hover:bg-gold/10" 
-                    : "bg-transparent border border-white/10 text-foreground hover:bg-white/5"
+                    ? "bg-yellow-500/10 border border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/20" 
+                    : "bg-zinc-800 border border-zinc-700 text-zinc-200 hover:bg-zinc-700"
                 )}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.02, transition: { duration: 0.2 } }}
                 whileTap={{ scale: 0.98 }}
               >
                 Více informací
