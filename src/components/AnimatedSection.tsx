@@ -58,16 +58,6 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
     }
   };
   
-  // Child animation variants for staggered animations
-  const childVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.5 }
-    }
-  };
-  
   // Animation variants
   const defaultVariants = {
     hidden: getInitialState(),
@@ -98,13 +88,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
         animate={{ opacity: 1 }}
         transition={{ duration: 0.3 }}
       >
-        {staggerChildren ? 
-          React.Children.map(children, (child) => (
-            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
-              {child}
-            </motion.div>
-          ))
-          : children}
+        {children}
       </motion.div>
     );
   }
@@ -118,13 +102,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       viewport={{ once, margin: "-50px", amount: threshold }}
       variants={variants}
     >
-      {staggerChildren ? 
-        React.Children.map(children, (child) => (
-          <motion.div variants={childVariants}>
-            {child}
-          </motion.div>
-        ))
-        : children}
+      {children}
     </motion.div>
   );
 };

@@ -1,68 +1,65 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { cn } from '../../lib/utils';
-import { useMobileUtils } from '../../hooks/use-mobile-utils';
+import TextWithGlow from '../TextWithGlow';
+import { MoveUp } from 'lucide-react';
 
 interface StatBoxProps {
+  value: string;
   label: string;
-  value: number;
-  icon: React.ReactNode;
-  className?: string;
+  index: number;
+  hoveredStat: number | null;
+  handleStatHover: (index: number | null) => void;
+  rotationDegree?: number;
+  translateY?: number;
 }
 
-const StatBox: React.FC<StatBoxProps> = ({ label, value, icon, className }) => {
-  const { isMobile } = useMobileUtils();
+const StatBox: React.FC<StatBoxProps> = ({ 
+  value, 
+  label, 
+  index, 
+  hoveredStat, 
+  handleStatHover,
+  rotationDegree = 0,
+  translateY = 0
+}) => {
+  const rotateStyle = rotationDegree ? `rotate-[${rotationDegree}deg]` : '';
+  const translateYStyle = translateY ? `md:translate-y-${translateY}` : '';
   
   return (
-    <motion.div
-      whileHover={{ scale: isMobile ? 1.01 : 1.03 }}
-      className={cn(
-        "group p-4 md:p-6 border border-white/10 rounded-xl flex items-center justify-between bg-card/50 hover:bg-card/70 transition-colors backdrop-blur-sm relative overflow-hidden",
-        className
-      )}
+    <motion.div 
+      className={`bg-card/60 backdrop-blur-sm border border-gold/5 rounded-xl p-4 hover:border-gold/30 transition-all duration-300 transform ${rotateStyle} ${translateYStyle}`}
+      whileHover={{ y: -4, boxShadow: "0 10px 25px -5px rgba(212, 175, 55, 0.1)" }}
+      onHoverStart={() => handleStatHover(index)}
+      onHoverEnd={() => handleStatHover(null)}
     >
-      {/* Background glow effect */}
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-br from-gold/5 via-transparent to-transparent" />
-      </div>
-      
-      {/* Content */}
-      <div className="space-y-2 relative z-10">
-        <p className="text-xs md:text-sm text-muted-foreground">{label}</p>
-        
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ 
-            type: "spring", 
-            stiffness: 100,
-            duration: 0.8,
-            delay: 0.2
-          }}
-          className="relative"
-        >
-          <motion.p 
-            className="text-2xl md:text-3xl font-bold text-foreground"
-            initial={{ y: 20 }}
-            whileInView={{ y: 0 }}
-            transition={{ type: "spring", stiffness: 100 }}
-            viewport={{ once: true }}
-          >
-            {value}
-          </motion.p>
-        </motion.div>
-      </div>
-      
-      <motion.div 
-        className="bg-gold/10 p-2 md:p-3 rounded-full text-gold group-hover:bg-gold/20 transition-colors relative z-10"
-        whileHover={{ 
-          rotate: [0, -10, 10, -5, 0],
-          transition: { duration: 0.5 }
-        }}
+      <motion.h3 
+        className="text-2xl font-bold mb-1 flex items-center justify-center"
+        animate={{ y: hoveredStat === index ? [0, -3, 0] : 0 }}
+        transition={{ duration: 0.5 }}
       >
-        {icon}
-      </motion.div>
+        <TextWithGlow 
+          color="rgba(212, 175, 55, 0.8)" 
+          intensity="medium" 
+          gradient={true} 
+          gradientColors="from-gold to-gold-light"
+        >
+          {value}
+        </TextWithGlow>
+        
+        <motion.span 
+          className="ml-1 text-gold/80"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ 
+            opacity: hoveredStat === index ? 1 : 0,
+            scale: hoveredStat === index ? 1 : 0,
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          <MoveUp size={16} />
+        </motion.span>
+      </motion.h3>
+      <p className="text-sm text-foreground/70 text-center">{label}</p>
     </motion.div>
   );
 };

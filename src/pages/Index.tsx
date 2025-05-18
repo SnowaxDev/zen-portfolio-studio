@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { motion, useScroll, useSpring, useMotionTemplate, AnimatePresence } from 'framer-motion';
 import Header from '../components/Header';
@@ -49,6 +48,7 @@ const pageVariants = {
 const Index = () => {
   const isMobile = useIsMobile();
   const prefersReducedMotion = usePrefersReducedMotion();
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
   
@@ -59,6 +59,55 @@ const Index = () => {
     damping: 30, 
     restDelta: 0.001 
   });
+  
+  // Interactive cursor effect
+  const cursorSize = useSpring(12, { stiffness: 100, damping: 25 });
+  const cursorOpacity = useSpring(0, { stiffness: 100, damping: 25 });
+  const cursorX = useSpring(0, { stiffness: 80, damping: 20 });
+  const cursorY = useSpring(0, { stiffness: 80, damping: 20 });
+  
+  const cursorStyle = useMotionTemplate`
+    radial-gradient(
+      ${cursorSize}px circle,
+      rgba(212, 175, 55, ${cursorOpacity}),
+      transparent 60%
+    )
+  `;
+  
+  // Track mouse position for interactive cursor
+  useEffect(() => {
+    if (prefersReducedMotion || isMobile) return;
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      cursorX.set(e.clientX - 15);
+      cursorY.set(e.clientY - 15);
+      
+      setMousePosition({
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight
+      });
+    };
+    
+    const handleMouseEnter = () => {
+      cursorSize.set(40);
+      cursorOpacity.set(0.3);
+    };
+    
+    const handleMouseLeave = () => {
+      cursorSize.set(12);
+      cursorOpacity.set(0);
+    };
+    
+    window.addEventListener('mousemove', handleMouseMove);
+    document.body.addEventListener('mouseenter', handleMouseEnter);
+    document.body.addEventListener('mouseleave', handleMouseLeave);
+    
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      document.body.removeEventListener('mouseenter', handleMouseEnter);
+      document.body.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [cursorX, cursorY, cursorSize, cursorOpacity, isMobile, prefersReducedMotion]);
   
   // Show/hide scroll-to-top button based on scroll position
   useEffect(() => {
@@ -124,6 +173,18 @@ const Index = () => {
       exit="exit"
       className="overflow-x-hidden flex flex-col min-h-screen"
     >
+      {/* Interactive cursor effect for desktop */}
+      {!isMobile && !prefersReducedMotion && (
+        <motion.div
+          className="fixed inset-0 z-50 pointer-events-none"
+          style={{
+            background: cursorStyle,
+            left: cursorX,
+            top: cursorY,
+          }}
+        />
+      )}
+      
       {/* Scroll progress indicator */}
       <motion.div 
         className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold via-purple to-gold-light z-50"
@@ -153,6 +214,26 @@ const Index = () => {
         <Suspense fallback={<LoadingFallback />}>
           <ContactSection />
         </Suspense>
+        
+        {/* Dynamic decorative elements that respond to mouse position */}
+        {isLoaded && !prefersReducedMotion && (
+          <>
+            <div 
+              className="fixed top-20 left-10 w-32 h-32 bg-purple/10 rounded-full filter blur-3xl opacity-30 pointer-events-none"
+              style={{
+                transform: `translate(${mousePosition.x * -30}px, ${mousePosition.y * -20}px)`,
+                transition: 'transform 0.3s ease-out'
+              }}
+            />
+            <div 
+              className="fixed bottom-40 right-10 w-48 h-48 bg-gold/10 rounded-full filter blur-3xl opacity-20 pointer-events-none"
+              style={{
+                transform: `translate(${mousePosition.x * 30}px, ${mousePosition.y * 20}px)`,
+                transition: 'transform 0.3s ease-out'
+              }}
+            />
+          </>
+        )}
       </main>
       
       <Footer />
@@ -175,7 +256,58 @@ const Index = () => {
         )}
       </AnimatePresence>
       
-      {/* Animated background grid - specify no props since density doesn't exist */}
+      {/* Enhanced desktop scroll indicator - hide on mobile */}
+      {!isMobile && !prefersReducedMotion && (
+        <motion.div 
+          className="fixed bottom-5 right-5 flex flex-col items-center z-40"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 1.8, duration: 0.5 }}
+        >
+          <motion.div 
+            className="bg-card/80 backdrop-blur-sm p-3 rounded-full border border-gold/20 shadow-lg hover:border-gold/50 transition-colors"
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+          >
+            <motion.div 
+              className="w-1 h-8 bg-gradient-to-b from-gold to-purple rounded-full"
+              animate={{ 
+                scaleY: [1, 0.3, 1],
+                opacity: [1, 0.6, 1],
+              }}
+              transition={{ 
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+              }}
+            />
+          </motion.div>
+        </motion.div>
+      )}
+      
+      {/* Enhanced mobile floating contact button - only on mobile */}
+      {isMobile && (
+        <motion.div
+          className="fixed bottom-5 right-5 z-40"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.5 }}
+        >
+          <motion.a 
+            href="#contact"
+            className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-gold to-gold-light rounded-full shadow-lg shadow-gold/20"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            aria-label="Contact Me"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+            </svg>
+          </motion.a>
+        </motion.div>
+      )}
+      
+      {/* Animated background grid - removed density prop since it doesn't exist in component props */}
       {isLoaded && <FloatingGrid />}
     </motion.div>
   );
