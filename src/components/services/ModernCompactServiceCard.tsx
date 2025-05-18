@@ -1,10 +1,9 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { ArrowRight, LucideIcon } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
 import { cn } from '@/lib/utils';
-import { useNavigate } from 'react-router-dom';
 
 interface ModernCompactServiceCardProps {
   icon: LucideIcon;
@@ -14,7 +13,6 @@ interface ModernCompactServiceCardProps {
   priceType: string;
   className?: string;
   highlight?: boolean;
-  detailsPath?: string; // New prop to link to a details page
 }
 
 const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
@@ -25,17 +23,7 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
   priceType,
   className = '',
   highlight = false,
-  detailsPath = '#',
 }) => {
-  const navigate = useNavigate();
-  
-  // Handle click to navigate to detailed page
-  const handleClick = () => {
-    if (detailsPath && detailsPath !== '#') {
-      navigate(detailsPath);
-    }
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -45,7 +33,6 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
       className="h-full"
     >
       <motion.div 
-        className="h-full relative"
         whileHover={{ 
           y: -5, 
           transition: { duration: 0.15 },
@@ -53,9 +40,10 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
             ? "0 15px 30px -10px rgba(234, 179, 8, 0.3)" 
             : "0 15px 25px -10px rgba(0, 0, 0, 0.4)"
         }}
+        className="h-full"
       >
         <Card className={cn(
-          "h-full overflow-hidden transition-all duration-300 border-2 z-10 relative",
+          "h-full overflow-hidden transition-all duration-200 border-2",
           highlight 
             ? "border-yellow-500/40 hover:border-yellow-500/80 bg-gradient-to-b from-zinc-900 via-zinc-900 to-black/90" 
             : "border-zinc-800 hover:border-zinc-700 bg-gradient-to-b from-zinc-900 to-black/80",
@@ -100,41 +88,19 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
               
               <motion.button
                 className={cn(
-                  "mt-3 w-full py-1.5 text-sm rounded-md transition-colors flex items-center justify-center space-x-1",
+                  "mt-3 w-full py-1.5 text-sm rounded-md transition-colors",
                   highlight 
                     ? "bg-yellow-500/20 border border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/30" 
                     : "bg-zinc-800 border border-zinc-700 text-zinc-200 hover:bg-zinc-700"
                 )}
-                whileHover={{ 
-                  scale: 1.03, 
-                  transition: { duration: 0.15 } 
-                }}
+                whileHover={{ scale: 1.03, transition: { duration: 0.15 } }}
                 whileTap={{ scale: 0.98 }}
-                onClick={handleClick}
               >
-                <span>Více informací</span>
-                <motion.span
-                  initial={{ x: -5, opacity: 0 }}
-                  whileHover={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.2 }}
-                >
-                  <ArrowRight size={14} />
-                </motion.span>
+                Více informací
               </motion.button>
             </div>
           </CardContent>
         </Card>
-        
-        {/* Animated background glow on hover */}
-        <motion.div 
-          className={cn(
-            "absolute inset-0 -z-10 rounded-xl opacity-0 blur-xl transition-opacity",
-            highlight ? "bg-yellow-500/30" : "bg-blue-500/20"
-          )}
-          initial={{ opacity: 0 }}
-          whileHover={{ opacity: 0.6 }}
-          transition={{ duration: 0.3 }}
-        />
       </motion.div>
     </motion.div>
   );

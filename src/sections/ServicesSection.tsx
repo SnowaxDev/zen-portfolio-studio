@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Layout, Zap, Cloud, Shield, ArrowRight } from 'lucide-react';
@@ -6,7 +7,6 @@ import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Badge } from '@/components/ui/badge';
-import ModernCompactServiceCard from '@/components/services/ModernCompactServiceCard';
 
 // Types
 type ServiceCategory = 'websites' | 'design' | 'cloud' | 'maintenance';
@@ -31,6 +31,15 @@ interface ServiceCardProps {
   isPrimary?: boolean;
   isCustom?: boolean;
   onButtonClick?: () => void;
+}
+
+interface AdditionalService {
+  icon: React.ElementType;
+  title: string;
+  description: string;
+  price: string;
+  buttonText: string;
+  highlight?: boolean;
 }
 
 // Service pricing data
@@ -213,44 +222,36 @@ const servicePricingData: Record<ServiceCategory, Record<CustomerType, ServiceDa
   }
 };
 
-// Additional services data with detail paths
-const additionalServices = [
+// Additional services data
+const additionalServices: AdditionalService[] = [
   {
     icon: Layout,
     title: "Redesign webu",
     description: "Oživte svůj stávající web moderním designem, který zvýší konverze a vylepší uživatelský zážitek.",
     price: "od 3 900 Kč",
-    priceType: "jednorázově",
     buttonText: "Více informací",
-    highlight: true,
-    detailsPath: "/sluzby/redesign"
+    highlight: true
   },
   {
     icon: Zap,
     title: "Optimalizace rychlosti",
     description: "Zrychlete svůj web pro lepší uživatelský zážitek, vyšší konverze a lepší pozice ve vyhledávačích.",
     price: "od 1 500 Kč",
-    priceType: "jednorázově",
-    buttonText: "Více informací",
-    detailsPath: "/sluzby/optimalizace"
+    buttonText: "Více informací"
   },
   {
     icon: Shield,
     title: "Zabezpečení webu",
     description: "Ochraňte svůj web před útoky a zajistěte bezpečnost pro návštěvníky i vaše citlivá data.",
     price: "od 2 500 Kč",
-    priceType: "jednorázově",
-    buttonText: "Více informací",
-    detailsPath: "/sluzby/zabezpeceni"
+    buttonText: "Více informací"
   },
   {
     icon: Cloud,
     title: "Migrace na cloud",
     description: "Bezpečná migrace vašeho webu na rychlou a spolehlivou cloudovou infrastrukturu s minimálním výpadkem.",
     price: "od 3 000 Kč",
-    priceType: "jednorázově",
-    buttonText: "Více informací",
-    detailsPath: "/sluzby/migrace"
+    buttonText: "Více informací"
   }
 ];
 
@@ -290,21 +291,13 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       className="h-full"
     >
       <div className={cn(
-        "relative h-full flex flex-col rounded-2xl border-2 p-6 bg-black overflow-hidden group",
+        "relative h-full flex flex-col rounded-2xl border-2 p-6 bg-black overflow-hidden",
         isPrimary 
           ? "border-yellow-500/70" 
           : isCustom 
             ? "border-purple-500/50" 
             : "border-zinc-800"
       )}>
-        {/* Animated glow effect on hover */}
-        <motion.div 
-          className={cn(
-            "absolute inset-0 opacity-0 group-hover:opacity-10 blur-xl transition-opacity duration-300 -z-10",
-            isPrimary ? "bg-yellow-500" : isCustom ? "bg-purple-500" : "bg-blue-500"
-          )}
-        />
-        
         {/* Header with optional badge */}
         <div className="mb-5">
           {isPrimary && (
@@ -347,15 +340,12 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
         {/* Price */}
         <div className="mb-6">
           <div className="flex items-baseline">
-            <motion.span 
-              className={cn(
-                "text-3xl md:text-4xl font-bold",
-                isPrimary ? "text-yellow-500" : isCustom ? "text-purple-400" : "text-white"
-              )}
-              whileHover={{ scale: 1.05 }}
-            >
+            <span className={cn(
+              "text-3xl md:text-4xl font-bold",
+              isPrimary ? "text-yellow-500" : isCustom ? "text-purple-400" : "text-white"
+            )}>
               {price === null ? "0" : price.toLocaleString()}
-            </motion.span>
+            </span>
             <span className="text-zinc-400 ml-2 text-sm">
               Kč {isOneTime ? 'jednorázově' : 'měsíčně'}
             </span>
@@ -385,13 +375,11 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                 initial={{ opacity: 0, x: -10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.1 * index }}
-                className="flex items-start gap-2 group/feature"
+                className="flex items-start gap-2"
               >
                 <div className={cn(
-                  "mt-1 p-1 rounded-full flex-shrink-0 transition-colors duration-300",
-                  isPrimary ? "bg-yellow-500/20 group-hover/feature:bg-yellow-500/40" : 
-                  isCustom ? "bg-purple-500/20 group-hover/feature:bg-purple-500/40" : 
-                  "bg-zinc-800 group-hover/feature:bg-zinc-700"
+                  "mt-1 p-1 rounded-full flex-shrink-0",
+                  isPrimary ? "bg-yellow-500/20" : isCustom ? "bg-purple-500/20" : "bg-zinc-800"
                 )}>
                   <motion.div
                     whileHover={{ rotate: 180 }}
@@ -403,9 +391,7 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
                     )} />
                   </motion.div>
                 </div>
-                <span className="text-sm text-zinc-300 group-hover/feature:text-white transition-colors duration-300">
-                  {feature}
-                </span>
+                <span className="text-sm text-zinc-300">{feature}</span>
               </motion.div>
             ))}
           </div>
@@ -450,6 +436,94 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   );
 };
 
+// AdditionalServiceCard Component
+const AdditionalServiceCard: React.FC<{service: AdditionalService}> = ({ service }) => {
+  const { icon: Icon, title, description, price, buttonText, highlight } = service;
+  
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.4 }}
+      className="h-full"
+    >
+      <div className={cn(
+        "h-full rounded-2xl border-2 bg-black p-5 flex flex-col relative overflow-hidden",
+        highlight ? "border-yellow-500/40" : "border-zinc-800"
+      )}>
+        <motion.div
+          whileHover={{ 
+            rotate: [0, -10, 10, -5, 0], 
+            scale: 1.05,
+            transition: { duration: 0.5 }
+          }}
+          className={cn(
+            "w-12 h-12 rounded-xl flex items-center justify-center mb-4",
+            highlight ? "bg-yellow-500/20" : "bg-zinc-800"
+          )}
+        >
+          <Icon className={cn(
+            "w-6 h-6",
+            highlight ? "text-yellow-500" : "text-zinc-300"
+          )} />
+        </motion.div>
+        
+        <h3 className={cn(
+          "text-xl font-bold mb-2",
+          highlight ? "text-yellow-500" : "text-white"
+        )}>
+          {title}
+        </h3>
+        
+        <p className="text-zinc-400 text-sm mb-4 flex-grow">
+          {description}
+        </p>
+        
+        <div className="mt-auto">
+          <div className="flex items-baseline mb-3">
+            <span className={cn(
+              "text-2xl font-bold",
+              highlight ? "text-yellow-500" : "text-white"
+            )}>
+              {price}
+            </span>
+            <span className="text-zinc-400 text-xs ml-2">jednorázově</span>
+          </div>
+          
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <Button 
+              variant="outline" 
+              className={cn(
+                "w-full border relative overflow-hidden",
+                highlight 
+                  ? "border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/10" 
+                  : "border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+              )}
+            >
+              <motion.span
+                className={cn(
+                  "absolute inset-0 opacity-0",
+                  highlight 
+                    ? "bg-gradient-to-r from-yellow-500/0 via-yellow-500/20 to-yellow-500/0" 
+                    : "bg-gradient-to-r from-zinc-700/0 via-zinc-700/30 to-zinc-700/0"
+                )}
+                initial={{ x: "-100%" }}
+                whileHover={{ x: "100%", opacity: 1 }}
+                transition={{ duration: 0.6 }}
+              />
+              {buttonText}
+            </Button>
+          </motion.div>
+        </div>
+      </div>
+    </motion.div>
+  );
+};
+
 const ServicesSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>('websites');
   const [customerType, setCustomerType] = useState<CustomerType>('individual');
@@ -475,11 +549,18 @@ const ServicesSection: React.FC = () => {
       
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
-        <AnimatedSection delay={0.1} direction="up" className="text-center mb-16" withYellowBar>
+        <AnimatedSection delay={0.1} direction="up" className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-3 relative inline-block">
             <span className="bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
               Služby a Ceník
             </span>
+            <motion.span 
+              className="absolute -bottom-2 left-0 h-1 w-full bg-gradient-to-r from-yellow-500/50 via-yellow-400 to-yellow-500/50 rounded"
+              initial={{ scaleX: 0 }}
+              whileInView={{ scaleX: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.7, delay: 0.5 }}
+            />
           </h2>
           
           <p className="text-zinc-400 max-w-2xl mx-auto mt-4">
@@ -507,7 +588,7 @@ const ServicesSection: React.FC = () => {
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  {/* Active background with improved animation */}
+                  {/* Active background */}
                   {isActive && (
                     <motion.div 
                       className="absolute inset-0 bg-yellow-500 rounded-xl"
@@ -516,10 +597,7 @@ const ServicesSection: React.FC = () => {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                       transition={{ duration: 0.3 }}
-                    >
-                      {/* Inner glow for active tab */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-yellow-600/20 to-transparent" />
-                    </motion.div>
+                    />
                   )}
                   
                   <span className="relative z-10">
@@ -538,37 +616,20 @@ const ServicesSection: React.FC = () => {
           </div>
         </AnimatedSection>
         
-        {/* Customer Type Selector - enhanced animation */}
+        {/* Customer Type Selector */}
         <AnimatedSection delay={0.3} direction="up" className="mb-12">
-          <div className="bg-zinc-900/60 backdrop-blur-sm rounded-2xl p-1.5 flex max-w-sm mx-auto relative">
+          <div className="bg-zinc-900/60 rounded-2xl p-1.5 flex max-w-sm mx-auto relative">
             {/* Moving background */}
             <motion.div 
-              className="absolute h-full top-0 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-xl shadow-lg"
+              className="absolute h-full top-0 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-xl"
               style={{ 
                 width: `${100 / customerTypeConfig.length}%` 
               }}
               animate={{ 
                 left: `${customerTypeConfig.findIndex(c => c.value === customerType) * (100 / customerTypeConfig.length)}%` 
               }}
-              transition={{ 
-                type: "spring", 
-                stiffness: 300, 
-                damping: 30 
-              }}
-            >
-              {/* Subtle shine effect */}
-              <motion.div 
-                className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-                initial={{ x: "-100%" }}
-                animate={{ x: "100%" }}
-                transition={{ 
-                  duration: 1.5, 
-                  repeat: Infinity, 
-                  repeatType: "mirror",
-                  ease: "linear"
-                }}
-              />
-            </motion.div>
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            />
             
             {customerTypeConfig.map((type) => (
               <motion.button
@@ -578,9 +639,6 @@ const ServicesSection: React.FC = () => {
                   "flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors relative z-10",
                   customerType === type.value ? "text-black" : "text-zinc-400"
                 )}
-                whileHover={{ 
-                  scale: customerType === type.value ? 1 : 1.05,
-                }}
                 whileTap={{ scale: 0.95 }}
               >
                 {type.label}
@@ -618,9 +676,9 @@ const ServicesSection: React.FC = () => {
           </div>
         </AnimatedSection>
         
-        {/* Additional Services - with enhanced hover effects and link to detail pages */}
+        {/* Additional Services */}
         <div className="mt-12 relative">
-          {/* Decorative line with improved animation */}
+          {/* Decorative line */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-md h-px overflow-hidden">
             <motion.div 
               className="w-full h-full bg-gradient-to-r from-transparent via-yellow-500/70 to-transparent"
@@ -631,11 +689,18 @@ const ServicesSection: React.FC = () => {
             />
           </div>
           
-          <AnimatedSection delay={0.3} direction="up" className="text-center mb-12 pt-16" withYellowBar>
+          <AnimatedSection delay={0.3} direction="up" className="text-center mb-12 pt-16">
             <h3 className="text-3xl font-bold mb-3 relative inline-block">
               <span className="bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
                 Další služby
               </span>
+              <motion.span 
+                className="absolute -bottom-2 left-0 h-0.5 w-full bg-gradient-to-r from-yellow-500/50 via-yellow-300 to-yellow-500/50 rounded"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7, delay: 0.5 }}
+              />
             </h3>
             
             <p className="text-zinc-400 max-w-lg mx-auto mt-3">
@@ -645,15 +710,9 @@ const ServicesSection: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {additionalServices.map((service, index) => (
-              <ModernCompactServiceCard 
+              <AdditionalServiceCard 
                 key={index} 
-                icon={service.icon} 
-                title={service.title}
-                description={service.description}
-                price={service.price}
-                priceType={service.priceType}
-                highlight={service.highlight}
-                detailsPath={service.detailsPath}
+                service={service} 
               />
             ))}
           </div>
