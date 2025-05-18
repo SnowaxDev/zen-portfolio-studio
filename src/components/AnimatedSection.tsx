@@ -17,6 +17,7 @@ interface AnimatedSectionProps {
   staggerDelay?: number;
   customVariants?: Variants;
   withOverflow?: boolean;
+  withYellowBar?: boolean; // New prop for yellow bar animation
 }
 
 const AnimatedSection: React.FC<AnimatedSectionProps> = ({
@@ -33,6 +34,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   staggerDelay = 0.1,
   customVariants,
   withOverflow = false,
+  withYellowBar = false, // Default to false
 }) => {
   const prefersReducedMotion = usePrefersReducedMotion();
   
@@ -103,6 +105,21 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       variants={variants}
     >
       {children}
+      
+      {/* Add animated yellow bar if withYellowBar prop is true */}
+      {withYellowBar && (
+        <motion.div
+          className="absolute bottom-0 left-1/2 transform -translate-x-1/2 h-1 bg-gradient-to-r from-yellow-500/0 via-yellow-500 to-yellow-500/0 rounded-full"
+          initial={{ width: 0, opacity: 0 }}
+          whileInView={{ width: "80%", opacity: 1 }}
+          viewport={{ once }}
+          transition={{ 
+            duration: 0.8, 
+            delay: delay + 0.3,
+            ease: "easeOut"
+          }}
+        />
+      )}
     </motion.div>
   );
 };
