@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { motion, useScroll, useSpring, useMotionTemplate, AnimatePresence } from 'framer-motion';
 import Header from '../components/Header';
@@ -24,7 +25,7 @@ const LoadingFallback = () => (
   </div>
 );
 
-// Page transition variants
+// Page transition variants - simplified for mobile
 const pageVariants = {
   initial: { opacity: 0 },
   animate: { 
@@ -60,7 +61,7 @@ const Index = () => {
     restDelta: 0.001 
   });
   
-  // Interactive cursor effect
+  // Interactive cursor effect - only enabled for desktop
   const cursorSize = useSpring(12, { stiffness: 100, damping: 25 });
   const cursorOpacity = useSpring(0, { stiffness: 100, damping: 25 });
   const cursorX = useSpring(0, { stiffness: 80, damping: 20 });
@@ -74,7 +75,7 @@ const Index = () => {
     )
   `;
   
-  // Track mouse position for interactive cursor
+  // Track mouse position for interactive cursor - disabled for mobile
   useEffect(() => {
     if (prefersReducedMotion || isMobile) return;
     
@@ -173,7 +174,7 @@ const Index = () => {
       exit="exit"
       className="overflow-x-hidden flex flex-col min-h-screen"
     >
-      {/* Interactive cursor effect for desktop */}
+      {/* Interactive cursor effect for desktop only */}
       {!isMobile && !prefersReducedMotion && (
         <motion.div
           className="fixed inset-0 z-50 pointer-events-none"
@@ -215,8 +216,8 @@ const Index = () => {
           <ContactSection />
         </Suspense>
         
-        {/* Dynamic decorative elements that respond to mouse position */}
-        {isLoaded && !prefersReducedMotion && (
+        {/* Dynamic decorative elements that respond to mouse position - disabled on mobile */}
+        {isLoaded && !prefersReducedMotion && !isMobile && (
           <>
             <div 
               className="fixed top-20 left-10 w-32 h-32 bg-purple/10 rounded-full filter blur-3xl opacity-30 pointer-events-none"
@@ -246,8 +247,8 @@ const Index = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 20 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
+            whileHover={{ scale: isMobile ? 1 : 1.1 }}
+            whileTap={{ scale: isMobile ? 0.95 : 0.9 }}
             onClick={scrollToTop}
             aria-label="Scroll to top"
           >
@@ -296,7 +297,6 @@ const Index = () => {
           <motion.a 
             href="#contact"
             className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-gold to-gold-light rounded-full shadow-lg shadow-gold/20"
-            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             aria-label="Contact Me"
           >
@@ -307,8 +307,8 @@ const Index = () => {
         </motion.div>
       )}
       
-      {/* Animated background grid - removed density prop since it doesn't exist in component props */}
-      {isLoaded && <FloatingGrid />}
+      {/* Animated background grid - only show on non-mobile devices */}
+      {isLoaded && !isMobile && <FloatingGrid />}
     </motion.div>
   );
 };

@@ -2,6 +2,7 @@
 import React, { ReactNode } from 'react';
 import { motion, Variants } from 'framer-motion';
 import { usePrefersReducedMotion } from '../hooks/use-reduced-motion';
+import { useIsMobile } from '../hooks/use-mobile';
 
 interface AnimatedSectionProps {
   children: ReactNode;
@@ -35,10 +36,12 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   withOverflow = false,
 }) => {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const isMobile = useIsMobile();
+  const shouldReduceAnimations = prefersReducedMotion || isMobile;
   
-  // Determine the initial animation based on direction
+  // Determine the initial animation based on direction with reduced effects for mobile
   const getInitialState = () => {
-    if (prefersReducedMotion) {
+    if (shouldReduceAnimations) {
       return { opacity: 0 };
     }
     
@@ -66,9 +69,9 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       x: 0,
       y: 0,
       transition: {
-        duration: prefersReducedMotion ? 0.15 : duration,
+        duration: shouldReduceAnimations ? 0.15 : duration,
         ease: [0.22, 1, 0.36, 1], // Enhanced cubic bezier curve for more natural motion
-        delay: prefersReducedMotion ? 0 : delay,
+        delay: shouldReduceAnimations ? 0 : delay,
         staggerChildren: staggerChildren ? staggerDelay : 0,
         delayChildren: staggerChildren ? delay : 0,
       }
@@ -78,8 +81,8 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   // Choose between default and custom variants
   const variants = customVariants || defaultVariants;
 
-  // Use simpler animation if user prefers reduced motion
-  if (prefersReducedMotion) {
+  // Use simpler animation if user prefers reduced motion or is on mobile
+  if (shouldReduceAnimations) {
     return (
       <motion.div
         id={id}

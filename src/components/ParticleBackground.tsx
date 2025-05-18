@@ -1,5 +1,6 @@
 
 import React, { useEffect, useRef } from 'react';
+import { useIsMobile } from '../hooks/use-mobile';
 
 interface Particle {
   x: number;
@@ -12,6 +13,7 @@ interface Particle {
 
 const ParticleBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const isMobile = useIsMobile();
   
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -29,8 +31,15 @@ const ParticleBackground: React.FC = () => {
     setCanvasSize();
     window.addEventListener('resize', setCanvasSize);
     
-    // Create particles
-    const particleCount = Math.min(Math.floor(window.innerWidth / 10), 100);
+    // Create particles - significantly fewer on mobile
+    const getParticleCount = () => {
+      if (isMobile) {
+        return Math.min(Math.floor(window.innerWidth / 30), 20);
+      }
+      return Math.min(Math.floor(window.innerWidth / 10), 100);
+    };
+    
+    const particleCount = getParticleCount();
     const particles: Particle[] = [];
     
     // Use a fixed color scheme now that we don't have theme
@@ -42,10 +51,14 @@ const ParticleBackground: React.FC = () => {
         y: Math.random() * canvas.height,
         radius: Math.random() * 2 + 1,
         color: `hsla(${primaryColor}, ${Math.random() * 0.4 + 0.1})`,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5
+        vx: (Math.random() - 0.5) * (isMobile ? 0.2 : 0.5),
+        vy: (Math.random() - 0.5) * (isMobile ? 0.2 : 0.5)
       });
     }
+    
+    // Optimize the connection distance for mobile
+    const getConnectionDistance = () => isMobile ? 100 : 150;
+    const connectionDistance = getConnectionDistance();
     
     // Animation loop
     const animate = () => {
@@ -69,32 +82,39 @@ const ParticleBackground: React.FC = () => {
         ctx.fillStyle = particle.color;
         ctx.fill();
         
-        // Draw connections
-        particles.forEach((otherParticle, j) => {
-          if (i === j) return;
-          
-          const dx = particle.x - otherParticle.x;
-          const dy = particle.y - otherParticle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-          
-          if (distance < 150) {
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(otherParticle.x, otherParticle.y);
-            ctx.strokeStyle = `hsla(${primaryColor}, ${0.2 * (1 - distance / 150)})`;
-            ctx.lineWidth = 0.5;
-            ctx.stroke();
-          }
-        });
+        // Only draw connections on non-mobile or if we have few particles
+        if (!isMobile || particleCount < 30) {
+          particles.forEach((otherParticle, j) => {
+            if (i === j) return;
+            
+            const dx = particle.x - otherParticle.x;
+            const dy = particle.y - otherParticle.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            
+            if (distance < connectionDistance) {
+              ctx.beginPath();
+              ctx.moveTo(particle.x, particle.y);
+              ctx.lineTo(otherParticle.x, otherParticle.y);
+              ctx.strokeStyle = `hsla(${primaryColor}, ${0.2 * (1 - distance / connectionDistance)})`;
+              ctx.lineWidth = 0.5;
+              ctx.stroke();
+            }
+          });
+        }
       });
     };
     
-    animate();
+    // Only start animation if not on mobile or if we allow it
+    const animationFrame = requestAnimationFrame(animate);
     
     return () => {
       window.removeEventListener('resize', setCanvasSize);
+      cancelAnimationFrame(animationFrame);
     };
-  }, []);
+  }, [isMobile]);
+  
+  // Optionally hide completely for mobile if needed
+  // if (isMobile) return null;
   
   return (
     <canvas 

@@ -1,6 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { motion, useAnimation, useInView, Variant, Variants } from 'framer-motion';
 import { usePrefersReducedMotion } from '../hooks/use-reduced-motion';
+import { useIsMobile } from '../hooks/use-mobile';
 import { easings } from '../lib/utils';
 
 interface ScrollRevealProps {
@@ -42,20 +43,26 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once, amount: threshold });
   const prefersReducedMotion = usePrefersReducedMotion();
+  const isMobile = useIsMobile();
+  const shouldReduceAnimations = prefersReducedMotion || isMobile;
   
-  // Map for defining animation direction
+  // Mobile-optimized distance and duration
+  const optimizedDistance = isMobile ? Math.min(distance, 20) : distance;
+  const optimizedDuration = isMobile ? Math.min(duration, 0.3) : duration;
+  
+  // Map for defining animation direction (reduced distance for mobile)
   const directionMap = {
-    up: { x: 0, y: distance },
-    down: { x: 0, y: -distance },
-    left: { x: distance, y: 0 },
-    right: { x: -distance, y: 0 },
+    up: { x: 0, y: optimizedDistance },
+    down: { x: 0, y: -optimizedDistance },
+    left: { x: optimizedDistance, y: 0 },
+    right: { x: -optimizedDistance, y: 0 },
     none: { x: 0, y: 0 },
   };
   
   // Initial state based on animation style
   const getInitialState = (): Variant => {
-    // For reduced motion preference, simplify the animations
-    if (prefersReducedMotion) {
+    // For reduced motion preference or mobile, simplify the animations
+    if (shouldReduceAnimations) {
       return { opacity: 0 };
     }
     
@@ -116,48 +123,17 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   
   // Animation end state based on animation style
   const getAnimateState = (): Variant => {
-    switch (animationStyle) {
-      case 'fade':
-      case 'slide':
-        return {
-          opacity: 1,
-          x: 0,
-          y: 0,
-        };
-      case 'scale':
-        return {
-          opacity: 1,
-          scale: 1,
-        };
-      case 'rotate':
-        return {
-          opacity: 1,
-          rotate: 0,
-          y: 0,
-        };
-      case 'shimmer':
-        return {
-          opacity: 1,
-          backgroundPosition: '200% 0'
-        };
-      case 'bounce':
-        return {
-          opacity: 1,
-          y: 0,
-        };
-      case 'flip':
-        return {
-          opacity: 1,
-          rotateX: 0,
-          rotateY: 0,
-        };
-      default:
-        return {
-          opacity: 1,
-          x: 0,
-          y: 0,
-        };
-    }
+    // Same animation end states, but simpler transitions will be applied
+    return {
+      opacity: 1,
+      x: 0,
+      y: 0,
+      scale: 1,
+      rotate: 0,
+      rotateX: 0,
+      rotateY: 0,
+      backgroundPosition: animationStyle === 'shimmer' ? '200% 0' : undefined
+    };
   };
   
   // Create child variants for staggered animations
@@ -165,13 +141,13 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
     if (!staggerChildren) return {};
     
     return {
-      hidden: { opacity: 0, y: 20 },
+      hidden: { opacity: 0, y: isMobile ? 10 : 20 },
       visible: (i: number) => ({
         opacity: 1,
         y: 0,
         transition: {
-          delay: i * staggerDelay + delay,
-          duration: duration,
+          delay: i * (isMobile ? staggerDelay * 0.5 : staggerDelay) + delay,
+          duration: optimizedDuration,
           ease: easing,
         }
       })
@@ -184,12 +160,12 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
       ...getAnimateState(),
       transition: {
         type: animationStyle === 'bounce' ? 'spring' : 'tween',
-        duration: animationStyle === 'bounce' ? undefined : duration,
-        delay: delay,
+        duration: animationStyle === 'bounce' ? undefined : optimizedDuration,
+        delay: shouldReduceAnimations ? delay * 0.5 : delay,
         ease: animationStyle === 'bounce' ? undefined : easing,
-        damping: animationStyle === 'bounce' ? 8 : undefined,
-        stiffness: animationStyle === 'bounce' ? 100 : undefined,
-        staggerChildren: staggerChildren ? staggerDelay : 0,
+        damping: animationStyle === 'bounce' ? (isMobile ? 10 : 8) : undefined,
+        stiffness: animationStyle === 'bounce' ? (isMobile ? 120 : 100) : undefined,
+        staggerChildren: staggerChildren ? (isMobile ? staggerDelay * 0.5 : staggerDelay) : 0,
         delayChildren: staggerChildren ? delay : 0,
       }
     }
@@ -198,7 +174,7 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
   const childVariants = getChildVariants();
   
   useEffect(() => {
-    if (prefersReducedMotion) {
+    if (shouldReduceAnimations) {
       controls.start({ opacity: 1 });
       return;
     }
@@ -208,10 +184,10 @@ const ScrollReveal: React.FC<ScrollRevealProps> = ({
     } else if (!once) {
       controls.start("hidden");
     }
-  }, [isInView, controls, once, prefersReducedMotion]);
+  }, [isInView, controls, once, shouldReduceAnimations]);
 
-  // Use simplified animation for reduced motion preference
-  if (prefersReducedMotion) {
+  // Use simplified animation for reduced motion preference or mobile
+  if (shouldReduceAnimations) {
     const Component = as as React.ElementType;
     return (
       <Component ref={ref} className={className} style={{ width }}>
