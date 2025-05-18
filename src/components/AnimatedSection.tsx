@@ -25,10 +25,10 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   className = '',
   id,
   direction = 'up',
-  distance = 30,
+  distance = 20,
   once = true,
-  duration = 0.5,
-  threshold = 0.1,
+  duration = 0.6,
+  threshold = 0.2,
   staggerChildren = false,
   staggerDelay = 0.1,
   customVariants,
@@ -58,7 +58,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
     }
   };
   
-  // Animation variants with improved dynamics
+  // Enhanced animation variants with improved dynamics
   const defaultVariants = {
     hidden: getInitialState(),
     visible: {
@@ -67,7 +67,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       y: 0,
       transition: {
         duration: prefersReducedMotion ? 0.15 : duration,
-        ease: [0.25, 0.1, 0.25, 1], // Improved cubic bezier curve
+        ease: [0.22, 1, 0.36, 1], // Enhanced cubic bezier curve for more natural motion
         delay: prefersReducedMotion ? 0 : delay,
         staggerChildren: staggerChildren ? staggerDelay : 0,
         delayChildren: staggerChildren ? delay : 0,
@@ -99,7 +99,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
       className={`${className} relative ${withOverflow ? '' : 'overflow-hidden'}`}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, margin: "-5px", amount: threshold }}
+      viewport={{ once, margin: "0px", amount: threshold }}
       variants={variants}
     >
       {children}

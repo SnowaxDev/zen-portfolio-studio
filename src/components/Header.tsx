@@ -91,13 +91,13 @@ const Header: React.FC = () => {
         >
           <span>John.dev</span>
           <motion.span 
-            className="absolute bottom-0 left-0 w-0 h-0.5 bg-accent"
+            className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-500"
             initial={{ width: 0 }}
             animate={{ width: isActive('#hero') ? "100%" : 0 }}
             transition={{ duration: 0.3 }}
           />
           <motion.span 
-            className="absolute bottom-0 left-0 w-0 h-0.5 bg-primary"
+            className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400"
             initial={{ width: "0%" }}
             whileHover={{ width: "100%" }}
             transition={{ duration: 0.3 }}
@@ -124,15 +124,15 @@ const Header: React.FC = () => {
                         href={item.href}
                         className={`flex items-center px-4 py-2 rounded-md transition-all duration-300 ${
                           active 
-                            ? 'bg-accent/10 text-accent font-medium' 
-                            : 'text-foreground/80 hover:bg-accent/5 hover:text-primary'
+                            ? 'bg-yellow-500/10 text-yellow-400 font-medium' 
+                            : 'text-foreground/80 hover:bg-yellow-500/5 hover:text-yellow-300'
                         }`}
                       >
-                        <IconComponent className={`mr-2 h-4 w-4 ${active ? 'text-accent' : ''}`} />
+                        <IconComponent className={`mr-2 h-4 w-4 ${active ? 'text-yellow-400' : ''}`} />
                         <span>{item.label}</span>
                         {active && (
                           <motion.div
-                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-accent mx-2"
+                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-yellow-500 mx-2"
                             layoutId="activeSection"
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -152,7 +152,7 @@ const Header: React.FC = () => {
         {isMobile && (
           <div className="flex items-center">
             <motion.button
-              className="p-2 bg-card/50 rounded-md backdrop-blur-md border border-white/10 text-foreground shadow-lg"
+              className="p-2 bg-black/50 rounded-md backdrop-blur-md border border-yellow-500/20 text-foreground shadow-lg"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
               aria-label="Toggle mobile menu"
@@ -167,7 +167,7 @@ const Header: React.FC = () => {
                     exit={{ opacity: 0, rotate: 90 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <X className="h-5 w-5" />
+                    <X className="h-5 w-5 text-yellow-400" />
                   </motion.div>
                 ) : (
                   <motion.div
@@ -177,7 +177,7 @@ const Header: React.FC = () => {
                     exit={{ opacity: 0, rotate: -90 }}
                     transition={{ duration: 0.2 }}
                   >
-                    <Menu className="h-5 w-5" />
+                    <Menu className="h-5 w-5 text-yellow-400" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -221,13 +221,13 @@ const Header: React.FC = () => {
                         href={item.href}
                         className={`flex items-center gap-3 px-5 py-3.5 rounded-lg transition-all ${
                           active 
-                            ? 'bg-gold/10 text-gold font-medium shadow-sm' 
+                            ? 'bg-yellow-500/10 text-yellow-400 font-medium shadow-sm' 
                             : 'text-foreground/80 hover:bg-white/5'
                         }`}
                         onClick={() => setMobileMenuOpen(false)}
                       >
-                        <div className={`p-2 rounded-lg ${active ? 'bg-gold/10' : 'bg-white/5'}`}>
-                          <IconComponent className={`h-5 w-5 ${active ? 'text-gold' : ''}`} />
+                        <div className={`p-2 rounded-lg ${active ? 'bg-yellow-500/10' : 'bg-white/5'}`}>
+                          <IconComponent className={`h-5 w-5 ${active ? 'text-yellow-400' : ''}`} />
                         </div>
                         <span className="text-lg">{item.label}</span>
                       </a>
@@ -246,7 +246,7 @@ const Header: React.FC = () => {
                 <a
                   href="#contact"
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center w-full py-3.5 bg-gradient-to-r from-gold to-gold-light text-background rounded-lg font-medium shadow-lg"
+                  className="flex items-center justify-center w-full py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-400 text-background rounded-lg font-medium shadow-lg"
                 >
                   Kontaktujte Mě
                 </a>

@@ -28,27 +28,20 @@ const StatBox: React.FC<StatBoxProps> = ({
   
   return (
     <motion.div 
-      className={`bg-card/60 backdrop-blur-sm border border-gold/5 rounded-xl p-4 hover:border-gold/30 transition-all duration-300 transform ${rotateStyle} ${translateYStyle}`}
-      whileHover={{ y: -4, boxShadow: "0 10px 25px -5px rgba(212, 175, 55, 0.1)" }}
+      className={`bg-black/60 backdrop-blur-sm border border-yellow-500/20 rounded-xl p-5 hover:border-yellow-500/50 transition-all duration-300 transform ${rotateStyle} ${translateYStyle}`}
+      whileHover={{ y: -5, boxShadow: "0 10px 25px -5px rgba(234, 179, 8, 0.2)" }}
       onHoverStart={() => handleStatHover(index)}
       onHoverEnd={() => handleStatHover(null)}
     >
-      <motion.h3 
-        className="text-2xl font-bold mb-1 flex items-center justify-center"
+      <motion.div 
+        className="flex items-center justify-center"
         animate={{ y: hoveredStat === index ? [0, -3, 0] : 0 }}
         transition={{ duration: 0.5 }}
       >
-        <TextWithGlow 
-          color="rgba(212, 175, 55, 0.8)" 
-          intensity="medium" 
-          gradient={true} 
-          gradientColors="from-gold to-gold-light"
-        >
-          {value}
-        </TextWithGlow>
+        <span className="text-3xl font-bold text-yellow-400">{value}</span>
         
         <motion.span 
-          className="ml-1 text-gold/80"
+          className="ml-1 text-yellow-400"
           initial={{ opacity: 0, scale: 0 }}
           animate={{ 
             opacity: hoveredStat === index ? 1 : 0,
@@ -58,8 +51,8 @@ const StatBox: React.FC<StatBoxProps> = ({
         >
           <MoveUp size={16} />
         </motion.span>
-      </motion.h3>
-      <p className="text-sm text-foreground/70 text-center">{label}</p>
+      </motion.div>
+      <p className="text-sm text-foreground/70 text-center mt-2">{label}</p>
     </motion.div>
   );
 };
