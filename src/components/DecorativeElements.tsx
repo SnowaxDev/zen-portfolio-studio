@@ -1,6 +1,6 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useMobileAnimationSettings } from '../hooks/use-mobile-animation-settings';
 
 interface FloatingCircleProps {
   className?: string;
@@ -131,13 +131,18 @@ export const FloatingLine: React.FC<FloatingLineProps> = ({
 
 interface FloatingGridProps {
   className?: string;
-  density?: number;  // Added density prop to the interface
+  density?: number;
 }
 
 export const FloatingGrid: React.FC<FloatingGridProps> = ({
   className = '',
-  density = 1,  // Default value for density
+  density = 1,
 }) => {
+  const { shouldReduceAnimations } = useMobileAnimationSettings();
+  
+  // Don't render grid for mobile or reduced motion users
+  if (shouldReduceAnimations) return null;
+  
   // Use density to adjust the grid size
   const gridSize = `${50 / (density || 1)}px ${50 / (density || 1)}px`;
   

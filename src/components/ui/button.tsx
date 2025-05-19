@@ -1,4 +1,3 @@
-
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -46,21 +45,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const { shouldReduceAnimations } = useMobileAnimationSettings();
     const Comp = asChild ? Slot : "button"
     
-    // Shimmer effect for buttons
-    const shimmer = !shouldReduceAnimations ? (
-      <motion.span
-        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
-        style={{ backgroundSize: '200% 100%' }}
-        initial={{ x: '-100%', opacity: 0 }}
-        whileHover={{ 
-          x: '100%', 
-          opacity: 1,
-          transition: { duration: 0.8, ease: "easeInOut" }
-        }}
-      />
-    ) : null;
-    
-    // Use motion component for desktop and regular component for mobile
+    // Use regular button without animations for reduced motion/mobile
     if (shouldReduceAnimations) {
       return (
         <Comp
@@ -71,6 +56,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       );
     }
     
+    // For desktop, keep the motion effects but remove the shimmer
     return (
       <motion.div
         whileHover={{ scale: 1.015 }}
@@ -83,7 +69,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           ref={ref}
           {...props}
         >
-          {shimmer}
           {props.children}
         </Comp>
       </motion.div>

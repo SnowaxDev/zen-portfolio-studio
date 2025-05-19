@@ -15,13 +15,15 @@ export function useMobileAnimationSettings() {
   const [animationIntensity, setAnimationIntensity] = useState<'none' | 'minimal' | 'moderate' | 'full'>('full');
   
   useEffect(() => {
-    // Determine if animations should be reduced
+    // We're being more aggressive now with animation reduction
+    // Mobile devices now get more aggressive animation reduction
     setShouldReduceAnimations(isMobile || prefersReducedMotion);
     
     // Set animation intensity based on device and preferences
     if (prefersReducedMotion) {
       setAnimationIntensity('none');
     } else if (isMobile) {
+      // Mobile devices now get minimal instead of moderate
       setAnimationIntensity('minimal');
     } else {
       setAnimationIntensity('full');
@@ -34,8 +36,8 @@ export function useMobileAnimationSettings() {
   const getAnimationDuration = (defaultDuration: number): number => {
     switch (animationIntensity) {
       case 'none': return 0;
-      case 'minimal': return defaultDuration * 0.5;
-      case 'moderate': return defaultDuration * 0.75;
+      case 'minimal': return defaultDuration * 0.4; // Even more reduced for mobile
+      case 'moderate': return defaultDuration * 0.6; // More reduced overall
       case 'full': return defaultDuration;
       default: return defaultDuration;
     }
@@ -47,8 +49,8 @@ export function useMobileAnimationSettings() {
   const getAnimationDelay = (defaultDelay: number): number => {
     switch (animationIntensity) {
       case 'none': return 0;
-      case 'minimal': return defaultDelay * 0.3;
-      case 'moderate': return defaultDelay * 0.75;
+      case 'minimal': return defaultDelay * 0.2; // Even more reduced for mobile
+      case 'moderate': return defaultDelay * 0.6; // More reduced overall
       case 'full': return defaultDelay;
       default: return defaultDelay;
     }

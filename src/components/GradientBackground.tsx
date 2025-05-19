@@ -1,26 +1,30 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { useMobileAnimationSettings } from '../hooks/use-mobile-animation-settings';
 
 const GradientBackground: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const { shouldReduceAnimations, animationIntensity } = useMobileAnimationSettings();
   
   const { scrollYProgress } = useScroll({
     target: containerRef
   });
   
-  // Transform values for parallax effect
-  const backgroundY1 = useTransform(scrollYProgress, [0, 1], [0, -150]);
-  const backgroundY2 = useTransform(scrollYProgress, [0, 1], [0, -75]);
-  const backgroundX1 = useTransform(scrollYProgress, [0, 1], [0, -50]);
-  const backgroundX2 = useTransform(scrollYProgress, [0, 1], [0, 50]);
+  // Transform values for parallax effect - disabled on mobile
+  const backgroundY1 = useTransform(scrollYProgress, [0, 1], [0, shouldReduceAnimations ? 0 : -150]);
+  const backgroundY2 = useTransform(scrollYProgress, [0, 1], [0, shouldReduceAnimations ? 0 : -75]);
+  const backgroundX1 = useTransform(scrollYProgress, [0, 1], [0, shouldReduceAnimations ? 0 : -50]);
+  const backgroundX2 = useTransform(scrollYProgress, [0, 1], [0, shouldReduceAnimations ? 0 : 50]);
   const opacity1 = useTransform(scrollYProgress, [0, 0.3, 1], [0.9, 0.7, 0.5]);
   const opacity2 = useTransform(scrollYProgress, [0, 0.5, 1], [0.7, 0.5, 0.3]);
   const gridOpacity = useTransform(scrollYProgress, [0, 0.5], [0.08, 0.04]);
   
-  // Mouse movement effect
+  // Mouse movement effect - disabled on mobile
   useEffect(() => {
+    if (shouldReduceAnimations) return;
+    
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({
         x: e.clientX / window.innerWidth - 0.5,
@@ -30,7 +34,7 @@ const GradientBackground: React.FC = () => {
     
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+  }, [shouldReduceAnimations]);
   
   return (
     <div ref={containerRef} className="fixed inset-0 -z-10 overflow-hidden">
@@ -47,16 +51,18 @@ const GradientBackground: React.FC = () => {
         }} 
       />
       
-      {/* Interactive gradient that follows mouse */}
-      <div 
-        className="absolute inset-0 opacity-30"
-        style={{
-          background: `radial-gradient(circle at ${50 + mousePosition.x * 30}% ${50 + mousePosition.y * 30}%, rgba(212, 175, 55, 0.2) 0%, rgba(139, 92, 246, 0.1) 40%, transparent 70%)`,
-          transition: 'background 0.1s ease-out'
-        }}
-      />
+      {/* Interactive gradient that follows mouse - simplified on mobile */}
+      {!shouldReduceAnimations && (
+        <div 
+          className="absolute inset-0 opacity-30"
+          style={{
+            background: `radial-gradient(circle at ${50 + mousePosition.x * 30}% ${50 + mousePosition.y * 30}%, rgba(212, 175, 55, 0.2) 0%, rgba(139, 92, 246, 0.1) 40%, transparent 70%)`,
+            transition: 'background 0.1s ease-out'
+          }}
+        />
+      )}
       
-      {/* Animated gradients */}
+      {/* Animated gradients - simplified for mobile */}
       <motion.div 
         className="absolute top-0 right-0 w-[800px] h-[800px] opacity-20 bg-purple blur-[150px] -z-10" 
         style={{ 
@@ -65,7 +71,7 @@ const GradientBackground: React.FC = () => {
           opacity: opacity1,
           filter: 'hue-rotate(-10deg)'
         }}
-        animate={{ 
+        animate={shouldReduceAnimations ? {} : { 
           scale: [1, 1.05, 1],
           rotate: [0, 2, 0],
         }}
@@ -84,7 +90,7 @@ const GradientBackground: React.FC = () => {
           opacity: opacity2,
           filter: 'hue-rotate(10deg)'
         }}
-        animate={{ 
+        animate={shouldReduceAnimations ? {} : { 
           scale: [1, 1.08, 1],
           rotate: [0, -2, 0],
         }}
@@ -95,19 +101,21 @@ const GradientBackground: React.FC = () => {
         }}
       />
       
-      <motion.div 
-        className="absolute top-1/3 left-1/4 w-[300px] h-[300px] opacity-20 bg-purple-light blur-[100px] -z-10" 
-        animate={{ 
-          scale: [1, 1.3, 1],
-          x: [0, 30, 0],
-          y: [0, -30, 0],
-        }}
-        transition={{ 
-          duration: 12,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      />
+      {!shouldReduceAnimations && (
+        <motion.div 
+          className="absolute top-1/3 left-1/4 w-[300px] h-[300px] opacity-20 bg-purple-light blur-[100px] -z-10" 
+          animate={{ 
+            scale: [1, 1.3, 1],
+            x: [0, 30, 0],
+            y: [0, -30, 0],
+          }}
+          transition={{ 
+            duration: 12,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+      )}
       
       {/* Grid overlay with animation */}
       <motion.div 
@@ -118,85 +126,9 @@ const GradientBackground: React.FC = () => {
       {/* Vignette effect */}
       <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,rgba(0,0,0,0.4)_90%)] opacity-40" />
       
-      {/* Moving dots */}
-      <div className="absolute inset-0">
-        {[...Array(20)].map((_, i) => (
-          <motion.div
-            key={i}
-            className={`absolute w-1 h-1 rounded-full ${i % 3 === 0 ? 'bg-gold/40' : i % 3 === 1 ? 'bg-purple/40' : 'bg-white/30'}`}
-            initial={{
-              x: Math.random() * 100 + "%",
-              y: Math.random() * 100 + "%",
-            }}
-            animate={{
-              x: [
-                Math.random() * 100 + "%",
-                Math.random() * 100 + "%",
-                Math.random() * 100 + "%",
-              ],
-              y: [
-                Math.random() * 100 + "%",
-                Math.random() * 100 + "%",
-                Math.random() * 100 + "%",
-              ],
-              opacity: [0.3, 0.8, 0.3],
-              scale: [1, i % 4 === 0 ? 1.5 : 1, 1],
-            }}
-            transition={{
-              duration: 10 + Math.random() * 20,
-              repeat: Infinity,
-              ease: "linear",
-            }}
-          />
-        ))}
-      </div>
+      {/* Moving dots - REMOVED */}
       
-      {/* Subtle glow lines */}
-      <div className="absolute inset-0 overflow-hidden opacity-20">
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={`line-${i}`}
-            className="absolute h-[1px] bg-gradient-to-r from-transparent via-gold to-transparent"
-            style={{
-              width: `${Math.random() * 30 + 20}%`,
-              left: `${Math.random() * 70}%`,
-              top: `${(i + 1) * 18}%`,
-            }}
-            animate={{
-              opacity: [0.1, 0.5, 0.1],
-              width: [`${Math.random() * 30 + 20}%`, `${Math.random() * 30 + 25}%`, `${Math.random() * 30 + 20}%`],
-              left: [`${Math.random() * 70}%`, `${Math.random() * 65}%`, `${Math.random() * 70}%`],
-            }}
-            transition={{
-              duration: 8 + i * 4,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-        
-        {[...Array(5)].map((_, i) => (
-          <motion.div
-            key={`v-line-${i}`}
-            className="absolute w-[1px] bg-gradient-to-b from-transparent via-purple to-transparent"
-            style={{
-              height: `${Math.random() * 30 + 20}%`,
-              left: `${(i + 1) * 18}%`,
-              top: `${Math.random() * 70}%`,
-            }}
-            animate={{
-              opacity: [0.1, 0.4, 0.1],
-              height: [`${Math.random() * 30 + 20}%`, `${Math.random() * 30 + 25}%`, `${Math.random() * 30 + 20}%`],
-              top: [`${Math.random() * 70}%`, `${Math.random() * 65}%`, `${Math.random() * 70}%`],
-            }}
-            transition={{
-              duration: 10 + i * 3,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-        ))}
-      </div>
+      {/* Subtle glow lines - REMOVED */}
       
       {/* Subtle glow effect */}
       <div className="absolute inset-0 bg-gradient-to-b from-transparent via-background/5 to-gold/5 opacity-30" />

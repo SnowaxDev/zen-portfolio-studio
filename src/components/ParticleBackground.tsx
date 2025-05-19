@@ -1,6 +1,7 @@
 
 import React, { useEffect, useRef } from 'react';
 import { useIsMobile } from '../hooks/use-mobile';
+import { useMobileAnimationSettings } from '../hooks/use-mobile-animation-settings';
 
 interface Particle {
   x: number;
@@ -13,7 +14,11 @@ interface Particle {
 
 const ParticleBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const { shouldReduceAnimations } = useMobileAnimationSettings();
   const isMobile = useIsMobile();
+  
+  // If we should reduce animations (mobile or reduced motion), don't render this component
+  if (shouldReduceAnimations) return null;
   
   useEffect(() => {
     if (!canvasRef.current) return;
@@ -31,12 +36,9 @@ const ParticleBackground: React.FC = () => {
     setCanvasSize();
     window.addEventListener('resize', setCanvasSize);
     
-    // Create particles - significantly fewer on mobile
+    // Create particles - significantly fewer particles overall
     const getParticleCount = () => {
-      if (isMobile) {
-        return Math.min(Math.floor(window.innerWidth / 30), 20);
-      }
-      return Math.min(Math.floor(window.innerWidth / 10), 100);
+      return Math.min(Math.floor(window.innerWidth / 40), 15);
     };
     
     const particleCount = getParticleCount();
@@ -49,16 +51,15 @@ const ParticleBackground: React.FC = () => {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        radius: Math.random() * 2 + 1,
-        color: `hsla(${primaryColor}, ${Math.random() * 0.4 + 0.1})`,
-        vx: (Math.random() - 0.5) * (isMobile ? 0.2 : 0.5),
-        vy: (Math.random() - 0.5) * (isMobile ? 0.2 : 0.5)
+        radius: Math.random() * 2 + 0.5, // Smaller particles
+        color: `hsla(${primaryColor}, ${Math.random() * 0.3 + 0.05})`, // Lower opacity
+        vx: (Math.random() - 0.5) * 0.2, // Slower movement
+        vy: (Math.random() - 0.5) * 0.2  // Slower movement
       });
     }
     
-    // Optimize the connection distance for mobile
-    const getConnectionDistance = () => isMobile ? 100 : 150;
-    const connectionDistance = getConnectionDistance();
+    // Reduce the connection distance
+    const connectionDistance = 80;
     
     // Animation loop
     const animate = () => {
@@ -82,10 +83,10 @@ const ParticleBackground: React.FC = () => {
         ctx.fillStyle = particle.color;
         ctx.fill();
         
-        // Only draw connections on non-mobile or if we have few particles
-        if (!isMobile || particleCount < 30) {
+        // Draw fewer connections
+        if (i % 2 === 0) {
           particles.forEach((otherParticle, j) => {
-            if (i === j) return;
+            if (i === j || j % 2 !== 0) return;
             
             const dx = particle.x - otherParticle.x;
             const dy = particle.y - otherParticle.y;
@@ -95,8 +96,8 @@ const ParticleBackground: React.FC = () => {
               ctx.beginPath();
               ctx.moveTo(particle.x, particle.y);
               ctx.lineTo(otherParticle.x, otherParticle.y);
-              ctx.strokeStyle = `hsla(${primaryColor}, ${0.2 * (1 - distance / connectionDistance)})`;
-              ctx.lineWidth = 0.5;
+              ctx.strokeStyle = `hsla(${primaryColor}, ${0.1 * (1 - distance / connectionDistance)})`;
+              ctx.lineWidth = 0.3;
               ctx.stroke();
             }
           });
@@ -104,22 +105,18 @@ const ParticleBackground: React.FC = () => {
       });
     };
     
-    // Only start animation if not on mobile or if we allow it
     const animationFrame = requestAnimationFrame(animate);
     
     return () => {
       window.removeEventListener('resize', setCanvasSize);
       cancelAnimationFrame(animationFrame);
     };
-  }, [isMobile]);
-  
-  // Optionally hide completely for mobile if needed
-  // if (isMobile) return null;
+  }, []);
   
   return (
     <canvas 
       ref={canvasRef} 
-      className="absolute top-0 left-0 w-full h-full -z-10 opacity-70"
+      className="absolute top-0 left-0 w-full h-full -z-10 opacity-50"
       aria-hidden="true"
     />
   );
