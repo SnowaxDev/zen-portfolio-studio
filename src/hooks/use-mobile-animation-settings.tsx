@@ -15,16 +15,15 @@ export function useMobileAnimationSettings() {
   const [animationIntensity, setAnimationIntensity] = useState<'none' | 'minimal' | 'moderate' | 'full'>('full');
   
   useEffect(() => {
-    // We're being more aggressive now with animation reduction
-    // Mobile devices now get more aggressive animation reduction
+    // Mobile devices always get reduced animations for better performance
     setShouldReduceAnimations(isMobile || prefersReducedMotion);
     
     // Set animation intensity based on device and preferences
     if (prefersReducedMotion) {
       setAnimationIntensity('none');
     } else if (isMobile) {
-      // Mobile devices now get minimal instead of moderate
-      setAnimationIntensity('minimal');
+      // Mobile devices now get none instead of minimal for maximum performance
+      setAnimationIntensity('none');
     } else {
       setAnimationIntensity('full');
     }
@@ -36,8 +35,8 @@ export function useMobileAnimationSettings() {
   const getAnimationDuration = (defaultDuration: number): number => {
     switch (animationIntensity) {
       case 'none': return 0;
-      case 'minimal': return defaultDuration * 0.4; // Even more reduced for mobile
-      case 'moderate': return defaultDuration * 0.6; // More reduced overall
+      case 'minimal': return defaultDuration * 0.3; // Further reduced for mobile
+      case 'moderate': return defaultDuration * 0.5; // More reduced overall
       case 'full': return defaultDuration;
       default: return defaultDuration;
     }
@@ -49,12 +48,22 @@ export function useMobileAnimationSettings() {
   const getAnimationDelay = (defaultDelay: number): number => {
     switch (animationIntensity) {
       case 'none': return 0;
-      case 'minimal': return defaultDelay * 0.2; // Even more reduced for mobile
-      case 'moderate': return defaultDelay * 0.6; // More reduced overall
+      case 'minimal': return defaultDelay * 0.1; // Further reduced for mobile
+      case 'moderate': return defaultDelay * 0.5; // More reduced overall
       case 'full': return defaultDelay;
       default: return defaultDelay;
     }
   };
+  
+  /**
+   * Should disable hover effects on mobile
+   */
+  const shouldDisableHoverEffects = isMobile;
+  
+  /**
+   * Should use simpler animations on mobile
+   */
+  const shouldUseSimpleAnimations = isMobile;
   
   return {
     isMobile,
@@ -62,6 +71,8 @@ export function useMobileAnimationSettings() {
     shouldReduceAnimations,
     animationIntensity,
     getAnimationDuration,
-    getAnimationDelay
+    getAnimationDelay,
+    shouldDisableHoverEffects,
+    shouldUseSimpleAnimations
   };
 }

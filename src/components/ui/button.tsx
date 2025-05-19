@@ -1,3 +1,4 @@
+
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
@@ -42,14 +43,18 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const { shouldReduceAnimations } = useMobileAnimationSettings();
+    const { shouldReduceAnimations, shouldDisableHoverEffects } = useMobileAnimationSettings();
     const Comp = asChild ? Slot : "button"
     
-    // Use regular button without animations for reduced motion/mobile
+    // Mobile optimization: Use regular button with active state feedback for touch
     if (shouldReduceAnimations) {
       return (
         <Comp
-          className={cn(buttonVariants({ variant, size, className }))}
+          className={cn(
+            buttonVariants({ variant, size, className }),
+            "active:scale-95 transition-transform",  // Added touch feedback
+            "touch-manipulation" // Improve touch responsiveness
+          )}
           ref={ref}
           {...props}
         />
@@ -59,7 +64,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     // For desktop, keep the motion effects but remove the shimmer
     return (
       <motion.div
-        whileHover={{ scale: 1.015 }}
+        whileHover={{ scale: shouldDisableHoverEffects ? 1 : 1.015 }}
         whileTap={{ scale: 0.98 }}
         transition={{ duration: 0.1 }}
         className="inline-block"

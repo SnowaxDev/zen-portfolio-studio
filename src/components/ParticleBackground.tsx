@@ -36,34 +36,45 @@ const ParticleBackground: React.FC = () => {
     setCanvasSize();
     window.addEventListener('resize', setCanvasSize);
     
-    // Create particles - significantly fewer particles overall
+    // Create particles - significantly fewer particles for better performance
     const getParticleCount = () => {
-      return Math.min(Math.floor(window.innerWidth / 40), 15);
+      return Math.min(Math.floor(window.innerWidth / 100), 10);
     };
     
     const particleCount = getParticleCount();
     const particles: Particle[] = [];
     
-    // Use a fixed color scheme now that we don't have theme
+    // Use a fixed color scheme
     const primaryColor = '221, 83%, 53%'; // Blue color
     
     for (let i = 0; i < particleCount; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        radius: Math.random() * 2 + 0.5, // Smaller particles
-        color: `hsla(${primaryColor}, ${Math.random() * 0.3 + 0.05})`, // Lower opacity
-        vx: (Math.random() - 0.5) * 0.2, // Slower movement
-        vy: (Math.random() - 0.5) * 0.2  // Slower movement
+        radius: Math.random() * 1.5 + 0.5, // Smaller particles
+        color: `hsla(${primaryColor}, ${Math.random() * 0.2 + 0.05})`, // Lower opacity
+        vx: (Math.random() - 0.5) * 0.1, // Much slower movement
+        vy: (Math.random() - 0.5) * 0.1  // Much slower movement
       });
     }
     
-    // Reduce the connection distance
-    const connectionDistance = 80;
+    // Reduce the connection distance further
+    const connectionDistance = 60;
     
-    // Animation loop
-    const animate = () => {
-      requestAnimationFrame(animate);
+    // Animation loop - optimized for performance
+    let animationFrameId: number;
+    let lastTime = 0;
+    const fps = 30; // Lower FPS for better performance
+    const interval = 1000 / fps;
+    
+    const animate = (timestamp: number) => {
+      animationFrameId = requestAnimationFrame(animate);
+      
+      // Throttle rendering to specified FPS
+      const deltaTime = timestamp - lastTime;
+      if (deltaTime < interval) return;
+      lastTime = timestamp - (deltaTime % interval);
+      
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       particles.forEach((particle, i) => {
@@ -83,10 +94,10 @@ const ParticleBackground: React.FC = () => {
         ctx.fillStyle = particle.color;
         ctx.fill();
         
-        // Draw fewer connections
-        if (i % 2 === 0) {
+        // Draw far fewer connections - only every 3rd particle connects
+        if (i % 3 === 0) {
           particles.forEach((otherParticle, j) => {
-            if (i === j || j % 2 !== 0) return;
+            if (i === j || j % 3 !== 0) return;
             
             const dx = particle.x - otherParticle.x;
             const dy = particle.y - otherParticle.y;
@@ -96,8 +107,8 @@ const ParticleBackground: React.FC = () => {
               ctx.beginPath();
               ctx.moveTo(particle.x, particle.y);
               ctx.lineTo(otherParticle.x, otherParticle.y);
-              ctx.strokeStyle = `hsla(${primaryColor}, ${0.1 * (1 - distance / connectionDistance)})`;
-              ctx.lineWidth = 0.3;
+              ctx.strokeStyle = `hsla(${primaryColor}, ${0.05 * (1 - distance / connectionDistance)})`;
+              ctx.lineWidth = 0.2;
               ctx.stroke();
             }
           });
@@ -105,18 +116,18 @@ const ParticleBackground: React.FC = () => {
       });
     };
     
-    const animationFrame = requestAnimationFrame(animate);
+    animationFrameId = requestAnimationFrame(animate);
     
     return () => {
       window.removeEventListener('resize', setCanvasSize);
-      cancelAnimationFrame(animationFrame);
+      cancelAnimationFrame(animationFrameId);
     };
   }, []);
   
   return (
     <canvas 
       ref={canvasRef} 
-      className="absolute top-0 left-0 w-full h-full -z-10 opacity-50"
+      className="absolute top-0 left-0 w-full h-full -z-10 opacity-30" 
       aria-hidden="true"
     />
   );
