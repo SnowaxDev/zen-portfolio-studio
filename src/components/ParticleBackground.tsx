@@ -17,11 +17,11 @@ const ParticleBackground: React.FC = () => {
   const { shouldReduceAnimations } = useMobileAnimationSettings();
   const isMobile = useIsMobile();
   
-  // If we should reduce animations (mobile or reduced motion), don't render this component
-  if (shouldReduceAnimations) return null;
+  // IMPORTANT FIX: Don't return early before all hooks are used
   
   useEffect(() => {
-    if (!canvasRef.current) return;
+    // If we should reduce animations, don't initialize the canvas
+    if (shouldReduceAnimations || !canvasRef.current) return;
     
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -122,7 +122,12 @@ const ParticleBackground: React.FC = () => {
       window.removeEventListener('resize', setCanvasSize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, []);
+  }, [shouldReduceAnimations, isMobile]);
+  
+  // Conditionally render based on animation settings
+  if (shouldReduceAnimations) {
+    return null;
+  }
   
   return (
     <canvas 
