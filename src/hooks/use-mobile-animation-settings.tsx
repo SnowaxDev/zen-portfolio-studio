@@ -1,6 +1,6 @@
 
 import { useMemo } from 'react';
-import { useMobile } from './use-mobile';
+import { useIsMobile } from './use-mobile';
 import { usePrefersReducedMotion } from './use-reduced-motion';
 
 /**
@@ -8,7 +8,7 @@ import { usePrefersReducedMotion } from './use-reduced-motion';
  * and respects user preferences for reduced motion
  */
 export function useMobileAnimationSettings() {
-  const { isMobile } = useMobile();
+  const isMobile = useIsMobile();
   const prefersReducedMotion = usePrefersReducedMotion();
   
   // Determine if animations should be reduced based on device and user preferences
@@ -25,6 +25,15 @@ export function useMobileAnimationSettings() {
     return desktopDuration;
   };
   
+  // Get animation delay adjusted for device
+  const getAnimationDelay = (desktopDelay: number) => {
+    if (shouldReduceAnimations) {
+      // Reduce delays on mobile
+      return desktopDelay * 0.5;
+    }
+    return desktopDelay;
+  };
+  
   // Get appropriate animation easing based on device
   const getAnimationEasing = () => {
     if (shouldReduceAnimations) {
@@ -34,6 +43,9 @@ export function useMobileAnimationSettings() {
     // More elaborate easing for desktop
     return [0.25, 0.1, 0.25, 1.0]; 
   };
+  
+  // Get animation intensity value (0-1)
+  const animationIntensity = shouldReduceAnimations ? 0.4 : 1;
   
   // Get smooth exit animation properties
   const getSmoothExitProps = () => {
@@ -53,8 +65,11 @@ export function useMobileAnimationSettings() {
   
   return {
     shouldReduceAnimations,
+    isMobile,
     getAnimationDuration,
+    getAnimationDelay,
     getAnimationEasing,
+    animationIntensity,
     getSmoothExitProps
   };
 }
