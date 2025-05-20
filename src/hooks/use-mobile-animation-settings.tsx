@@ -1,109 +1,60 @@
 
-import { useState, useEffect } from 'react';
-import { useIsMobile } from './use-mobile';
+import { useMemo } from 'react';
+import { useMobile } from './use-mobile';
 import { usePrefersReducedMotion } from './use-reduced-motion';
 
 /**
- * Hook to determine animation settings based on device type and user preferences
- * This combines mobile detection with reduced motion preferences and provides
- * granular control over animation intensity
+ * A hook that provides animation settings optimized for mobile devices
+ * and respects user preferences for reduced motion
  */
 export function useMobileAnimationSettings() {
-  const isMobile = useIsMobile();
+  const { isMobile } = useMobile();
   const prefersReducedMotion = usePrefersReducedMotion();
-  const [shouldReduceAnimations, setShouldReduceAnimations] = useState(false);
-  const [animationIntensity, setAnimationIntensity] = useState<'none' | 'minimal' | 'moderate' | 'full'>('full');
   
-  useEffect(() => {
-    // Determine if animations should be reduced based on device and preferences
-    const shouldReduce = isMobile || prefersReducedMotion;
-    setShouldReduceAnimations(shouldReduce);
-    
-    // Set animation intensity based on device and preferences
-    if (prefersReducedMotion) {
-      setAnimationIntensity('none');
-    } else if (isMobile) {
-      // Use minimal animations on mobile for better performance
-      setAnimationIntensity('minimal');
-    } else {
-      setAnimationIntensity('full');
-    }
+  // Determine if animations should be reduced based on device and user preferences
+  const shouldReduceAnimations = useMemo(() => {
+    return isMobile || prefersReducedMotion;
   }, [isMobile, prefersReducedMotion]);
   
-  /**
-   * Get appropriate duration based on animation intensity
-   */
-  const getAnimationDuration = (defaultDuration: number): number => {
-    switch (animationIntensity) {
-      case 'none': return 0;
-      case 'minimal': return defaultDuration * 0.4; // Reduced for mobile
-      case 'moderate': return defaultDuration * 0.7; // Somewhat reduced
-      case 'full': return defaultDuration;
-      default: return defaultDuration;
+  // Get animation duration adjusted for device
+  const getAnimationDuration = (desktopDuration: number) => {
+    if (shouldReduceAnimations) {
+      // Reduce animation durations on mobile or when reduced motion is preferred
+      return desktopDuration * 0.6;
     }
+    return desktopDuration;
   };
   
-  /**
-   * Get appropriate delay based on animation intensity
-   */
-  const getAnimationDelay = (defaultDelay: number): number => {
-    switch (animationIntensity) {
-      case 'none': return 0;
-      case 'minimal': return defaultDelay * 0.5; // Reduced for mobile
-      case 'moderate': return defaultDelay * 0.7; // Somewhat reduced
-      case 'full': return defaultDelay;
-      default: return defaultDelay;
+  // Get appropriate animation easing based on device
+  const getAnimationEasing = () => {
+    if (shouldReduceAnimations) {
+      // Simpler easing for mobile
+      return "easeOut";
     }
+    // More elaborate easing for desktop
+    return [0.25, 0.1, 0.25, 1.0]; 
   };
   
-  /**
-   * Returns an appropriate easing string based on animation intensity
-   */
-  const getAnimationEasing = (): [number, number, number, number] => {
-    switch (animationIntensity) {
-      case 'none': 
-      case 'minimal': 
-        return [0.25, 0.1, 0.25, 1]; // More direct easing for mobile
-      case 'moderate':
-      case 'full':
-        return [0.34, 1.56, 0.64, 1]; // Springy easing for desktop
-      default:
-        return [0.25, 0.1, 0.25, 1];
-    }
-  };
-  
-  /**
-   * Returns smooth exit transition values to avoid abrupt animation stops
-   */
+  // Get smooth exit animation properties
   const getSmoothExitProps = () => {
     return {
-      exitTransition: { 
-        duration: getAnimationDuration(0.2), 
-        ease: [0.4, 0.0, 0.2, 1] // Smooth easeOut
+      exitVariant: {
+        opacity: 1,
+        scale: 1,
+        y: 0,
+        transition: { duration: 0.2 }
+      },
+      exitTransition: {
+        duration: 0.2,
+        ease: "easeOut"
       }
     };
   };
   
-  /**
-   * Should disable hover effects on mobile
-   */
-  const shouldDisableHoverEffects = isMobile;
-  
-  /**
-   * Should use simpler animations on mobile
-   */
-  const shouldUseSimpleAnimations = isMobile;
-  
   return {
-    isMobile,
-    prefersReducedMotion,
     shouldReduceAnimations,
-    animationIntensity,
     getAnimationDuration,
-    getAnimationDelay,
     getAnimationEasing,
-    getSmoothExitProps,
-    shouldDisableHoverEffects,
-    shouldUseSimpleAnimations
+    getSmoothExitProps
   };
 }
