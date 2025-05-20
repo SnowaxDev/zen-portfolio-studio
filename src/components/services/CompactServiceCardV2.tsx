@@ -29,32 +29,34 @@ const CompactServiceCardV2: React.FC<CompactServiceCardV2Props> = ({
   buttonText = "Více informací",
   onButtonClick,
 }) => {
-  const { 
-    shouldReduceAnimations,
-    getAnimationDuration,
-    getAnimationEasing
-  } = useMobileAnimationSettings();
+  const { shouldReduceAnimations } = useMobileAnimationSettings();
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: getAnimationDuration(0.4) }}
+      transition={{ duration: 0.4 }}
+      whileHover={{ 
+        y: shouldReduceAnimations ? 0 : -5,
+        transition: { duration: 0.2 }
+      }}
       className="h-full"
     >
       <div className={cn(
-        "group relative h-full rounded-xl border-2 p-5 flex flex-col overflow-hidden transition-all duration-300",
+        "group h-full rounded-xl border-2 p-5 flex flex-col overflow-hidden transition-all duration-300",
         highlight 
-          ? "border-yellow-500/40 bg-black hover:border-yellow-500/80" 
-          : "border-zinc-800 bg-black hover:border-zinc-700",
+          ? "border-yellow-500/30 bg-gradient-to-b from-zinc-900/80 to-black hover:border-yellow-500/70 shadow-lg shadow-yellow-500/5" 
+          : "border-zinc-800/70 bg-gradient-to-b from-zinc-900/50 to-black hover:border-zinc-700",
         className
       )}>
-        {/* Enhanced hover overlay */}
-        <div className={cn(
-          "absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300",
-          highlight ? "bg-yellow-500/5" : "bg-zinc-800/10"
-        )} />
+        {/* Enhanced hover effects */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+          <div className={cn(
+            "h-full w-full",
+            highlight ? "bg-yellow-500/5" : "bg-zinc-800/10"
+          )}></div>
+        </div>
         
         {/* Shimmer effect on hover */}
         <motion.div
@@ -67,16 +69,10 @@ const CompactServiceCardV2: React.FC<CompactServiceCardV2Props> = ({
           }}
           animate={{ 
             x: ['100%', '-100%'],
-            transition: { 
-              duration: getAnimationDuration(1.5), 
-              repeat: Infinity, 
-              repeatType: 'loop', 
-              ease: "linear" 
-            } 
+            transition: { duration: 1.5, repeat: Infinity, repeatType: 'loop', ease: "linear" } 
           }}
         />
         
-        {/* Content with relative z-index to appear above effects */}
         <div className="relative z-10 flex flex-col h-full">
           <motion.div
             className={cn(
@@ -86,7 +82,7 @@ const CompactServiceCardV2: React.FC<CompactServiceCardV2Props> = ({
             whileHover={{ 
               rotate: shouldReduceAnimations ? 0 : [0, -10, 10, -5, 0], 
               scale: shouldReduceAnimations ? 1 : 1.05, 
-              transition: { duration: 0.5 }
+              transition: { duration: 0.5 } 
             }}
           >
             <Icon className={cn(
@@ -111,7 +107,7 @@ const CompactServiceCardV2: React.FC<CompactServiceCardV2Props> = ({
               className="flex items-baseline mb-3"
               whileHover={{ 
                 scale: shouldReduceAnimations ? 1 : 1.03,
-                transition: { duration: getAnimationDuration(0.2) }
+                transition: { duration: 0.2 }
               }}
             >
               <span className={cn(

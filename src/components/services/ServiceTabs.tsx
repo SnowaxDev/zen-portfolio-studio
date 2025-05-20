@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 
 interface ServiceTabProps {
   icon: LucideIcon;
@@ -27,9 +28,9 @@ const ServiceTab: React.FC<ServiceTabProps> = ({ icon: Icon, label, value, isAct
     <TabsTrigger 
       value={value}
       className={cn(
-        "flex items-center gap-2 px-4 py-2.5 rounded-lg transition-all relative data-[state=active]:text-black",
+        "flex items-center gap-2 px-4 py-3 rounded-xl transition-all relative data-[state=active]:text-black",
         isActive 
-          ? "text-black font-medium" 
+          ? "text-black font-semibold" 
           : "text-zinc-400 hover:text-zinc-200"
       )}
     >
@@ -37,10 +38,10 @@ const ServiceTab: React.FC<ServiceTabProps> = ({ icon: Icon, label, value, isAct
       {isActive && (
         <motion.span
           layoutId="activeServiceTab"
-          className="absolute inset-0 bg-yellow-500 rounded-lg"
+          className="absolute inset-0 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-xl"
           transition={{ 
             type: "spring", 
-            stiffness: 300, 
+            stiffness: 500, 
             damping: 30 
           }}
         />
@@ -53,7 +54,7 @@ const ServiceTab: React.FC<ServiceTabProps> = ({ icon: Icon, label, value, isAct
         )} />
       </span>
       
-      <span className="relative z-10">
+      <span className="relative z-10 font-medium">
         {label}
       </span>
     </TabsTrigger>
@@ -68,7 +69,7 @@ const ServiceTabs: React.FC<ServiceTabsProps> = ({ tabs, selectedValue, onValueC
       className="w-full"
     >
       <div className="flex justify-center">
-        <TabsList className="bg-zinc-900/60 p-1 mb-8">
+        <TabsList className="bg-zinc-900/80 p-1.5 rounded-2xl mb-8 shadow-xl shadow-black/10">
           {tabs.map((tab) => (
             <ServiceTab
               key={tab.value}

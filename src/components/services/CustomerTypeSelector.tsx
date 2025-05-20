@@ -21,11 +21,10 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
   onChange
 }) => {
   const { shouldReduceAnimations } = useMobileAnimationSettings();
-
   const selectedIndex = options.findIndex(option => option.value === selectedValue);
   
   return (
-    <div className="bg-zinc-900/60 rounded-2xl p-1.5 flex max-w-sm mx-auto relative">
+    <div className="bg-zinc-900/80 rounded-2xl p-1.5 flex max-w-sm mx-auto relative shadow-xl shadow-black/10">
       {/* Moving background with smoother animation */}
       <motion.div 
         className="absolute h-full top-0 bg-gradient-to-r from-yellow-500 to-yellow-400 rounded-xl"
@@ -37,7 +36,7 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
         }}
         transition={{ 
           type: "spring", 
-          stiffness: 300, 
+          stiffness: 500, 
           damping: 30 
         }}
       />
@@ -47,7 +46,7 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
           key={option.value}
           onClick={() => onChange(option.value)}
           className={cn(
-            "flex-1 py-2 px-3 rounded-lg text-sm font-medium transition-colors relative z-10",
+            "flex-1 py-2.5 px-3 rounded-lg text-sm font-medium transition-colors relative z-10",
             selectedValue === option.value ? "text-black" : "text-zinc-400"
           )}
           whileHover={selectedValue !== option.value ? { scale: shouldReduceAnimations ? 1 : 1.05 } : {}}

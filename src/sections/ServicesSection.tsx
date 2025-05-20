@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Layout, Zap, Cloud, Shield, ArrowRight, Info } from 'lucide-react';
+import { Layout, Zap, Cloud, Shield } from 'lucide-react';
 import AnimatedSection from '@/components/AnimatedSection';
 import { cn } from '@/lib/utils';
 import ModernServiceCard from '@/components/services/ModernServiceCard';
@@ -9,9 +9,8 @@ import CompactServiceCardV2 from '@/components/services/CompactServiceCardV2';
 import ServiceTabs from '@/components/services/ServiceTabs';
 import CustomerTypeSelector from '@/components/services/CustomerTypeSelector';
 
-// Types
-type ServiceCategory = 'websites' | 'design' | 'cloud' | 'maintenance';
-type CustomerType = 'individual' | 'business' | 'budget';
+// Types and data imports
+import { ServiceCategory, CustomerType, servicePricingData, additionalServices } from '@/lib/services-data';
 
 // Tab configuration
 const tabsConfig = [
@@ -28,16 +27,12 @@ const customerTypeConfig = [
   { value: 'business', label: 'Firmy' },
 ];
 
-// Service pricing data
-import { servicePricingData, additionalServices } from '@/lib/services-data';
-
 const ServicesSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<ServiceCategory>('websites');
   const [customerType, setCustomerType] = useState<CustomerType>('individual');
   
   // Service data for the current selection
   const currentService = servicePricingData[selectedCategory][customerType];
-  const isSubscription = currentService.billingType === 'subscription';
   
   return (
     <section id="services" className="bg-zinc-950 py-20 relative overflow-hidden">
