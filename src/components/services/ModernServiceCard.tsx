@@ -130,7 +130,8 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
       return price.toLocaleString();
     }
     // For custom solution or consultation
-    if (price === null || price === 0 || price === '0') {
+    // Fix the type comparison by checking for null and ensuring proper string comparison
+    if (price === null || price === '0' || (typeof price === 'number' && price === 0)) {
       return isCustom ? "Dle konzultace" : "Kontaktujte nás";
     }
     // For string prices (like "od 5000")
@@ -138,7 +139,7 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
   };
 
   const priceDisplay = renderPrice();
-  const showPriceType = !(price === null || price === 0 || price === '0' || isCustom);
+  const showPriceType = !(price === null || (typeof price === 'number' && price === 0) || price === '0' || isCustom);
 
   return (
     <motion.div
@@ -166,7 +167,11 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: getAnimationDelay(0.2), duration: getAnimationDuration(0.5) }}
-            exit={{ opacity: 0, y: -10, transition: { duration: 0.2 } }}
+            exit={{ 
+              opacity: 0, 
+              y: -10, 
+              transition: { duration: 0.2 } 
+            }}
           >
             <span className={cn(
               "px-3 py-1 text-xs font-semibold rounded-full shadow-lg",
@@ -227,7 +232,10 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
                 scale: shouldReduceAnimations ? 1 : 1.05,
                 transition: { duration: 0.2 }
               }}
-              exit={{ scale: 1, transition: { duration: 0.2 } }}
+              exit={{ 
+                scale: 1, 
+                transition: { duration: 0.2 } 
+              }}
             >
               <motion.span 
                 className={cn(
@@ -301,7 +309,11 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
                       rotate: shouldReduceAnimations ? 0 : [0, 10, -10, 0] 
                     }}
                     transition={{ duration: 0.5 }}
-                    exit={{ scale: 1, rotate: 0 }}
+                    exit={{ 
+                      scale: 1, 
+                      rotate: 0,
+                      transition: { duration: 0.2 }
+                    }}
                     className={cn(
                       "mr-2 mt-0.5 flex-shrink-0 p-1 rounded-full",
                       isPrimary 
@@ -327,7 +339,10 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
             <motion.div
               whileHover={{ scale: shouldReduceAnimations ? 1 : 1.03 }}
               whileTap={{ scale: 0.97 }}
-              exit={{ scale: 1 }}
+              exit={{ 
+                scale: 1,
+                transition: { duration: 0.2 } 
+              }}
             >
               <Button 
                 className={cn(
@@ -356,7 +371,10 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
                     opacity: 1,
                     transition: { duration: 0.6 }
                   }}
-                  exit={{ opacity: 0 }}
+                  exit={{ 
+                    opacity: 0,
+                    transition: { duration: 0.2 }
+                  }}
                 />
                 {isCustom ? "Nezávazná konzultace" : ctaText}
               </Button>

@@ -78,8 +78,11 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           damping: 25
         }}
         // Smooth exit transition to prevent abrupt animation stop
-        exit={{ scale: 1, y: 0 }}
-        exitTransition={exitTransition}
+        exit={{ 
+          scale: 1, 
+          y: 0,
+          transition: exitTransition // Use the transition property here instead of exitTransition
+        }}
         className="inline-block"
       >
         <Comp
@@ -88,13 +91,15 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           {...props}
         >
           {/* Subtle shimmer effect on hover with smooth exit */}
-          <motion.span
+          <motion.span 
             className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"
             initial={{ opacity: 0, x: '-100%' }}
             whileHover={{ opacity: 1, x: '100%' }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
-            exit={{ opacity: 0 }}
-            exitTransition={{ duration: 0.2 }}
+            exit={{ 
+              opacity: 0,
+              transition: { duration: 0.2 } // Add the transition directly to exit
+            }}
           />
           {props.children}
         </Comp>

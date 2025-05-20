@@ -58,7 +58,7 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
         exit={{ 
           y: 0, 
           boxShadow: "0 0 0 0 rgba(0, 0, 0, 0)", 
-          transition: exitTransition 
+          transition: { duration: 0.2 } 
         }}
         className="h-full"
       >
@@ -80,7 +80,10 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
                   rotate: shouldReduceAnimations ? 0 : [0, -10, 10, 0], 
                   transition: { duration: 0.3 } 
                 }}
-                exit={{ rotate: 0, transition: { duration: 0.2 } }}
+                exit={{ 
+                  rotate: 0, 
+                  transition: { duration: 0.2 } 
+                }}
               >
                 <Icon className={cn(
                   "h-5 w-5", 
@@ -108,7 +111,10 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
                     scale: shouldReduceAnimations ? 1 : 1.05,
                     transition: { duration: 0.15 } 
                   }}
-                  exit={{ scale: 1, transition: { duration: 0.15 } }}
+                  exit={{ 
+                    scale: 1, 
+                    transition: { duration: 0.15 } 
+                  }}
                 >
                   {price}
                 </motion.span>
@@ -123,7 +129,10 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
                   transition: { duration: 0.15 } 
                 }}
                 whileTap={{ scale: 0.98 }}
-                exit={{ scale: 1, transition: { duration: 0.15 } }}
+                exit={{ 
+                  scale: 1, 
+                  transition: { duration: 0.15 } 
+                }}
               >
                 <Button
                   className={cn(
@@ -148,7 +157,10 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
                       opacity: shouldReduceAnimations ? 0 : 1,
                       transition: { duration: 0.6 }
                     }}
-                    exit={{ opacity: 0 }}
+                    exit={{ 
+                      opacity: 0,
+                      transition: { duration: 0.2 }
+                    }}
                   />
                   {buttonText}
                 </Button>
