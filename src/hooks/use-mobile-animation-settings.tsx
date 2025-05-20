@@ -15,14 +15,14 @@ export function useMobileAnimationSettings() {
   const [animationIntensity, setAnimationIntensity] = useState<'none' | 'minimal' | 'moderate' | 'full'>('full');
   
   useEffect(() => {
-    // Mobile devices always get reduced animations for better performance
+    // Always reduce animations on mobile for better performance
     setShouldReduceAnimations(isMobile || prefersReducedMotion);
     
     // Set animation intensity based on device and preferences
     if (prefersReducedMotion) {
       setAnimationIntensity('none');
     } else if (isMobile) {
-      // Mobile devices now get none instead of minimal for maximum performance
+      // Mobile devices always get none for maximum performance
       setAnimationIntensity('none');
     } else {
       setAnimationIntensity('full');
@@ -35,8 +35,8 @@ export function useMobileAnimationSettings() {
   const getAnimationDuration = (defaultDuration: number): number => {
     switch (animationIntensity) {
       case 'none': return 0;
-      case 'minimal': return defaultDuration * 0.3; // Further reduced for mobile
-      case 'moderate': return defaultDuration * 0.5; // More reduced overall
+      case 'minimal': return defaultDuration * 0.2; // Further reduced for mobile
+      case 'moderate': return defaultDuration * 0.4; // More reduced overall
       case 'full': return defaultDuration;
       default: return defaultDuration;
     }
@@ -49,7 +49,7 @@ export function useMobileAnimationSettings() {
     switch (animationIntensity) {
       case 'none': return 0;
       case 'minimal': return defaultDelay * 0.1; // Further reduced for mobile
-      case 'moderate': return defaultDelay * 0.5; // More reduced overall
+      case 'moderate': return defaultDelay * 0.4; // More reduced overall
       case 'full': return defaultDelay;
       default: return defaultDelay;
     }

@@ -4,12 +4,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useIsMobile } from '../hooks/use-mobile';
 import { NavigationMenu, NavigationMenuList, NavigationMenuItem } from './ui/navigation-menu';
 import { Home, User, Code, Wrench, Mail, Menu, X } from 'lucide-react';
+import { useMobileAnimationSettings } from '../hooks/use-mobile-animation-settings';
 
 const Header: React.FC = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
   const isMobile = useIsMobile();
+  const { shouldReduceAnimations, getAnimationDuration } = useMobileAnimationSettings();
   
   // Navigation items with icons
   const navItems = [
@@ -45,18 +47,30 @@ const Header: React.FC = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Animation variants
+  // Animation variants - simplified for mobile
   const headerVariants = {
-    initial: { y: -100 },
-    animate: { y: 0, transition: { duration: 0.5, ease: "easeOut" } }
+    initial: shouldReduceAnimations ? { y: 0 } : { y: -100 },
+    animate: { y: 0, transition: { duration: getAnimationDuration(0.5), ease: "easeOut" } }
   };
 
   const mobileMenuVariants = {
-    closed: { opacity: 0, y: "-100%" },
-    open: { opacity: 1, y: 0, transition: { duration: 0.3, ease: "easeOut" } }
+    closed: shouldReduceAnimations ? { opacity: 0, height: 0 } : { opacity: 0, y: "-100%" },
+    open: { 
+      opacity: 1, 
+      height: "auto", 
+      y: 0, 
+      transition: { 
+        duration: getAnimationDuration(0.3), 
+        ease: "easeOut" 
+      } 
+    }
   };
 
-  const navItemVariants = {
+  // Simpler variant for mobile
+  const navItemVariants = shouldReduceAnimations ? {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 }
+  } : {
     hidden: { opacity: 0, y: -5 },
     visible: (i: number) => ({ 
       opacity: 1, 
@@ -72,11 +86,24 @@ const Header: React.FC = () => {
     const sectionId = href.replace('#', '');
     return activeSection === sectionId;
   };
+  
+  // Function to handle menu item click on mobile
+  const handleMobileItemClick = (href: string) => {
+    setMobileMenuOpen(false);
+    
+    // Add a small delay before scrolling to allow menu animation to complete
+    setTimeout(() => {
+      const element = document.querySelector(href);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 300);
+  };
 
   return (
     <motion.header
       className={`fixed top-0 left-0 right-0 z-50 py-3 md:py-4 transition-all duration-300 ${
-        isScrolled ? 'glassmorphism shadow-lg' : 'bg-transparent'
+        isScrolled || mobileMenuOpen ? 'glassmorphism shadow-lg' : 'bg-transparent'
       }`}
       initial="initial"
       animate="animate"
@@ -85,8 +112,8 @@ const Header: React.FC = () => {
       <div className="container-custom flex items-center justify-between">
         <motion.a 
           href="#hero" 
-          className="text-xl font-bold text-gradient relative group"
-          whileHover={{ scale: 1.05 }}
+          className="text-xl font-bold text-gradient relative group z-10"
+          whileHover={isMobile ? {} : { scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
         >
           <span>John.dev</span>
@@ -94,17 +121,19 @@ const Header: React.FC = () => {
             className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-500"
             initial={{ width: 0 }}
             animate={{ width: isActive('#hero') ? "100%" : 0 }}
-            transition={{ duration: 0.3 }}
+            transition={{ duration: getAnimationDuration(0.3) }}
           />
-          <motion.span 
-            className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400"
-            initial={{ width: "0%" }}
-            whileHover={{ width: "100%" }}
-            transition={{ duration: 0.3 }}
-          />
+          {!isMobile && (
+            <motion.span 
+              className="absolute bottom-0 left-0 w-0 h-0.5 bg-yellow-400"
+              initial={{ width: "0%" }}
+              whileHover={{ width: "100%" }}
+              transition={{ duration: 0.3 }}
+            />
+          )}
         </motion.a>
         
-        {/* Desktop Navigation */}
+        {/* Desktop Navigation - only render when not mobile */}
         {!isMobile && (
           <NavigationMenu>
             <NavigationMenuList className="flex space-x-1">
@@ -148,36 +177,37 @@ const Header: React.FC = () => {
           </NavigationMenu>
         )}
         
-        {/* Mobile Menu Button - Enhanced for better visibility */}
+        {/* Mobile Menu Button - Enhanced for better visibility and touch */}
         {isMobile && (
           <div className="flex items-center">
             <motion.button
-              className="p-2 bg-black/50 rounded-md backdrop-blur-md border border-yellow-500/20 text-foreground shadow-lg"
+              className="p-3 bg-black/50 rounded-md backdrop-blur-md border border-yellow-500/20 text-foreground shadow-lg"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-expanded={mobileMenuOpen}
               aria-label="Toggle mobile menu"
-              whileTap={{ scale: 0.9 }}
+              style={{ minWidth: '48px', minHeight: '48px' }} /* Ensures tap target size */
+              whileTap={{ scale: 0.95 }}
             >
               <AnimatePresence mode="wait">
                 {mobileMenuOpen ? (
                   <motion.div
                     key="close"
-                    initial={{ opacity: 0, rotate: -90 }}
+                    initial={shouldReduceAnimations ? { opacity: 0 } : { opacity: 0, rotate: -90 }}
                     animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: 90 }}
-                    transition={{ duration: 0.2 }}
+                    exit={shouldReduceAnimations ? { opacity: 0 } : { opacity: 0, rotate: 90 }}
+                    transition={{ duration: getAnimationDuration(0.2) }}
                   >
-                    <X className="h-5 w-5 text-yellow-400" />
+                    <X className="h-6 w-6 text-yellow-400" />
                   </motion.div>
                 ) : (
                   <motion.div
                     key="menu"
-                    initial={{ opacity: 0, rotate: 90 }}
+                    initial={shouldReduceAnimations ? { opacity: 0 } : { opacity: 0, rotate: 90 }}
                     animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: -90 }}
-                    transition={{ duration: 0.2 }}
+                    exit={shouldReduceAnimations ? { opacity: 0 } : { opacity: 0, rotate: -90 }}
+                    transition={{ duration: getAnimationDuration(0.2) }}
                   >
-                    <Menu className="h-5 w-5 text-yellow-400" />
+                    <Menu className="h-6 w-6 text-yellow-400" />
                   </motion.div>
                 )}
               </AnimatePresence>
@@ -186,18 +216,18 @@ const Header: React.FC = () => {
         )}
       </div>
 
-      {/* Improved Mobile Navigation - Full screen with better styling */}
+      {/* Improved Mobile Navigation - Full screen with better styling and performance */}
       <AnimatePresence>
-        {isMobile && mobileMenuOpen && (
+        {isMobile && (
           <motion.div
-            className="fixed top-[49px] left-0 right-0 bottom-0 bg-background/95 backdrop-blur-xl z-40 flex flex-col justify-start pt-6 overflow-y-auto"
+            className={`fixed top-[49px] left-0 right-0 bottom-0 bg-background/95 backdrop-blur-xl z-40 flex flex-col justify-start pt-6 overflow-hidden ${mobileMenuOpen ? 'block' : 'hidden'}`}
             initial="closed"
-            animate="open"
+            animate={mobileMenuOpen ? "open" : "closed"}
             exit="closed"
             variants={mobileMenuVariants}
           >
             <nav className="container-custom">
-              <ul className="flex flex-col space-y-2.5">
+              <ul className="flex flex-col space-y-4 pb-6">
                 {navItems.map((item, index) => {
                   const IconComponent = item.icon;
                   const active = isActive(item.href);
@@ -205,29 +235,39 @@ const Header: React.FC = () => {
                   return (
                     <motion.li 
                       key={item.label}
-                      initial={{ opacity: 0, x: -20 }}
+                      initial={{ opacity: 0, x: -10 }}
                       animate={{ 
                         opacity: 1, 
                         x: 0,
-                        transition: { delay: index * 0.08 } 
+                        transition: { 
+                          delay: shouldReduceAnimations ? 0 : index * 0.05,
+                          duration: getAnimationDuration(0.2)
+                        } 
                       }}
                       exit={{ 
                         opacity: 0, 
-                        x: -20,
-                        transition: { delay: (navItems.length - index) * 0.05 } 
+                        x: -10,
+                        transition: { 
+                          delay: shouldReduceAnimations ? 0 : (navItems.length - index) * 0.03,
+                          duration: getAnimationDuration(0.1)
+                        } 
                       }}
                     >
                       <a
                         href={item.href}
-                        className={`flex items-center gap-3 px-5 py-3.5 rounded-lg transition-all ${
+                        className={`flex items-center gap-3 px-5 py-4 rounded-lg transition-all ${
                           active 
                             ? 'bg-yellow-500/10 text-yellow-400 font-medium shadow-sm' 
                             : 'text-foreground/80 hover:bg-white/5'
                         }`}
-                        onClick={() => setMobileMenuOpen(false)}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleMobileItemClick(item.href);
+                        }}
+                        style={{ minHeight: '56px' }} /* Ensures tap target size */
                       >
                         <div className={`p-2 rounded-lg ${active ? 'bg-yellow-500/10' : 'bg-white/5'}`}>
-                          <IconComponent className={`h-5 w-5 ${active ? 'text-yellow-400' : ''}`} />
+                          <IconComponent className={`h-6 w-6 ${active ? 'text-yellow-400' : ''}`} />
                         </div>
                         <span className="text-lg">{item.label}</span>
                       </a>
@@ -238,17 +278,21 @@ const Header: React.FC = () => {
               
               {/* Mobile contact button at bottom of menu */}
               <motion.div
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="mt-8 pt-6 border-t border-white/10"
+                transition={{ delay: 0.2, duration: getAnimationDuration(0.2) }}
+                className="mt-6 pt-6 border-t border-white/10"
               >
                 <a
                   href="#contact"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center w-full py-3.5 bg-gradient-to-r from-yellow-500 to-yellow-400 text-background rounded-lg font-medium shadow-lg"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleMobileItemClick('#contact');
+                  }}
+                  className="flex items-center justify-center w-full py-4 bg-gradient-to-r from-yellow-500 to-yellow-400 text-background rounded-lg font-medium shadow-lg"
+                  style={{ minHeight: '56px' }} /* Ensures tap target size */
                 >
-                  Kontaktujte Mě
+                  Contact Me
                 </a>
               </motion.div>
             </nav>

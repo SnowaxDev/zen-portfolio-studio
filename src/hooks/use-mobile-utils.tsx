@@ -4,6 +4,7 @@ import { useIsMobile } from './use-mobile';
 
 /**
  * A hook that provides mobile-specific utility functions and values
+ * to optimize the mobile experience without affecting desktop
  */
 export function useMobileUtils() {
   const isMobile = useIsMobile();
@@ -12,6 +13,7 @@ export function useMobileUtils() {
   const [isScrollingDown, setIsScrollingDown] = useState(false);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [visibleOnScroll, setVisibleOnScroll] = useState(true);
+  const [viewportHeight, setViewportHeight] = useState(0);
 
   // Handle scroll direction detection
   useEffect(() => {
@@ -63,6 +65,29 @@ export function useMobileUtils() {
     };
   }, [isMobile]);
   
+  // Fix for mobile viewport height issues with browser chrome
+  useEffect(() => {
+    if (!isMobile) return;
+    
+    const setVhProperty = () => {
+      // First get the viewport height and multiply by 1% to get a value for a vh unit
+      const vh = window.innerHeight * 0.01;
+      // Set the value in the --vh custom property to the root of the document
+      document.documentElement.style.setProperty('--vh', `${vh}px`);
+      setViewportHeight(window.innerHeight);
+    };
+    
+    setVhProperty();
+    
+    window.addEventListener('resize', setVhProperty);
+    window.addEventListener('orientationchange', setVhProperty);
+    
+    return () => {
+      window.removeEventListener('resize', setVhProperty);
+      window.removeEventListener('orientationchange', setVhProperty);
+    };
+  }, [isMobile]);
+  
   // Calculate if user has performed a meaningful swipe
   const swipeDirection = () => {
     const threshold = 50; // minimum distance for a swipe
@@ -91,6 +116,11 @@ export function useMobileUtils() {
     
     return spacingClass;
   };
+  
+  // Fix for 100vh on mobile browsers by using the --vh CSS variable
+  const getFullHeight = (): string => {
+    return isMobile ? 'calc(var(--vh, 1vh) * 100)' : '100vh';
+  };
 
   return {
     isMobile,
@@ -98,6 +128,8 @@ export function useMobileUtils() {
     visibleOnScroll,
     swipeDirection,
     getMobileSize,
-    getMobileSpacing
+    getMobileSpacing,
+    getFullHeight,
+    viewportHeight
   };
 }
