@@ -132,7 +132,7 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
     }
     
     // For custom solution or consultation
-    if (price === null || price === '0' || (typeof price === 'number' && price === 0)) {
+    if (price === null || price === '0' || (typeof price === 'string' && price === '0')) {
       return isCustom ? "Dle konzultace" : "Kontaktujte nás";
     }
     
@@ -142,8 +142,8 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
 
   const priceDisplay = renderPrice();
   const showPriceType = !(price === null || 
+                        (typeof price === 'string' && price === '0') || 
                         (typeof price === 'number' && price === 0) || 
-                        price === '0' || 
                         isCustom);
 
   return (

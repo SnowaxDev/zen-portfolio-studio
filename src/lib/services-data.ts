@@ -1,5 +1,6 @@
 
-import { Layout, Zap, Cloud, Shield, ArrowRight } from 'lucide-react';
+import { Layout, Zap, Cloud, Shield, ArrowRight, Info } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 
 // Types
 export type ServiceCategory = 'websites' | 'design' | 'cloud' | 'maintenance';
@@ -16,7 +17,7 @@ export interface ServiceData {
 }
 
 export interface AdditionalService {
-  icon: React.ElementType;
+  icon: LucideIcon;
   title: string;
   description: string;
   price: string;
