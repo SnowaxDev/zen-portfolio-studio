@@ -73,6 +73,18 @@ export function useMobileAnimationSettings() {
   };
   
   /**
+   * Returns smooth exit transition values to avoid abrupt animation stops
+   */
+  const getSmoothExitProps = () => {
+    return {
+      exitTransition: { 
+        duration: getAnimationDuration(0.2), 
+        ease: [0.4, 0.0, 0.2, 1] // Smooth easeOut
+      }
+    };
+  };
+  
+  /**
    * Should disable hover effects on mobile
    */
   const shouldDisableHoverEffects = isMobile;
@@ -90,6 +102,7 @@ export function useMobileAnimationSettings() {
     getAnimationDuration,
     getAnimationDelay,
     getAnimationEasing,
+    getSmoothExitProps,
     shouldDisableHoverEffects,
     shouldUseSimpleAnimations
   };

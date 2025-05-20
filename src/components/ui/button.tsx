@@ -43,7 +43,7 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const { shouldReduceAnimations, animationIntensity } = useMobileAnimationSettings();
+    const { shouldReduceAnimations, animationIntensity, getSmoothExitProps } = useMobileAnimationSettings();
     const Comp = asChild ? Slot : "button"
     
     // Mobile optimization: Use regular button with tap feedback for touch
@@ -61,7 +61,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       );
     }
     
-    // For desktop, enhance the motion effects with subtle animations
+    // For desktop, enhance the motion effects with subtle animations and smooth exit
+    const { exitTransition } = getSmoothExitProps();
+    
     return (
       <motion.div
         whileHover={{ 
@@ -75,6 +77,9 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           stiffness: 400,
           damping: 25
         }}
+        // Smooth exit transition to prevent abrupt animation stop
+        exit={{ scale: 1, y: 0 }}
+        exitTransition={exitTransition}
         className="inline-block"
       >
         <Comp
@@ -82,12 +87,14 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           ref={ref}
           {...props}
         >
-          {/* Subtle shimmer effect on hover */}
+          {/* Subtle shimmer effect on hover with smooth exit */}
           <motion.span
             className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"
             initial={{ opacity: 0, x: '-100%' }}
             whileHover={{ opacity: 1, x: '100%' }}
             transition={{ duration: 0.8, ease: "easeInOut" }}
+            exit={{ opacity: 0 }}
+            exitTransition={{ duration: 0.2 }}
           />
           {props.children}
         </Comp>

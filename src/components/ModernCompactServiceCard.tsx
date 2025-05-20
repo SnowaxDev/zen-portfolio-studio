@@ -32,10 +32,11 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
   const { 
     shouldReduceAnimations,
     getAnimationDuration,
-    getAnimationEasing
+    getAnimationEasing,
+    getSmoothExitProps
   } = useMobileAnimationSettings();
 
-  // Enhanced card animation variants
+  // Enhanced card animation variants with smooth exit transitions
   const cardVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: { 
@@ -55,19 +56,29 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
         duration: getAnimationDuration(0.2),
         ease: getAnimationEasing()
       }
+    },
+    exit: {
+      y: 0,
+      boxShadow: "0 0 0 0 rgba(0, 0, 0, 0)",
+      transition: getSmoothExitProps().exitTransition
     }
   };
 
-  // Icon animation for more engaging interaction
+  // Icon animation for more engaging interaction with smooth exit
   const iconVariants = {
     hover: {
       rotate: shouldReduceAnimations ? 0 : [0, -10, 10, -5, 0],
       scale: shouldReduceAnimations ? 1 : 1.05,
       transition: { duration: 0.5 }
+    },
+    exit: {
+      rotate: 0,
+      scale: 1,
+      transition: { duration: 0.2 }
     }
   };
   
-  // Button hover effect with shimmer
+  // Button hover effect with shimmer and smooth exit
   const buttonVariants = {
     hover: {
       scale: shouldReduceAnimations ? 1 : 1.02,
@@ -76,6 +87,10 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
     tap: {
       scale: 0.98,
       transition: { duration: 0.1 }
+    },
+    exit: {
+      scale: 1,
+      transition: { duration: 0.2 }
     }
   };
 
@@ -89,6 +104,7 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
     >
       <motion.div 
         whileHover={shouldReduceAnimations ? {} : "hover"} 
+        exit="exit"
         className="h-full"
       >
         <div className={cn(
@@ -96,7 +112,7 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
           highlight ? "border-yellow-500/40" : "border-zinc-800",
           className
         )}>
-          {/* Animated shimmer effect on hover */}
+          {/* Animated shimmer effect on hover with smooth exit */}
           <motion.div
             className="absolute inset-0 pointer-events-none"
             initial={{ opacity: 0 }}
@@ -104,6 +120,7 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
               opacity: shouldReduceAnimations ? 0 : 1,
               transition: { duration: 0.3 }
             }}
+            exit={{ opacity: 0, transition: { duration: 0.2 } }}
           >
             <motion.div
               className="absolute -inset-x-full top-0 bottom-0 h-full w-[200%]"
@@ -122,16 +139,18 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
                   ease: "linear" 
                 } 
               }}
+              exit={{ opacity: 0 }}
             />
           </motion.div>
           
-          {/* Icon with interactive animation */}
+          {/* Icon with interactive animation and smooth exit */}
           <motion.div 
             className={cn(
               "w-12 h-12 rounded-xl flex items-center justify-center mb-4",
               highlight ? "bg-yellow-500/20" : "bg-zinc-800"
             )}
             whileHover="hover"
+            exit="exit"
             variants={iconVariants}
           >
             <Icon className={cn(
@@ -152,7 +171,7 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
             {description}
           </p>
           
-          {/* Price with subtle animation */}
+          {/* Price with subtle animation and smooth exit */}
           <div className="mt-auto">
             <motion.div 
               className="flex items-baseline mb-3"
@@ -160,6 +179,7 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
                 scale: shouldReduceAnimations ? 1 : 1.03,
                 transition: { duration: 0.2 }
               }}
+              exit={{ scale: 1, transition: { duration: 0.15 } }}
             >
               <span className={cn(
                 "text-2xl font-bold",
@@ -170,11 +190,12 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
               <span className="text-zinc-400 text-xs ml-2">{priceType}</span>
             </motion.div>
             
-            {/* Enhanced button */}
+            {/* Enhanced button with smooth exit animations */}
             <motion.div
               variants={buttonVariants}
               whileHover="hover"
               whileTap="tap"
+              exit="exit"
             >
               <Button 
                 variant="outline" 
@@ -198,6 +219,7 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
                     x: shouldReduceAnimations ? "-100%" : "100%", 
                     opacity: shouldReduceAnimations ? 0 : 1 
                   }}
+                  exit={{ opacity: 0, x: "100%" }}
                   transition={{ duration: 0.6 }}
                 />
                 {buttonText}
