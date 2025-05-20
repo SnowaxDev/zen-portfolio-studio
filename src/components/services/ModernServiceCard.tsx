@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
-import { Check, Info, Star } from 'lucide-react';
+import { Check, Info } from 'lucide-react';
 import { Card, CardContent } from '../ui/card';
 import { Button } from '../ui/button';
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/tooltip';
@@ -40,9 +40,7 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
   const { isMobile } = useMobileUtils();
   const { 
     shouldReduceAnimations, 
-    getAnimationDelay, 
-    getAnimationDuration,
-    getAnimationEasing
+    animationIntensity
   } = useMobileAnimationSettings();
   
   const controls = useAnimationControls();
@@ -54,7 +52,7 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
         await controls.start({
           backgroundPosition: ['200% 0%', '-200% 0%'],
           transition: { 
-            duration: getAnimationDuration(3), 
+            duration: 3, 
             repeat: Infinity, 
             repeatType: 'reverse',
             ease: "linear" 
@@ -64,9 +62,9 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
       
       runShimmer();
     }
-  }, [highlighted, isPrimary, controls, shouldReduceAnimations, getAnimationDuration]);
+  }, [highlighted, isPrimary, controls, shouldReduceAnimations]);
 
-  // Enhanced card appearance with staggered animations and smooth exit
+  // Enhanced card appearance with better hover animation
   const cardVariants = {
     hidden: { 
       opacity: 0, 
@@ -78,65 +76,53 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
       y: 0, 
       scale: 1,
       transition: { 
-        duration: getAnimationDuration(0.5),
-        ease: getAnimationEasing()
+        duration: 0.5,
+        ease: "easeOut"
       }
     },
     hover: { 
-      y: isMobile ? 0 : -5,
-      scale: isMobile ? 1 : 1.02,
+      y: isMobile ? 0 : -10,
+      scale: isMobile ? 1 : 1.05,
       boxShadow: isPrimary 
         ? "0 20px 30px -10px rgba(234, 179, 8, 0.3)" 
         : highlighted 
           ? "0 20px 30px -10px rgba(139, 92, 246, 0.3)" 
           : "0 20px 30px -15px rgba(0, 0, 0, 0.5)",
       transition: { 
-        duration: getAnimationDuration(0.2),
+        duration: 0.3,
         ease: [0.25, 0.1, 0.25, 1]
       }
     },
-    exit: {
-      y: 0,
-      scale: 1,
-      boxShadow: "0 0 0 0 rgba(0, 0, 0, 0)",
-      transition: { 
-        duration: 0.2 
-      }
+    tap: {
+      scale: 0.98,
+      transition: { duration: 0.1 }
     }
   };
 
-  // Features animation stagger effect with smooth exit
+  // Features animation stagger effect
   const featureVariants = {
     hidden: { opacity: 0, x: -10 },
     visible: (i: number) => ({
       opacity: 1, 
       x: 0,
       transition: { 
-        delay: getAnimationDelay(0.1 * i),
-        duration: getAnimationDuration(0.4),
-        ease: getAnimationEasing()
+        delay: 0.1 * i,
+        duration: 0.4,
+        ease: "easeOut"
       }
-    }),
-    exit: {
-      opacity: 1, 
-      x: 0,
-      transition: { duration: 0.2 }
-    }
+    })
   };
 
   // Format price display based on the type of price
   const renderPrice = () => {
-    // For numerical prices
     if (typeof price === 'number') {
       return price.toLocaleString();
     }
     
-    // For custom solution or consultation
     if (price === null || price === '0' || (typeof price === 'string' && price === '0')) {
       return isCustom ? "Dle konzultace" : "Kontaktujte nás";
     }
     
-    // For string prices (like "od 5000")
     return price;
   };
 
@@ -150,14 +136,14 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
     <motion.div
       initial="hidden"
       whileInView="visible"
+      whileHover={shouldReduceAnimations ? undefined : "hover"}
+      whileTap={shouldReduceAnimations ? undefined : "tap"}
       viewport={{ once: true, margin: "-50px" }}
       variants={cardVariants}
-      whileHover={shouldReduceAnimations ? undefined : "hover"}
-      exit="exit"
-      className="h-full"
+      className="h-full w-full"
     >
       <Card className={cn(
-        "h-full overflow-hidden border-2 relative transition-all duration-300",
+        "h-full w-full overflow-hidden border-2 relative transition-all duration-300",
         isPrimary 
           ? "border-gold/30 bg-gradient-to-b from-card to-black/80 hover:border-gold/70" 
           : highlighted || isCustom
@@ -171,12 +157,7 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
             className="absolute -top-3 left-0 right-0 flex justify-center"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: getAnimationDelay(0.2), duration: getAnimationDuration(0.5) }}
-            exit={{ 
-              opacity: 0, 
-              y: -10, 
-              transition: { duration: 0.2 } 
-            }}
+            transition={{ delay: 0.2, duration: 0.5 }}
           >
             <span className={cn(
               "px-3 py-1 text-xs font-semibold rounded-full shadow-lg",
@@ -201,7 +182,6 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
               background: 'linear-gradient(90deg, transparent, rgba(255,255,255,0.08), transparent)',
               backgroundSize: '200% 100%',
             }}
-            exit={{ opacity: 0 }}
           />
         )}
         
@@ -229,39 +209,23 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
             </p>
           </div>
           
-          {/* Price - animated on hover with smooth exit */}
+          {/* Price - with static rendering (no hover effect) */}
           <div className="mb-5">
-            <motion.div 
-              className="flex items-end"
-              whileHover={{ 
-                scale: shouldReduceAnimations ? 1 : 1.05,
-                transition: { duration: 0.2 }
-              }}
-              exit={{ 
-                scale: 1, 
-                transition: { duration: 0.2 } 
-              }}
-            >
-              <motion.span 
+            <div className="flex items-end">
+              <span 
                 className={cn(
                   "text-3xl font-bold",
                   isPrimary ? "text-gold" : (highlighted || isCustom) ? "text-purple-light" : "text-foreground"
                 )}
-                initial={{ opacity: 1 }}
-                // Counting animation on page load
-                animate={shouldReduceAnimations ? {} : { 
-                  opacity: [0, 1],
-                  transition: { duration: 0.6, delay: 0.3 }
-                }}
               >
                 {priceDisplay}
-              </motion.span>
+              </span>
               {showPriceType && (
                 <span className="text-muted-foreground ml-2">
                   Kč {isOneTime ? 'jednorázově' : 'měsíčně'}
                 </span>
               )}
-            </motion.div>
+            </div>
             {showPriceType && (
               <div className="mt-1 inline-flex items-center">
                 <div className={cn(
@@ -293,7 +257,7 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
             )}
           </div>
           
-          {/* Features - with staggered animation and smooth exit */}
+          {/* Features - with staggered animation */}
           <div className="flex-grow mb-5">
             <h4 className="font-medium text-sm mb-3">Co je zahrnuto:</h4>
             <ul className="space-y-2">
@@ -304,7 +268,6 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
                   custom={index}
                   initial="hidden"
                   whileInView="visible"
-                  exit="exit"
                   viewport={{ once: true }}
                   variants={featureVariants}
                 >
@@ -314,11 +277,6 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
                       rotate: shouldReduceAnimations ? 0 : [0, 10, -10, 0] 
                     }}
                     transition={{ duration: 0.5 }}
-                    exit={{ 
-                      scale: 1, 
-                      rotate: 0,
-                      transition: { duration: 0.2 }
-                    }}
                     className={cn(
                       "mr-2 mt-0.5 flex-shrink-0 p-1 rounded-full",
                       isPrimary 
@@ -339,14 +297,16 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
             </ul>
           </div>
           
-          {/* CTA Button - with enhanced hover effect and smooth exit */}
+          {/* CTA Button - with enhanced hover effect */}
           <div className="mt-auto">
             <motion.div
-              whileHover={{ scale: shouldReduceAnimations ? 1 : 1.03 }}
-              whileTap={{ scale: 0.97 }}
-              exit={{ 
-                scale: 1,
+              whileHover={{ 
+                scale: shouldReduceAnimations ? 1 : 1.05,
                 transition: { duration: 0.2 } 
+              }}
+              whileTap={{ 
+                scale: 0.95,
+                transition: { duration: 0.1 } 
               }}
             >
               <Button 
@@ -375,10 +335,6 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
                     x: '100%', 
                     opacity: 1,
                     transition: { duration: 0.6 }
-                  }}
-                  exit={{ 
-                    opacity: 0,
-                    transition: { duration: 0.2 }
                   }}
                 />
                 {isCustom ? "Nezávazná konzultace" : ctaText}

@@ -25,9 +25,9 @@ interface ServiceTabsProps {
 }
 
 const ServiceTab: React.FC<ServiceTabProps> = ({ icon: Icon, label, value, isActive, index }) => {
-  const { shouldReduceAnimations } = useMobileAnimationSettings();
+  const { shouldReduceAnimations, animationIntensity } = useMobileAnimationSettings();
   
-  // Animation variants for tab items
+  // Animation variants for tab items with improved hover
   const tabVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { 
@@ -40,10 +40,11 @@ const ServiceTab: React.FC<ServiceTabProps> = ({ icon: Icon, label, value, isAct
       }
     },
     hover: {
+      scale: shouldReduceAnimations ? 1 : 1.05,
       y: shouldReduceAnimations ? 0 : -2,
-      transition: { duration: 0.2 }
+      transition: { duration: 0.3 }
     },
-    tap: { scale: 0.95 }
+    tap: { scale: 0.98 }
   };
   
   return (
@@ -78,9 +79,9 @@ const ServiceTab: React.FC<ServiceTabProps> = ({ icon: Icon, label, value, isAct
               opacity: 0,
               transition: { duration: 0.3 } 
             }}
-            // Add subtle pulsing glow effect
+            // Enhanced pulsing glow effect
             whileInView={{
-              boxShadow: ["0px 0px 0px 0px rgba(234, 179, 8, 0.0)", "0px 0px 15px 2px rgba(234, 179, 8, 0.3)", "0px 0px 0px 0px rgba(234, 179, 8, 0.0)"],
+              boxShadow: ["0px 0px 0px 0px rgba(234, 179, 8, 0.0)", "0px 0px 20px 3px rgba(234, 179, 8, 0.4)", "0px 0px 0px 0px rgba(234, 179, 8, 0.0)"],
               transition: {
                 duration: 3,
                 ease: "easeInOut",
@@ -95,7 +96,8 @@ const ServiceTab: React.FC<ServiceTabProps> = ({ icon: Icon, label, value, isAct
         <motion.span 
           className="relative z-10"
           whileHover={{ 
-            rotate: shouldReduceAnimations ? 0 : [0, -10, 10, -5, 0],
+            rotate: shouldReduceAnimations ? 0 : [0, -5, 5, -3, 0],
+            scale: shouldReduceAnimations ? 1 : 1.15,
             transition: { duration: 0.5 } 
           }}
         >
@@ -153,7 +155,7 @@ const ServiceTabs: React.FC<ServiceTabsProps> = ({ tabs, selectedValue, onValueC
         onValueChange={onValueChange}
         className="w-full"
       >
-        <div className="flex justify-center">
+        <div className="flex justify-center overflow-x-auto pb-2">
           <TabsList className="bg-zinc-900/80 backdrop-blur-sm p-1.5 rounded-2xl mb-8 shadow-xl shadow-black/10 border border-zinc-800/50">
             {tabs.map((tab, index) => (
               <ServiceTab

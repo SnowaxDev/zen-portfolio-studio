@@ -31,45 +31,79 @@ const CompactServiceCardV2: React.FC<CompactServiceCardV2Props> = ({
 }) => {
   const { shouldReduceAnimations } = useMobileAnimationSettings();
 
+  // Improved card container animation with better hover
+  const containerVariants = {
+    initial: { 
+      opacity: 0, 
+      y: 20 
+    },
+    animate: { 
+      opacity: 1, 
+      y: 0,
+      transition: { 
+        duration: 0.5
+      }
+    },
+    hover: {
+      y: shouldReduceAnimations ? 0 : -8,
+      scale: shouldReduceAnimations ? 1 : 1.03,
+      boxShadow: highlight 
+        ? "0px 20px 25px -5px rgba(234, 179, 8, 0.25)" 
+        : "0px 20px 25px -5px rgba(0, 0, 0, 0.25)",
+      transition: { 
+        duration: 0.3,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  // Icon animation variants
+  const iconVariants = {
+    hover: {
+      rotate: shouldReduceAnimations ? 0 : [0, -10, 10, -5, 0],
+      scale: shouldReduceAnimations ? 1 : 1.15,
+      transition: { 
+        duration: 0.5 
+      }
+    }
+  };
+
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
+      initial="initial"
+      whileInView="animate"
+      whileHover="hover"
+      variants={containerVariants}
       viewport={{ once: true, margin: "-50px" }}
-      transition={{ duration: 0.4 }}
-      whileHover={{ 
-        y: shouldReduceAnimations ? 0 : -5,
-        transition: { duration: 0.2 }
-      }}
-      className="h-full"
+      className="h-full w-full"
     >
       <div className={cn(
-        "group h-full rounded-xl border-2 p-5 flex flex-col overflow-hidden transition-all duration-300",
+        "h-full w-full rounded-xl border-2 p-5 flex flex-col overflow-hidden transition-all duration-300 relative",
         highlight 
           ? "border-yellow-500/30 bg-gradient-to-b from-zinc-900/80 to-black hover:border-yellow-500/70 shadow-lg shadow-yellow-500/5" 
           : "border-zinc-800/70 bg-gradient-to-b from-zinc-900/50 to-black hover:border-zinc-700",
         className
       )}>
-        {/* Enhanced hover effects */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-          <div className={cn(
-            "h-full w-full",
-            highlight ? "bg-yellow-500/5" : "bg-zinc-800/10"
-          )}></div>
-        </div>
-        
         {/* Shimmer effect on hover */}
         <motion.div
-          className="absolute -inset-x-full top-0 bottom-0 h-full w-[200%] opacity-0 group-hover:opacity-100"
+          className="absolute -inset-x-full top-0 bottom-0 h-full w-[200%] opacity-0"
           style={{
             background: highlight 
-              ? 'linear-gradient(90deg, transparent, rgba(234, 179, 8, 0.08), transparent)'
-              : 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent)',
+              ? 'linear-gradient(90deg, transparent, rgba(234, 179, 8, 0.10), transparent)'
+              : 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.07), transparent)',
             backgroundSize: '200% 100%'
           }}
-          animate={{ 
-            x: ['100%', '-100%'],
-            transition: { duration: 1.5, repeat: Infinity, repeatType: 'loop', ease: "linear" } 
+          variants={{
+            hover: {
+              x: ['100%', '-100%'],
+              opacity: 1,
+              transition: { 
+                duration: 1.5, 
+                repeat: Infinity, 
+                repeatType: 'loop', 
+                ease: "linear" 
+              }
+            }
           }}
         />
         
@@ -79,11 +113,7 @@ const CompactServiceCardV2: React.FC<CompactServiceCardV2Props> = ({
               "w-12 h-12 rounded-xl flex items-center justify-center mb-4",
               highlight ? "bg-yellow-500/20" : "bg-zinc-800"
             )}
-            whileHover={{ 
-              rotate: shouldReduceAnimations ? 0 : [0, -10, 10, -5, 0], 
-              scale: shouldReduceAnimations ? 1 : 1.05, 
-              transition: { duration: 0.5 } 
-            }}
+            variants={iconVariants}
           >
             <Icon className={cn(
               "w-6 h-6",
@@ -103,13 +133,8 @@ const CompactServiceCardV2: React.FC<CompactServiceCardV2Props> = ({
           </p>
           
           <div className="mt-auto">
-            <motion.div 
-              className="flex items-baseline mb-3"
-              whileHover={{ 
-                scale: shouldReduceAnimations ? 1 : 1.03,
-                transition: { duration: 0.2 }
-              }}
-            >
+            {/* Price with static appearance */}
+            <div className="flex items-baseline mb-3">
               <span className={cn(
                 "text-2xl font-bold",
                 highlight ? "text-yellow-500" : "text-white"
@@ -117,10 +142,13 @@ const CompactServiceCardV2: React.FC<CompactServiceCardV2Props> = ({
                 {price}
               </span>
               <span className="text-zinc-400 text-xs ml-2">{priceType}</span>
-            </motion.div>
+            </div>
             
+            {/* Button with improved hover animation */}
             <motion.div
-              whileHover={{ scale: shouldReduceAnimations ? 1 : 1.02 }}
+              whileHover={{ 
+                scale: shouldReduceAnimations ? 1 : 1.03 
+              }}
               whileTap={{ scale: 0.98 }}
             >
               <Button 

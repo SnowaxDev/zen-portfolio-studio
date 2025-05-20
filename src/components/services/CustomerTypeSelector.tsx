@@ -20,7 +20,7 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
   selectedValue,
   onChange
 }) => {
-  const { shouldReduceAnimations } = useMobileAnimationSettings();
+  const { shouldReduceAnimations, animationIntensity } = useMobileAnimationSettings();
   const selectedIndex = options.findIndex(option => option.value === selectedValue);
   
   // Enhanced container variants
@@ -33,7 +33,7 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
     }
   };
   
-  // Button animation variants
+  // Button animation variants with improved hover effect
   const buttonVariants = {
     initial: { opacity: 0 },
     animate: (i: number) => ({ 
@@ -44,15 +44,15 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
       }
     }),
     hover: {
-      y: shouldReduceAnimations ? 0 : -2,
+      scale: shouldReduceAnimations ? 1 : 1.05,
       transition: { duration: 0.2 }
     },
-    tap: { scale: 0.95 }
+    tap: { scale: 0.98 }
   };
   
   return (
     <motion.div 
-      className="relative"
+      className="relative w-full max-w-xl mx-auto"
       initial="initial"
       animate="animate"
       variants={containerVariants}
@@ -73,11 +73,11 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
               duration: 0.4
             }
           }}
-          // Add a subtle pulsing effect
+          // Enhanced pulsing effect
           whileInView={{
-            boxShadow: ["0px 0px 0px 0px rgba(234, 179, 8, 0.0)", "0px 0px 15px 1px rgba(234, 179, 8, 0.3)", "0px 0px 0px 0px rgba(234, 179, 8, 0.0)"],
+            boxShadow: ["0px 0px 0px 0px rgba(234, 179, 8, 0.0)", "0px 0px 20px 2px rgba(234, 179, 8, 0.4)", "0px 0px 0px 0px rgba(234, 179, 8, 0.0)"],
             transition: {
-              duration: 2,
+              duration: 2.5,
               ease: "easeInOut",
               repeat: Infinity,
               repeatType: "reverse"
@@ -100,10 +100,10 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
             whileHover="hover"
             whileTap="tap"
           >
-            {/* Add subtle text glow effect on selected item */}
+            {/* Enhanced text glow effect on selected item */}
             {selectedValue === option.value ? (
               <span className="relative">
-                <span className="absolute inset-0 blur-sm opacity-50 bg-yellow-300 rounded-full" />
+                <span className="absolute inset-0 blur-sm opacity-60 bg-yellow-300 rounded-full" />
                 <span className="relative">{option.label}</span>
               </span>
             ) : (
