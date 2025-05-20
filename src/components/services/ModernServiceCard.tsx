@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
 import { Check, Info, Star } from 'lucide-react';
@@ -132,8 +131,8 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
     }
     
     // For custom solution or consultation
-    // Fixed type comparison by ensuring we properly check both null and string '0'
-    if (price === null || price === '0' || price === 0) {
+    // Check all possible null/0 values using type-safe comparisons
+    if (price === null || price === '0' || (typeof price === 'number' && price === 0)) {
       return isCustom ? "Dle konzultace" : "Kontaktujte nás";
     }
     
@@ -142,8 +141,11 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
   };
 
   const priceDisplay = renderPrice();
-  // Fix the type comparison by using strict equality with both type options
-  const showPriceType = !(price === null || price === 0 || price === '0' || isCustom);
+  // Fix the type comparison by using strict typechecking for each possible type
+  const showPriceType = !(price === null || 
+                          (typeof price === 'number' && price === 0) || 
+                          price === '0' || 
+                          isCustom);
 
   return (
     <motion.div
