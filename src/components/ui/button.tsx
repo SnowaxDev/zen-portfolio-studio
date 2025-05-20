@@ -43,7 +43,7 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const { shouldReduceAnimations, animationIntensity, getSmoothExitProps } = useMobileAnimationSettings();
+    const { shouldReduceAnimations } = useMobileAnimationSettings();
     const Comp = asChild ? Slot : "button"
     
     // Mobile optimization: Use regular button with tap feedback for touch
@@ -62,8 +62,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     }
     
     // For desktop, enhance the motion effects with subtle animations and smooth exit
-    const { exitTransition } = getSmoothExitProps();
-    
     return (
       <motion.div
         whileHover={{ 
@@ -81,7 +79,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         exit={{ 
           scale: 1, 
           y: 0,
-          transition: exitTransition // Use the transition property here instead of exitTransition
+          transition: { duration: 0.2 } 
         }}
         className="inline-block"
       >
@@ -98,7 +96,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             transition={{ duration: 0.8, ease: "easeInOut" }}
             exit={{ 
               opacity: 0,
-              transition: { duration: 0.2 } // Add the transition directly to exit
+              transition: { duration: 0.2 }
             }}
           />
           {props.children}

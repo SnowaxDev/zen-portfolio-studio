@@ -49,19 +49,33 @@ const StatBox: React.FC<StatBoxProps> = ({
 
   return (
     <motion.div 
-      className={`group bg-black/60 backdrop-blur-sm border border-yellow-500/20 rounded-xl p-5 hover:border-yellow-500/50 transition-all duration-300 transform ${rotateStyle} ${translateYStyle}`}
+      className={`group relative bg-black/60 backdrop-blur-sm border border-yellow-500/20 rounded-xl p-5 transition-all duration-300 transform ${rotateStyle} ${translateYStyle}`}
       animate={controls}
+      initial={{ y: 0, borderColor: "rgba(234, 179, 8, 0.2)" }}
       whileHover={shouldReduceAnimations ? {} : { 
-        y: -5, 
+        scale: 1.03,
+        borderColor: "rgba(234, 179, 8, 0.5)",
         boxShadow: "0 10px 25px -5px rgba(234, 179, 8, 0.2)",
-        transition: { type: "spring", stiffness: 300, damping: 15 }
+        transition: { 
+          type: "spring", 
+          stiffness: 300, 
+          damping: 15 
+        }
       }}
       onHoverStart={() => !shouldReduceAnimations && handleStatHover(index)}
       onHoverEnd={() => !shouldReduceAnimations && handleStatHover(null)}
       onTap={() => isMobile && handleStatHover(index !== hoveredStat ? index : null)}
     >
+      {/* Add a permanent glow effect that intensifies on hover */}
+      <motion.div
+        className="absolute inset-0 rounded-xl bg-yellow-500/5 pointer-events-none"
+        initial={{ opacity: 0 }}
+        whileHover={{ opacity: 0.5 }}
+        transition={{ duration: 0.3 }}
+      />
+      
       <motion.div 
-        className="flex items-center justify-center"
+        className="flex items-center justify-center relative z-10"
         animate={{ 
           y: isActive ? [0, -3, 0] : 0,
           transition: { 
@@ -95,7 +109,7 @@ const StatBox: React.FC<StatBoxProps> = ({
           <MoveUp size={16} />
         </motion.span>
       </motion.div>
-      <p className="text-sm text-foreground/70 text-center mt-2">{label}</p>
+      <p className="text-sm text-foreground/70 text-center mt-2 relative z-10">{label}</p>
     </motion.div>
   );
 };

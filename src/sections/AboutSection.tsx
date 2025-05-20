@@ -25,7 +25,7 @@ const AboutSection: React.FC = () => {
     setHoveredStat(index);
   };
 
-  // Stats data - fixed with correct numbers as requested previously
+  // Stats data with improved structure
   const stats = [
     { value: '2+', label: 'Roky zkušeností', rotation: 0, translateY: 0 },
     { value: '5+', label: 'Dokončených projektů', rotation: 0, translateY: 0 },
@@ -71,13 +71,8 @@ const AboutSection: React.FC = () => {
 
   return (
     <section id="about" className="relative py-16 md:py-20 overflow-hidden bg-background">
-      {/* Background elements with improved aesthetics */}
-      <AnimatedSection 
-        className="absolute inset-0 pointer-events-none" 
-        withOverflow={true}
-        direction="none"
-      >
-        {/* Subtle background accents */}
+      {/* Improved background elements */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
         <motion.div 
           className="absolute top-40 left-10 w-64 h-64 rounded-full bg-primary/5 blur-3xl"
           animate={{
@@ -93,7 +88,6 @@ const AboutSection: React.FC = () => {
           initial={{ opacity: 0.3, scale: 1 }}
         />
         
-        {/* Secondary background accent */}
         <motion.div 
           className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-accent/5 blur-3xl"
           animate={{
@@ -108,10 +102,10 @@ const AboutSection: React.FC = () => {
           }}
           initial={{ opacity: 0.2, scale: 1 }}
         />
-      </AnimatedSection>
+      </div>
       
       <div className="container-custom relative z-10">
-        {/* Section title */}
+        {/* Section title with improved styling */}
         <div className="mb-12 md:mb-16 text-center md:text-left">
           <SectionTitle 
             title="O Mně" 
@@ -123,12 +117,8 @@ const AboutSection: React.FC = () => {
           />
         </div>
         
-        {/* Stats grid - more symmetric and evenly spaced */}
-        <AnimatedSection 
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-14" 
-          staggerChildren={true}
-          staggerDelay={0.08}
-        >
+        {/* Stats grid with improved layout and spacing */}
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6 mb-14">
           {stats.map((stat, index) => (
             <StatBox 
               key={index}
@@ -141,10 +131,10 @@ const AboutSection: React.FC = () => {
               translateY={stat.translateY}
             />
           ))}
-        </AnimatedSection>
+        </div>
         
-        {/* Main content in a symmetric layout */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+        {/* Main content in a symmetric layout with improved spacing */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-12">
           {/* Left column - Tech information */}
           <div className="space-y-8">
             <ScrollReveal
@@ -153,8 +143,12 @@ const AboutSection: React.FC = () => {
               delay={0.1}
             >
               <motion.div 
-                className="bg-card/50 backdrop-blur-sm border border-white/5 rounded-xl p-6 shadow-sm hover:shadow-lg hover:border-gold/20 transition-all duration-500"
-                whileHover={{ y: -5 }}
+                className="bg-card/50 backdrop-blur-sm border border-white/5 rounded-xl p-6 shadow-sm hover:shadow-lg transition-all duration-500"
+                whileHover={{ 
+                  y: -5,
+                  borderColor: "rgba(255,255,255,0.2)",
+                  transition: { duration: 0.3 }
+                }}
               >
                 <div className="flex items-center mb-6">
                   <motion.div 
@@ -190,23 +184,28 @@ const AboutSection: React.FC = () => {
               </motion.div>
             </ScrollReveal>
             
-            {/* My Coding Philosophy */}
+            {/* My Coding Philosophy with improved styling */}
             <ScrollReveal
               animationStyle="scale"
               delay={0.2}
             >
               <motion.div 
-                className="p-6 bg-card/50 backdrop-blur-sm rounded-xl border border-gold/5 shadow-sm hover:shadow-md transition-all duration-300"
+                className="p-6 bg-card/50 backdrop-blur-sm rounded-xl border border-gold/5 shadow-sm transition-all duration-300"
                 whileHover={{ 
+                  y: -5,
                   boxShadow: "0 20px 25px -5px rgba(0,0,0,0.1), 0 8px 10px -6px rgba(0,0,0,0.1)",
-                  borderColor: "hsl(var(--gold) / 0.2)"
+                  borderColor: "hsl(var(--gold) / 0.2)",
+                  transition: { duration: 0.3 }
                 }}
               >
                 <div className="flex items-center mb-6">
                   <motion.div 
                     className="p-3 rounded-lg bg-gold/5 mr-4"
-                    whileHover={{ rotate: 360, backgroundColor: "hsl(var(--gold) / 0.15)" }}
-                    transition={{ duration: 0.6 }}
+                    whileHover={{ 
+                      rotate: 360, 
+                      backgroundColor: "hsl(var(--gold) / 0.15)",
+                      transition: { duration: 0.6 }
+                    }}
                   >
                     <Code2 className="text-gold" size={24} />
                   </motion.div>
@@ -234,7 +233,7 @@ const AboutSection: React.FC = () => {
             </ScrollReveal>
           </div>
           
-          {/* Right column - My Journey and Hobbies */}
+          {/* Right column - My Journey and Hobbies with improved layout */}
           <div className="space-y-6">
             <ScrollReveal
               animationStyle="fade"
@@ -248,7 +247,7 @@ const AboutSection: React.FC = () => {
             </ScrollReveal>
             
             <div className="relative">
-              {/* Decorative accent */}
+              {/* Decorative accent with improved styling */}
               <motion.div
                 className="absolute -left-4 top-0 h-full w-1 bg-gradient-to-b from-transparent via-gold/20 to-transparent rounded-full"
                 initial={{ scaleY: 0, opacity: 0 }}
@@ -292,7 +291,7 @@ const AboutSection: React.FC = () => {
               </div>
             </div>
             
-            {/* IT Hobbies Section */}
+            {/* IT Hobbies Section with improved styling */}
             <ScrollReveal
               animationStyle="slide"
               direction="up"
@@ -351,7 +350,7 @@ const AboutSection: React.FC = () => {
               </Collapsible>
             </ScrollReveal>
             
-            {/* CTA Button - Perfectly centered */}
+            {/* CTA Button - Perfectly centered with improved styling */}
             <ScrollReveal
               animationStyle="bounce"
               delay={0.4}

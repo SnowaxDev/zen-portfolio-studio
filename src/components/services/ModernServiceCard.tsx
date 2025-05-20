@@ -42,8 +42,7 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
     shouldReduceAnimations, 
     getAnimationDelay, 
     getAnimationDuration,
-    getAnimationEasing,
-    getSmoothExitProps
+    getAnimationEasing
   } = useMobileAnimationSettings();
   
   const controls = useAnimationControls();
@@ -100,7 +99,9 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
       y: 0,
       scale: 1,
       boxShadow: "0 0 0 0 rgba(0, 0, 0, 0)",
-      transition: getSmoothExitProps().exitTransition
+      transition: { 
+        duration: 0.2 
+      }
     }
   };
 
@@ -129,17 +130,19 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
     if (typeof price === 'number') {
       return price.toLocaleString();
     }
+    
     // For custom solution or consultation
-    // Fix the type comparison by checking for null and ensuring proper string comparison
-    if (price === null || price === '0' || (typeof price === 'number' && price === 0)) {
+    // Fixed type comparison by checking exact values properly
+    if (price === null || price === '0' || price === 0) {
       return isCustom ? "Dle konzultace" : "Kontaktujte nás";
     }
+    
     // For string prices (like "od 5000")
     return price;
   };
 
   const priceDisplay = renderPrice();
-  const showPriceType = !(price === null || (typeof price === 'number' && price === 0) || price === '0' || isCustom);
+  const showPriceType = !(price === null || price === 0 || price === '0' || isCustom);
 
   return (
     <motion.div

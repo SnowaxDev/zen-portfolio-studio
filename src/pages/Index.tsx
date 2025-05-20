@@ -18,9 +18,11 @@ const ServicesSection = lazy(() => import('../sections/ServicesSection'));
 const ContactSection = lazy(() => import('../sections/ContactSection'));
 
 // Enhanced loading fallback with better error handling
-const LoadingFallback = () => <div className="flex items-center justify-center min-h-[200px]">
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-[200px]">
     <Loader className="h-8 w-8 animate-spin text-gold" />
-  </div>;
+  </div>
+);
 
 // Page transition variants - simplified for mobile
 const pageVariants = {
@@ -44,7 +46,9 @@ const pageVariants = {
     }
   }
 };
+
 const Index = () => {
+  // ... keep existing code (state definitions and hooks)
   const isMobile = useIsMobile();
   const prefersReducedMotion = usePrefersReducedMotion();
   const [mousePosition, setMousePosition] = useState({
@@ -92,6 +96,7 @@ const Index = () => {
   // Track mouse position for interactive cursor - disabled for mobile
   useEffect(() => {
     if (prefersReducedMotion || isMobile) return;
+    
     const handleMouseMove = (e: MouseEvent) => {
       cursorX.set(e.clientX - 15);
       cursorY.set(e.clientY - 15);
@@ -100,17 +105,21 @@ const Index = () => {
         y: e.clientY / window.innerHeight
       });
     };
+    
     const handleMouseEnter = () => {
       cursorSize.set(40);
       cursorOpacity.set(0.3);
     };
+    
     const handleMouseLeave = () => {
       cursorSize.set(12);
       cursorOpacity.set(0);
     };
+    
     window.addEventListener('mousemove', handleMouseMove);
     document.body.addEventListener('mouseenter', handleMouseEnter);
     document.body.addEventListener('mouseleave', handleMouseLeave);
+    
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
       document.body.removeEventListener('mouseenter', handleMouseEnter);
@@ -144,7 +153,7 @@ const Index = () => {
     document.title = "Jan Novák | Frontend Vývojář & UI/UX Designer";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute("content", "Portfolio web pro Jana Nováka, Frontend Vývojáře a UI/UX Designera specializujícího se na React a Next.js aplikace.");
+      metaDescription.setAttribute("content", "Portfolio web pro Jana Nováka, Frontend Vývojáře a UI/UX Designera specializující se na React a Next.js aplikace.");
     }
 
     // Add viewport meta tag to ensure proper mobile rendering
@@ -165,25 +174,41 @@ const Index = () => {
     }
     themeColor.setAttribute('content', '#1A1F2C');
 
-    // Simulate asset loading
+    // Simulate asset loading with a slight delay for smoother transitions
     const timer = setTimeout(() => {
       setIsLoaded(true);
     }, 500);
     return () => clearTimeout(timer);
   }, []);
-  return <motion.div variants={pageVariants} initial="initial" animate="animate" exit="exit" className="overflow-x-hidden flex flex-col min-h-screen">
+
+  return (
+    <motion.div 
+      variants={pageVariants} 
+      initial="initial" 
+      animate="animate" 
+      exit="exit" 
+      className="overflow-x-hidden flex flex-col min-h-screen"
+    >
       {/* Interactive cursor effect for desktop only */}
-      {!isMobile && !prefersReducedMotion && <motion.div className="fixed inset-0 z-50 pointer-events-none" style={{
-      background: cursorStyle,
-      left: cursorX,
-      top: cursorY
-    }} />}
+      {!isMobile && !prefersReducedMotion && (
+        <motion.div 
+          className="fixed inset-0 z-50 pointer-events-none" 
+          style={{
+            background: cursorStyle,
+            left: cursorX,
+            top: cursorY
+          }} 
+        />
+      )}
       
       {/* Scroll progress indicator */}
-      <motion.div className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold via-purple to-gold-light z-50" style={{
-      scaleX: smoothScrollProgress,
-      transformOrigin: "0%"
-    }} />
+      <motion.div 
+        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold via-purple to-gold-light z-50" 
+        style={{
+          scaleX: smoothScrollProgress,
+          transformOrigin: "0%"
+        }} 
+      />
       
       <Header />
       
@@ -210,39 +235,77 @@ const Index = () => {
         </Suspense>
         
         {/* Dynamic decorative elements that respond to mouse position - disabled on mobile */}
-        {isLoaded && !prefersReducedMotion && !isMobile && <>
-            <div className="fixed top-20 left-10 w-32 h-32 bg-purple/10 rounded-full filter blur-3xl opacity-30 pointer-events-none" style={{
-          transform: `translate(${mousePosition.x * -30}px, ${mousePosition.y * -20}px)`,
-          transition: 'transform 0.3s ease-out'
-        }} />
-            <div className="fixed bottom-40 right-10 w-48 h-48 bg-gold/10 rounded-full filter blur-3xl opacity-20 pointer-events-none" style={{
-          transform: `translate(${mousePosition.x * 30}px, ${mousePosition.y * 20}px)`,
-          transition: 'transform 0.3s ease-out'
-        }} />
-          </>}
+        {isLoaded && !prefersReducedMotion && !isMobile && (
+          <>
+            <div 
+              className="fixed top-20 left-10 w-32 h-32 bg-purple/10 rounded-full filter blur-3xl opacity-30 pointer-events-none" 
+              style={{
+                transform: `translate(${mousePosition.x * -30}px, ${mousePosition.y * -20}px)`,
+                transition: 'transform 0.3s ease-out'
+              }} 
+            />
+            <div 
+              className="fixed bottom-40 right-10 w-48 h-48 bg-gold/10 rounded-full filter blur-3xl opacity-20 pointer-events-none" 
+              style={{
+                transform: `translate(${mousePosition.x * 30}px, ${mousePosition.y * 20}px)`,
+                transition: 'transform 0.3s ease-out'
+              }} 
+            />
+          </>
+        )}
       </main>
       
       <Footer />
       
       {/* Enhanced scroll-to-top button - better for mobile */}
       <AnimatePresence>
-        {showScrollTop && <motion.button className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-card/80 backdrop-blur-md border border-gold/20 shadow-lg hover:border-gold/50 transition-colors" initial={{
-        opacity: 0,
-        y: 20
-      }} animate={{
-        opacity: 1,
-        y: 0
-      }} exit={{
-        opacity: 0,
-        y: 20
-      }} whileHover={{
-        scale: isMobile ? 1 : 1.1
-      }} whileTap={{
-        scale: isMobile ? 0.95 : 0.9
-      }} onClick={scrollToTop} aria-label="Scroll to top">
+        {showScrollTop && (
+          <motion.button 
+            className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-card/80 backdrop-blur-md border border-gold/20 shadow-lg hover:border-gold/50 transition-colors" 
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            whileHover={{ scale: isMobile ? 1 : 1.1 }}
+            whileTap={{ scale: isMobile ? 0.95 : 0.9 }}
+            onClick={scrollToTop} 
+            aria-label="Scroll to top"
+          >
             <ArrowUp className="h-5 w-5 text-gold" />
-          </motion.button>}
+          </motion.button>
+        )}
       </AnimatePresence>
+      
+      {/* Enhanced mobile floating contact button - only on mobile */}
+      {isMobile && (
+        <motion.div 
+          className="fixed bottom-5 right-5 z-40" 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.5 }}
+        >
+          <motion.a 
+            href="#contact" 
+            className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-gold to-gold-light rounded-full shadow-lg shadow-gold/20" 
+            whileTap={{ scale: 0.95 }}
+            aria-label="Contact Me"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="h-5 w-5 text-background" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" 
+              />
+            </svg>
+          </motion.a>
+        </motion.div>
+      )}
       
       {/* Enhanced desktop scroll indicator - hide on mobile */}
       {!isMobile && !prefersReducedMotion && <motion.div className="fixed bottom-5 right-5 flex flex-col items-center z-40" initial={{
@@ -258,28 +321,10 @@ const Index = () => {
           
         </motion.div>}
       
-      {/* Enhanced mobile floating contact button - only on mobile */}
-      {isMobile && <motion.div className="fixed bottom-5 right-5 z-40" initial={{
-      opacity: 0,
-      y: 20
-    }} animate={{
-      opacity: 1,
-      y: 0
-    }} transition={{
-      delay: 1,
-      duration: 0.5
-    }}>
-          <motion.a href="#contact" className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-gold to-gold-light rounded-full shadow-lg shadow-gold/20" whileTap={{
-        scale: 0.95
-      }} aria-label="Contact Me">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-background" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-            </svg>
-          </motion.a>
-        </motion.div>}
-      
       {/* Animated background grid - only show on non-mobile devices */}
       {isLoaded && !isMobile && <FloatingGrid />}
-    </motion.div>;
+    </motion.div>
+  );
 };
+
 export default Index;
