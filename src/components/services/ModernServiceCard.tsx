@@ -132,7 +132,7 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
     }
     
     // For custom solution or consultation
-    // Fixed type comparison by checking exact values properly
+    // Fixed type comparison by ensuring we properly check both null and string '0'
     if (price === null || price === '0' || price === 0) {
       return isCustom ? "Dle konzultace" : "Kontaktujte nás";
     }
@@ -142,6 +142,7 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
   };
 
   const priceDisplay = renderPrice();
+  // Fix the type comparison by using strict equality with both type options
   const showPriceType = !(price === null || price === 0 || price === '0' || isCustom);
 
   return (
