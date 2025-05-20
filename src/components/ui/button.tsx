@@ -7,7 +7,7 @@ import { useMobileAnimationSettings } from "@/hooks/use-mobile-animation-setting
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 relative overflow-hidden",
+  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 relative overflow-hidden",
   {
     variants: {
       variant: {
@@ -43,16 +43,16 @@ export interface ButtonProps
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, asChild = false, ...props }, ref) => {
-    const { shouldReduceAnimations, shouldDisableHoverEffects } = useMobileAnimationSettings();
+    const { shouldReduceAnimations, animationIntensity } = useMobileAnimationSettings();
     const Comp = asChild ? Slot : "button"
     
-    // Mobile optimization: Use regular button with active state feedback for touch
+    // Mobile optimization: Use regular button with tap feedback for touch
     if (shouldReduceAnimations) {
       return (
         <Comp
           className={cn(
             buttonVariants({ variant, size, className }),
-            "active:scale-95 transition-transform",  // Added touch feedback
+            "active:scale-95 transition-all duration-200",  // Enhanced tap feedback
             "touch-manipulation" // Improve touch responsiveness
           )}
           ref={ref}
@@ -61,12 +61,20 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       );
     }
     
-    // For desktop, keep the motion effects but remove the shimmer
+    // For desktop, enhance the motion effects with subtle animations
     return (
       <motion.div
-        whileHover={{ scale: shouldDisableHoverEffects ? 1 : 1.015 }}
+        whileHover={{ 
+          scale: 1.015,
+          y: -1,
+        }}
         whileTap={{ scale: 0.98 }}
-        transition={{ duration: 0.1 }}
+        transition={{ 
+          duration: 0.2,
+          type: "spring",
+          stiffness: 400,
+          damping: 25
+        }}
         className="inline-block"
       >
         <Comp
@@ -74,6 +82,13 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           ref={ref}
           {...props}
         >
+          {/* Subtle shimmer effect on hover */}
+          <motion.span
+            className="absolute inset-0 pointer-events-none bg-gradient-to-r from-transparent via-white/10 to-transparent"
+            initial={{ opacity: 0, x: '-100%' }}
+            whileHover={{ opacity: 1, x: '100%' }}
+            transition={{ duration: 0.8, ease: "easeInOut" }}
+          />
           {props.children}
         </Comp>
       </motion.div>

@@ -8,6 +8,7 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '../ui/
 import TextWithGlow from '../TextWithGlow';
 import { cn } from '@/lib/utils';
 import { useMobileUtils } from '@/hooks/use-mobile-utils';
+import { useMobileAnimationSettings } from '@/hooks/use-mobile-animation-settings';
 
 interface ModernServiceCardProps {
   title: string;
@@ -35,37 +36,94 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
   onButtonClick
 }) => {
   const { isMobile } = useMobileUtils();
+  const { 
+    shouldReduceAnimations, 
+    getAnimationDelay, 
+    getAnimationDuration,
+    getAnimationEasing
+  } = useMobileAnimationSettings();
+  
   const controls = useAnimationControls();
   
   // Add shimmer effect to highlighted cards
   React.useEffect(() => {
-    if (highlighted) {
+    if (highlighted && !shouldReduceAnimations) {
       const runShimmer = async () => {
         await controls.start({
           backgroundPosition: ['200% 0%', '-200% 0%'],
-          transition: { duration: 3, repeat: Infinity, repeatType: 'reverse' }
+          transition: { 
+            duration: getAnimationDuration(3), 
+            repeat: Infinity, 
+            repeatType: 'reverse',
+            ease: "linear" 
+          }
         });
       };
       
       runShimmer();
     }
-  }, [highlighted, controls]);
+  }, [highlighted, controls, shouldReduceAnimations, getAnimationDuration]);
+
+  // Enhanced card appearance with staggered animations
+  const cardVariants = {
+    hidden: { 
+      opacity: 0, 
+      y: 20, 
+      scale: 0.98 
+    },
+    visible: { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      transition: { 
+        duration: getAnimationDuration(0.5),
+        ease: getAnimationEasing()
+      }
+    },
+    hover: { 
+      y: isMobile ? 0 : -5,
+      scale: isMobile ? 1 : 1.02,
+      boxShadow: isPrimary 
+        ? "0 20px 30px -10px rgba(234, 179, 8, 0.3)" 
+        : highlighted 
+          ? "0 20px 30px -10px rgba(139, 92, 246, 0.3)" 
+          : "0 20px 30px -15px rgba(0, 0, 0, 0.5)",
+      transition: { 
+        duration: getAnimationDuration(0.2),
+        ease: [0.25, 0.1, 0.25, 1]
+      }
+    }
+  };
+
+  // Features animation stagger effect
+  const featureVariants = {
+    hidden: { opacity: 0, x: -10 },
+    visible: (i: number) => ({
+      opacity: 1, 
+      x: 0,
+      transition: { 
+        delay: getAnimationDelay(0.1 * i),
+        duration: getAnimationDuration(0.4),
+        ease: getAnimationEasing()
+      }
+    })
+  };
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.5 }}
-      whileHover={{ y: isMobile ? 0 : -5 }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, margin: "-50px" }}
+      variants={cardVariants}
+      whileHover={shouldReduceAnimations ? {} : "hover"}
       className="h-full"
     >
       <Card className={cn(
         "h-full overflow-hidden border relative transition-all duration-300",
         isPrimary 
-          ? "border-gold/30 bg-gradient-to-b from-card to-black/80 hover:border-gold/60" 
+          ? "border-gold/30 bg-gradient-to-b from-card to-black/80 hover:border-gold/70" 
           : highlighted
-            ? "border-purple/30 bg-gradient-to-b from-card to-black/90 hover:border-purple/50"
+            ? "border-purple/30 bg-gradient-to-b from-card to-black/90 hover:border-purple/60"
             : "border-white/10 bg-card/50 hover:border-white/30",
         className
       )}>
@@ -75,7 +133,7 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
             className="absolute -top-3 left-0 right-0 flex justify-center"
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2, duration: 0.5 }}
+            transition={{ delay: getAnimationDelay(0.2), duration: getAnimationDuration(0.5) }}
           >
             <span className={cn(
               "px-3 py-1 text-xs font-semibold rounded-full shadow-lg",
@@ -87,7 +145,7 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
         )}
         
         {/* Shimmer effect for highlighted cards */}
-        {highlighted && (
+        {highlighted && !shouldReduceAnimations && (
           <motion.div 
             className="absolute inset-0 pointer-events-none overflow-hidden"
             animate={controls}
@@ -120,22 +178,33 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
             </p>
           </div>
           
-          {/* Price */}
+          {/* Price - animated on hover */}
           <div className="mb-5">
-            <div className="flex items-end">
+            <motion.div 
+              className="flex items-end"
+              whileHover={{ 
+                scale: shouldReduceAnimations ? 1 : 1.05,
+                transition: { duration: 0.2 }
+              }}
+            >
               <motion.span 
                 className={cn(
                   "text-3xl font-bold",
                   isPrimary ? "text-gold" : highlighted ? "text-purple-light" : "text-foreground"
                 )}
-                whileHover={{ scale: 1.05 }}
+                initial={{ opacity: 1 }}
+                // Counting animation on page load
+                animate={shouldReduceAnimations ? {} : { 
+                  opacity: [0, 1],
+                  transition: { duration: 0.6, delay: 0.3 }
+                }}
               >
                 {price.toLocaleString()}
               </motion.span>
               <span className="text-muted-foreground ml-2">
                 Kč {isOneTime ? 'jednorázově' : 'měsíčně'}
               </span>
-            </div>
+            </motion.div>
             <div className="mt-1 inline-flex items-center">
               <div className={cn(
                 "px-2 py-0.5 text-xs rounded-full",
@@ -165,7 +234,7 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
             </div>
           </div>
           
-          {/* Features */}
+          {/* Features - with staggered animation */}
           <div className="flex-grow mb-5">
             <h4 className="font-medium text-sm mb-3">Co je zahrnuto:</h4>
             <ul className="space-y-2">
@@ -173,18 +242,29 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
                 <motion.li 
                   key={index} 
                   className="flex items-start text-sm"
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
+                  custom={index}
+                  initial="hidden"
+                  whileInView="visible"
                   viewport={{ once: true }}
-                  transition={{ delay: 0.1 * index }}
+                  variants={featureVariants}
                 >
                   <motion.span
-                    whileHover={{ scale: 1.2, rotate: [0, 10, -10, 0] }}
+                    whileHover={{ 
+                      scale: shouldReduceAnimations ? 1 : 1.2, 
+                      rotate: shouldReduceAnimations ? 0 : [0, 10, -10, 0] 
+                    }}
                     transition={{ duration: 0.5 }}
-                    className="mr-2 mt-0.5 flex-shrink-0"
+                    className={cn(
+                      "mr-2 mt-0.5 flex-shrink-0 p-1 rounded-full",
+                      isPrimary 
+                        ? "bg-gold/10" 
+                        : highlighted 
+                          ? "bg-purple/10" 
+                          : "bg-green-400/10"
+                    )}
                   >
                     <Check className={cn(
-                      "h-4 w-4", 
+                      "h-3 w-3", 
                       isPrimary ? "text-gold" : highlighted ? "text-purple" : "text-green-400"
                     )} />
                   </motion.span>
@@ -194,10 +274,10 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
             </ul>
           </div>
           
-          {/* CTA Button */}
+          {/* CTA Button - with enhanced hover effect */}
           <div className="mt-auto">
             <motion.div
-              whileHover={{ scale: 1.03 }}
+              whileHover={{ scale: shouldReduceAnimations ? 1 : 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
               <Button 
@@ -211,19 +291,6 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
                 )}
                 onClick={onButtonClick}
               >
-                <motion.span
-                  className={cn(
-                    "absolute inset-0 bg-gradient-to-r",
-                    isPrimary 
-                      ? "from-gold-light/0 via-white/20 to-gold-light/0" 
-                      : highlighted
-                        ? "from-purple/0 via-white/20 to-purple/0"
-                        : "from-white/0 via-white/10 to-white/0"
-                  )}
-                  initial={{ x: "-100%", opacity: 0 }}
-                  whileHover={{ x: "100%", opacity: 1 }}
-                  transition={{ duration: 0.8 }}
-                />
                 {ctaText}
               </Button>
             </motion.div>
