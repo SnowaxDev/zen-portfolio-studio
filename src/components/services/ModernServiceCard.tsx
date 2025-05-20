@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { motion, useAnimationControls } from 'framer-motion';
 import { Check, Info, Star } from 'lucide-react';
@@ -131,7 +132,6 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
     }
     
     // For custom solution or consultation
-    // Check all possible null/0 values using type-safe comparisons
     if (price === null || price === '0' || (typeof price === 'number' && price === 0)) {
       return isCustom ? "Dle konzultace" : "Kontaktujte nás";
     }
@@ -141,11 +141,10 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
   };
 
   const priceDisplay = renderPrice();
-  // Fix the type comparison by using strict typechecking for each possible type
   const showPriceType = !(price === null || 
-                          (typeof price === 'number' && price === 0) || 
-                          price === '0' || 
-                          isCustom);
+                        (typeof price === 'number' && price === 0) || 
+                        price === '0' || 
+                        isCustom);
 
   return (
     <motion.div
@@ -153,12 +152,12 @@ const ModernServiceCard: React.FC<ModernServiceCardProps> = ({
       whileInView="visible"
       viewport={{ once: true, margin: "-50px" }}
       variants={cardVariants}
-      whileHover={shouldReduceAnimations ? {} : "hover"}
+      whileHover={shouldReduceAnimations ? undefined : "hover"}
       exit="exit"
       className="h-full"
     >
       <Card className={cn(
-        "h-full overflow-hidden border relative transition-all duration-300",
+        "h-full overflow-hidden border-2 relative transition-all duration-300",
         isPrimary 
           ? "border-gold/30 bg-gradient-to-b from-card to-black/80 hover:border-gold/70" 
           : highlighted || isCustom
