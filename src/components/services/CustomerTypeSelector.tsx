@@ -76,9 +76,11 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
           // Enhanced glow effect
           initial={{ boxShadow: "0px 0px 0px 0px rgba(234, 179, 8, 0.0)" }}
           animate={{
-            boxShadow: ["0px 0px 0px 0px rgba(234, 179, 8, 0.0)", 
-                       "0px 0px 15px 2px rgba(234, 179, 8, 0.4)", 
-                       "0px 0px 0px 0px rgba(234, 179, 8, 0.0)"],
+            boxShadow: [
+              "0px 0px 0px 0px rgba(234, 179, 8, 0.0)", 
+              "0px 0px 15px 2px rgba(234, 179, 8, 0.4)", 
+              "0px 0px 0px 0px rgba(234, 179, 8, 0.0)"
+            ]
           }}
           transition={{
             boxShadow: {
