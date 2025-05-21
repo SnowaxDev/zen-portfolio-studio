@@ -67,22 +67,22 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
           }}
           animate={{ 
             left: `${selectedIndex * (100 / options.length)}%`,
-            transition: { 
-              type: "spring", 
-              stiffness: 500, 
-              damping: 30
-            }
-          }}
-          // Enhanced glow effect
-          initial={{ boxShadow: "0px 0px 0px 0px rgba(234, 179, 8, 0.0)" }}
-          animate={{
+            // Include box-shadow animation in the same animate object to avoid duplicate attributes
             boxShadow: [
               "0px 0px 0px 0px rgba(234, 179, 8, 0.0)", 
               "0px 0px 15px 2px rgba(234, 179, 8, 0.4)", 
               "0px 0px 0px 0px rgba(234, 179, 8, 0.0)"
             ]
           }}
+          initial={{ boxShadow: "0px 0px 0px 0px rgba(234, 179, 8, 0.0)" }}
           transition={{
+            // Position transition
+            left: { 
+              type: "spring", 
+              stiffness: 500, 
+              damping: 30
+            },
+            // Box shadow transition
             boxShadow: {
               duration: 2.5,
               ease: "easeInOut",
