@@ -23,11 +23,12 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
   
   return (
     <div className="relative w-full max-w-md mx-auto mb-10">
-      <div className="bg-zinc-900 rounded-xl p-1.5 flex mx-auto relative z-10 shadow-lg shadow-black/10 border border-zinc-800">
+      <div className="bg-zinc-900 rounded-xl p-1.5 flex mx-auto relative z-10 shadow-lg border border-zinc-800">
         {/* Background highlight */}
         <motion.div 
           className="absolute h-full top-0 bg-yellow-500 rounded-lg z-0"
           style={{ width: `${100 / options.length}%` }}
+          initial={false}
           animate={{ 
             left: `${selectedIndex * (100 / options.length)}%` 
           }}

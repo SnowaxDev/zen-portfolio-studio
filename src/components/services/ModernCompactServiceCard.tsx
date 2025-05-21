@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '../ui/button';
@@ -29,24 +28,17 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
   buttonText = "Více informací",
   onButtonClick
 }) => {
-  const { shouldReduceAnimations } = useMobileAnimationSettings();
-
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.4 }}
-      className="h-full"
-    >
+    <div className="h-full">
       <div className={cn(
-        "h-full rounded-xl overflow-hidden border-2 transition-all duration-200 bg-zinc-900 shadow-lg",
+        "h-full rounded-xl overflow-hidden border-2 bg-zinc-900 transition-all duration-200",
         highlight 
           ? "border-yellow-500/50 hover:border-yellow-500" 
           : "border-zinc-800 hover:border-zinc-700",
         className
       )}>
         <div className="p-5 h-full flex flex-col">
+          {/* Card header with icon and title */}
           <div className="flex items-center space-x-3 mb-3">
             <div className={cn(
               "p-2 rounded-lg", 
@@ -65,8 +57,10 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
             </h3>
           </div>
           
+          {/* Card description */}
           <p className="text-sm text-zinc-400 mb-4 line-clamp-2">{description}</p>
           
+          {/* Price and action button */}
           <div className="mt-auto">
             <div className="flex items-baseline mb-3">
               <span className={cn(
@@ -94,7 +88,7 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
           </div>
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 };
 

@@ -37,7 +37,13 @@ const ServiceTab: React.FC<ServiceTabProps> = ({ icon: Icon, label, isActive, on
         <motion.span
           layoutId="activeServiceTab"
           className="absolute inset-0 bg-yellow-500 rounded-lg z-0"
-          transition={{ duration: 0.3 }}
+          initial={false}
+          transition={{ 
+            type: "spring",
+            stiffness: 500,
+            damping: 30,
+            duration: 0.3
+          }}
         />
       )}
       
@@ -57,7 +63,7 @@ const ServiceTabs: React.FC<ServiceTabsProps> = ({ tabs, selectedValue, onValueC
   return (
     <div className="w-full mb-10">
       <div className="flex justify-center overflow-x-auto pb-2">
-        <div className="bg-zinc-900/80 backdrop-blur-sm p-2 rounded-xl shadow-lg shadow-black/10 border border-zinc-800/50 flex">
+        <div className="bg-zinc-900 p-2 rounded-xl shadow-lg border border-zinc-800 flex">
           {tabs.map((tab) => (
             <ServiceTab
               key={tab.value}
