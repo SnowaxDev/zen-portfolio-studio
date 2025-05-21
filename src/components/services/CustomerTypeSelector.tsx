@@ -20,10 +20,10 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
   selectedValue,
   onChange
 }) => {
-  const { shouldReduceAnimations, animationIntensity } = useMobileAnimationSettings();
+  const { shouldReduceAnimations } = useMobileAnimationSettings();
   const selectedIndex = options.findIndex(option => option.value === selectedValue);
   
-  // Enhanced container variants
+  // Container animation
   const containerVariants = {
     initial: { opacity: 0, y: 15 },
     animate: { 
@@ -33,7 +33,7 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
     }
   };
   
-  // Button animation variants with improved hover effect
+  // Button animation with subtle hover effects
   const buttonVariants = {
     initial: { opacity: 0 },
     animate: (i: number) => ({ 
@@ -45,22 +45,23 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
     }),
     hover: {
       scale: shouldReduceAnimations ? 1 : 1.05,
-      transition: { duration: 0.2 }
+      y: shouldReduceAnimations ? 0 : -2,
+      transition: { type: "spring", stiffness: 400, damping: 17 }
     },
-    tap: { scale: 0.98 }
+    tap: { scale: 0.97 }
   };
   
   return (
     <motion.div 
-      className="relative w-full max-w-xl mx-auto"
+      className="relative w-full max-w-lg mx-auto mb-8"
       initial="initial"
       animate="animate"
       variants={containerVariants}
     >
-      <div className="bg-zinc-900/80 backdrop-blur-sm rounded-2xl p-1.5 flex max-w-sm mx-auto relative shadow-xl shadow-black/10 border border-zinc-800/50">
-        {/* Moving background with enhanced animation */}
+      <div className="bg-zinc-900/80 backdrop-blur-sm rounded-xl p-1.5 flex max-w-sm mx-auto relative z-10 shadow-xl shadow-black/10 border border-zinc-800/50">
+        {/* Background highlight */}
         <motion.div 
-          className="absolute h-full top-0 bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-500 rounded-xl"
+          className="absolute h-full top-0 bg-gradient-to-r from-yellow-500 via-yellow-400 to-yellow-500 rounded-lg"
           style={{ 
             width: `${100 / options.length}%` 
           }}
@@ -69,14 +70,18 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
             transition: { 
               type: "spring", 
               stiffness: 500, 
-              damping: 30,
-              duration: 0.4
+              damping: 30
             }
           }}
-          // Enhanced pulsing effect
-          whileInView={{
-            boxShadow: ["0px 0px 0px 0px rgba(234, 179, 8, 0.0)", "0px 0px 20px 2px rgba(234, 179, 8, 0.4)", "0px 0px 0px 0px rgba(234, 179, 8, 0.0)"],
-            transition: {
+          // Enhanced glow effect
+          initial={{ boxShadow: "0px 0px 0px 0px rgba(234, 179, 8, 0.0)" }}
+          animate={{
+            boxShadow: ["0px 0px 0px 0px rgba(234, 179, 8, 0.0)", 
+                       "0px 0px 15px 2px rgba(234, 179, 8, 0.4)", 
+                       "0px 0px 0px 0px rgba(234, 179, 8, 0.0)"],
+          }}
+          transition={{
+            boxShadow: {
               duration: 2.5,
               ease: "easeInOut",
               repeat: Infinity,
@@ -91,8 +96,8 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
             custom={i}
             onClick={() => onChange(option.value)}
             className={cn(
-              "flex-1 py-3 px-4 rounded-lg text-sm font-medium transition-colors relative z-10",
-              selectedValue === option.value ? "text-black" : "text-zinc-400"
+              "flex-1 py-2.5 px-4 rounded-lg text-sm font-medium z-10",
+              selectedValue === option.value ? "text-black" : "text-zinc-400 hover:text-zinc-200"
             )}
             variants={buttonVariants}
             initial="initial"
@@ -100,15 +105,7 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
             whileHover="hover"
             whileTap="tap"
           >
-            {/* Enhanced text glow effect on selected item */}
-            {selectedValue === option.value ? (
-              <span className="relative">
-                <span className="absolute inset-0 blur-sm opacity-60 bg-yellow-300 rounded-full" />
-                <span className="relative">{option.label}</span>
-              </span>
-            ) : (
-              option.label
-            )}
+            {option.label}
           </motion.button>
         ))}
       </div>

@@ -4,8 +4,8 @@ import { motion } from 'framer-motion';
 import { Layout, Zap, Cloud, Shield } from 'lucide-react';
 import AnimatedSection from '@/components/AnimatedSection';
 import { cn } from '@/lib/utils';
-import ModernServiceCard from '@/components/services/ModernServiceCard';
-import CompactServiceCardV2 from '@/components/services/CompactServiceCardV2';
+import ServiceCard from '@/components/services/ServiceCard';
+import CompactServiceCard from '@/components/services/CompactServiceCard';
 import ServiceTabs from '@/components/services/ServiceTabs';
 import CustomerTypeSelector from '@/components/services/CustomerTypeSelector';
 
@@ -34,22 +34,30 @@ const ServicesSection: React.FC = () => {
   // Service data for the current selection
   const currentService = servicePricingData[selectedCategory][customerType];
   
+  // Section animation variants
+  const backgroundVariants = {
+    initial: { opacity: 0 },
+    animate: { 
+      opacity: 1,
+      transition: { duration: 0.8 }
+    }
+  };
+  
   return (
     <section id="services" className="bg-zinc-950 py-20 relative overflow-hidden">
-      {/* Enhanced background elements */}
-      <div className="absolute top-0 inset-0 pointer-events-none">
-        {/* Grid pattern with subtle animation */}
-        <motion.div 
-          className="absolute inset-0 opacity-5"
-          animate={{
-            backgroundPosition: ['0px 0px', '40px 40px'],
-            transition: { duration: 20, repeat: Infinity, ease: "linear" }
-          }}
-        >
+      {/* Background elements */}
+      <motion.div 
+        className="absolute top-0 inset-0 pointer-events-none"
+        variants={backgroundVariants}
+        initial="initial"
+        animate="animate"
+      >
+        {/* Grid pattern */}
+        <div className="absolute inset-0 opacity-5">
           <div className="h-full w-full bg-[linear-gradient(rgba(255,215,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,215,0,0.1)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
-        </motion.div>
+        </div>
         
-        {/* Enhanced glow effects */}
+        {/* Glow effects */}
         <motion.div 
           className="absolute -top-40 -left-40 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"
           animate={{
@@ -66,10 +74,10 @@ const ServicesSection: React.FC = () => {
           }}
           transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", delay: 2 }}
         />
-      </div>
+      </motion.div>
       
       <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header with improved animation */}
+        {/* Section Header */}
         <AnimatedSection delay={0.1} direction="up" className="text-center mb-16">
           <h2 className="text-4xl md:text-5xl font-bold mb-3 relative inline-block">
             <span className="bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
@@ -89,7 +97,7 @@ const ServicesSection: React.FC = () => {
           </p>
         </AnimatedSection>
         
-        {/* Service Categories with improved tab design */}
+        {/* Service Categories */}
         <AnimatedSection delay={0.2} direction="up" className="mb-12">
           <ServiceTabs 
             tabs={tabsConfig} 
@@ -97,48 +105,45 @@ const ServicesSection: React.FC = () => {
             onValueChange={(value) => setSelectedCategory(value as ServiceCategory)}
           />
         
-          {/* Customer Type Selector with improved design */}
-          <AnimatedSection delay={0.3} direction="up" className="mb-12">
-            <CustomerTypeSelector
-              options={customerTypeConfig}
-              selectedValue={customerType}
-              onChange={(value) => setCustomerType(value as CustomerType)}
-            />
-          </AnimatedSection>
+          {/* Customer Type Selector */}
+          <CustomerTypeSelector
+            options={customerTypeConfig}
+            selectedValue={customerType}
+            onChange={(value) => setCustomerType(value as CustomerType)}
+          />
           
-          {/* Service Cards with improved animation */}
-          <AnimatedSection delay={0.4} direction="up" className="mb-24">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              <ModernServiceCard
-                title={currentService.title}
-                description={currentService.description}
-                price={currentService.price}
-                isOneTime={currentService.billingType === 'oneTime'}
-                features={currentService.features}
-                isPrimary={currentService.isPopular}
-              />
-              
-              <ModernServiceCard
-                title="Individuální řešení"
-                description="Potřebujete komplexní řešení přesně podle vašich potřeb? Kontaktujte nás pro nezávaznou konzultaci."
-                price={null}
-                isOneTime={true}
-                features={[
-                  "Bezplatná úvodní konzultace",
-                  "Detailní analýza potřeb",
-                  "Návrh řešení na míru",
-                  "Transparentní cenová nabídka",
-                  "Prioritní realizace"
-                ]}
-                isCustom={true}
-              />
-            </div>
-          </AnimatedSection>
+          {/* Service Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-24">
+            <ServiceCard
+              title={currentService.title}
+              description={currentService.description}
+              price={currentService.price}
+              isOneTime={currentService.billingType === 'oneTime'}
+              features={currentService.features}
+              isPrimary={currentService.isPopular}
+              ctaText="Objednat"
+            />
+            
+            <ServiceCard
+              title="Individuální řešení"
+              description="Potřebujete komplexní řešení přesně podle vašich potřeb? Kontaktujte nás pro nezávaznou konzultaci."
+              price={null}
+              isOneTime={true}
+              features={[
+                "Bezplatná úvodní konzultace",
+                "Detailní analýza potřeb",
+                "Návrh řešení na míru",
+                "Transparentní cenová nabídka",
+                "Prioritní realizace"
+              ]}
+              isCustom={true}
+            />
+          </div>
         </AnimatedSection>
         
-        {/* Additional Services with improved divider */}
+        {/* Additional Services */}
         <div className="mt-12 relative">
-          {/* Enhanced decorative line */}
+          {/* Decorative line */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-md h-px overflow-hidden">
             <motion.div 
               className="w-full h-full bg-gradient-to-r from-transparent via-yellow-500/70 to-transparent"
@@ -170,7 +175,7 @@ const ServicesSection: React.FC = () => {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {additionalServices.map((service, index) => (
-              <CompactServiceCardV2
+              <CompactServiceCard
                 key={index}
                 icon={service.icon}
                 title={service.title}

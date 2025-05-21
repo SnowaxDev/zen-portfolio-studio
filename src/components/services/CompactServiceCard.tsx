@@ -1,222 +1,191 @@
 
-import React, { useState } from 'react';
-import { motion, useMotionValue, useTransform } from 'framer-motion';
-import { Card, CardContent } from '../ui/card';
+import React from 'react';
+import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
-import TextWithGlow from '../TextWithGlow';
+import { cn } from '@/lib/utils';
+import { Button } from '../ui/button';
+import { useMobileAnimationSettings } from '@/hooks/use-mobile-animation-settings';
 
 interface CompactServiceCardProps {
   icon: LucideIcon;
   title: string;
   description: string;
   price: string;
-  priceType: string;
-  className?: string; // Added className prop as optional
+  priceType?: string;
+  highlight?: boolean;
+  buttonText?: string;
+  onButtonClick?: () => void;
 }
 
-const CompactServiceCard: React.FC<CompactServiceCardProps> = ({ 
-  icon: Icon, 
-  title, 
-  description, 
-  price, 
-  priceType,
-  className = '' // Default to empty string
+const CompactServiceCard: React.FC<CompactServiceCardProps> = ({
+  icon: Icon,
+  title,
+  description,
+  price,
+  priceType = "jednorázově",
+  highlight = false,
+  buttonText = "Více informací",
+  onButtonClick
 }) => {
-  const [isHovered, setIsHovered] = useState(false);
-  
-  // Motion values for 3D tilting effect
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-  
-  // Transform mouse position into rotation
-  const rotateX = useTransform(y, [-100, 100], [10, -10]);
-  const rotateY = useTransform(x, [-100, 100], [-10, 10]);
-  
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    const card = e.currentTarget;
-    const rect = card.getBoundingClientRect();
-    
-    // Calculate mouse position relative to card center
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
-    const mouseX = e.clientX - rect.left - centerX;
-    const mouseY = e.clientY - rect.top - centerY;
-    
-    // Set motion values proportionally
-    x.set(mouseX * 0.5);
-    y.set(mouseY * 0.5);
-  };
-  
-  const handleMouseLeave = () => {
-    // Reset motion values smoothly on mouse leave
-    x.set(0);
-    y.set(0);
-    setIsHovered(false);
-  };
+  const { shouldReduceAnimations } = useMobileAnimationSettings();
   
   // Animation variants
   const cardVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
+    initial: { opacity: 0, y: 20 },
+    animate: { 
       opacity: 1, 
       y: 0,
-      transition: { 
-        duration: 0.5,
-        type: "spring",
-        stiffness: 100
-      }
+      transition: { duration: 0.4 }
     },
-    hover: { 
-      y: -8, 
-      boxShadow: "0 15px 35px -15px rgba(212, 175, 55, 0.25)",
-      transition: { 
-        duration: 0.4,
-        ease: "easeOut"
-      }
-    }
+    hover: {
+      y: shouldReduceAnimations ? 0 : -5,
+      scale: shouldReduceAnimations ? 1 : 1.02,
+      boxShadow: highlight 
+        ? "0 15px 30px -10px rgba(234, 179, 8, 0.25)" 
+        : "0 15px 30px -10px rgba(0, 0, 0, 0.25)",
+      transition: { duration: 0.3 }
+    },
+    tap: { scale: 0.98 }
   };
-
-  const iconContainerVariants = {
-    hidden: { scale: 0.8, opacity: 0 },
-    visible: { 
+  
+  // Icon animation variants
+  const iconVariants = {
+    initial: { scale: 0.8, opacity: 0 },
+    animate: { 
       scale: 1, 
       opacity: 1,
-      transition: { 
-        delay: 0.2,
-        duration: 0.4,
-        type: "spring"
-      }
+      transition: { duration: 0.5, type: "spring" }
     },
-    hover: { 
-      rotate: [0, -10, 10, -5, 0],
-      scale: 1.1,
-      backgroundColor: "rgba(212, 175, 55, 0.1)",
+    hover: {
+      rotate: shouldReduceAnimations ? 0 : [0, -5, 5, 0],
+      scale: shouldReduceAnimations ? 1 : 1.1,
       transition: { duration: 0.5 }
     }
   };
   
-  // Shimmer animation for card border on hover
-  const shimmerVariants = {
-    initial: {
-      x: "-100%",
-      opacity: 0,
-    },
-    animate: {
-      x: "100%",
-      opacity: isHovered ? 0.3 : 0,
+  // Content animation stagger effect
+  const contentVariants = {
+    initial: { opacity: 0 },
+    animate: { 
+      opacity: 1,
       transition: {
-        duration: 1.5,
-        ease: "easeInOut",
-        repeat: Infinity,
-      },
-    },
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+  
+  const itemVariants = {
+    initial: { opacity: 0, y: 10 },
+    animate: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.3 }
+    }
   };
 
   return (
     <motion.div
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true, margin: "-50px" }}
-      whileHover="hover"
+      className="h-full"
       variants={cardVariants}
-      className={`h-full ${className}`} // Added className here
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        perspective: 1000,
-      }}
+      initial="initial"
+      whileInView="animate"
+      whileHover="hover"
+      whileTap="tap"
+      viewport={{ once: true, margin: "-50px" }}
     >
-      <motion.div
-        style={{
-          rotateX,
-          rotateY,
-          transformStyle: "preserve-3d",
-        }}
-        transition={{
-          type: "spring",
-          stiffness: 400,
-          damping: 30
-        }}
-        className="h-full"
-      >
-        <Card className="bg-card/50 backdrop-blur-sm rounded-xl border border-white/10 h-full hover:border-gold/30 transition-all overflow-hidden relative">
-          {/* Shimmer effect overlay */}
+      <div className={cn(
+        "h-full rounded-xl border p-5 flex flex-col relative overflow-hidden bg-zinc-900",
+        highlight ? "border-yellow-500/30" : "border-zinc-800"
+      )}>
+        {/* Shimmer effect for highlighted cards */}
+        {highlight && !shouldReduceAnimations && (
           <motion.div
-            className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-gold/10 to-transparent pointer-events-none"
-            variants={shimmerVariants}
-            initial="initial"
-            animate="animate"
+            className="absolute -inset-x-full top-0 bottom-0 h-full w-[300%]"
+            style={{
+              background: 'linear-gradient(90deg, transparent, rgba(234, 179, 8, 0.07), transparent)',
+              backgroundSize: '200% 100%'
+            }}
+            animate={{
+              x: ['100%', '-100%'],
+              transition: { 
+                duration: 1.5, 
+                repeat: Infinity, 
+                ease: "linear" 
+              }
+            }}
           />
+        )}
+        
+        <motion.div 
+          className="relative z-10 flex flex-col h-full"
+          variants={contentVariants}
+        >
+          {/* Icon with animation */}
+          <motion.div
+            className={cn(
+              "w-12 h-12 rounded-lg flex items-center justify-center mb-4",
+              highlight ? "bg-yellow-500/20" : "bg-zinc-800"
+            )}
+            variants={iconVariants}
+            whileHover="hover"
+          >
+            <Icon className={cn(
+              "w-6 h-6",
+              highlight ? "text-yellow-500" : "text-zinc-300"
+            )} />
+          </motion.div>
           
-          {/* Highlight glow on card corners */}
-          {isHovered && (
-            <>
-              <div className="absolute top-0 left-0 w-12 h-12 bg-gradient-to-br from-gold/20 to-transparent rounded-tl-xl" />
-              <div className="absolute bottom-0 right-0 w-12 h-12 bg-gradient-to-tl from-gold/20 to-transparent rounded-br-xl" />
-            </>
-          )}
+          {/* Title */}
+          <motion.h3 
+            className={cn(
+              "text-lg font-bold mb-2",
+              highlight ? "text-yellow-500" : "text-white"
+            )}
+            variants={itemVariants}
+          >
+            {title}
+          </motion.h3>
           
-          <CardContent className="pt-6 h-full flex flex-col">
-            <motion.div 
-              className="mb-4 bg-muted/80 w-14 h-14 rounded-lg flex items-center justify-center"
-              variants={iconContainerVariants}
+          {/* Description */}
+          <motion.p 
+            className="text-sm text-zinc-400 mb-4 flex-grow"
+            variants={itemVariants}
+          >
+            {description}
+          </motion.p>
+          
+          {/* Price */}
+          <motion.div 
+            className="flex items-baseline mb-3"
+            variants={itemVariants}
+          >
+            <span className={cn(
+              "text-xl font-bold",
+              highlight ? "text-yellow-500" : "text-white"
+            )}>
+              {price}
+            </span>
+            <span className="text-zinc-400 text-xs ml-1.5">{priceType}</span>
+          </motion.div>
+          
+          {/* Button */}
+          <motion.div variants={itemVariants}>
+            <Button 
+              variant="outline" 
+              onClick={onButtonClick}
+              className={cn(
+                "w-full border relative overflow-hidden",
+                highlight 
+                  ? "border-yellow-500/50 text-yellow-500 hover:bg-yellow-500/10" 
+                  : "border-zinc-700 text-zinc-300 hover:bg-zinc-800"
+              )}
             >
-              <motion.div
-                animate={isHovered ? {
-                  scale: [1, 1.15, 1],
-                  transition: { duration: 1, repeat: Infinity }
-                } : {}}
-              >
-                <Icon className="h-7 w-7 text-gold" />
-              </motion.div>
-            </motion.div>
-            
-            <motion.h4 
-              className="text-xl font-medium mb-2"
-              initial={{ opacity: 0, y: 5 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.3 }}
-            >
-              <TextWithGlow 
-                intensity="light" 
-                color="rgba(212, 175, 55, 0.6)"
-                pulsate={false}
-                hover={true}
-              >
-                {title}
-              </TextWithGlow>
-            </motion.h4>
-            
-            <motion.p 
-              className="text-sm text-muted-foreground mb-4 flex-grow"
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              transition={{ delay: 0.4 }}
-            >
-              {description}
-            </motion.p>
-            
-            <motion.div 
-              className="flex items-center mt-auto pt-4 border-t border-white/5"
-              initial={{ opacity: 0, y: 5 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-            >
-              <p className="font-medium text-gold">
-                <TextWithGlow 
-                  intensity={isHovered ? "medium" : "light"}
-                  color="rgba(212, 175, 55, 0.4)"
-                  pulsate={isHovered}
-                >
-                  {price}
-                </TextWithGlow>
-              </p>
-              <span className="text-xs text-muted-foreground ml-1">{priceType}</span>
-            </motion.div>
-          </CardContent>
-        </Card>
-      </motion.div>
+              {buttonText}
+            </Button>
+          </motion.div>
+        </motion.div>
+      </div>
     </motion.div>
   );
 };
