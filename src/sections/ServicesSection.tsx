@@ -34,47 +34,19 @@ const ServicesSection: React.FC = () => {
   // Service data for the current selection
   const currentService = servicePricingData[selectedCategory][customerType];
   
-  // Section animation variants
-  const backgroundVariants = {
-    initial: { opacity: 0 },
-    animate: { 
-      opacity: 1,
-      transition: { duration: 0.8 }
-    }
-  };
-  
   return (
     <section id="services" className="bg-zinc-950 py-20 relative overflow-hidden">
       {/* Background elements */}
-      <motion.div 
-        className="absolute top-0 inset-0 pointer-events-none"
-        variants={backgroundVariants}
-        initial="initial"
-        animate="animate"
-      >
+      <div className="absolute top-0 inset-0 pointer-events-none">
         {/* Grid pattern */}
         <div className="absolute inset-0 opacity-5">
           <div className="h-full w-full bg-[linear-gradient(rgba(255,215,0,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(255,215,0,0.1)_1px,transparent_1px)] bg-[size:40px_40px]"></div>
         </div>
         
         {/* Glow effects */}
-        <motion.div 
-          className="absolute -top-40 -left-40 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"
-          animate={{
-            opacity: [0.5, 0.8, 0.5],
-            scale: [1, 1.05, 1],
-          }}
-          transition={{ duration: 8, repeat: Infinity, repeatType: "reverse" }}
-        />
-        <motion.div 
-          className="absolute -bottom-40 -right-40 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"
-          animate={{
-            opacity: [0.5, 0.8, 0.5],
-            scale: [1, 1.1, 1],
-          }}
-          transition={{ duration: 10, repeat: Infinity, repeatType: "reverse", delay: 2 }}
-        />
-      </motion.div>
+        <div className="absolute -top-40 -left-40 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"></div>
+        <div className="absolute -bottom-40 -right-40 w-80 h-80 bg-yellow-500/10 rounded-full blur-3xl"></div>
+      </div>
       
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
