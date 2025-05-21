@@ -9,7 +9,7 @@ interface ServiceTabProps {
   label: string;
   value: string;
   isActive: boolean;
-  index: number;
+  onClick: () => void;
 }
 
 interface ServiceTabsProps {
@@ -22,16 +22,16 @@ interface ServiceTabsProps {
   onValueChange: (value: string) => void;
 }
 
-const ServiceTab: React.FC<ServiceTabProps> = ({ icon: Icon, label, value, isActive, index }) => {
+const ServiceTab: React.FC<ServiceTabProps> = ({ icon: Icon, label, isActive, onClick }) => {
   return (
     <button
       className={cn(
-        "flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 relative",
+        "flex items-center gap-3 px-5 py-3.5 rounded-lg transition-all duration-200 relative",
         isActive 
           ? "text-black font-semibold"
-          : "text-zinc-400 hover:text-zinc-200"
+          : "text-zinc-300 hover:text-zinc-100"
       )}
-      onClick={() => {}}
+      onClick={onClick}
     >
       {isActive && (
         <motion.span
@@ -44,7 +44,7 @@ const ServiceTab: React.FC<ServiceTabProps> = ({ icon: Icon, label, value, isAct
       <span className="relative z-10">
         <Icon className={cn(
           "w-5 h-5", 
-          isActive ? "text-black" : "text-zinc-400"
+          isActive ? "text-black" : "text-zinc-300"
         )} />
       </span>
       
@@ -57,17 +57,16 @@ const ServiceTabs: React.FC<ServiceTabsProps> = ({ tabs, selectedValue, onValueC
   return (
     <div className="w-full mb-10">
       <div className="flex justify-center overflow-x-auto pb-2">
-        <div className="bg-zinc-900/80 backdrop-blur-sm p-1.5 rounded-xl shadow-lg shadow-black/10 border border-zinc-800/50 flex">
-          {tabs.map((tab, index) => (
-            <div key={tab.value} onClick={() => onValueChange(tab.value)}>
-              <ServiceTab
-                icon={tab.icon}
-                label={tab.label}
-                value={tab.value}
-                isActive={selectedValue === tab.value}
-                index={index}
-              />
-            </div>
+        <div className="bg-zinc-900/80 backdrop-blur-sm p-2 rounded-xl shadow-lg shadow-black/10 border border-zinc-800/50 flex">
+          {tabs.map((tab) => (
+            <ServiceTab
+              key={tab.value}
+              icon={tab.icon}
+              label={tab.label}
+              value={tab.value}
+              isActive={selectedValue === tab.value}
+              onClick={() => onValueChange(tab.value)}
+            />
           ))}
         </div>
       </div>

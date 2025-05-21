@@ -22,19 +22,19 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
   const selectedIndex = options.findIndex(option => option.value === selectedValue);
   
   return (
-    <div className="relative w-full max-w-lg mx-auto mb-8">
-      <div className="bg-zinc-900/80 backdrop-blur-sm rounded-xl p-1.5 flex max-w-sm mx-auto relative z-10 shadow-xl shadow-black/10 border border-zinc-800/50">
+    <div className="relative w-full max-w-md mx-auto mb-10">
+      <div className="bg-zinc-900 rounded-xl p-1.5 flex mx-auto relative z-10 shadow-lg shadow-black/10 border border-zinc-800">
         {/* Background highlight */}
         <motion.div 
-          className="absolute h-full top-0 bg-yellow-500 rounded-lg"
+          className="absolute h-full top-0 bg-yellow-500 rounded-lg z-0"
           style={{ width: `${100 / options.length}%` }}
           animate={{ 
-            left: `${selectedIndex * (100 / options.length)}%`
+            left: `${selectedIndex * (100 / options.length)}%` 
           }}
           transition={{ 
             type: "spring", 
-            stiffness: 500, 
-            damping: 30
+            stiffness: 400, 
+            damping: 30 
           }}
         />
         
@@ -43,8 +43,8 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
             key={option.value}
             onClick={() => onChange(option.value)}
             className={cn(
-              "flex-1 py-2.5 px-4 rounded-lg text-sm font-medium z-10",
-              selectedValue === option.value ? "text-black" : "text-zinc-400 hover:text-zinc-200"
+              "flex-1 py-2.5 px-4 rounded-lg text-sm font-medium z-10 transition-colors duration-200",
+              selectedValue === option.value ? "text-black" : "text-zinc-300 hover:text-zinc-100"
             )}
           >
             {option.label}

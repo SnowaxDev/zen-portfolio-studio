@@ -5,7 +5,7 @@ import { Layout, Zap, Cloud, Shield } from 'lucide-react';
 import AnimatedSection from '@/components/AnimatedSection';
 import { cn } from '@/lib/utils';
 import ServiceCard from '@/components/services/ServiceCard';
-import CompactServiceCard from '@/components/services/CompactServiceCard';
+import ModernCompactServiceCard from '@/components/services/ModernCompactServiceCard';
 import ServiceTabs from '@/components/services/ServiceTabs';
 import CustomerTypeSelector from '@/components/services/CustomerTypeSelector';
 
@@ -113,8 +113,8 @@ const ServicesSection: React.FC = () => {
           </div>
         </AnimatedSection>
         
-        {/* Additional Services */}
-        <div className="mt-12 relative">
+        {/* Additional Services - Redesigned section */}
+        <div className="mt-12 pt-10 relative">
           {/* Decorative line */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-md h-px overflow-hidden">
             <motion.div 
@@ -126,7 +126,7 @@ const ServicesSection: React.FC = () => {
             />
           </div>
           
-          <AnimatedSection delay={0.3} direction="up" className="text-center mb-12 pt-16">
+          <AnimatedSection delay={0.3} direction="up" className="text-center mb-10">
             <h3 className="text-3xl font-bold mb-3 relative inline-block">
               <span className="bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
                 Další služby
@@ -145,9 +145,9 @@ const ServicesSection: React.FC = () => {
             </p>
           </AnimatedSection>
           
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
             {additionalServices.map((service, index) => (
-              <CompactServiceCard
+              <ModernCompactServiceCard
                 key={index}
                 icon={service.icon}
                 title={service.title}
