@@ -2,6 +2,8 @@
 import React, { useRef, useEffect } from 'react';
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion';
 import { usePrefersReducedMotion } from '../hooks/use-reduced-motion';
+import { cn } from '@/lib/utils';
+import { Progress } from './ui/progress';
 
 interface ProgressBarProps {
   skill: string;
@@ -35,7 +37,6 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          // Fix: Use the correct TypeScript-compatible animation approach
           animate(progressValue, percentage, {
             duration: 1.2,
             ease: "easeOut",
@@ -62,6 +63,13 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
     accent: "bg-gradient-to-r from-accent to-accent-light"
   };
   
+  // Custom progress bar styles
+  const progressStyles = {
+    primary: "bg-gold",
+    secondary: "bg-purple",
+    accent: "bg-accent"
+  };
+  
   // Simplified version for reduced motion
   if (prefersReducedMotion) {
     return (
@@ -74,19 +82,21 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
             </span>
           </div>
         </div>
-        <div className="h-2 rounded-full bg-black/50 overflow-hidden backdrop-blur-sm border border-white/5">
-          <div 
-            className={`h-full rounded-full ${barColors[color]}`}
-            style={{ width: `${percentage}%` }}
-          />
-        </div>
+        <Progress
+          value={percentage}
+          className="h-2 bg-black/50 border border-white/5"
+          indicatorClassName={progressStyles[color]}
+        />
       </div>
     );
   }
   
   return (
     <div 
-      className={`relative w-full ${isHovered ? 'scale-[1.02] transition-transform' : ''} ${className}`} 
+      className={cn("relative w-full transition-all duration-300", 
+        isHovered ? 'scale-[1.02]' : '',
+        className
+      )} 
       ref={ref}
     >
       <div className="flex justify-between mb-2 items-center">
@@ -109,18 +119,15 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
           </motion.span>
         </motion.div>
       </div>
-      <div className="h-2 rounded-full bg-black/50 overflow-hidden backdrop-blur-sm border border-white/5">
-        <motion.div 
-          className={`h-full rounded-full ${barColors[color]}`}
-          initial={{ width: 0 }}
-          animate={{ width: `${percentage}%` }}
-          transition={{ 
-            duration: 1, 
-            ease: "easeOut",
-            delay: delay + 0.1
-          }}
-        />
-      </div>
+      
+      <Progress
+        value={percentage}
+        className="h-2.5 bg-black/50 border border-white/5 overflow-hidden"
+        indicatorClassName={cn(
+          progressStyles[color], 
+          "transition-all duration-500"
+        )}
+      />
     </div>
   );
 };

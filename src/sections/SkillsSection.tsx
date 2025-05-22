@@ -4,11 +4,12 @@ import { motion } from 'framer-motion';
 import ScrollReveal from '../components/ScrollReveal';
 import ProgressBar from '../components/ProgressBar';
 import { frontendSkills, backendSkills, frameworks, sectionMeta } from '../lib/section-data';
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
-import { ChevronDown, ChevronUp, Code, Database, Layers } from 'lucide-react';
+import { Code, Database, Layers } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 const SkillsSection: React.FC = () => {
   const [hoveredFramework, setHoveredFramework] = useState<string | null>(null);
+  const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
   
   // Page entrance animation variants
   const pageEntranceVariants = {
@@ -62,9 +63,13 @@ const SkillsSection: React.FC = () => {
         animate="visible"
       >
         {/* Section Header */}
-        <motion.div className="text-center mb-16" variants={itemVariants}>
-          <h2 className="text-3xl md:text-4xl font-bold text-gradient">
-            Moje <span className="text-gold">dovednosti</span>
+        <ScrollReveal
+          animationStyle="fade"
+          className="text-center mb-16"
+        >
+          <h2 className="text-3xl md:text-4xl font-bold">
+            <span className="text-gradient">Moje </span>
+            <span className="text-gold">dovednosti</span>
           </h2>
           
           <motion.div 
@@ -72,86 +77,105 @@ const SkillsSection: React.FC = () => {
           />
           
           <p className="mt-4 text-muted-foreground max-w-2xl mx-auto">
-            Technologie a nástroje, se kterými rád pracuji
+            {sectionMeta.skills.subtitle}
           </p>
-        </motion.div>
+        </ScrollReveal>
         
         {/* Skills Cards Grid */}
-        <motion.div 
-          className="grid md:grid-cols-2 gap-8 mb-20"
-          variants={itemVariants}
-        >
+        <div className="grid md:grid-cols-2 gap-8 mb-20">
           {/* Frontend Skills */}
-          <motion.div 
-            className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-lg shadow-blue-900/10 hover:shadow-blue-900/20 p-6"
-            whileHover={{ 
-              y: -5, 
-              boxShadow: "0 20px 40px -20px rgba(37, 99, 235, 0.3)"
-            }}
+          <ScrollReveal
+            animationStyle="slide"
+            direction="right"
+            className="h-full"
           >
-            <div className="flex items-center mb-6">
-              <div className="bg-gradient-to-br from-blue-600/20 to-blue-400/20 p-3.5 rounded-xl mr-4 transition-colors duration-300 backdrop-blur-md">
-                <Code size={24} className="text-blue-400" />
+            <motion.div 
+              className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-lg shadow-blue-900/10 p-6 h-full"
+              whileHover={{ 
+                y: -5, 
+                boxShadow: "0 20px 40px -20px rgba(37, 99, 235, 0.3)"
+              }}
+            >
+              <div className="flex items-center mb-8">
+                <div className="bg-gradient-to-br from-blue-600/20 to-blue-400/20 p-3.5 rounded-xl mr-4 backdrop-blur-md">
+                  <Code size={24} className="text-blue-400" />
+                </div>
+                <h3 className="text-xl font-bold">Frontend Vývoj</h3>
               </div>
-              <h3 className="text-xl font-bold">Frontend Vývoj</h3>
-            </div>
-            
-            <div className="space-y-5">
-              {frontendSkills.map((skill, index) => (
-                <motion.div 
-                  key={index} 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                >
-                  <ProgressBar 
-                    skill={skill.skill} 
-                    percentage={skill.percentage} 
-                    delay={index * 0.1} 
-                    color="primary"
-                  />
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
+              
+              <div className="space-y-6">
+                {frontendSkills.map((skill, index) => (
+                  <motion.div 
+                    key={index} 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                    onMouseEnter={() => setHoveredSkill(skill.skill)}
+                    onMouseLeave={() => setHoveredSkill(null)}
+                  >
+                    <ProgressBar 
+                      skill={skill.skill} 
+                      percentage={skill.percentage} 
+                      delay={index * 0.1} 
+                      color="primary"
+                      isHovered={hoveredSkill === skill.skill}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </ScrollReveal>
           
           {/* Backend Skills */}
-          <motion.div 
-            className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-lg shadow-purple-900/10 hover:shadow-purple-900/20 p-6"
-            whileHover={{ 
-              y: -5, 
-              boxShadow: "0 20px 40px -20px rgba(139, 92, 246, 0.3)"
-            }}
+          <ScrollReveal
+            animationStyle="slide"
+            direction="left"
+            className="h-full"
           >
-            <div className="flex items-center mb-6">
-              <div className="bg-gradient-to-br from-purple-600/20 to-purple-400/20 p-3.5 rounded-xl mr-4 transition-colors duration-300 backdrop-blur-md">
-                <Database size={24} className="text-purple-400" />
+            <motion.div 
+              className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-lg shadow-purple-900/10 p-6 h-full"
+              whileHover={{ 
+                y: -5, 
+                boxShadow: "0 20px 40px -20px rgba(139, 92, 246, 0.3)"
+              }}
+            >
+              <div className="flex items-center mb-8">
+                <div className="bg-gradient-to-br from-purple-600/20 to-purple-400/20 p-3.5 rounded-xl mr-4 backdrop-blur-md">
+                  <Database size={24} className="text-purple-400" />
+                </div>
+                <h3 className="text-xl font-bold">Backend Vývoj</h3>
               </div>
-              <h3 className="text-xl font-bold">Backend Vývoj</h3>
-            </div>
-            
-            <div className="space-y-5">
-              {backendSkills.map((skill, index) => (
-                <motion.div 
-                  key={index} 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                >
-                  <ProgressBar 
-                    skill={skill.skill} 
-                    percentage={skill.percentage} 
-                    delay={index * 0.1} 
-                    color="secondary"
-                  />
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </motion.div>
+              
+              <div className="space-y-6">
+                {backendSkills.map((skill, index) => (
+                  <motion.div 
+                    key={index} 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: index * 0.1, duration: 0.5 }}
+                    onMouseEnter={() => setHoveredSkill(skill.skill)}
+                    onMouseLeave={() => setHoveredSkill(null)}
+                  >
+                    <ProgressBar 
+                      skill={skill.skill} 
+                      percentage={skill.percentage} 
+                      delay={index * 0.1} 
+                      color="secondary"
+                      isHovered={hoveredSkill === skill.skill}
+                    />
+                  </motion.div>
+                ))}
+              </div>
+            </motion.div>
+          </ScrollReveal>
+        </div>
         
         {/* Frameworks and Tools */}
-        <motion.div variants={itemVariants} className="mt-24 relative">
+        <ScrollReveal
+          animationStyle="fade"
+          className="mt-24 relative"
+          delay={0.2}
+        >
           <div className="flex flex-col items-center justify-center mb-12">
             <motion.div
               className="relative"
@@ -216,7 +240,7 @@ const SkillsSection: React.FC = () => {
           </div>
           
           <motion.div
-            className="flex flex-wrap justify-center gap-4 max-w-4xl mx-auto"
+            className="flex flex-wrap justify-center gap-3 max-w-4xl mx-auto"
             initial="hidden"
             animate="visible"
             variants={{
@@ -242,10 +266,14 @@ const SkillsSection: React.FC = () => {
                 }}
               >
                 <motion.div 
-                  className="px-4 py-2.5 bg-black/40 backdrop-blur-md border border-gold/10 rounded-lg transition-all duration-300"
+                  className={cn(
+                    "px-4 py-2.5 backdrop-blur-md rounded-lg transition-all duration-300 border",
+                    hoveredFramework === framework
+                      ? "bg-black/60 border-gold/30" 
+                      : "bg-black/40 border-gold/10"
+                  )}
                   whileHover={{
                     backgroundColor: "rgba(0, 0, 0, 0.6)",
-                    borderColor: "rgba(212, 175, 55, 0.3)",
                     boxShadow: "0 10px 25px -5px rgba(212, 175, 55, 0.2)"
                   }}
                 >
@@ -270,7 +298,7 @@ const SkillsSection: React.FC = () => {
               </motion.div>
             ))}
           </motion.div>
-        </motion.div>
+        </ScrollReveal>
       </motion.div>
     </section>
   );

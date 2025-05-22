@@ -63,7 +63,12 @@ const ServiceTabs: React.FC<ServiceTabsProps> = ({ tabs, selectedValue, onValueC
   return (
     <div className="w-full mb-10">
       <div className="flex justify-center overflow-x-auto pb-2">
-        <div className="bg-zinc-900 p-2 rounded-xl shadow-lg border border-zinc-800 flex">
+        <motion.div 
+          className="bg-zinc-900 p-2 rounded-xl shadow-lg border border-zinc-800 flex"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5, ease: "easeOut" }}
+        >
           {tabs.map((tab) => (
             <ServiceTab
               key={tab.value}
@@ -74,7 +79,7 @@ const ServiceTabs: React.FC<ServiceTabsProps> = ({ tabs, selectedValue, onValueC
               onClick={() => onValueChange(tab.value)}
             />
           ))}
-        </div>
+        </motion.div>
       </div>
     </div>
   );

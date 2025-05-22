@@ -22,7 +22,12 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
   const selectedIndex = options.findIndex(option => option.value === selectedValue);
   
   return (
-    <div className="relative w-full max-w-md mx-auto mb-10">
+    <motion.div 
+      className="relative w-full max-w-md mx-auto mb-10"
+      initial={{ y: 20, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+    >
       <div className="bg-zinc-900 rounded-xl p-1.5 flex mx-auto relative z-10 shadow-lg border border-zinc-800">
         {/* Background highlight */}
         <motion.div 
@@ -52,7 +57,7 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
           </button>
         ))}
       </div>
-    </div>
+    </motion.div>
   );
 };
 
