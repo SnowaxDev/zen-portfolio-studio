@@ -78,37 +78,35 @@ const SkillsSection: React.FC = () => {
           }}
         />
         
-        <motion.div 
-          className="absolute right-0 bottom-0 w-[600px] h-[600px] rounded-full bg-gradient-to-tr from-purple/5 to-gold/5 opacity-30 blur-[100px]"
-          animate={{ 
-            scale: [1, 1.1, 1], 
-            rotate: [0, -5, 0],
-            opacity: [0.2, 0.3, 0.2]
-          }}
-          transition={{ 
-            repeat: Infinity, 
-            duration: 20, 
-            ease: "easeInOut",
-            delay: 5
-          }}
-        />
-        
-        {/* Enhanced grid overlay */}
+        {/* Grid overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:35px_35px] opacity-25"></div>
       </div>
       
-      <div className="container-custom relative z-10">
+      <div className="container mx-auto px-6 relative z-10 max-w-6xl">
         {/* Section Header with enhanced styling */}
-        <ScrollReveal
-          animationStyle="fade"
-          className="text-center mb-16"
-        >
+        <ScrollReveal animationStyle="fade" className="text-center mb-16">
           <motion.div
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
+            className="relative"
           >
-            <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-2">
+            <div className="absolute -top-20 left-1/2 transform -translate-x-1/2 w-32 h-32 opacity-20">
+              <motion.div 
+                className="absolute inset-0 rounded-full bg-gold/30 blur-3xl"
+                animate={{ 
+                  scale: [0.8, 1.2, 0.8], 
+                  opacity: [0.1, 0.3, 0.1] 
+                }}
+                transition={{ 
+                  repeat: Infinity, 
+                  duration: 7, 
+                  ease: "easeInOut" 
+                }}
+              />
+            </div>
+            
+            <h2 className="text-3xl md:text-5xl font-bold mb-2">
               <span className="text-gold">Moje </span>
               <span className="text-white">dovednosti</span>
             </h2>
@@ -122,7 +120,7 @@ const SkillsSection: React.FC = () => {
                 transition={{ delay: 0.3, duration: 0.8 }}
               />
               
-              {/* Subtle star decoration */}
+              {/* Star decoration */}
               <motion.div
                 className="absolute -right-6 -top-1"
                 initial={{ scale: 0, opacity: 0 }}
@@ -139,14 +137,10 @@ const SkillsSection: React.FC = () => {
           </motion.div>
         </ScrollReveal>
         
-        {/* Skills Cards Grid with improved layout and card design */}
+        {/* Skills Cards Grid with improved layout */}
         <div className="grid md:grid-cols-2 gap-8 mb-20">
           {/* Frontend Skills Card */}
-          <ScrollReveal
-            animationStyle="slide"
-            direction="right"
-            className="h-full"
-          >
+          <ScrollReveal animationStyle="slide" direction="right" className="h-full">
             <motion.div
               variants={cardVariants}
               initial="hidden"
@@ -200,11 +194,7 @@ const SkillsSection: React.FC = () => {
           </ScrollReveal>
           
           {/* Backend Skills Card */}
-          <ScrollReveal
-            animationStyle="slide"
-            direction="left"
-            className="h-full"
-          >
+          <ScrollReveal animationStyle="slide" direction="left" className="h-full">
             <motion.div
               variants={cardVariants}
               initial="hidden"
@@ -258,19 +248,16 @@ const SkillsSection: React.FC = () => {
           </ScrollReveal>
         </div>
         
-        {/* Frameworks and Tools with improved visual design */}
-        <ScrollReveal
-          animationStyle="fade"
-          className="mt-24 relative"
-          delay={0.2}
-        >
-          <div className="flex flex-col items-center justify-center mb-12">
-            <motion.div
+        {/* Frameworks and Tools with improved layout */}
+        <ScrollReveal animationStyle="fade" className="relative" delay={0.2}>
+          <div className="flex flex-col items-center justify-center mb-12 relative">
+            {/* Central icon with glow effect */}
+            <motion.div 
               className="relative"
               whileHover={{ scale: 1.05 }}
             >
               <motion.div 
-                className="bg-gradient-to-br from-gold/20 to-gold-dark/20 p-5 rounded-full mb-5 ring-2 ring-gold/10 shadow-lg shadow-gold/5 relative overflow-hidden"
+                className="bg-gradient-to-br from-gold/20 to-gold-dark/20 p-6 rounded-full mb-6 ring-2 ring-gold/10 shadow-lg shadow-gold/5 relative overflow-hidden"
                 animate={{ 
                   boxShadow: shouldReduceAnimations ? 
                     "0 0 20px rgba(212, 175, 55, 0.2)" : 
@@ -282,9 +269,9 @@ const SkillsSection: React.FC = () => {
                     { repeat: Infinity, duration: 3 }
                 }}
               >
-                <Layers className="text-gold relative z-10" size={32} />
+                <Layers className="text-gold relative z-10" size={36} />
                 
-                {/* Enhanced inner glow effect */}
+                {/* Inner glow effect */}
                 {!shouldReduceAnimations && (
                   <motion.div 
                     className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent rounded-full"
@@ -301,6 +288,7 @@ const SkillsSection: React.FC = () => {
                 )}
               </motion.div>
               
+              {/* Decorative star */}
               <motion.div
                 animate={shouldReduceAnimations ? {} : {
                   rotate: [-2, 2, -2]
@@ -332,7 +320,7 @@ const SkillsSection: React.FC = () => {
           
           {/* Improved frameworks grid layout */}
           <motion.div
-            className="flex flex-wrap justify-center gap-2.5 max-w-4xl mx-auto"
+            className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 max-w-4xl mx-auto"
             initial="hidden"
             animate="visible"
             variants={{
@@ -358,10 +346,11 @@ const SkillsSection: React.FC = () => {
                   transition: { duration: 0.2, type: "spring", stiffness: 400 }
                 }}
                 whileTap={{ scale: 0.98 }}
+                className="flex justify-center"
               >
                 <motion.div 
                   className={cn(
-                    "px-4 py-2.5 backdrop-blur-md rounded-lg transition-all duration-300 border",
+                    "px-4 py-2.5 backdrop-blur-md rounded-lg transition-all duration-300 border text-center",
                     hoveredFramework === framework
                       ? "bg-black/70 border-gold/40 shadow-lg shadow-gold/10" 
                       : "bg-black/40 border-gold/10"

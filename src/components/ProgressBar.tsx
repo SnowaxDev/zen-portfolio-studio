@@ -33,9 +33,9 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
   
   // Define gradient colors based on selected color
   const gradientColors = {
-    gold: 'linear-gradient(to right, rgb(171, 148, 54) 0%, rgb(212, 175, 55) 100%)',
-    purple: 'linear-gradient(to right, rgb(88, 28, 135) 0%, rgb(139, 92, 246) 100%)',
-    blue: 'linear-gradient(to right, rgb(29, 78, 216) 0%, rgb(59, 130, 246) 100%)'
+    gold: 'linear-gradient(90deg, rgb(171, 148, 54) 0%, rgb(212, 175, 55) 100%)',
+    purple: 'linear-gradient(90deg, rgb(88, 28, 135) 0%, rgb(139, 92, 246) 100%)',
+    blue: 'linear-gradient(90deg, rgb(29, 78, 216) 0%, rgb(59, 130, 246) 100%)'
   };
 
   useEffect(() => {
@@ -73,15 +73,14 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       <div className={`relative w-full ${className}`} ref={ref}>
         <div className="flex justify-between mb-2 items-center">
           <span className="text-sm font-medium text-white/90">{skill}</span>
-          <div className="flex items-center">
-            <span className="text-sm font-mono bg-black/60 px-2 py-0.5 rounded-md border border-white/10">
-              {percentage}%
-            </span>
+          <div className="bg-black/70 px-2 py-0.5 rounded border border-white/10">
+            <span className="text-sm font-mono">{percentage}%</span>
           </div>
         </div>
         <Progress
           value={percentage}
           indicatorColor={gradientColors[color]}
+          height="h-2"
         />
       </div>
     );
@@ -102,10 +101,10 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         duration: getAnimationDuration(0.5) 
       }}
     >
-      <div className="flex justify-between mb-2 items-center">
+      <div className="flex justify-between mb-1.5 items-center">
         <motion.span 
           className="text-sm font-medium"
-          initial={{ opacity: 0, x: -10 }}
+          initial={{ opacity: 0, x: -5 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: getAnimationDelay(delay), duration: getAnimationDuration(0.3) }}
         >
@@ -119,9 +118,9 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
         >
           <motion.span 
             className={cn(
-              "text-sm font-mono bg-black/60 px-2 py-0.5 rounded-md backdrop-blur-sm border",
-              color === 'gold' ? "border-gold/10" : 
-              color === 'purple' ? "border-purple/10" : "border-blue/10"
+              "text-sm font-mono bg-black/60 px-2 py-0.5 rounded border",
+              color === 'gold' ? "border-gold/20" : 
+              color === 'purple' ? "border-purple/20" : "border-blue/20"
             )}
             whileHover={{ y: -1 }}
           >
@@ -132,7 +131,8 @@ const ProgressBar: React.FC<ProgressBarProps> = ({
       
       <Progress
         value={percentage}
-        className="h-2.5 overflow-hidden"
+        height="h-2"
+        className="overflow-hidden"
         indicatorColor={gradientColors[color]}
       />
       

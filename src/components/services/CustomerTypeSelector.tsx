@@ -13,19 +13,21 @@ interface CustomerTypeSelectorProps {
   options: CustomerType[];
   selectedValue: string;
   onChange: (value: string) => void;
+  className?: string;
 }
 
 const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
   options,
   selectedValue,
-  onChange
+  onChange,
+  className
 }) => {
   const selectedIndex = options.findIndex(option => option.value === selectedValue);
   const { getAnimationDuration, shouldReduceAnimations } = useMobileAnimationSettings();
   
   return (
     <motion.div 
-      className="relative w-full max-w-md mx-auto mb-10"
+      className={cn("relative w-full max-w-md mx-auto mb-10", className)}
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: getAnimationDuration(0.5), delay: 0.2, ease: "easeOut" }}
