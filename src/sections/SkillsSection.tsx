@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import ScrollReveal from '../components/ScrollReveal';
@@ -7,30 +6,25 @@ import { frontendSkills, backendSkills, frameworks, sectionMeta } from '../lib/s
 import { Code, Database, Layers, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useMobileAnimationSettings } from '@/hooks/use-mobile-animation-settings';
-
 const SkillsSection: React.FC = () => {
   const [hoveredFramework, setHoveredFramework] = useState<string | null>(null);
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
-  const { shouldReduceAnimations } = useMobileAnimationSettings();
-  
-  return (
-    <section id="skills" className="py-20 md:py-24 bg-background relative overflow-hidden">
+  const {
+    shouldReduceAnimations
+  } = useMobileAnimationSettings();
+  return <section id="skills" className="py-20 md:py-24 bg-background relative overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {/* Animated gradient blobs */}
-        <motion.div 
-          className="absolute -left-96 -top-32 w-[700px] h-[700px] rounded-full bg-gradient-to-br from-gold/5 to-blue-900/5 opacity-30 blur-[120px]"
-          animate={{ 
-            scale: [1, 1.2, 1], 
-            rotate: [0, 10, 0],
-            opacity: [0.3, 0.4, 0.3]
-          }}
-          transition={{ 
-            repeat: Infinity, 
-            duration: 25, 
-            ease: "easeInOut",
-          }}
-        />
+        <motion.div className="absolute -left-96 -top-32 w-[700px] h-[700px] rounded-full bg-gradient-to-br from-gold/5 to-blue-900/5 opacity-30 blur-[120px]" animate={{
+        scale: [1, 1.2, 1],
+        rotate: [0, 10, 0],
+        opacity: [0.3, 0.4, 0.3]
+      }} transition={{
+        repeat: Infinity,
+        duration: 25,
+        ease: "easeInOut"
+      }} />
         
         {/* Grid overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.01)_1px,transparent_1px)] bg-[size:35px_35px] opacity-25"></div>
@@ -39,19 +33,23 @@ const SkillsSection: React.FC = () => {
       <div className="container mx-auto px-4 relative z-10 max-w-5xl">
         {/* Section Header */}
         <ScrollReveal animationStyle="fade" className="text-center mb-16">
-          <div className="flex flex-col items-center justify-center">
+          <div className="flex flex-col items-center justify-center px-[223px]">
             <h2 className="text-3xl md:text-4xl font-bold mb-2">
               <span className="text-gold">Moje </span>
               <span className="text-white">dovednosti</span>
             </h2>
             
             {/* Animated underline */}
-            <motion.div 
-              className="h-1 bg-gradient-to-r from-gold/80 to-gold-light/80 rounded-full w-24 mt-2"
-              initial={{ width: 0, opacity: 0 }}
-              animate={{ width: "6rem", opacity: 1 }}
-              transition={{ delay: 0.3, duration: 0.8 }}
-            />
+            <motion.div className="h-1 bg-gradient-to-r from-gold/80 to-gold-light/80 rounded-full w-24 mt-2" initial={{
+            width: 0,
+            opacity: 0
+          }} animate={{
+            width: "6rem",
+            opacity: 1
+          }} transition={{
+            delay: 0.3,
+            duration: 0.8
+          }} />
             
             <p className="mt-4 text-muted-foreground max-w-2xl mx-auto text-base md:text-lg">
               Technologie a nástroje, se kterými rád pracuji
@@ -73,21 +71,9 @@ const SkillsSection: React.FC = () => {
             </div>
             
             <div className="space-y-6">
-              {frontendSkills.map((skill, index) => (
-                <div 
-                  key={index} 
-                  onMouseEnter={() => setHoveredSkill(skill.skill)}
-                  onMouseLeave={() => setHoveredSkill(null)}
-                >
-                  <ProgressBar 
-                    skill={skill.skill} 
-                    percentage={skill.percentage} 
-                    delay={index * 0.1} 
-                    color="blue"
-                    isHovered={hoveredSkill === skill.skill}
-                  />
-                </div>
-              ))}
+              {frontendSkills.map((skill, index) => <div key={index} onMouseEnter={() => setHoveredSkill(skill.skill)} onMouseLeave={() => setHoveredSkill(null)}>
+                  <ProgressBar skill={skill.skill} percentage={skill.percentage} delay={index * 0.1} color="blue" isHovered={hoveredSkill === skill.skill} />
+                </div>)}
             </div>
           </div>
           
@@ -103,21 +89,9 @@ const SkillsSection: React.FC = () => {
             </div>
             
             <div className="space-y-6">
-              {backendSkills.map((skill, index) => (
-                <div 
-                  key={index} 
-                  onMouseEnter={() => setHoveredSkill(skill.skill)}
-                  onMouseLeave={() => setHoveredSkill(null)}
-                >
-                  <ProgressBar 
-                    skill={skill.skill} 
-                    percentage={skill.percentage} 
-                    delay={index * 0.1} 
-                    color="purple"
-                    isHovered={hoveredSkill === skill.skill}
-                  />
-                </div>
-              ))}
+              {backendSkills.map((skill, index) => <div key={index} onMouseEnter={() => setHoveredSkill(skill.skill)} onMouseLeave={() => setHoveredSkill(null)}>
+                  <ProgressBar skill={skill.skill} percentage={skill.percentage} delay={index * 0.1} color="purple" isHovered={hoveredSkill === skill.skill} />
+                </div>)}
             </div>
           </div>
         </div>
@@ -130,32 +104,24 @@ const SkillsSection: React.FC = () => {
               <Layers className="text-gold" size={32} />
               
               {/* Inner glow effect */}
-              <motion.div 
-                className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent rounded-full"
-                animate={{
-                  opacity: [0.3, 0.6, 0.3],
-                  rotate: [0, 360]
-                }}
-                transition={{
-                  duration: 8,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-              />
+              <motion.div className="absolute inset-0 bg-gradient-to-r from-gold/10 to-transparent rounded-full" animate={{
+              opacity: [0.3, 0.6, 0.3],
+              rotate: [0, 360]
+            }} transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "linear"
+            }} />
             </div>
             
             {/* Decorative star */}
-            <motion.div
-              animate={{
-                rotate: [-2, 2, -2]
-              }}
-              transition={{
-                duration: 6,
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="absolute -top-2 -right-2 text-gold/80"
-            >
+            <motion.div animate={{
+            rotate: [-2, 2, -2]
+          }} transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }} className="absolute -top-2 -right-2 text-gold/80">
               <Star className="w-4 h-4" fill="currentColor" />
             </motion.div>
           </div>
@@ -164,55 +130,47 @@ const SkillsSection: React.FC = () => {
             Frameworky a Nástroje
           </h3>
           
-          <motion.div 
-            initial={{ width: 0 }}
-            animate={{ width: "5rem" }}
-            transition={{ duration: 0.8 }}
-            className="h-1 bg-gradient-to-r from-gold/50 to-gold-light/50 rounded-full mb-8"
-          />
+          <motion.div initial={{
+          width: 0
+        }} animate={{
+          width: "5rem"
+        }} transition={{
+          duration: 0.8
+        }} className="h-1 bg-gradient-to-r from-gold/50 to-gold-light/50 rounded-full mb-8" />
           
           {/* Frameworks grid layout */}
           <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-3 max-w-3xl mx-auto">
-            {frameworks.map((framework, index) => (
-              <motion.div
-                key={framework}
-                initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={{ delay: index * 0.05, duration: 0.3 }}
-                whileHover={{ 
-                  y: -5, 
-                  scale: 1.05,
-                  transition: { duration: 0.2, type: "spring", stiffness: 400 }
-                }}
-                whileTap={{ scale: 0.98 }}
-                className="flex justify-center"
-                onMouseEnter={() => setHoveredFramework(framework)}
-                onMouseLeave={() => setHoveredFramework(null)}
-              >
-                <div 
-                  className={cn(
-                    "px-3 py-2 backdrop-blur-md rounded-lg transition-all duration-300 border text-center w-full",
-                    hoveredFramework === framework
-                      ? "bg-black/70 border-gold/40 shadow-lg shadow-gold/10" 
-                      : "bg-black/40 border-gold/10"
-                  )}
-                >
-                  <span 
-                    className={cn(
-                      "text-sm font-medium",
-                      hoveredFramework === framework ? "text-gold" : "text-slate-400"
-                    )}
-                  >
+            {frameworks.map((framework, index) => <motion.div key={framework} initial={{
+            opacity: 0,
+            y: 10,
+            scale: 0.9
+          }} animate={{
+            opacity: 1,
+            y: 0,
+            scale: 1
+          }} transition={{
+            delay: index * 0.05,
+            duration: 0.3
+          }} whileHover={{
+            y: -5,
+            scale: 1.05,
+            transition: {
+              duration: 0.2,
+              type: "spring",
+              stiffness: 400
+            }
+          }} whileTap={{
+            scale: 0.98
+          }} className="flex justify-center" onMouseEnter={() => setHoveredFramework(framework)} onMouseLeave={() => setHoveredFramework(null)}>
+                <div className={cn("px-3 py-2 backdrop-blur-md rounded-lg transition-all duration-300 border text-center w-full", hoveredFramework === framework ? "bg-black/70 border-gold/40 shadow-lg shadow-gold/10" : "bg-black/40 border-gold/10")}>
+                  <span className={cn("text-sm font-medium", hoveredFramework === framework ? "text-gold" : "text-slate-400")}>
                     {framework}
                   </span>
                 </div>
-              </motion.div>
-            ))}
+              </motion.div>)}
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>;
 };
-
 export default SkillsSection;
