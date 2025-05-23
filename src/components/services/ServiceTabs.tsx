@@ -31,14 +31,14 @@ const ServiceTab: React.FC<ServiceTabProps> = ({ icon: Icon, label, isActive, on
   return (
     <motion.button
       className={cn(
-        "flex items-center gap-2 md:gap-3 px-3 md:px-5 py-2.5 md:py-3.5 rounded-lg transition-all duration-200 relative text-sm md:text-base whitespace-nowrap",
+        "flex items-center gap-2 px-3 py-3 md:px-4 md:py-3 rounded-lg transition-all duration-200 relative text-xs md:text-base whitespace-nowrap min-h-[44px]",
         isActive 
           ? "text-black font-semibold"
           : "text-zinc-300 hover:text-zinc-100"
       )}
       onClick={onClick}
       whileHover={{ 
-        scale: isActive ? 1 : (isMobile ? 1 : 1.05),
+        scale: isActive ? 1 : (isMobile ? 1 : 1.02),
         transition: { duration: 0.2 } 
       }}
       whileTap={{ scale: 0.98 }}
@@ -68,12 +68,12 @@ const ServiceTab: React.FC<ServiceTabProps> = ({ icon: Icon, label, isActive, on
       
       <span className="relative z-10">
         <Icon className={cn(
-          "w-4 h-4 md:w-5 md:h-5 transition-transform", 
+          "w-4 h-4 transition-transform", 
           isActive ? "text-black" : "text-zinc-300"
         )} />
       </span>
       
-      <span className="relative z-10 hidden sm:inline">{label}</span>
+      <span className="relative z-10 text-xs md:text-sm font-medium">{label}</span>
       
       {/* Add subtle shine effect when active */}
       {isActive && !shouldReduceAnimations && (
@@ -97,11 +97,11 @@ const ServiceTabs: React.FC<ServiceTabsProps> = ({ tabs, selectedValue, onValueC
   const { getAnimationDuration } = useMobileAnimationSettings();
   
   return (
-    <div className="w-full mb-6 md:mb-10">
-      <div className="flex justify-center">
-        <div className="w-full max-w-4xl overflow-x-auto pb-2">
+    <div className="w-full mb-6 md:mb-8">
+      <div className="flex justify-center px-4 md:px-0">
+        <div className="w-full max-w-4xl">
           <motion.div 
-            className="bg-black/60 backdrop-blur-md p-1.5 md:p-2 rounded-xl shadow-xl border border-white/10 flex gap-1 min-w-max mx-auto"
+            className="bg-black/60 backdrop-blur-md p-1 md:p-1.5 rounded-xl shadow-xl border border-white/10 grid grid-cols-2 md:flex md:gap-1 gap-1 mx-auto"
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: getAnimationDuration(0.5), ease: "easeOut" }}

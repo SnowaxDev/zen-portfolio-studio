@@ -50,8 +50,8 @@ const ServicesSection: React.FC = () => {
       
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
-        <AnimatedSection delay={0.1} direction="up" className="text-center mb-8 md:mb-16">
-          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 relative inline-block">
+        <AnimatedSection delay={0.1} direction="up" className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-4xl lg:text-5xl font-bold mb-3 relative inline-block">
             <span className="bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
               Služby a Ceník
             </span>
@@ -64,7 +64,7 @@ const ServicesSection: React.FC = () => {
             />
           </h2>
           
-          <p className="text-zinc-400 max-w-2xl mx-auto mt-4 text-sm md:text-base">
+          <p className="text-zinc-400 max-w-2xl mx-auto mt-4 text-sm md:text-base px-4">
             Profesionální webový vývoj s transparentními cenami a bez skrytých poplatků
           </p>
         </AnimatedSection>
@@ -72,7 +72,7 @@ const ServicesSection: React.FC = () => {
         {/* Service Categories */}
         <AnimatedSection delay={0.2} direction="up" className="mb-8 md:mb-12">
           {/* Service Tabs - Mobile Optimized */}
-          <div className="mb-6 md:mb-10">
+          <div className="mb-6 md:mb-8">
             <ServiceTabs 
               tabs={tabsConfig} 
               selectedValue={selectedCategory} 
@@ -81,41 +81,43 @@ const ServicesSection: React.FC = () => {
           </div>
         
           {/* Customer Type Selector - Mobile Optimized */}
-          <div className="mb-8 md:mb-10">
+          <div className="mb-8 md:mb-10 px-4 md:px-0">
             <CustomerTypeSelector
               options={customerTypeConfig}
               selectedValue={customerType}
               onChange={(value) => setCustomerType(value as CustomerType)}
-              className="max-w-sm md:max-w-md"
+              className="w-full max-w-md mx-auto"
             />
           </div>
           
           {/* Service Cards - Mobile First Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 max-w-6xl mx-auto mb-16 md:mb-24">
-            <ServiceCard
-              title={currentService.title}
-              description={currentService.description}
-              price={currentService.price}
-              isOneTime={currentService.billingType === 'oneTime'}
-              features={currentService.features}
-              isPrimary={currentService.isPopular}
-              ctaText="Objednat"
-            />
-            
-            <ServiceCard
-              title="Individuální řešení"
-              description="Potřebujete komplexní řešení přesně podle vašich potřeb? Kontaktujte nás pro nezávaznou konzultaci."
-              price={null}
-              isOneTime={true}
-              features={[
-                "Bezplatná úvodní konzultace",
-                "Detailní analýza potřeb",
-                "Návrh řešení na míru",
-                "Transparentní cenová nabídka",
-                "Prioritní realizace"
-              ]}
-              isCustom={true}
-            />
+          <div className="px-4 md:px-0">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 max-w-6xl mx-auto mb-12 md:mb-16">
+              <ServiceCard
+                title={currentService.title}
+                description={currentService.description}
+                price={currentService.price}
+                isOneTime={currentService.billingType === 'oneTime'}
+                features={currentService.features}
+                isPrimary={currentService.isPopular}
+                ctaText="Objednat"
+              />
+              
+              <ServiceCard
+                title="Individuální řešení"
+                description="Potřebujete komplexní řešení přesně podle vašich potřeb? Kontaktujte nás pro nezávaznou konzultaci."
+                price={null}
+                isOneTime={true}
+                features={[
+                  "Bezplatná úvodní konzultace",
+                  "Detailní analýza potřeb",
+                  "Návrh řešení na míru",
+                  "Transparentní cenová nabídka",
+                  "Prioritní realizace"
+                ]}
+                isCustom={true}
+              />
+            </div>
           </div>
         </AnimatedSection>
         
@@ -132,8 +134,8 @@ const ServicesSection: React.FC = () => {
             />
           </div>
           
-          <AnimatedSection delay={0.3} direction="up" className="text-center mb-6 md:mb-10">
-            <h3 className="text-2xl md:text-3xl font-bold mb-3 relative inline-block">
+          <AnimatedSection delay={0.3} direction="up" className="text-center mb-6 md:mb-10 px-4 md:px-0">
+            <h3 className="text-xl md:text-3xl font-bold mb-3 relative inline-block">
               <span className="bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
                 Další služby
               </span>
@@ -152,19 +154,21 @@ const ServicesSection: React.FC = () => {
           </AnimatedSection>
           
           {/* Additional Services Grid - Mobile Responsive */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 mt-6 md:mt-8">
-            {additionalServices.map((service, index) => (
-              <ModernCompactServiceCard
-                key={index}
-                icon={service.icon}
-                title={service.title}
-                description={service.description}
-                price={service.price}
-                priceType="jednorázově"
-                highlight={service.highlight}
-                buttonText={service.buttonText}
-              />
-            ))}
+          <div className="px-4 md:px-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mt-6 md:mt-8 max-w-7xl mx-auto">
+              {additionalServices.map((service, index) => (
+                <ModernCompactServiceCard
+                  key={index}
+                  icon={service.icon}
+                  title={service.title}
+                  description={service.description}
+                  price={service.price}
+                  priceType="jednorázově"
+                  highlight={service.highlight}
+                  buttonText={service.buttonText}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
