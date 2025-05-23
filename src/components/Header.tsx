@@ -106,6 +106,11 @@ const Header: React.FC = () => {
     }, 100);
   };
 
+  // Handle hamburger click
+  const handleHamburgerClick = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+
   return (
     <>
       <motion.header
@@ -194,7 +199,7 @@ const Header: React.FC = () => {
           {isMobile && (
             <motion.button
               className="p-3 bg-black/50 rounded-md backdrop-blur-md border border-yellow-500/20 text-foreground shadow-lg relative z-50"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              onClick={handleHamburgerClick}
               aria-expanded={mobileMenuOpen}
               aria-label="Toggle mobile menu"
               style={{ minWidth: '48px', minHeight: '48px' }}
@@ -237,17 +242,18 @@ const Header: React.FC = () => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: getAnimationDuration(0.3) }}
+            onClick={() => setMobileMenuOpen(false)}
           />
         )}
       </AnimatePresence>
 
       {/* Mobile Navigation Menu */}
       <AnimatePresence>
-        {isMobile && (
+        {isMobile && mobileMenuOpen && (
           <motion.div
             className="fixed top-0 right-0 bottom-0 z-45 w-80 max-w-[85vw] bg-background/95 backdrop-blur-xl border-l border-white/10"
             initial="closed"
-            animate={mobileMenuOpen ? "open" : "closed"}
+            animate="open"
             exit="closed"
             variants={mobileMenuVariants}
           >
@@ -263,8 +269,8 @@ const Header: React.FC = () => {
                         key={item.label}
                         initial={{ opacity: 0, x: 20 }}
                         animate={{ 
-                          opacity: mobileMenuOpen ? 1 : 0, 
-                          x: mobileMenuOpen ? 0 : 20,
+                          opacity: 1, 
+                          x: 0,
                           transition: { 
                             delay: shouldReduceAnimations ? 0 : index * 0.05,
                             duration: getAnimationDuration(0.2)
@@ -279,24 +285,20 @@ const Header: React.FC = () => {
                           } 
                         }}
                       >
-                        <a
-                          href={item.href}
-                          className={`flex items-center gap-4 px-4 py-4 rounded-lg transition-all duration-200 ${
+                        <button
+                          onClick={() => handleMobileItemClick(item.href)}
+                          className={`flex items-center gap-4 px-4 py-4 rounded-lg transition-all duration-200 w-full text-left ${
                             active 
                               ? 'bg-yellow-500/10 text-yellow-400 font-medium shadow-sm border border-yellow-500/20' 
                               : 'text-foreground/80 hover:bg-white/5 hover:text-yellow-300'
                           }`}
-                          onClick={(e) => {
-                            e.preventDefault();
-                            handleMobileItemClick(item.href);
-                          }}
                           style={{ minHeight: '56px' }}
                         >
                           <div className={`p-2 rounded-lg ${active ? 'bg-yellow-500/10' : 'bg-white/5'}`}>
                             <IconComponent className={`h-5 w-5 ${active ? 'text-yellow-400' : ''}`} />
                           </div>
                           <span className="text-base font-medium">{item.label}</span>
-                        </a>
+                        </button>
                       </motion.li>
                     );
                   })}
@@ -307,24 +309,20 @@ const Header: React.FC = () => {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ 
-                  opacity: mobileMenuOpen ? 1 : 0, 
-                  y: mobileMenuOpen ? 0 : 20 
+                  opacity: 1, 
+                  y: 0 
                 }}
                 transition={{ delay: 0.2, duration: getAnimationDuration(0.2) }}
                 className="mt-6 pt-6 border-t border-white/10"
               >
-                <a
-                  href="#contact"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleMobileItemClick('#contact');
-                  }}
+                <button
+                  onClick={() => handleMobileItemClick('#contact')}
                   className="flex items-center justify-center w-full py-4 bg-gradient-to-r from-yellow-500 to-yellow-400 text-background rounded-lg font-medium shadow-lg hover:shadow-xl transition-shadow"
                   style={{ minHeight: '56px' }}
                 >
                   <Mail className="mr-2 h-5 w-5" />
                   Contact Me
-                </a>
+                </button>
               </motion.div>
             </div>
           </motion.div>

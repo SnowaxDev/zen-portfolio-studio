@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import ScrollReveal from '../components/ScrollReveal';
@@ -6,13 +7,16 @@ import { frontendSkills, backendSkills, frameworks, sectionMeta } from '../lib/s
 import { Code, Database, Layers, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useMobileAnimationSettings } from '@/hooks/use-mobile-animation-settings';
+
 const SkillsSection: React.FC = () => {
   const [hoveredFramework, setHoveredFramework] = useState<string | null>(null);
   const [hoveredSkill, setHoveredSkill] = useState<string | null>(null);
   const {
     shouldReduceAnimations
   } = useMobileAnimationSettings();
-  return <section id="skills" className="py-20 md:py-24 bg-background relative overflow-hidden">
+  
+  return (
+    <section id="skills" className="py-20 md:py-24 bg-background relative overflow-hidden">
       {/* Background elements */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         {/* Animated gradient blobs */}
@@ -33,7 +37,7 @@ const SkillsSection: React.FC = () => {
       <div className="container mx-auto px-4 relative z-10 max-w-5xl">
         {/* Section Header */}
         <ScrollReveal animationStyle="fade" className="text-center mb-16">
-          <div className="flex flex-col items-center justify-center px-[223px]">
+          <div className="flex flex-col items-center justify-center px-0 md:px-[223px]">
             <h2 className="text-3xl md:text-4xl font-bold mb-2">
               <span className="text-gold">Moje </span>
               <span className="text-white">dovednosti</span>
@@ -58,9 +62,9 @@ const SkillsSection: React.FC = () => {
         </ScrollReveal>
         
         {/* Skills Cards Grid - Centered two-column layout */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 mb-16 max-w-4xl mx-auto">
           {/* Frontend Skills Card */}
-          <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-xl p-6">
+          <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-xl p-4 md:p-6">
             <div className="flex items-center mb-6">
               <div className="bg-gradient-to-br from-blue-600/20 to-blue-400/20 p-3 rounded-xl mr-4 backdrop-blur-md">
                 <Code size={24} className="text-blue-400" />
@@ -70,7 +74,7 @@ const SkillsSection: React.FC = () => {
               </h3>
             </div>
             
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               {frontendSkills.map((skill, index) => <div key={index} onMouseEnter={() => setHoveredSkill(skill.skill)} onMouseLeave={() => setHoveredSkill(null)}>
                   <ProgressBar skill={skill.skill} percentage={skill.percentage} delay={index * 0.1} color="blue" isHovered={hoveredSkill === skill.skill} />
                 </div>)}
@@ -78,7 +82,7 @@ const SkillsSection: React.FC = () => {
           </div>
           
           {/* Backend Skills Card */}
-          <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-xl p-6">
+          <div className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-xl p-4 md:p-6">
             <div className="flex items-center mb-6">
               <div className="bg-gradient-to-br from-purple-600/20 to-purple-400/20 p-3 rounded-xl mr-4 backdrop-blur-md">
                 <Database size={24} className="text-purple-400" />
@@ -88,7 +92,7 @@ const SkillsSection: React.FC = () => {
               </h3>
             </div>
             
-            <div className="space-y-6">
+            <div className="space-y-4 md:space-y-6">
               {backendSkills.map((skill, index) => <div key={index} onMouseEnter={() => setHoveredSkill(skill.skill)} onMouseLeave={() => setHoveredSkill(null)}>
                   <ProgressBar skill={skill.skill} percentage={skill.percentage} delay={index * 0.1} color="purple" isHovered={hoveredSkill === skill.skill} />
                 </div>)}
@@ -138,8 +142,8 @@ const SkillsSection: React.FC = () => {
           duration: 0.8
         }} className="h-1 bg-gradient-to-r from-gold/50 to-gold-light/50 rounded-full mb-8" />
           
-          {/* Frameworks grid layout */}
-          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 gap-3 max-w-3xl mx-auto">
+          {/* Frameworks grid layout - Mobile optimized */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 md:gap-3 max-w-3xl mx-auto">
             {frameworks.map((framework, index) => <motion.div key={framework} initial={{
             opacity: 0,
             y: 10,
@@ -162,8 +166,8 @@ const SkillsSection: React.FC = () => {
           }} whileTap={{
             scale: 0.98
           }} className="flex justify-center" onMouseEnter={() => setHoveredFramework(framework)} onMouseLeave={() => setHoveredFramework(null)}>
-                <div className={cn("px-3 py-2 backdrop-blur-md rounded-lg transition-all duration-300 border text-center w-full", hoveredFramework === framework ? "bg-black/70 border-gold/40 shadow-lg shadow-gold/10" : "bg-black/40 border-gold/10")}>
-                  <span className={cn("text-sm font-medium", hoveredFramework === framework ? "text-gold" : "text-slate-400")}>
+                <div className={cn("px-2 py-2 md:px-3 md:py-2 backdrop-blur-md rounded-lg transition-all duration-300 border text-center w-full min-h-[44px] flex items-center justify-center", hoveredFramework === framework ? "bg-black/70 border-gold/40 shadow-lg shadow-gold/10" : "bg-black/40 border-gold/10")}>
+                  <span className={cn("text-xs md:text-sm font-medium", hoveredFramework === framework ? "text-gold" : "text-slate-400")}>
                     {framework}
                   </span>
                 </div>
@@ -171,6 +175,8 @@ const SkillsSection: React.FC = () => {
           </div>
         </div>
       </div>
-    </section>;
+    </section>
+  );
 };
+
 export default SkillsSection;
