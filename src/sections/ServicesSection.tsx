@@ -35,7 +35,7 @@ const ServicesSection: React.FC = () => {
   const currentService = servicePricingData[selectedCategory][customerType];
   
   return (
-    <section id="services" className="bg-zinc-950 py-20 relative overflow-hidden">
+    <section id="services" className="bg-zinc-950 py-12 md:py-20 relative overflow-hidden">
       {/* Background elements */}
       <div className="absolute top-0 inset-0 pointer-events-none">
         {/* Grid pattern */}
@@ -50,8 +50,8 @@ const ServicesSection: React.FC = () => {
       
       <div className="container mx-auto px-4 relative z-10">
         {/* Section Header */}
-        <AnimatedSection delay={0.1} direction="up" className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-bold mb-3 relative inline-block">
+        <AnimatedSection delay={0.1} direction="up" className="text-center mb-8 md:mb-16">
+          <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-3 relative inline-block">
             <span className="bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
               Služby a Ceník
             </span>
@@ -64,28 +64,34 @@ const ServicesSection: React.FC = () => {
             />
           </h2>
           
-          <p className="text-zinc-400 max-w-2xl mx-auto mt-4">
+          <p className="text-zinc-400 max-w-2xl mx-auto mt-4 text-sm md:text-base">
             Profesionální webový vývoj s transparentními cenami a bez skrytých poplatků
           </p>
         </AnimatedSection>
         
         {/* Service Categories */}
-        <AnimatedSection delay={0.2} direction="up" className="mb-12">
-          <ServiceTabs 
-            tabs={tabsConfig} 
-            selectedValue={selectedCategory} 
-            onValueChange={(value) => setSelectedCategory(value as ServiceCategory)}
-          />
+        <AnimatedSection delay={0.2} direction="up" className="mb-8 md:mb-12">
+          {/* Service Tabs - Mobile Optimized */}
+          <div className="mb-6 md:mb-10">
+            <ServiceTabs 
+              tabs={tabsConfig} 
+              selectedValue={selectedCategory} 
+              onValueChange={(value) => setSelectedCategory(value as ServiceCategory)}
+            />
+          </div>
         
-          {/* Customer Type Selector */}
-          <CustomerTypeSelector
-            options={customerTypeConfig}
-            selectedValue={customerType}
-            onChange={(value) => setCustomerType(value as CustomerType)}
-          />
+          {/* Customer Type Selector - Mobile Optimized */}
+          <div className="mb-8 md:mb-10">
+            <CustomerTypeSelector
+              options={customerTypeConfig}
+              selectedValue={customerType}
+              onChange={(value) => setCustomerType(value as CustomerType)}
+              className="max-w-sm md:max-w-md"
+            />
+          </div>
           
-          {/* Service Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-24">
+          {/* Service Cards - Mobile First Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 max-w-6xl mx-auto mb-16 md:mb-24">
             <ServiceCard
               title={currentService.title}
               description={currentService.description}
@@ -113,8 +119,8 @@ const ServicesSection: React.FC = () => {
           </div>
         </AnimatedSection>
         
-        {/* Additional Services - Redesigned section */}
-        <div className="mt-12 pt-10 relative">
+        {/* Additional Services - Mobile Optimized */}
+        <div className="mt-8 md:mt-12 pt-8 md:pt-10 relative">
           {/* Decorative line */}
           <div className="absolute top-0 left-1/2 transform -translate-x-1/2 w-full max-w-md h-px overflow-hidden">
             <motion.div 
@@ -126,8 +132,8 @@ const ServicesSection: React.FC = () => {
             />
           </div>
           
-          <AnimatedSection delay={0.3} direction="up" className="text-center mb-10">
-            <h3 className="text-3xl font-bold mb-3 relative inline-block">
+          <AnimatedSection delay={0.3} direction="up" className="text-center mb-6 md:mb-10">
+            <h3 className="text-2xl md:text-3xl font-bold mb-3 relative inline-block">
               <span className="bg-gradient-to-r from-yellow-500 via-yellow-300 to-yellow-500 bg-clip-text text-transparent">
                 Další služby
               </span>
@@ -140,12 +146,13 @@ const ServicesSection: React.FC = () => {
               />
             </h3>
             
-            <p className="text-zinc-400 max-w-lg mx-auto mt-3">
+            <p className="text-zinc-400 max-w-lg mx-auto mt-3 text-sm md:text-base">
               Doplňkové služby pro vylepšení vašeho webu a online podnikání
             </p>
           </AnimatedSection>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-8">
+          {/* Additional Services Grid - Mobile Responsive */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 md:gap-6 mt-6 md:mt-8">
             {additionalServices.map((service, index) => (
               <ModernCompactServiceCard
                 key={index}

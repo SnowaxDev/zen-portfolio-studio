@@ -27,12 +27,12 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
   
   return (
     <motion.div 
-      className={cn("relative w-full max-w-md mx-auto mb-10", className)}
+      className={cn("relative w-full max-w-sm mx-auto mb-6 md:mb-10", className)}
       initial={{ y: 20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: getAnimationDuration(0.5), delay: 0.2, ease: "easeOut" }}
     >
-      <div className="bg-black/60 backdrop-blur-md rounded-xl p-1.5 flex mx-auto relative z-10 shadow-xl border border-white/10">
+      <div className="bg-black/60 backdrop-blur-md rounded-xl p-1 md:p-1.5 flex mx-auto relative z-10 shadow-xl border border-white/10">
         {/* Background highlight */}
         <motion.div 
           className="absolute h-full top-0 bg-gradient-to-r from-yellow-600 to-yellow-400 rounded-lg z-0"
@@ -53,7 +53,7 @@ const CustomerTypeSelector: React.FC<CustomerTypeSelectorProps> = ({
             key={option.value}
             onClick={() => onChange(option.value)}
             className={cn(
-              "flex-1 py-2.5 px-4 rounded-lg text-sm font-medium z-10 transition-colors duration-200",
+              "flex-1 py-2 md:py-2.5 px-2 md:px-4 rounded-lg text-xs md:text-sm font-medium z-10 transition-colors duration-200 whitespace-nowrap",
               selectedValue === option.value 
                 ? "text-black font-semibold" 
                 : "text-zinc-300 hover:text-zinc-100"
