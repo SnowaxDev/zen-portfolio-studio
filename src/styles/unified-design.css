@@ -1,0 +1,196 @@
+
+/* Unified Design System CSS */
+
+/* Import the design system variables */
+:root {
+  /* Typography */
+  --font-primary: 'Space Grotesk', sans-serif;
+  
+  /* Unified Color Palette */
+  --color-gold: #D4AF37;
+  --color-gold-light: #F8D568;
+  --color-gold-dark: #A67C00;
+  
+  --color-purple: #8B5CF6;
+  --color-purple-light: #A78BFA;
+  --color-purple-dark: #6D28D9;
+  
+  --color-blue: #3B82F6;
+  --color-blue-light: #60A5FA;
+  --color-blue-dark: #1D4ED8;
+  
+  /* Consistent Spacing */
+  --spacing-xs: 0.25rem;
+  --spacing-sm: 0.5rem;
+  --spacing-md: 1rem;
+  --spacing-lg: 1.5rem;
+  --spacing-xl: 2rem;
+  --spacing-2xl: 3rem;
+  --spacing-3xl: 4rem;
+  
+  /* Border Radius Scale */
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  
+  /* Consistent Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  --shadow-gold: 0 0 20px rgba(212, 175, 55, 0.3);
+  --shadow-purple: 0 0 20px rgba(139, 92, 246, 0.3);
+  
+  /* Animation Timing */
+  --duration-fast: 200ms;
+  --duration-normal: 300ms;
+  --duration-slow: 500ms;
+  --easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Global Typography Consistency */
+body {
+  font-family: var(--font-primary);
+  line-height: 1.6;
+}
+
+/* Unified Component Base Classes */
+.unified-card {
+  @apply bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-300 shadow-xl;
+}
+
+.unified-card-hover {
+  @apply hover:border-gold/30 hover:shadow-gold/20 hover:-translate-y-1;
+}
+
+.unified-button-primary {
+  @apply bg-gradient-to-r from-gold to-gold-light text-black font-medium px-6 py-3 rounded-lg hover:shadow-gold transition-all duration-300;
+}
+
+.unified-button-secondary {
+  @apply bg-transparent border border-gold text-gold hover:bg-gold hover:text-black transition-all duration-300 px-6 py-3 rounded-lg;
+}
+
+.unified-text-gradient {
+  @apply bg-gradient-to-r from-gold via-gold-light to-gold bg-clip-text text-transparent;
+}
+
+.unified-text-heading {
+  @apply font-bold text-white;
+}
+
+.unified-text-body {
+  @apply text-gray-400 leading-relaxed;
+}
+
+.unified-text-accent {
+  @apply text-gold font-medium;
+}
+
+/* Consistent Grid Systems */
+.unified-grid-responsive {
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8;
+}
+
+.unified-grid-2col {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8;
+}
+
+/* Unified Animation Classes */
+.unified-fade-in {
+  animation: unifiedFadeIn 0.5s var(--easing-smooth) forwards;
+}
+
+.unified-slide-in {
+  animation: unifiedSlideIn 0.6s var(--easing-smooth) forwards;
+}
+
+.unified-scale-in {
+  animation: unifiedScaleIn 0.4s var(--easing-smooth) forwards;
+}
+
+/* Animation Keyframes */
+@keyframes unifiedFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes unifiedSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes unifiedScaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* Consistent Hover Effects */
+.unified-hover-lift {
+  @apply transition-transform duration-200 hover:-translate-y-1;
+}
+
+.unified-hover-glow {
+  @apply transition-all duration-300;
+}
+
+.unified-hover-glow:hover {
+  filter: drop-shadow(0 0 10px var(--color-gold));
+}
+
+/* Mobile Optimizations */
+@media (max-width: 768px) {
+  .unified-mobile-spacing {
+    @apply px-4 py-8;
+  }
+  
+  .unified-mobile-text {
+    @apply text-center;
+  }
+  
+  .unified-mobile-grid {
+    @apply grid-cols-1 gap-4;
+  }
+}
+
+/* Focus States for Accessibility */
+.unified-focus {
+  @apply focus:outline-none focus:ring-2 focus:ring-gold/50 focus:ring-offset-2 focus:ring-offset-black;
+}
+
+/* Consistent Loading States */
+.unified-loading {
+  @apply animate-pulse bg-gray-800/50;
+}
+
+/* Unified Backdrop Blur Effects */
+.unified-backdrop {
+  @apply bg-black/80 backdrop-blur-lg;
+}
+
+/* Consistent Border Styles */
+.unified-border {
+  @apply border border-white/10;
+}
+
+.unified-border-accent {
+  @apply border border-gold/30;
+}

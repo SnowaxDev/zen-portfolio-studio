@@ -3,6 +3,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import ScrollReveal from '../components/ScrollReveal';
 import ProgressBar from '../components/ProgressBar';
+import UnifiedCard from '../components/ui/unified-card';
+import UnifiedText from '../components/ui/unified-text';
 import { frontendSkills, backendSkills, frameworks, sectionMeta } from '../lib/section-data';
 import { Code, Database, Layers, Star } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -84,15 +86,15 @@ const SkillsSection: React.FC = () => {
         {/* Section Header */}
         <ScrollReveal animationStyle="fade" className="text-center mb-12 md:mb-16">
           <div className="flex flex-col items-center justify-center">
-            <motion.h2 
-              className="text-3xl md:text-4xl font-bold mb-4"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: getAnimationDuration(0.6) }}
+            <UnifiedText 
+              variant="h2" 
+              gradient={true}
+              animation="fade"
+              className="mb-4"
             >
               <span className="text-gold">Moje </span>
               <span className="text-white">dovednosti</span>
-            </motion.h2>
+            </UnifiedText>
             
             {/* Animated underline */}
             <motion.div 
@@ -102,37 +104,34 @@ const SkillsSection: React.FC = () => {
               transition={{ delay: 0.3, duration: getAnimationDuration(0.8) }}
             />
             
-            <motion.p 
-              className="mt-6 text-muted-foreground max-w-2xl mx-auto text-base md:text-lg"
-              initial={{ opacity: 0, y: 15 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.4, duration: getAnimationDuration(0.6) }}
+            <UnifiedText 
+              variant="subtitle" 
+              animation="fade"
+              delay={0.4}
+              className="mt-6 max-w-2xl mx-auto"
             >
               Technologie a nástroje, se kterými rád pracuji
-            </motion.p>
+            </UnifiedText>
           </div>
         </ScrollReveal>
         
         {/* Skills Cards Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8 mb-16 max-w-5xl mx-auto">
+        <div className="unified-grid-2col mb-16 max-w-5xl mx-auto">
           {/* Frontend Skills Card */}
-          <motion.div 
-            className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-xl p-6"
-            initial={{ opacity: 0, x: -30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.2, duration: getAnimationDuration(0.6) }}
-            whileHover={shouldReduceAnimations ? {} : { 
-              y: -5,
-              boxShadow: "0 20px 40px -10px rgba(59, 130, 246, 0.15)"
-            }}
+          <UnifiedCard
+            variant="interactive"
+            animation="slide"
+            delay={0.2}
+            glow="blue"
+            className="p-6"
           >
             <div className="flex items-center mb-6">
               <div className="bg-gradient-to-br from-blue-600/20 to-blue-400/20 p-3 rounded-xl mr-4 backdrop-blur-md">
                 <Code size={24} className="text-blue-400" />
               </div>
-              <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-blue-100">
+              <UnifiedText variant="h3" className="bg-clip-text text-transparent bg-gradient-to-r from-blue-300 to-blue-100">
                 Frontend Vývoj
-              </h3>
+              </UnifiedText>
             </div>
             
             <div className="space-y-5">
@@ -155,26 +154,23 @@ const SkillsSection: React.FC = () => {
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </UnifiedCard>
           
           {/* Backend Skills Card */}
-          <motion.div 
-            className="bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-500 shadow-xl p-6"
-            initial={{ opacity: 0, x: 30 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3, duration: getAnimationDuration(0.6) }}
-            whileHover={shouldReduceAnimations ? {} : { 
-              y: -5,
-              boxShadow: "0 20px 40px -10px rgba(147, 51, 234, 0.15)"
-            }}
+          <UnifiedCard
+            variant="interactive"
+            animation="slide"
+            delay={0.3}
+            glow="purple"
+            className="p-6"
           >
             <div className="flex items-center mb-6">
               <div className="bg-gradient-to-br from-purple-600/20 to-purple-400/20 p-3 rounded-xl mr-4 backdrop-blur-md">
                 <Database size={24} className="text-purple-400" />
               </div>
-              <h3 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-purple-100">
+              <UnifiedText variant="h3" className="bg-clip-text text-transparent bg-gradient-to-r from-purple-300 to-purple-100">
                 Backend Vývoj
-              </h3>
+              </UnifiedText>
             </div>
             
             <div className="space-y-5">
@@ -197,7 +193,7 @@ const SkillsSection: React.FC = () => {
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </UnifiedCard>
         </div>
         
         {/* Frameworks and Tools Section */}
@@ -247,14 +243,14 @@ const SkillsSection: React.FC = () => {
               </motion.div>
             </motion.div>
             
-            <motion.h3 
-              className="text-2xl font-bold text-gold mb-3"
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7, duration: getAnimationDuration(0.6) }}
+            <UnifiedText 
+              variant="h3" 
+              className="text-gold mb-3"
+              animation="fade"
+              delay={0.7}
             >
               Frameworky a Nástroje
-            </motion.h3>
+            </UnifiedText>
             
             <motion.div 
               initial={{ width: 0 }}
