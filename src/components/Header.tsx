@@ -195,25 +195,25 @@ const Header: React.FC = () => {
             </NavigationMenu>
           )}
           
-          {/* Mobile Menu Button - Fixed */}
+          {/* Mobile Menu Button - Enhanced */}
           {isMobile && (
             <motion.button
-              className="p-2 bg-black/40 backdrop-blur-md rounded-lg border border-yellow-500/20 text-foreground shadow-lg relative z-50"
+              className="p-2 bg-black/60 backdrop-blur-md rounded-lg border border-yellow-500/30 text-foreground shadow-lg relative z-50"
               onClick={handleHamburgerClick}
               aria-expanded={mobileMenuOpen}
               aria-label="Toggle mobile menu"
-              style={{ minWidth: '44px', minHeight: '44px' }}
+              style={{ minWidth: '48px', minHeight: '48px' }}
               whileTap={{ scale: 0.95 }}
-              animate={mobileMenuOpen ? { rotate: 90 } : { rotate: 0 }}
-              transition={{ duration: 0.2 }}
+              animate={mobileMenuOpen ? { rotate: 180 } : { rotate: 0 }}
+              transition={{ duration: 0.3 }}
             >
               <AnimatePresence mode="wait">
                 {mobileMenuOpen ? (
                   <motion.div
                     key="close"
-                    initial={{ opacity: 0, rotate: -180 }}
+                    initial={{ opacity: 0, rotate: -90 }}
                     animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: 180 }}
+                    exit={{ opacity: 0, rotate: 90 }}
                     transition={{ duration: 0.2 }}
                   >
                     <X className="h-5 w-5 text-yellow-400" />
@@ -221,9 +221,9 @@ const Header: React.FC = () => {
                 ) : (
                   <motion.div
                     key="menu"
-                    initial={{ opacity: 0, rotate: 180 }}
+                    initial={{ opacity: 0, rotate: 90 }}
                     animate={{ opacity: 1, rotate: 0 }}
-                    exit={{ opacity: 0, rotate: -180 }}
+                    exit={{ opacity: 0, rotate: -90 }}
                     transition={{ duration: 0.2 }}
                   >
                     <Menu className="h-5 w-5 text-yellow-400" />
@@ -235,11 +235,11 @@ const Header: React.FC = () => {
         </div>
       </motion.header>
 
-      {/* Mobile Navigation Overlay - Improved */}
+      {/* Mobile Navigation Overlay - Enhanced */}
       <AnimatePresence>
         {isMobile && mobileMenuOpen && (
           <motion.div
-            className="fixed inset-0 z-40 bg-black/60 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -249,19 +249,33 @@ const Header: React.FC = () => {
         )}
       </AnimatePresence>
 
-      {/* Mobile Navigation Menu - Completely Redesigned */}
+      {/* Mobile Navigation Menu - Completely Redesigned with Better Animations */}
       <AnimatePresence>
         {isMobile && mobileMenuOpen && (
           <motion.div
-            className="fixed top-0 right-0 bottom-0 z-45 w-72 max-w-[80vw] bg-black/95 backdrop-blur-xl border-l border-yellow-500/20"
+            className="fixed top-0 right-0 bottom-0 z-45 w-80 max-w-[85vw] bg-black/95 backdrop-blur-xl border-l border-yellow-500/20 shadow-2xl"
             initial="closed"
             animate="open"
             exit="closed"
             variants={mobileMenuVariants}
           >
-            <div className="flex flex-col h-full pt-20 pb-6 px-4">
+            <div className="flex flex-col h-full pt-20 pb-6 px-6">
               <nav className="flex-1">
-                <ul className="flex flex-col space-y-1">
+                <motion.ul 
+                  className="flex flex-col space-y-2"
+                  initial="hidden"
+                  animate="visible"
+                  variants={{
+                    hidden: { opacity: 0 },
+                    visible: {
+                      opacity: 1,
+                      transition: {
+                        staggerChildren: 0.1,
+                        delayChildren: 0.2
+                      }
+                    }
+                  }}
+                >
                   {navItems.map((item, index) => {
                     const IconComponent = item.icon;
                     const active = isActive(item.href);
@@ -269,71 +283,101 @@ const Header: React.FC = () => {
                     return (
                       <motion.li 
                         key={item.label}
-                        initial={{ opacity: 0, x: 30 }}
-                        animate={{ 
-                          opacity: 1, 
-                          x: 0,
-                          transition: { 
-                            delay: index * 0.08,
-                            duration: 0.3,
-                            ease: "easeOut"
-                          } 
-                        }}
-                        exit={{ 
-                          opacity: 0, 
-                          x: 30,
-                          transition: { 
-                            delay: (navItems.length - index) * 0.05,
-                            duration: 0.2
-                          } 
+                        variants={{
+                          hidden: { opacity: 0, x: 30 },
+                          visible: { 
+                            opacity: 1, 
+                            x: 0,
+                            transition: { 
+                              duration: 0.4,
+                              ease: "easeOut"
+                            } 
+                          }
                         }}
                       >
                         <motion.button
                           onClick={() => handleMobileItemClick(item.href)}
-                          className={`flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 w-full text-left group ${
+                          className={cn(
+                            "flex items-center gap-4 px-4 py-4 rounded-xl transition-all duration-300 w-full text-left group relative overflow-hidden",
                             active 
-                              ? 'bg-yellow-500/15 text-yellow-400 border border-yellow-500/30 shadow-lg' 
-                              : 'text-white/80 hover:bg-white/5 hover:text-yellow-300 border border-transparent'
-                          }`}
-                          whileHover={{ x: 4 }}
-                          whileTap={{ scale: 0.96 }}
+                              ? "bg-gradient-to-r from-yellow-500/20 to-yellow-400/20 text-yellow-400 border border-yellow-500/30 shadow-lg" 
+                              : "text-white/80 hover:bg-white/5 hover:text-yellow-300 border border-transparent hover:border-white/10"
+                          )}
+                          whileHover={{ x: 6, scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
                         >
-                          <div className={`p-2 rounded-lg transition-colors ${
-                            active ? 'bg-yellow-500/20' : 'bg-white/5 group-hover:bg-yellow-500/10'
-                          }`}>
-                            <IconComponent className={`h-4 w-4 ${active ? 'text-yellow-400' : 'text-white/70'}`} />
+                          {/* Background shine effect */}
+                          {active && !shouldReduceAnimations && (
+                            <motion.div
+                              className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-400/10 to-transparent"
+                              initial={{ x: -100 }}
+                              animate={{ x: 100 }}
+                              transition={{ 
+                                duration: 2, 
+                                repeat: Infinity, 
+                                repeatDelay: 1,
+                                ease: "linear" 
+                              }}
+                            />
+                          )}
+                          
+                          <div className={cn(
+                            "p-2.5 rounded-lg transition-all duration-300 relative z-10",
+                            active ? "bg-yellow-500/20" : "bg-white/5 group-hover:bg-yellow-500/10"
+                          )}>
+                            <IconComponent className={cn(
+                              "h-5 w-5 transition-colors duration-300",
+                              active ? "text-yellow-400" : "text-white/70 group-hover:text-yellow-300"
+                            )} />
                           </div>
-                          <span className="text-sm font-medium">{item.label}</span>
+                          
+                          <span className="text-base font-medium relative z-10">{item.label}</span>
+                          
                           {active && (
                             <motion.div
-                              className="ml-auto w-2 h-2 bg-yellow-400 rounded-full"
+                              className="ml-auto w-2 h-2 bg-yellow-400 rounded-full relative z-10"
                               initial={{ scale: 0 }}
                               animate={{ scale: 1 }}
-                              transition={{ type: "spring", stiffness: 400 }}
+                              transition={{ type: "spring", stiffness: 400, delay: 0.1 }}
                             />
                           )}
                         </motion.button>
                       </motion.li>
                     );
                   })}
-                </ul>
+                </motion.ul>
               </nav>
               
-              {/* Mobile contact button at bottom of menu - Improved */}
+              {/* Enhanced Contact Button */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.4, duration: 0.3 }}
-                className="mt-6 pt-4 border-t border-white/10"
+                transition={{ delay: 0.6, duration: 0.4 }}
+                className="mt-8 pt-6 border-t border-white/10"
               >
                 <motion.button
                   onClick={() => handleMobileItemClick('#contact')}
-                  className="flex items-center justify-center w-full py-3 bg-gradient-to-r from-yellow-500 to-yellow-400 text-black rounded-xl font-medium shadow-lg"
+                  className="flex items-center justify-center w-full py-4 bg-gradient-to-r from-yellow-500 to-yellow-400 text-black rounded-xl font-semibold shadow-lg relative overflow-hidden"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <Mail className="mr-2 h-4 w-4" />
-                  Contact Me
+                  {/* Button shine effect */}
+                  {!shouldReduceAnimations && (
+                    <motion.div
+                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                      initial={{ x: -100 }}
+                      animate={{ x: 100 }}
+                      transition={{ 
+                        duration: 1.5, 
+                        repeat: Infinity, 
+                        repeatDelay: 2,
+                        ease: "easeInOut" 
+                      }}
+                    />
+                  )}
+                  
+                  <Mail className="mr-3 h-5 w-5 relative z-10" />
+                  <span className="relative z-10">Contact Me</span>
                 </motion.button>
               </motion.div>
             </div>
