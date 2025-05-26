@@ -55,58 +55,112 @@ body {
 }
 
 /* Unified Component Base Classes */
-.unified-card {
-  @apply bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-300 shadow-xl;
-}
+@layer components {
+  .unified-card {
+    @apply bg-black/40 backdrop-blur-xl border border-white/10 rounded-xl overflow-hidden transition-all duration-300 shadow-xl;
+  }
 
-.unified-card-hover {
-  @apply hover:border-gold/30 hover:shadow-gold/20 hover:-translate-y-1;
-}
+  .unified-card-hover {
+    @apply hover:border-gold/30 hover:shadow-gold/20 hover:-translate-y-1;
+  }
 
-.unified-button-primary {
-  @apply bg-gradient-to-r from-gold to-gold-light text-black font-medium px-6 py-3 rounded-lg hover:shadow-gold transition-all duration-300;
-}
+  .unified-button-primary {
+    @apply bg-gradient-to-r from-gold to-gold-light text-black font-medium px-6 py-3 rounded-lg hover:shadow-gold transition-all duration-300;
+  }
 
-.unified-button-secondary {
-  @apply bg-transparent border border-gold text-gold hover:bg-gold hover:text-black transition-all duration-300 px-6 py-3 rounded-lg;
-}
+  .unified-button-secondary {
+    @apply bg-transparent border border-gold text-gold hover:bg-gold hover:text-black transition-all duration-300 px-6 py-3 rounded-lg;
+  }
 
-.unified-text-gradient {
-  @apply bg-gradient-to-r from-gold via-gold-light to-gold bg-clip-text text-transparent;
-}
+  .unified-text-gradient {
+    @apply bg-gradient-to-r from-gold via-gold-light to-gold bg-clip-text text-transparent;
+  }
 
-.unified-text-heading {
-  @apply font-bold text-white;
-}
+  .unified-text-heading {
+    @apply font-bold text-white;
+  }
 
-.unified-text-body {
-  @apply text-gray-400 leading-relaxed;
-}
+  .unified-text-body {
+    @apply text-gray-400 leading-relaxed;
+  }
 
-.unified-text-accent {
-  @apply text-gold font-medium;
-}
+  .unified-text-accent {
+    @apply text-gold font-medium;
+  }
 
-/* Consistent Grid Systems */
-.unified-grid-responsive {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8;
-}
+  /* Consistent Grid Systems */
+  .unified-grid-responsive {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8;
+  }
 
-.unified-grid-2col {
-  @apply grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8;
+  .unified-grid-2col {
+    @apply grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-8;
+  }
+
+  /* Consistent Hover Effects */
+  .unified-hover-lift {
+    @apply transition-transform duration-200 hover:-translate-y-1;
+  }
+
+  .unified-hover-glow {
+    @apply transition-all duration-300;
+  }
+
+  .unified-hover-glow:hover {
+    filter: drop-shadow(0 0 10px var(--color-gold));
+  }
+
+  /* Focus States for Accessibility */
+  .unified-focus {
+    @apply focus:outline-none focus:ring-2 focus:ring-gold/50 focus:ring-offset-2 focus:ring-offset-black;
+  }
+
+  /* Consistent Loading States */
+  .unified-loading {
+    @apply animate-pulse bg-gray-800/50;
+  }
+
+  /* Unified Backdrop Blur Effects */
+  .unified-backdrop {
+    @apply bg-black/80 backdrop-blur-lg;
+  }
+
+  /* Consistent Border Styles */
+  .unified-border {
+    @apply border border-white/10;
+  }
+
+  .unified-border-accent {
+    @apply border border-gold/30;
+  }
+
+  /* Mobile Optimizations */
+  .unified-mobile-spacing {
+    @apply px-4 py-8;
+  }
+  
+  .unified-mobile-text {
+    @apply text-center;
+  }
+  
+  .unified-mobile-grid {
+    @apply grid-cols-1 gap-4;
+  }
 }
 
 /* Unified Animation Classes */
-.unified-fade-in {
-  animation: unifiedFadeIn 0.5s var(--easing-smooth) forwards;
-}
+@layer utilities {
+  .unified-fade-in {
+    animation: unifiedFadeIn 0.5s var(--easing-smooth) forwards;
+  }
 
-.unified-slide-in {
-  animation: unifiedSlideIn 0.6s var(--easing-smooth) forwards;
-}
+  .unified-slide-in {
+    animation: unifiedSlideIn 0.6s var(--easing-smooth) forwards;
+  }
 
-.unified-scale-in {
-  animation: unifiedScaleIn 0.4s var(--easing-smooth) forwards;
+  .unified-scale-in {
+    animation: unifiedScaleIn 0.4s var(--easing-smooth) forwards;
+  }
 }
 
 /* Animation Keyframes */
@@ -141,56 +195,4 @@ body {
     opacity: 1;
     transform: scale(1);
   }
-}
-
-/* Consistent Hover Effects */
-.unified-hover-lift {
-  @apply transition-transform duration-200 hover:-translate-y-1;
-}
-
-.unified-hover-glow {
-  @apply transition-all duration-300;
-}
-
-.unified-hover-glow:hover {
-  filter: drop-shadow(0 0 10px var(--color-gold));
-}
-
-/* Mobile Optimizations */
-@media (max-width: 768px) {
-  .unified-mobile-spacing {
-    @apply px-4 py-8;
-  }
-  
-  .unified-mobile-text {
-    @apply text-center;
-  }
-  
-  .unified-mobile-grid {
-    @apply grid-cols-1 gap-4;
-  }
-}
-
-/* Focus States for Accessibility */
-.unified-focus {
-  @apply focus:outline-none focus:ring-2 focus:ring-gold/50 focus:ring-offset-2 focus:ring-offset-black;
-}
-
-/* Consistent Loading States */
-.unified-loading {
-  @apply animate-pulse bg-gray-800/50;
-}
-
-/* Unified Backdrop Blur Effects */
-.unified-backdrop {
-  @apply bg-black/80 backdrop-blur-lg;
-}
-
-/* Consistent Border Styles */
-.unified-border {
-  @apply border border-white/10;
-}
-
-.unified-border-accent {
-  @apply border border-gold/30;
 }

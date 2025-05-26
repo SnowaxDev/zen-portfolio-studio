@@ -62,7 +62,7 @@
   }
   
   .text-gradient {
-    @apply unified-text-gradient;
+    @apply bg-gradient-to-r from-gold via-gold-light to-gold bg-clip-text text-transparent;
   }
   
   .hover-lift {
