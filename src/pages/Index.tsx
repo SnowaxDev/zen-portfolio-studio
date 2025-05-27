@@ -1,9 +1,11 @@
+
 import React, { useEffect, useState, Suspense, lazy } from 'react';
 import { motion, useScroll, useSpring, useMotionTemplate, AnimatePresence } from 'framer-motion';
 import Header from '../components/Header';
 import HeroSection from '../sections/HeroSection';
 import Footer from '../components/Footer';
 import { useIsMobile } from '../hooks/use-mobile';
+import { useMobileOptimizations } from '../hooks/use-mobile-optimizations';
 import { FloatingGrid } from '../components/DecorativeElements';
 import { usePrefersReducedMotion } from '../hooks/use-reduced-motion';
 import { Loader, ArrowUp } from 'lucide-react';
@@ -17,74 +19,68 @@ const SkillsSection = lazy(() => import('../sections/SkillsSection'));
 const ServicesSection = lazy(() => import('../sections/ServicesSection'));
 const ContactSection = lazy(() => import('../sections/ContactSection'));
 
-// Enhanced loading fallback with better error handling
-const LoadingFallback = () => (
-  <div className="flex items-center justify-center min-h-[200px]">
-    <Loader className="h-8 w-8 animate-spin text-gold" />
-  </div>
-);
+// Enhanced loading fallback for mobile
+const LoadingFallback = () => {
+  const { isMobile } = useMobileOptimizations();
+  
+  return (
+    <div className={`flex items-center justify-center ${isMobile ? 'min-h-[150px]' : 'min-h-[200px]'}`}>
+      <Loader className={`animate-spin text-gold ${isMobile ? 'h-6 w-6' : 'h-8 w-8'}`} />
+    </div>
+  );
+};
 
-// Page transition variants - simplified for mobile
-const pageVariants = {
+// Mobile-optimized page transition variants
+const getMobilePageVariants = (isMobile: boolean, isReducedMotion: boolean) => ({
   initial: {
-    opacity: 0
+    opacity: 0,
+    ...(isMobile && !isReducedMotion ? { y: 20 } : {})
   },
   animate: {
     opacity: 1,
+    y: 0,
     transition: {
-      duration: 0.9,
+      duration: isMobile ? 0.4 : 0.9,
       ease: [0.22, 1, 0.36, 1],
-      staggerChildren: 0.35,
-      delayChildren: 0.2
+      staggerChildren: isMobile ? 0.1 : 0.35,
+      delayChildren: isMobile ? 0.1 : 0.2
     }
   },
   exit: {
     opacity: 0,
     transition: {
-      duration: 0.7,
+      duration: isMobile ? 0.3 : 0.7,
       ease: [0.22, 1, 0.36, 1]
     }
   }
-};
+});
 
 const Index = () => {
-  // ... keep existing code (state definitions and hooks)
   const isMobile = useIsMobile();
   const prefersReducedMotion = usePrefersReducedMotion();
-  const [mousePosition, setMousePosition] = useState({
-    x: 0,
-    y: 0
-  });
+  const { 
+    isReducedMotion, 
+    getAnimationDuration,
+    getTouchTargetSize 
+  } = useMobileOptimizations();
+  
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [isLoaded, setIsLoaded] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
 
   // Get scroll progress for scroll-based animations
-  const {
-    scrollYProgress
-  } = useScroll();
+  const { scrollYProgress } = useScroll();
   const smoothScrollProgress = useSpring(scrollYProgress, {
-    stiffness: 100,
-    damping: 30,
+    stiffness: isMobile ? 200 : 100,
+    damping: isMobile ? 40 : 30,
     restDelta: 0.001
   });
 
-  // Interactive cursor effect - only enabled for desktop
-  const cursorSize = useSpring(12, {
-    stiffness: 100,
-    damping: 25
-  });
-  const cursorOpacity = useSpring(0, {
-    stiffness: 100,
-    damping: 25
-  });
-  const cursorX = useSpring(0, {
-    stiffness: 80,
-    damping: 20
-  });
-  const cursorY = useSpring(0, {
-    stiffness: 80,
-    damping: 20
-  });
+  // Interactive cursor effect - disabled for mobile
+  const cursorSize = useSpring(12, { stiffness: 100, damping: 25 });
+  const cursorOpacity = useSpring(0, { stiffness: 100, damping: 25 });
+  const cursorX = useSpring(0, { stiffness: 80, damping: 20 });
+  const cursorY = useSpring(0, { stiffness: 80, damping: 20 });
   const cursorStyle = useMotionTemplate`
     radial-gradient(
       ${cursorSize}px circle,
@@ -130,15 +126,13 @@ const Index = () => {
   // Show/hide scroll-to-top button based on scroll position
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > window.innerHeight) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
-      }
+      const threshold = isMobile ? window.innerHeight * 0.5 : window.innerHeight;
+      setShowScrollTop(window.scrollY > threshold);
     };
-    window.addEventListener('scroll', handleScroll);
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [isMobile]);
 
   // Scroll to top function
   const scrollToTop = () => {
@@ -148,7 +142,7 @@ const Index = () => {
     });
   };
 
-  // Update metadata to Czech and preload critical assets
+  // Update metadata and preload critical assets
   useEffect(() => {
     document.title = "Jan Novák | Frontend Vývojář & UI/UX Designer";
     const metaDescription = document.querySelector('meta[name="description"]');
@@ -156,16 +150,16 @@ const Index = () => {
       metaDescription.setAttribute("content", "Portfolio web pro Jana Nováka, Frontend Vývojáře a UI/UX Designera specializující se na React a Next.js aplikace.");
     }
 
-    // Add viewport meta tag to ensure proper mobile rendering
+    // Ensure proper mobile viewport
     let viewport = document.querySelector('meta[name="viewport"]');
     if (!viewport) {
       viewport = document.createElement('meta');
       viewport.setAttribute('name', 'viewport');
       document.getElementsByTagName('head')[0].appendChild(viewport);
     }
-    viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1');
+    viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes');
 
-    // Add theme-color meta tag for mobile browser UI
+    // Add theme-color for mobile browsers
     let themeColor = document.querySelector('meta[name="theme-color"]');
     if (!themeColor) {
       themeColor = document.createElement('meta');
@@ -174,12 +168,15 @@ const Index = () => {
     }
     themeColor.setAttribute('content', '#1A1F2C');
 
-    // Simulate asset loading with a slight delay for smoother transitions
+    // Optimize loading for mobile
     const timer = setTimeout(() => {
       setIsLoaded(true);
-    }, 500);
+    }, isMobile ? 300 : 500);
+    
     return () => clearTimeout(timer);
-  }, []);
+  }, [isMobile]);
+
+  const pageVariants = getMobilePageVariants(isMobile, isReducedMotion);
 
   return (
     <motion.div 
@@ -201,9 +198,11 @@ const Index = () => {
         />
       )}
       
-      {/* Scroll progress indicator */}
+      {/* Mobile-optimized scroll progress indicator */}
       <motion.div 
-        className="fixed top-0 left-0 right-0 h-1 bg-gradient-to-r from-gold via-purple to-gold-light z-50" 
+        className={`fixed top-0 left-0 right-0 bg-gradient-to-r from-gold via-purple to-gold-light z-50 ${
+          isMobile ? 'h-0.5' : 'h-1'
+        }`}
         style={{
           scaleX: smoothScrollProgress,
           transformOrigin: "0%"
@@ -215,7 +214,7 @@ const Index = () => {
       <main className="flex-grow relative">
         <HeroSection />
         
-        {/* Directly render AboutSection without Suspense to fix loading issue */}
+        {/* Render AboutSection directly for better mobile performance */}
         <AboutSection />
         
         <Suspense fallback={<LoadingFallback />}>
@@ -234,7 +233,7 @@ const Index = () => {
           <ContactSection />
         </Suspense>
         
-        {/* Dynamic decorative elements that respond to mouse position - disabled on mobile */}
+        {/* Decorative elements - optimized for mobile */}
         {isLoaded && !prefersReducedMotion && !isMobile && (
           <>
             <div 
@@ -257,35 +256,38 @@ const Index = () => {
       
       <Footer />
       
-      {/* Enhanced scroll-to-top button - better for mobile */}
+      {/* Mobile-optimized scroll-to-top button */}
       <AnimatePresence>
         {showScrollTop && (
           <motion.button 
-            className="fixed bottom-6 right-6 z-40 p-3 rounded-full bg-card/80 backdrop-blur-md border border-gold/20 shadow-lg hover:border-gold/50 transition-colors" 
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
+            className={`fixed z-40 rounded-full bg-card/90 backdrop-blur-md border border-gold/30 shadow-lg hover:border-gold/50 transition-colors ${getTouchTargetSize()} ${
+              isMobile ? 'bottom-4 right-4 p-2.5' : 'bottom-6 right-6 p-3'
+            }`}
+            initial={{ opacity: 0, y: 20, scale: 0.8 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.8 }}
             whileHover={{ scale: isMobile ? 1 : 1.1 }}
-            whileTap={{ scale: isMobile ? 0.95 : 0.9 }}
+            whileTap={{ scale: 0.95 }}
             onClick={scrollToTop} 
             aria-label="Scroll to top"
           >
-            <ArrowUp className="h-5 w-5 text-gold" />
+            <ArrowUp className={`text-gold ${isMobile ? 'h-4 w-4' : 'h-5 w-5'}`} />
           </motion.button>
         )}
       </AnimatePresence>
       
-      {/* Enhanced mobile floating contact button - only on mobile */}
+      {/* Mobile-specific floating contact button */}
       {isMobile && (
         <motion.div 
-          className="fixed bottom-5 right-5 z-40" 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1, duration: 0.5 }}
+          className="fixed bottom-4 left-4 z-40" 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 1, duration: 0.4 }}
         >
           <motion.a 
             href="#contact" 
-            className="flex items-center justify-center w-12 h-12 bg-gradient-to-r from-gold to-gold-light rounded-full shadow-lg shadow-gold/20" 
+            className={`flex items-center justify-center bg-gradient-to-r from-gold to-gold-light rounded-full shadow-lg shadow-gold/20 ${getTouchTargetSize()}`}
+            style={{ width: '44px', height: '44px' }}
             whileTap={{ scale: 0.95 }}
             aria-label="Contact Me"
           >
@@ -307,21 +309,7 @@ const Index = () => {
         </motion.div>
       )}
       
-      {/* Enhanced desktop scroll indicator - hide on mobile */}
-      {!isMobile && !prefersReducedMotion && <motion.div className="fixed bottom-5 right-5 flex flex-col items-center z-40" initial={{
-      opacity: 0,
-      scale: 0.8
-    }} animate={{
-      opacity: 1,
-      scale: 1
-    }} transition={{
-      delay: 1.8,
-      duration: 0.5
-    }}>
-          
-        </motion.div>}
-      
-      {/* Animated background grid - only show on non-mobile devices */}
+      {/* Animated background grid - desktop only */}
       {isLoaded && !isMobile && <FloatingGrid />}
     </motion.div>
   );
