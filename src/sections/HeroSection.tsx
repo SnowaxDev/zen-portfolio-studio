@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import AnimatedText from '../components/AnimatedText';
@@ -67,20 +68,6 @@ const HeroSection: React.FC = () => {
     tap: { scale: 0.95 }
   };
   
-  // Decorative elements variants
-  const floatingElementVariants = {
-    animate: (custom: number) => ({
-      y: [0, custom * 10, 0],
-      x: [0, custom * 5, 0],
-      rotate: [0, custom * 5, 0],
-      transition: {
-        duration: 3 + custom,
-        repeat: Infinity,
-        ease: "easeInOut"
-      }
-    })
-  };
-  
   return (
     <section id="hero" className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
       {/* Enhanced particle background with fewer particles on mobile */}
@@ -145,7 +132,6 @@ const HeroSection: React.FC = () => {
           {/* Fixed mobile heading size to 28px */}
           {isMobile ? (
             <h1 className="text-[28px] leading-tight font-bold mb-8 px-2">
-              <TextWithSparkles>Dušan Kostić</TextWithSparkles>
               <div className="text-gold text-xl mt-2">Dusanko.dev</div>
             </h1>
           ) : (
@@ -156,11 +142,6 @@ const HeroSection: React.FC = () => {
               }}
               transition={{ type: "spring", stiffness: 75, damping: 30 }}
             >
-              <AnimatedText 
-                text="Dušan Kostić"
-                className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-2"
-                animation="wave"
-              />
               <div className="text-gold text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
                 Dusanko.dev
               </div>
@@ -243,7 +224,7 @@ const HeroSection: React.FC = () => {
             x: isMobile ? 0 : mousePosition.x * 20,
             y: isMobile ? 0 : mousePosition.y * 20,
             marginBottom: isMobile ? '24px' : '0',
-            marginTop: isMobile ? '0' // Move avatar up by 30px on desktop
+            marginTop: isMobile ? '0' : '-30px'
           }}
         >
           <div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 mx-auto">
@@ -339,7 +320,7 @@ const HeroSection: React.FC = () => {
               }}
             >
               <img 
-                src="/lovable-uploads/new-profile-image.png"
+                src="/lovable-uploads/4675bcc5-3096-4a4e-a9ab-c69be970616b.png"
                 alt="Dušan Kostić" 
                 className="w-full h-full object-cover"
               />
