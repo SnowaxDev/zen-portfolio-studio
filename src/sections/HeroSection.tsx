@@ -67,6 +67,17 @@ const HeroSection: React.FC = () => {
     },
     tap: { scale: 0.95 }
   };
+
+  // Don't render until we know the mobile state to prevent hook order issues
+  if (isMobile === undefined) {
+    return (
+      <section id="hero" className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
+        <div className="flex items-center justify-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gold"></div>
+        </div>
+      </section>
+    );
+  }
   
   return (
     <section id="hero" className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
@@ -129,24 +140,27 @@ const HeroSection: React.FC = () => {
             </motion.span>
           </motion.div>
           
-          {/* Fixed mobile heading size to 28px */}
-          {isMobile ? (
-            <h1 className="text-[28px] leading-tight font-bold mb-8 px-2">
-              <div className="text-gold text-xl mt-2">Dusanko.dev</div>
-            </h1>
-          ) : (
-            <motion.div
-              style={{
-                x: mousePosition.x * -25,
-                y: mousePosition.y * -15,
-              }}
-              transition={{ type: "spring", stiffness: 75, damping: 30 }}
-            >
-              <div className="text-gold text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
+          {/* Consistent heading rendering for both mobile and desktop */}
+          <motion.div
+            style={{
+              x: isMobile ? 0 : mousePosition.x * -25,
+              y: isMobile ? 0 : mousePosition.y * -15,
+            }}
+            transition={{ type: "spring", stiffness: 75, damping: 30 }}
+          >
+            <h1 className={`font-bold mb-6 ${isMobile ? 'text-[28px] leading-tight px-2' : 'text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-2'}`}>
+              {!isMobile && (
+                <AnimatedText 
+                  text="Dušan Kostić"
+                  className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-2"
+                  animation="wave"
+                />
+              )}
+              <div className={`text-gold font-semibold ${isMobile ? 'text-xl mt-2' : 'text-2xl md:text-3xl lg:text-4xl'}`}>
                 Dusanko.dev
               </div>
-            </motion.div>
-          )}
+            </h1>
+          </motion.div>
           
           <motion.p 
             className="text-foreground/80 mb-8 max-w-lg md:max-w-xl text-lg px-4 md:px-0 mx-auto md:mx-0 relative"
