@@ -191,9 +191,15 @@ const Index = () => {
         <motion.div 
           className="fixed inset-0 z-50 pointer-events-none" 
           style={{
-            background: cursorStyle,
-            left: cursorX,
-            top: cursorY
+            background: useMotionTemplate`
+              radial-gradient(
+                ${useSpring(12, { stiffness: 100, damping: 25 })}px circle,
+                rgba(212, 175, 55, ${useSpring(0, { stiffness: 100, damping: 25 })}),
+                transparent 60%
+              )
+            `,
+            left: useSpring(0, { stiffness: 80, damping: 20 }),
+            top: useSpring(0, { stiffness: 80, damping: 20 })
           }} 
         />
       )}

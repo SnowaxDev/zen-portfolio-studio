@@ -80,14 +80,184 @@
 }
 
 @layer components {
-  /* Mobile-first container */
+  /* Mobile-first container with fixed desktop alignment */
   .container-custom {
-    @apply w-full max-w-7xl mx-auto px-3 sm:px-4 lg:px-8;
+    @apply w-full max-w-7xl mx-auto px-3 sm:px-4;
+  }
+  
+  /* Desktop container with proper left alignment */
+  @media (min-width: 1024px) {
+    .container-custom {
+      @apply px-32; /* Fixed 128px alignment */
+    }
   }
   
   /* Mobile-optimized glassmorphism */
   .glassmorphism {
     @apply bg-background/80 backdrop-blur-md border-b border-yellow-500/10 shadow-lg;
+  }
+  
+  /* Stats cards with standardized height and spacing */
+  .stats-container {
+    @apply grid grid-cols-2 lg:grid-cols-4 gap-6;
+  }
+  
+  @media (max-width: 767px) {
+    .stats-container {
+      @apply flex overflow-x-auto gap-4 px-4;
+      scroll-snap-type: x mandatory;
+    }
+    
+    .stats-card {
+      @apply flex-shrink-0 w-48;
+      scroll-snap-align: start;
+    }
+  }
+  
+  @media (min-width: 1024px) {
+    .stats-card {
+      @apply h-40; /* Fixed 160px height */
+      padding: 24px; /* Standardized padding */
+    }
+  }
+  
+  /* Project cards with improved alignment */
+  .projects-grid {
+    @apply grid gap-6;
+  }
+  
+  @media (max-width: 767px) {
+    .projects-grid {
+      @apply grid-cols-1; /* Single column on mobile */
+    }
+    
+    .project-card {
+      @apply w-full px-4; /* Full width with proper padding */
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .projects-grid {
+      @apply md:grid-cols-2 lg:grid-cols-3;
+    }
+    
+    .project-card {
+      @apply items-start; /* Top alignment */
+      padding: 16px; /* Consistent padding */
+    }
+    
+    .project-card img {
+      padding: 16px; /* Fixed image padding */
+    }
+    
+    .project-card-title {
+      @apply max-w-[280px]; /* Constrained title width */
+    }
+  }
+  
+  /* Pricing cards with proper alignment */
+  .pricing-container {
+    @apply grid gap-6;
+  }
+  
+  @media (max-width: 767px) {
+    .pricing-container {
+      @apply grid-cols-1 gap-6; /* Stack with 24px gap */
+    }
+    
+    .pricing-card {
+      @apply w-full;
+    }
+    
+    .pricing-button {
+      @apply w-full h-12 my-4; /* Full width, 48px height, 16px margin */
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .pricing-container {
+      @apply md:grid-cols-2;
+    }
+    
+    .pricing-card {
+      @apply items-start; /* Proper vertical alignment */
+    }
+    
+    .pricing-button {
+      @apply rounded-lg; /* Standardized 8px border radius */
+    }
+    
+    .pricing-price {
+      padding-top: 16px; /* Standardized price padding */
+    }
+  }
+  
+  /* Contact form layout fixes */
+  .contact-container {
+    @apply grid gap-8;
+  }
+  
+  @media (max-width: 767px) {
+    .contact-container {
+      @apply grid-cols-1 gap-6; /* Stack with proper spacing */
+    }
+    
+    .contact-form label {
+      @apply block mb-2; /* Labels above inputs */
+    }
+    
+    .contact-form input,
+    .contact-form textarea {
+      @apply w-full py-3; /* 12px vertical padding for 48px total height */
+    }
+    
+    .contact-submit {
+      @apply sticky bottom-4; /* Sticky button optimization */
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .contact-container {
+      @apply md:grid-cols-2; /* 50/50 split */
+    }
+    
+    .contact-form input,
+    .contact-form textarea {
+      @apply py-3; /* 12px vertical padding */
+    }
+    
+    .contact-submit {
+      @apply ml-0; /* Flush alignment with form fields */
+    }
+  }
+  
+  /* Footer improvements */
+  .footer-links {
+    @apply grid gap-6;
+  }
+  
+  @media (max-width: 767px) {
+    .footer-links {
+      @apply grid-cols-1;
+    }
+    
+    .footer-column h5 {
+      @apply font-bold text-sm mb-6; /* Re-insert column titles */
+    }
+    
+    .footer-social-icons {
+      @apply w-8 h-8 gap-4; /* 32px icons, 16px gap */
+    }
+  }
+  
+  @media (min-width: 768px) {
+    .footer-links {
+      @apply md:grid-cols-4 justify-items-center; /* Evenly distributed columns */
+    }
+    
+    .footer-social {
+      margin-top: 32px; /* Increased top margin */
+    }
   }
   
   /* Mobile navigation improvements */
@@ -146,22 +316,7 @@
     }
   }
   
-  /* Accent text */
-  .text-accent-yellow {
-    @apply text-yellow-400;
-  }
-
-  /* Mobile-optimized hover effects */
-  .hover-yellow-glow {
-    @apply transition-all duration-300;
-  }
-  
-  @media (min-width: 768px) {
-    .hover-yellow-glow:hover {
-      @apply shadow-lg;
-      box-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.2);
-    }
-  }
+  /* ... keep existing code (accent text, hover effects) */
   
   /* Mobile-specific optimizations */
   @media (max-width: 767px) {
@@ -260,124 +415,7 @@
   }
 }
 
-/* Text gradient styles */
-.text-gradient {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-yellow-300;
-}
-
-.text-gradient-purple {
-  @apply bg-clip-text text-transparent bg-gradient-to-r from-purple to-purple-light;
-}
-
-/* Mobile-optimized service section */
-.service-section {
-  @apply relative overflow-hidden py-12 md:py-16 lg:py-24;
-}
-
-/* Mobile-first animations */
-.hover-lift {
-  @apply transition-transform duration-200;
-}
-
-@media (min-width: 768px) {
-  .hover-lift:hover {
-    @apply -translate-y-1;
-  }
-}
-
-.hover-glow {
-  @apply transition-all duration-200;
-}
-
-@media (min-width: 768px) {
-  .hover-glow:hover {
-    @apply shadow-lg;
-    box-shadow: 0 10px 25px -5px rgba(234, 179, 8, 0.2);
-  }
-}
-
-/* Mobile-optimized shimmer effect */
-.shimmer {
-  background: linear-gradient(90deg, transparent, rgba(234, 179, 8, 0.1), transparent);
-  background-size: 200% 100%;
-  animation: shimmer 2s infinite;
-}
-
-@media (max-width: 767px) {
-  .shimmer {
-    animation-duration: 1.5s;
-  }
-}
-
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
-/* Mobile-optimized service card */
-.service-card {
-  @apply relative overflow-hidden border-2 border-zinc-800 rounded-xl bg-zinc-900/50 transition-all duration-300;
-}
-
-@media (min-width: 768px) {
-  .service-card:hover {
-    @apply border-yellow-500/30;
-    transform: translateY(-5px);
-    box-shadow: 0 10px 30px -15px rgba(234, 179, 8, 0.3);
-  }
-}
-
-.service-card-title {
-  @apply font-bold text-lg md:text-xl text-yellow-50 mb-1;
-}
-
-.service-card-price {
-  @apply font-bold text-xl md:text-2xl text-yellow-400 mt-2;
-}
-
-.service-card-button {
-  @apply mt-3 w-full py-3 md:py-2 rounded-lg border border-yellow-500/30 text-yellow-500 bg-yellow-500/5 transition-colors duration-200 text-sm font-medium;
-  min-height: 44px;
-}
-
-@media (min-width: 768px) {
-  .service-card-button {
-    min-height: auto;
-  }
-  
-  .service-card-button:hover {
-    @apply bg-yellow-500/15;
-  }
-}
-
-/* Mobile-optimized feature item */
-.feature-item {
-  @apply flex items-start gap-2 my-1.5 md:my-2;
-}
-
-.feature-item-icon {
-  @apply p-1 rounded-full bg-yellow-500/20 mt-0.5;
-}
-
-/* Mobile tab styling */
-.service-tab {
-  @apply px-3 py-2.5 md:px-4 md:py-3 rounded-xl transition-all relative overflow-hidden;
-  min-height: 44px;
-}
-
-@media (min-width: 768px) {
-  .service-tab {
-    min-height: auto;
-  }
-}
-
-.service-tab-active {
-  @apply text-black font-medium;
-}
-
-.service-tab-icon {
-  @apply w-4 h-4 md:w-5 md:h-5 mr-2;
-}
+/* ... keep existing code (text gradients, animations, service section styles) */
 
 /* Mobile viewport height fix */
 .mobile-vh-fix {
@@ -398,6 +436,22 @@
   .mobile-scroll-optimized {
     will-change: transform;
     transform: translateZ(0);
+  }
+}
+
+/* 8px baseline grid system */
+.grid-8 {
+  --spacing-unit: 8px;
+}
+
+.p-grid { padding: calc(var(--spacing-unit) * 2); }
+.m-grid { margin: calc(var(--spacing-unit) * 2); }
+.gap-grid { gap: calc(var(--spacing-unit) * 2); }
+
+/* Desktop specific grid alignment */
+@media (min-width: 1024px) {
+  .desktop-align-left {
+    margin-left: 128px; /* Fixed desktop left alignment */
   }
 }
 

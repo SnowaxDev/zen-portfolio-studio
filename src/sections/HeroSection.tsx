@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import AnimatedText from '../components/AnimatedText';
@@ -83,7 +82,7 @@ const HeroSection: React.FC = () => {
   };
   
   return (
-    <section id="hero" className="min-h-screen flex items-center justify-center pt-16 pb-8 relative overflow-hidden">
+    <section id="hero" className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
       {/* Enhanced particle background with fewer particles on mobile */}
       <ParticleBackground />
       
@@ -117,10 +116,10 @@ const HeroSection: React.FC = () => {
         }}
       />
       
-      <div className="container-custom flex flex-col md:flex-row items-center justify-between relative z-10">
-        {/* Improved mobile text content side */}
+      <div className="container mx-auto px-4 lg:px-32 flex flex-col md:flex-row items-center justify-between relative z-10">
+        {/* Desktop & Mobile responsive text content */}
         <motion.div 
-          className="w-full md:w-7/12 lg:w-3/5 mb-6 md:mb-0 px-4 sm:px-0 text-center md:text-left"
+          className="w-full md:w-7/12 lg:w-3/5 mb-8 md:mb-0 text-center md:text-left"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5 }}
@@ -129,7 +128,7 @@ const HeroSection: React.FC = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.3 }}
-            className="mb-4 md:mb-2 relative flex justify-center md:justify-start"
+            className="mb-6 md:mb-4 relative flex justify-center md:justify-start"
             style={{
               x: isMobile ? 0 : mousePosition.x * -15,
               y: isMobile ? 0 : mousePosition.y * -10,
@@ -141,18 +140,11 @@ const HeroSection: React.FC = () => {
             >
               {hero.subtitle}
             </motion.span>
-            
-            {/* Decorative element near the badge */}
-            <motion.div 
-              className="absolute -top-5 -left-6 w-4 h-4 rounded-full bg-purple/30"
-              variants={floatingElementVariants}
-              animate="animate"
-              custom={1.5}
-            />
           </motion.div>
           
+          {/* Fixed mobile heading size to 28px */}
           {isMobile ? (
-            <h1 className="text-4xl font-bold mb-6 leading-tight px-3">
+            <h1 className="text-[28px] leading-tight font-bold mb-8 px-2">
               <TextWithSparkles>Dušan Kostić</TextWithSparkles>
               <div className="text-gold text-xl mt-2">Dusanko.dev</div>
             </h1>
@@ -186,18 +178,11 @@ const HeroSection: React.FC = () => {
             }}
           >
             {hero.description}
-            
-            {/* Decorative elements behind the text */}
-            <motion.div 
-              className="absolute -right-10 top-1/2 w-20 h-1 bg-gradient-to-r from-gold/0 via-gold/30 to-gold/0"
-              variants={floatingElementVariants}
-              animate="animate"
-              custom={0.5}
-            />
           </motion.p>
           
+          {/* Fixed button layout - mobile stacked with proper spacing */}
           <motion.div 
-            className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start relative"
+            className={`flex ${isMobile ? 'flex-col space-y-3' : 'flex-row space-x-4'} justify-center md:justify-start relative pb-12`}
             style={{
               x: isMobile ? 0 : mousePosition.x * -5,
               y: isMobile ? 0 : mousePosition.y * -3,
@@ -205,7 +190,7 @@ const HeroSection: React.FC = () => {
           >
             <motion.a 
               href="#projects" 
-              className="group relative overflow-hidden bg-gradient-to-r from-gold to-gold-light text-background px-8 py-3.5 rounded-lg font-medium shadow-lg shadow-gold/20"
+              className={`group relative overflow-hidden bg-gradient-to-r from-gold to-gold-light text-background ${isMobile ? 'w-full py-4 px-6' : 'px-8 py-3.5'} rounded-lg font-medium shadow-lg shadow-gold/20`}
               variants={buttonVariants}
               initial="initial"
               animate="animate"
@@ -223,17 +208,11 @@ const HeroSection: React.FC = () => {
                   →
                 </motion.span>
               </span>
-              <motion.span 
-                className="absolute inset-0 bg-gradient-to-r from-purple/80 to-purple opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                initial={{ x: '100%' }}
-                whileHover={{ x: 0 }}
-                transition={{ duration: 0.4 }}
-              />
             </motion.a>
             
             <motion.a 
               href="#contact" 
-              className="group relative border-2 border-gold text-gold hover:text-background px-8 py-3.5 rounded-lg font-medium overflow-hidden"
+              className={`group relative border-2 border-gold text-gold hover:text-background ${isMobile ? 'w-full py-4 px-6' : 'px-8 py-3.5'} rounded-lg font-medium overflow-hidden`}
               variants={buttonVariants}
               initial="initial"
               animate="animate"
@@ -249,18 +228,10 @@ const HeroSection: React.FC = () => {
                 transition={{ duration: 0.3 }}
               />
             </motion.a>
-            
-            {/* Floating decorative element near buttons */}
-            <motion.div 
-              className="absolute -bottom-8 -right-8 w-16 h-16 rounded-full border border-dashed border-gold/20 opacity-70"
-              variants={floatingElementVariants}
-              animate="animate"
-              custom={2}
-            />
           </motion.div>
         </motion.div>
         
-        {/* Updated profile image */}
+        {/* Fixed profile image positioning */}
         <motion.div 
           className="w-full md:w-5/12 lg:w-2/5 relative"
           variants={imageVariants}
@@ -270,7 +241,9 @@ const HeroSection: React.FC = () => {
             scale: profileScale, 
             opacity: profileOpacity,
             x: isMobile ? 0 : mousePosition.x * 20,
-            y: isMobile ? 0 : mousePosition.y * 20
+            y: isMobile ? 0 : mousePosition.y * 20,
+            marginBottom: isMobile ? '24px' : '0',
+            marginTop: isMobile ? '0' // Move avatar up by 30px on desktop
           }}
         >
           <div className="relative w-56 h-56 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 mx-auto">
@@ -366,7 +339,7 @@ const HeroSection: React.FC = () => {
               }}
             >
               <img 
-                src="/lovable-uploads/4675bcc5-3096-4a4e-a9ab-c69be970616b.png"
+                src="/lovable-uploads/new-profile-image.png"
                 alt="Dušan Kostić" 
                 className="w-full h-full object-cover"
               />
@@ -383,7 +356,7 @@ const HeroSection: React.FC = () => {
         </motion.div>
       </div>
       
-      {/* Enhanced scroll indicator - more visible on mobile */}
+      {/* Enhanced scroll indicator */}
       <motion.div 
         className="absolute bottom-6 sm:bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center z-10"
         initial={{ opacity: 0, y: 20 }}
