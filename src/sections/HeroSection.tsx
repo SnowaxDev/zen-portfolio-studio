@@ -153,7 +153,8 @@ const HeroSection: React.FC = () => {
           
           {isMobile ? (
             <h1 className="text-4xl font-bold mb-6 leading-tight px-3">
-              <TextWithSparkles>{hero.title}</TextWithSparkles>
+              <TextWithSparkles>Dušan Kostić</TextWithSparkles>
+              <div className="text-gold text-xl mt-2">Dusanko.dev</div>
             </h1>
           ) : (
             <motion.div
@@ -164,10 +165,13 @@ const HeroSection: React.FC = () => {
               transition={{ type: "spring", stiffness: 75, damping: 30 }}
             >
               <AnimatedText 
-                text={hero.title}
-                className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-6"
+                text="Dušan Kostić"
+                className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold mb-2"
                 animation="wave"
               />
+              <div className="text-gold text-2xl md:text-3xl lg:text-4xl font-semibold mb-6">
+                Dusanko.dev
+              </div>
             </motion.div>
           )}
           
@@ -256,7 +260,7 @@ const HeroSection: React.FC = () => {
           </motion.div>
         </motion.div>
         
-        {/* Improved mobile profile image size and spacing */}
+        {/* Updated profile image */}
         <motion.div 
           className="w-full md:w-5/12 lg:w-2/5 relative"
           variants={imageVariants}
@@ -362,8 +366,8 @@ const HeroSection: React.FC = () => {
               }}
             >
               <img 
-                src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=500&h=500&fit=crop&q=80" 
-                alt="Jan Novák" 
+                src="/lovable-uploads/4675bcc5-3096-4a4e-a9ab-c69be970616b.png"
+                alt="Dušan Kostić" 
                 className="w-full h-full object-cover"
               />
               

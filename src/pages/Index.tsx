@@ -144,10 +144,10 @@ const Index = () => {
 
   // Update metadata and preload critical assets
   useEffect(() => {
-    document.title = "Jan Novák | Frontend Vývojář & UI/UX Designer";
+    document.title = "Dusanko.dev | Frontend Developer & UI/UX Designer";
     const metaDescription = document.querySelector('meta[name="description"]');
     if (metaDescription) {
-      metaDescription.setAttribute("content", "Portfolio web pro Jana Nováka, Frontend Vývojáře a UI/UX Designera specializující se na React a Next.js aplikace.");
+      metaDescription.setAttribute("content", "Portfolio webu pro Dušana Kostića - Dusanko.dev, Frontend vývojáře a UI/UX designera specializujícího se na React a Next.js aplikace.");
     }
 
     // Ensure proper mobile viewport
@@ -157,7 +157,7 @@ const Index = () => {
       viewport.setAttribute('name', 'viewport');
       document.getElementsByTagName('head')[0].appendChild(viewport);
     }
-    viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=5, user-scalable=yes');
+    viewport.setAttribute('content', 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no');
 
     // Add theme-color for mobile browsers
     let themeColor = document.querySelector('meta[name="theme-color"]');
@@ -166,7 +166,7 @@ const Index = () => {
       themeColor.setAttribute('name', 'theme-color');
       document.getElementsByTagName('head')[0].appendChild(themeColor);
     }
-    themeColor.setAttribute('content', '#1A1F2C');
+    themeColor.setAttribute('content', '#0A0914');
 
     // Optimize loading for mobile
     const timer = setTimeout(() => {
