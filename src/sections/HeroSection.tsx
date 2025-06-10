@@ -10,11 +10,11 @@ import { ArrowDown } from 'lucide-react';
 import TextWithGlow from '../components/TextWithGlow';
 
 const HeroSection: React.FC = () => {
+  // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
   const isMobile = useIsMobile();
   const { hero } = sectionMeta;
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
-  // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
   // Scroll progress for parallax effects
   const { scrollYProgress } = useScroll();
   const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -150]);
@@ -70,6 +70,7 @@ const HeroSection: React.FC = () => {
   };
 
   // NOW we can do conditional rendering after all hooks are called
+  // Show loading state while isMobile is being determined
   if (isMobile === undefined) {
     return (
       <section id="hero" className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
