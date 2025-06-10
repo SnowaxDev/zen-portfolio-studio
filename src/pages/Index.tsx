@@ -56,7 +56,7 @@ const getMobilePageVariants = (isMobile: boolean, isReducedMotion: boolean) => (
 });
 
 const Index = () => {
-  // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
+  // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS - FIXED ORDER
   const isMobile = useIsMobile();
   const prefersReducedMotion = usePrefersReducedMotion();
   const { 
@@ -72,8 +72,8 @@ const Index = () => {
   // Get scroll progress for scroll-based animations
   const { scrollYProgress } = useScroll();
   const smoothScrollProgress = useSpring(scrollYProgress, {
-    stiffness: isMobile ? 200 : 100,
-    damping: isMobile ? 40 : 30,
+    stiffness: (isMobile ?? false) ? 200 : 100,
+    damping: (isMobile ?? false) ? 40 : 30,
     restDelta: 0.001
   });
 
@@ -127,7 +127,7 @@ const Index = () => {
   // Show/hide scroll-to-top button based on scroll position
   useEffect(() => {
     const handleScroll = () => {
-      const threshold = isMobile ? window.innerHeight * 0.5 : window.innerHeight;
+      const threshold = (isMobile ?? false) ? window.innerHeight * 0.5 : window.innerHeight;
       setShowScrollTop(window.scrollY > threshold);
     };
     
@@ -164,7 +164,7 @@ const Index = () => {
     // Optimize loading for mobile
     const timer = setTimeout(() => {
       setIsLoaded(true);
-    }, isMobile ? 300 : 500);
+    }, (isMobile ?? false) ? 300 : 500);
     
     return () => clearTimeout(timer);
   }, [isMobile]);
