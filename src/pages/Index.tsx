@@ -56,6 +56,7 @@ const getMobilePageVariants = (isMobile: boolean, isReducedMotion: boolean) => (
 });
 
 const Index = () => {
+  // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
   const isMobile = useIsMobile();
   const prefersReducedMotion = usePrefersReducedMotion();
   const { 
@@ -134,14 +135,6 @@ const Index = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [isMobile]);
 
-  // Scroll to top function
-  const scrollToTop = () => {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
-  };
-
   // Update metadata and preload critical assets
   useEffect(() => {
     document.title = "Dusanko.dev | Frontend Developer & UI/UX Designer";
@@ -176,7 +169,16 @@ const Index = () => {
     return () => clearTimeout(timer);
   }, [isMobile]);
 
-  const pageVariants = getMobilePageVariants(isMobile, isReducedMotion);
+  // Scroll to top function
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
+  };
+
+  // NOW we can determine variants and do conditional rendering after all hooks are called
+  const pageVariants = getMobilePageVariants(isMobile || false, isReducedMotion);
 
   return (
     <motion.div 
