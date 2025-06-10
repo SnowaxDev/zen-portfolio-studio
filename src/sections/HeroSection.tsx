@@ -14,6 +14,13 @@ const HeroSection: React.FC = () => {
   const { hero } = sectionMeta;
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
+  // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS
+  // Scroll progress for parallax effects
+  const { scrollYProgress } = useScroll();
+  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -150]);
+  const profileScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9]);
+  const profileOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0.85]);
+  
   // Track mouse position for interactive elements
   useEffect(() => {
     const handleMouseMove = (e: MouseEvent) => {
@@ -26,12 +33,6 @@ const HeroSection: React.FC = () => {
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
-  
-  // Scroll progress for parallax effects
-  const { scrollYProgress } = useScroll();
-  const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -150]);
-  const profileScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9]);
-  const profileOpacity = useTransform(scrollYProgress, [0, 0.25], [1, 0.85]);
   
   // Enhanced animation variants
   const imageVariants = {
@@ -68,7 +69,7 @@ const HeroSection: React.FC = () => {
     tap: { scale: 0.95 }
   };
 
-  // Don't render until we know the mobile state to prevent hook order issues
+  // NOW we can do conditional rendering after all hooks are called
   if (isMobile === undefined) {
     return (
       <section id="hero" className="min-h-screen flex items-center justify-center pt-16 relative overflow-hidden">
