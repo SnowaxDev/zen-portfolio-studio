@@ -10,12 +10,12 @@ import { ArrowDown } from 'lucide-react';
 import TextWithGlow from '../components/TextWithGlow';
 
 const HeroSection: React.FC = () => {
-  // ALL HOOKS MUST BE CALLED BEFORE ANY CONDITIONAL RETURNS - FIXED ORDER
+  // ALL HOOKS MUST BE CALLED FIRST - BEFORE ANY CONDITIONS OR LOGIC
   const isMobile = useIsMobile();
   const { hero } = sectionMeta;
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   
-  // Scroll progress for parallax effects
+  // Scroll progress for parallax effects - MUST be called before any conditional logic
   const { scrollYProgress } = useScroll();
   const backgroundY = useTransform(scrollYProgress, [0, 1], [0, -150]);
   const profileScale = useTransform(scrollYProgress, [0, 0.2], [1, 0.9]);
@@ -69,8 +69,7 @@ const HeroSection: React.FC = () => {
     tap: { scale: 0.95 }
   };
 
-  // NOW we can do conditional rendering after all hooks are called
-  // Show loading state while isMobile is being determined
+  // NOW we can do conditional rendering - but NO early returns, just conditional content
   const isLoading = isMobile === undefined;
   
   return (
