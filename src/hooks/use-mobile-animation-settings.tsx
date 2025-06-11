@@ -15,6 +15,12 @@ export function useMobileAnimationSettings() {
     return prefersReducedMotion;
   }, [prefersReducedMotion]);
   
+  // Animation intensity based on device capabilities
+  const animationIntensity = useMemo(() => {
+    if (shouldReduceAnimations) return 'minimal';
+    return isMobile ? 'moderate' : 'full';
+  }, [shouldReduceAnimations, isMobile]);
+  
   // Premium easing curves for different animation types
   const easingCurves = useMemo(() => ({
     premium: [0.25, 0.1, 0.25, 1.0], // Premium smooth easing
@@ -41,6 +47,12 @@ export function useMobileAnimationSettings() {
   const getAnimationDelay = (baseDelay: number) => {
     if (shouldReduceAnimations) return baseDelay * 0.2;
     return isMobile ? baseDelay * 0.7 : baseDelay;
+  };
+  
+  // Get animation easing
+  const getAnimationEasing = (type: keyof typeof easingCurves = 'premium') => {
+    if (shouldReduceAnimations) return 'easeOut';
+    return easingCurves[type];
   };
   
   // Get premium spring configuration
@@ -76,6 +88,20 @@ export function useMobileAnimationSettings() {
     };
   };
   
+  // Get smooth exit properties
+  const getSmoothExitProps = () => {
+    return {
+      exitVariant: {
+        opacity: 0,
+        y: shouldReduceAnimations ? 0 : -10,
+        transition: {
+          duration: getAnimationDuration(0.2),
+          ease: 'easeOut'
+        }
+      }
+    };
+  };
+  
   // Premium viewport configuration
   const getViewportConfig = (threshold: number = 0.1) => ({
     once: true,
@@ -86,11 +112,14 @@ export function useMobileAnimationSettings() {
   return {
     shouldReduceAnimations,
     isMobile,
+    animationIntensity,
     easingCurves,
     getAnimationDuration,
     getAnimationDelay,
+    getAnimationEasing,
     getSpringConfig,
     getStaggerConfig,
+    getSmoothExitProps,
     getViewportConfig,
     // Optimized values for common use cases
     quickDuration: getAnimationDuration(0.2, 'fast'),

@@ -1,4 +1,3 @@
-
 import React, { useEffect, useRef } from 'react';
 import { useIsMobile } from '../hooks/use-mobile';
 import { useMobileAnimationSettings } from '../hooks/use-mobile-animation-settings';
@@ -14,10 +13,8 @@ interface Particle {
 
 const ParticleBackground: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { shouldReduceAnimations, animationIntensity } = useMobileAnimationSettings();
+  const { shouldReduceAnimations } = useMobileAnimationSettings();
   const isMobile = useIsMobile();
-  
-  // IMPORTANT: Don't return early before all hooks are used
   
   useEffect(() => {
     // If we should reduce animations, don't initialize the canvas
@@ -127,7 +124,7 @@ const ParticleBackground: React.FC = () => {
       window.removeEventListener('resize', setCanvasSize);
       cancelAnimationFrame(animationFrameId);
     };
-  }, [shouldReduceAnimations, isMobile, animationIntensity]);
+  }, [shouldReduceAnimations, isMobile]);
   
   // Conditionally render based on animation settings
   if (shouldReduceAnimations) {

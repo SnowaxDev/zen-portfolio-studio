@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { motion } from 'framer-motion';
 import { LucideIcon } from 'lucide-react';
@@ -32,8 +31,7 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
   const { 
     shouldReduceAnimations,
     getAnimationDuration,
-    getAnimationEasing,
-    getSmoothExitProps
+    premiumEasing
   } = useMobileAnimationSettings();
 
   // Container animation variants with improved hover scaling
@@ -47,21 +45,20 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
       y: 0,
       transition: { 
         duration: getAnimationDuration(0.4),
-        ease: getAnimationEasing()
+        ease: premiumEasing
       }
     },
     hover: {
-      scale: shouldReduceAnimations ? 1 : 1.03,  // Increased scale factor
-      y: shouldReduceAnimations ? 0 : -8,       // More noticeable lift
+      scale: shouldReduceAnimations ? 1 : 1.03,
+      y: shouldReduceAnimations ? 0 : -8,
       boxShadow: highlight 
         ? "0 20px 30px -15px rgba(234, 179, 8, 0.3)" 
         : "0 20px 30px -15px rgba(0, 0, 0, 0.2)",
       transition: { 
         duration: getAnimationDuration(0.3),
-        ease: getAnimationEasing()
+        ease: premiumEasing
       }
-    },
-    exit: getSmoothExitProps().exitVariant
+    }
   };
 
   // Card content animation for staggered children
@@ -84,7 +81,7 @@ const ModernCompactServiceCard: React.FC<ModernCompactServiceCardProps> = ({
       y: 0,
       transition: { 
         duration: getAnimationDuration(0.3),
-        ease: getAnimationEasing()
+        ease: premiumEasing
       }
     }
   };

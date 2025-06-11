@@ -159,7 +159,7 @@ const AboutSection: React.FC = () => {
                     <RotateCw className="text-gold" size={24} />
                   </motion.div>
                   <h4 className="text-xl font-semibold">
-                    <TextWithGlow intensity="light" pulsate={false}>
+                    <TextWithGlow intensity="subtle" pulsate={false}>
                       Můj Vývojový Stack
                     </TextWithGlow>
                   </h4>
@@ -210,7 +210,7 @@ const AboutSection: React.FC = () => {
                     <Code2 className="text-gold" size={24} />
                   </motion.div>
                   <h4 className="text-xl font-semibold">
-                    <TextWithGlow intensity="light" gradient={true} gradientColors="from-gold to-gold-light">
+                    <TextWithGlow intensity="subtle" gradient={true} gradientColors="from-gold to-gold-light">
                       Moje Kódovací Filosofie
                     </TextWithGlow>
                   </h4>
@@ -312,7 +312,7 @@ const AboutSection: React.FC = () => {
                       <Server className="text-purple" size={24} />
                     </motion.div>
                     <h4 className="text-xl font-semibold">
-                      <TextWithGlow color="rgba(139, 92, 246, 0.8)" intensity="light">
+                      <TextWithGlow color="rgba(139, 92, 246, 0.8)" intensity="subtle">
                         Moje IT Koníčky
                       </TextWithGlow>
                     </h4>
