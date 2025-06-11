@@ -1,19 +1,18 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { usePrefersReducedMotion } from '../hooks/use-reduced-motion';
+import { useMobileAnimationSettings } from '../hooks/use-mobile-animation-settings';
 
 interface TextWithGlowProps {
   children: React.ReactNode;
   className?: string;
-  intensity?: 'light' | 'medium' | 'strong';
+  intensity?: 'subtle' | 'medium' | 'strong';
   color?: string;
   pulsate?: boolean;
   delay?: number;
   duration?: number;
   hover?: boolean;
   shimmer?: boolean;
-  animateOnScroll?: boolean;
   gradient?: boolean;
   gradientColors?: string;
 }
@@ -22,104 +21,122 @@ const TextWithGlow: React.FC<TextWithGlowProps> = ({
   children,
   className = '',
   intensity = 'medium',
-  color = 'rgba(212, 175, 55, 0.8)', // Default gold color
-  pulsate = true,
+  color = 'rgba(212, 175, 55, 0.8)',
+  pulsate = false,
   delay = 0,
-  duration = 2,
+  duration = 3,
   hover = true,
   shimmer = false,
-  animateOnScroll = false,
   gradient = false,
   gradientColors = 'from-gold to-gold-light',
 }) => {
-  const prefersReducedMotion = usePrefersReducedMotion();
+  const { 
+    shouldReduceAnimations,
+    getAnimationDuration,
+    getAnimationDelay,
+    premiumEasing
+  } = useMobileAnimationSettings();
   
-  // Set shadow intensity based on prop
+  // Optimized glow intensities for premium feel
   const getShadowIntensity = () => {
     switch (intensity) {
-      case 'light': return `0 0 10px ${color}, 0 0 20px ${color}40`;
-      case 'strong': return `0 0 12px ${color}, 0 0 24px ${color}, 0 0 36px ${color}60`;
-      default: return `0 0 10px ${color}, 0 0 18px ${color}50`;
+      case 'subtle': 
+        return `0 0 8px ${color}40, 0 0 16px ${color}20`;
+      case 'strong': 
+        return `0 0 12px ${color}, 0 0 24px ${color}80, 0 0 36px ${color}40`;
+      default: 
+        return `0 0 10px ${color}60, 0 0 20px ${color}30`;
     }
   };
 
-  // Skip animations for users who prefer reduced motion
-  if (prefersReducedMotion) {
-    return <span className={className}>{children}</span>;
+  // Skip animations for reduced motion
+  if (shouldReduceAnimations) {
+    const combinedClassName = gradient 
+      ? `${className} bg-gradient-to-r ${gradientColors} bg-clip-text text-transparent`
+      : className;
+    
+    return <span className={combinedClassName}>{children}</span>;
   }
 
-  // Dynamic text glow variants with customized timing
-  const textGlowVariants = {
+  // Premium glow animation variants
+  const glowVariants = {
     initial: {
-      textShadow: `0 0 5px ${color}00`
+      textShadow: `0 0 0px ${color}00`,
+      ...(gradient && { 
+        backgroundSize: "100% 100%",
+        backgroundPosition: "0% 50%"
+      })
     },
     animate: {
       textShadow: getShadowIntensity(),
+      ...(gradient && shimmer && {
+        backgroundSize: "200% 100%",
+        backgroundPosition: ["0% 50%", "100% 50%", "0% 50%"]
+      }),
       transition: {
-        duration: duration,
+        duration: getAnimationDuration(duration),
         repeat: pulsate ? Infinity : 0,
         repeatType: "reverse" as const,
-        ease: "easeInOut",
-        delay: delay
+        ease: premiumEasing,
+        delay: getAnimationDelay(delay)
       }
     },
     hover: hover ? {
       textShadow: intensity === 'strong' 
-        ? `0 0 15px ${color}, 0 0 25px ${color}, 0 0 40px ${color}70` 
-        : `0 0 15px ${color}, 0 0 25px ${color}60`,
-      scale: 1.05,
-      transition: { duration: 0.3 }
+        ? `0 0 15px ${color}, 0 0 30px ${color}90, 0 0 45px ${color}60` 
+        : `0 0 12px ${color}80, 0 0 24px ${color}50`,
+      scale: 1.02,
+      transition: { 
+        duration: getAnimationDuration(0.3),
+        ease: premiumEasing
+      }
     } : {}
   };
 
-  // Shimmer styles - fixed to avoid the backgroundSize animation warning
-  const shimmerClass = shimmer ? 'shimmer-effect' : '';
-
-  // Combined styles for gradient
+  // Enhanced gradient styles
   const gradientStyle = gradient ? {
-    backgroundImage: `linear-gradient(to right, var(--gold), var(--gold-light))`,
+    background: `linear-gradient(45deg, var(--gold), var(--gold-light), var(--purple-light))`,
+    backgroundSize: shimmer ? "200% 100%" : "100% 100%",
     backgroundClip: 'text',
     WebkitBackgroundClip: 'text',
     WebkitTextFillColor: 'transparent',
+    filter: 'brightness(1.1)'
   } : {};
 
-  // Add gradient class if needed
   const gradientClass = gradient 
     ? `bg-gradient-to-r ${gradientColors} bg-clip-text text-transparent` 
     : '';
 
   return (
     <motion.span
-      className={`${className} ${gradientClass} ${shimmerClass}`}
-      variants={textGlowVariants}
-      initial={animateOnScroll ? "initial" : "animate"}
+      className={`${className} ${gradientClass} relative`}
+      variants={glowVariants}
+      initial="initial"
       animate="animate"
-      whileInView={animateOnScroll ? "animate" : undefined}
-      viewport={animateOnScroll ? { once: true, margin: "-100px" } : undefined}
       whileHover={hover ? "hover" : undefined}
       style={gradientStyle}
     >
       {children}
       
-      {/* Fix style JSX syntax */}
-      {shimmer && (
-        <style dangerouslySetInnerHTML={{
-          __html: `
-            .shimmer-effect {
-              position: relative;
-              background-size: 200% 100%;
-              background-repeat: no-repeat;
-              background-clip: text;
-              -webkit-background-clip: text;
-              background-image: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.6) 50%, transparent 100%);
-              animation: shimmer 2s infinite linear;
-            }
-            @keyframes shimmer {
-              0% { background-position: -100% 0; }
-              100% { background-position: 200% 0; }
-            }
-          `
-        }}/>
+      {/* Enhanced shimmer effect */}
+      {shimmer && !shouldReduceAnimations && (
+        <motion.span
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background: 'linear-gradient(90deg, transparent 30%, rgba(255,255,255,0.4) 50%, transparent 70%)',
+            backgroundSize: '200% 100%',
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+          }}
+          animate={{
+            backgroundPosition: ['200% 0', '-200% 0']
+          }}
+          transition={{
+            duration: getAnimationDuration(2),
+            repeat: Infinity,
+            ease: 'linear'
+          }}
+        />
       )}
     </motion.span>
   );

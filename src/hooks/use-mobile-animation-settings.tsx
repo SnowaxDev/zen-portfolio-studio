@@ -4,8 +4,7 @@ import { useIsMobile } from './use-mobile';
 import { usePrefersReducedMotion } from './use-reduced-motion';
 
 /**
- * A hook that provides animation settings optimized for mobile devices
- * and respects user preferences for reduced motion
+ * Enhanced animation settings optimized for premium feel and performance
  */
 export function useMobileAnimationSettings() {
   const isMobile = useIsMobile();
@@ -13,63 +12,91 @@ export function useMobileAnimationSettings() {
   
   // Determine if animations should be reduced based on device and user preferences
   const shouldReduceAnimations = useMemo(() => {
-    return isMobile || prefersReducedMotion;
-  }, [isMobile, prefersReducedMotion]);
+    return prefersReducedMotion;
+  }, [prefersReducedMotion]);
   
-  // Get animation duration adjusted for device
-  const getAnimationDuration = (desktopDuration: number) => {
-    if (shouldReduceAnimations) {
-      // Reduce animation durations on mobile or when reduced motion is preferred
-      return desktopDuration * 0.6;
-    }
-    return desktopDuration;
+  // Premium easing curves for different animation types
+  const easingCurves = useMemo(() => ({
+    premium: [0.25, 0.1, 0.25, 1.0], // Premium smooth easing
+    smooth: [0.4, 0.0, 0.2, 1.0], // Material design easing
+    bounce: [0.68, -0.55, 0.265, 1.55], // Subtle bounce
+    elastic: [0.175, 0.885, 0.32, 1.275], // Elastic feel
+    quick: [0.4, 0.0, 1, 1], // Quick and snappy
+  }), []);
+  
+  // Get optimized animation duration
+  const getAnimationDuration = (baseDuration: number, type: 'fast' | 'normal' | 'slow' = 'normal') => {
+    if (shouldReduceAnimations) return baseDuration * 0.3;
+    
+    const multipliers = {
+      fast: isMobile ? 0.6 : 0.8,
+      normal: isMobile ? 0.7 : 1.0,
+      slow: isMobile ? 0.8 : 1.2
+    };
+    
+    return baseDuration * multipliers[type];
   };
   
-  // Get animation delay adjusted for device
-  const getAnimationDelay = (desktopDelay: number) => {
-    if (shouldReduceAnimations) {
-      // Reduce delays on mobile
-      return desktopDelay * 0.5;
-    }
-    return desktopDelay;
+  // Get optimized animation delay
+  const getAnimationDelay = (baseDelay: number) => {
+    if (shouldReduceAnimations) return baseDelay * 0.2;
+    return isMobile ? baseDelay * 0.7 : baseDelay;
   };
   
-  // Get appropriate animation easing based on device
-  const getAnimationEasing = () => {
-    if (shouldReduceAnimations) {
-      // Simpler easing for mobile
-      return "easeOut";
-    }
-    // More elaborate easing for desktop
-    return [0.25, 0.1, 0.25, 1.0]; 
-  };
-  
-  // Get animation intensity value (0-1)
-  const animationIntensity = shouldReduceAnimations ? 0.4 : 1;
-  
-  // Get smooth exit animation properties
-  const getSmoothExitProps = () => {
-    return {
-      exitVariant: {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        transition: { duration: 0.2 }
+  // Get premium spring configuration
+  const getSpringConfig = (type: 'gentle' | 'bouncy' | 'stiff' = 'gentle') => {
+    const configs = {
+      gentle: { 
+        type: "spring" as const, 
+        stiffness: isMobile ? 120 : 100, 
+        damping: isMobile ? 20 : 15 
       },
-      exitTransition: {
-        duration: 0.2,
-        ease: "easeOut"
+      bouncy: { 
+        type: "spring" as const, 
+        stiffness: isMobile ? 200 : 300, 
+        damping: isMobile ? 25 : 20 
+      },
+      stiff: { 
+        type: "spring" as const, 
+        stiffness: isMobile ? 300 : 400, 
+        damping: isMobile ? 30 : 25 
       }
+    };
+    
+    return shouldReduceAnimations 
+      ? { type: "tween" as const, duration: 0.2, ease: "easeOut" }
+      : configs[type];
+  };
+  
+  // Get stagger configuration for premium feel
+  const getStaggerConfig = (baseDelay: number = 0.1) => {
+    return {
+      staggerChildren: getAnimationDelay(baseDelay),
+      delayChildren: getAnimationDelay(0.1)
     };
   };
   
+  // Premium viewport configuration
+  const getViewportConfig = (threshold: number = 0.1) => ({
+    once: true,
+    margin: isMobile ? "-20px" : "-50px",
+    amount: Math.max(0.05, threshold * (isMobile ? 0.5 : 1))
+  });
+
   return {
     shouldReduceAnimations,
     isMobile,
+    easingCurves,
     getAnimationDuration,
     getAnimationDelay,
-    getAnimationEasing,
-    animationIntensity,
-    getSmoothExitProps
+    getSpringConfig,
+    getStaggerConfig,
+    getViewportConfig,
+    // Optimized values for common use cases
+    quickDuration: getAnimationDuration(0.2, 'fast'),
+    normalDuration: getAnimationDuration(0.5, 'normal'),
+    slowDuration: getAnimationDuration(0.8, 'slow'),
+    premiumEasing: easingCurves.premium,
+    smoothEasing: easingCurves.smooth
   };
 }

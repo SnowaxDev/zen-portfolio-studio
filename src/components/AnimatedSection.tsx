@@ -1,6 +1,6 @@
 
 import React, { ReactNode } from 'react';
-import { motion, Variants, AnimationProps } from 'framer-motion';
+import { motion, Variants } from 'framer-motion';
 import { useMobileAnimationSettings } from '../hooks/use-mobile-animation-settings';
 
 interface AnimatedSectionProps {
@@ -8,15 +8,14 @@ interface AnimatedSectionProps {
   delay?: number;
   className?: string;
   id?: string;
-  direction?: 'up' | 'down' | 'left' | 'right' | 'none';
+  direction?: 'up' | 'down' | 'left' | 'right' | 'fade' | 'scale';
   distance?: number;
-  once?: boolean;
   duration?: number;
   threshold?: number;
   staggerChildren?: boolean;
   staggerDelay?: number;
   customVariants?: Variants;
-  withOverflow?: boolean;
+  animationType?: 'premium' | 'smooth' | 'elastic' | 'quick';
 }
 
 const AnimatedSection: React.FC<AnimatedSectionProps> = ({
@@ -25,85 +24,80 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   className = '',
   id,
   direction = 'up',
-  distance = 20,
-  once = true,
+  distance = 30,
   duration = 0.6,
-  threshold = 0.2,
+  threshold = 0.1,
   staggerChildren = false,
   staggerDelay = 0.1,
   customVariants,
-  withOverflow = false,
+  animationType = 'premium',
 }) => {
   const { 
     shouldReduceAnimations,
+    isMobile,
+    easingCurves,
     getAnimationDuration,
     getAnimationDelay,
-    isMobile
+    getSpringConfig,
+    getStaggerConfig,
+    getViewportConfig
   } = useMobileAnimationSettings();
   
-  // Calculate optimized animation parameters, much shorter for mobile
+  // Optimized parameters
   const optimizedDuration = getAnimationDuration(duration);
   const optimizedDelay = getAnimationDelay(delay);
+  const optimizedDistance = isMobile ? Math.min(distance, 20) : distance;
   
-  // Mobile-specific distance - much smaller for less movement
-  const mobileDistance = isMobile ? Math.min(distance * 0.4, 10) : distance;
-  
-  // Determine the initial animation based on direction with optimized effects
+  // Premium animation variants
   const getInitialState = () => {
     if (shouldReduceAnimations) {
-      // Minimal animation for mobile - just a fade
       return { opacity: 0 };
     }
     
-    // Full animations for desktop
     switch (direction) {
       case 'up':
-        return { opacity: 0, y: mobileDistance };
+        return { opacity: 0, y: optimizedDistance };
       case 'down':
-        return { opacity: 0, y: -mobileDistance };
+        return { opacity: 0, y: -optimizedDistance };
       case 'left':
-        return { opacity: 0, x: mobileDistance };
+        return { opacity: 0, x: optimizedDistance };
       case 'right':
-        return { opacity: 0, x: -mobileDistance };
-      case 'none':
-        return { opacity: 0 };
+        return { opacity: 0, x: -optimizedDistance };
+      case 'scale':
+        return { opacity: 0, scale: 0.9 };
+      case 'fade':
       default:
         return { opacity: 0 };
     }
   };
-  
-  // Enhanced animation variants with improved dynamics
-  const defaultVariants = {
+
+  const variants: Variants = customVariants || {
     hidden: getInitialState(),
     visible: {
       opacity: 1,
       x: 0,
       y: 0,
+      scale: 1,
       transition: {
         duration: optimizedDuration,
-        // More natural and smoother easing
-        ease: [0.25, 0.1, 0.25, 1], 
+        ease: easingCurves[animationType] || easingCurves.premium,
         delay: optimizedDelay,
-        staggerChildren: staggerChildren ? staggerDelay * (shouldReduceAnimations ? 0.3 : 1) : 0,
-        delayChildren: staggerChildren ? optimizedDelay : 0,
+        ...(staggerChildren ? getStaggerConfig(staggerDelay) : {})
       }
     }
   };
 
-  // Choose between default and custom variants
-  const variants = customVariants || defaultVariants;
-
-  // Use simpler animation if user prefers reduced motion or is on mobile
+  // Simplified animation for reduced motion
   if (shouldReduceAnimations) {
     return (
       <motion.div
         id={id}
-        className={`${className} relative ${withOverflow ? '' : 'overflow-hidden'}`}
+        className={className}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ 
-          duration: optimizedDuration > 0 ? Math.max(0.1, optimizedDuration) : 0.1,
-          ease: 'easeOut'
+          duration: 0.2,
+          ease: "easeOut"
         }}
       >
         {children}
@@ -114,10 +108,10 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   return (
     <motion.div
       id={id}
-      className={`${className} relative ${withOverflow ? '' : 'overflow-hidden'}`}
+      className={className}
       initial="hidden"
       whileInView="visible"
-      viewport={{ once, margin: "-10px", amount: threshold }}
+      viewport={getViewportConfig(threshold)}
       variants={variants}
     >
       {children}
