@@ -100,7 +100,7 @@ const HeroSection: React.FC = () => {
           
           <motion.div
             className="absolute bottom-[20%] right-[5%] w-96 h-96 rounded-full bg-gold/5 blur-3xl opacity-30"
-            style={{ y: useTransform(scrollYProgress, [0, 1], [0, -100]) }}
+            style={{ y: backgroundY }}
             animate={{
               scale: [1, 1.15, 1],
               rotate: [0, -5, 0],
