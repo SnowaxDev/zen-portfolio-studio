@@ -17,21 +17,19 @@ const GradientBackground: React.FC = () => {
     target: containerRef
   });
   
-  // Optimized transform values with better performance
   const backgroundY1 = useTransform(
     scrollYProgress, 
     [0, 1], 
-    [0, shouldReduceAnimations ? 0 : (isMobile ? -50 : -100)]
+    [0, shouldReduceAnimations ? 0 : (isMobile ? -30 : -60)]
   );
   const backgroundY2 = useTransform(
     scrollYProgress, 
     [0, 1], 
-    [0, shouldReduceAnimations ? 0 : (isMobile ? -25 : -50)]
+    [0, shouldReduceAnimations ? 0 : (isMobile ? -15 : -30)]
   );
-  const opacity1 = useTransform(scrollYProgress, [0, 0.3, 1], [0.8, 0.6, 0.4]);
-  const opacity2 = useTransform(scrollYProgress, [0, 0.5, 1], [0.6, 0.4, 0.2]);
+  const opacity1 = useTransform(scrollYProgress, [0, 0.4, 1], [0.7, 0.5, 0.3]);
+  const opacity2 = useTransform(scrollYProgress, [0, 0.6, 1], [0.5, 0.3, 0.2]);
   
-  // Optimized mouse tracking
   useEffect(() => {
     if (shouldReduceAnimations || isMobile) return;
     
@@ -56,116 +54,116 @@ const GradientBackground: React.FC = () => {
   
   return (
     <div ref={containerRef} className="fixed inset-0 -z-10 overflow-hidden">
-      {/* Premium base background */}
-      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/98 to-background/95" />
+      {/* Clean base background */}
+      <div className="absolute inset-0 bg-gradient-to-br from-background via-background/99 to-background/97" />
       
-      {/* Subtle texture overlay */}
+      {/* Refined texture */}
       <div 
-        className="absolute inset-0 opacity-[0.03] mix-blend-overlay"
+        className="absolute inset-0 opacity-[0.02] mix-blend-soft-light"
         style={{ 
-          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
-          backgroundSize: '400px 400px'
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`,
+          backgroundSize: '200px 200px'
         }} 
       />
       
-      {/* Interactive gradient following mouse */}
+      {/* Subtle interactive gradient */}
       {!shouldReduceAnimations && !isMobile && (
         <motion.div 
-          className="absolute inset-0 opacity-20"
+          className="absolute inset-0 opacity-15"
           style={{
-            background: `radial-gradient(circle 800px at ${50 + mousePosition.x * 20}% ${50 + mousePosition.y * 20}%, rgba(212, 175, 55, 0.15) 0%, rgba(139, 92, 246, 0.08) 50%, transparent 100%)`,
+            background: `radial-gradient(circle 600px at ${50 + mousePosition.x * 15}% ${50 + mousePosition.y * 15}%, rgba(212, 175, 55, 0.12) 0%, rgba(139, 92, 246, 0.06) 50%, transparent 100%)`,
           }}
-          transition={{ type: "spring", stiffness: 50, damping: 30 }}
+          transition={{ type: "spring", stiffness: 60, damping: 40 }}
         />
       )}
       
-      {/* Premium animated gradients with GPU acceleration */}
+      {/* Main gradient layers - cleaner and more subtle */}
       <motion.div 
-        className="absolute -top-1/4 -right-1/4 w-[120vw] h-[120vh] will-change-transform"
+        className="absolute -top-1/4 -right-1/4 w-[100vw] h-[100vh] will-change-transform"
         style={{ 
           y: backgroundY1,
           opacity: opacity1,
-          background: 'radial-gradient(ellipse 80% 50% at 70% 30%, rgba(139, 92, 246, 0.12) 0%, transparent 60%)',
-          filter: 'blur(80px)',
+          background: 'radial-gradient(ellipse 70% 40% at 65% 25%, rgba(139, 92, 246, 0.08) 0%, transparent 65%)',
+          filter: 'blur(60px)',
         }}
         animate={shouldReduceAnimations ? {} : { 
-          rotate: [0, 1, 0],
-          scale: [1, 1.02, 1],
+          rotate: [0, 0.5, 0],
+          scale: [1, 1.01, 1],
         }}
         transition={{ 
-          duration: getAnimationDuration(20),
+          duration: getAnimationDuration(25),
           repeat: Infinity,
           ease: premiumEasing
         }}
       />
       
       <motion.div 
-        className="absolute -bottom-1/4 -left-1/4 w-[120vw] h-[120vh] will-change-transform"
+        className="absolute -bottom-1/4 -left-1/4 w-[100vw] h-[100vh] will-change-transform"
         style={{ 
           y: backgroundY2,
           opacity: opacity2,
-          background: 'radial-gradient(ellipse 70% 60% at 30% 70%, rgba(212, 175, 55, 0.10) 0%, transparent 60%)',
-          filter: 'blur(80px)',
+          background: 'radial-gradient(ellipse 60% 50% at 35% 75%, rgba(212, 175, 55, 0.06) 0%, transparent 65%)',
+          filter: 'blur(60px)',
         }}
         animate={shouldReduceAnimations ? {} : { 
-          rotate: [0, -1, 0],
-          scale: [1, 1.03, 1],
+          rotate: [0, -0.5, 0],
+          scale: [1, 1.02, 1],
         }}
         transition={{ 
-          duration: getAnimationDuration(25),
+          duration: getAnimationDuration(30),
           repeat: Infinity,
           ease: premiumEasing,
-          delay: 2
+          delay: 3
         }}
       />
       
-      {/* Subtle accent gradients for desktop */}
+      {/* Minimal accent gradients */}
       {!shouldReduceAnimations && !isMobile && (
         <>
           <motion.div 
-            className="absolute top-1/3 left-1/3 w-[400px] h-[400px] will-change-transform"
+            className="absolute top-1/4 left-1/4 w-[300px] h-[300px] will-change-transform"
             style={{
-              background: 'radial-gradient(circle, rgba(139, 92, 246, 0.06) 0%, transparent 70%)',
-              filter: 'blur(60px)',
+              background: 'radial-gradient(circle, rgba(139, 92, 246, 0.04) 0%, transparent 70%)',
+              filter: 'blur(40px)',
             }}
             animate={{ 
-              x: [0, 20, 0],
-              y: [0, -15, 0],
-              scale: [1, 1.1, 1],
+              x: [0, 15, 0],
+              y: [0, -10, 0],
+              scale: [1, 1.05, 1],
             }}
             transition={{ 
-              duration: getAnimationDuration(15),
+              duration: getAnimationDuration(20),
               repeat: Infinity,
               ease: premiumEasing
             }}
           />
           
           <motion.div 
-            className="absolute bottom-1/3 right-1/3 w-[300px] h-[300px] will-change-transform"
+            className="absolute bottom-1/4 right-1/4 w-[250px] h-[250px] will-change-transform"
             style={{
-              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.05) 0%, transparent 70%)',
-              filter: 'blur(50px)',
+              background: 'radial-gradient(circle, rgba(212, 175, 55, 0.03) 0%, transparent 70%)',
+              filter: 'blur(35px)',
             }}
             animate={{ 
-              x: [0, -15, 0],
-              y: [0, 10, 0],
-              scale: [1, 1.08, 1],
+              x: [0, -10, 0],
+              y: [0, 8, 0],
+              scale: [1, 1.04, 1],
             }}
             transition={{ 
-              duration: getAnimationDuration(18),
+              duration: getAnimationDuration(22),
               repeat: Infinity,
               ease: premiumEasing,
-              delay: 1
+              delay: 2
             }}
           />
         </>
       )}
       
-      {/* Premium vignette effect */}
-      <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-background/20" />
+      {/* Subtle vignette */}
+      <div className="absolute inset-0 bg-gradient-radial from-transparent via-transparent to-background/10" />
       
-      {/* Subtle overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-to-t from-background/5 via-transparent to-background/5" />
+      {/* Clean depth overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-background/3 via-transparent to-background/3" />
     </div>
   );
 };
